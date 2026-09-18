@@ -1176,6 +1176,13 @@ function renderExerciseBody(ex, container, prevSlot) {
         ${ramp && step >= ramp.length ? `<button class="btn-primary warmupStartBtn" data-ex="${id}">Start working sets</button>` : ''}
       </div>
     </div>`;
+  } else if (ui.phase === 'rest' && Date.now() >= ui.restEndAt) {
+    // Rest period already elapsed (e.g. the app was backgrounded/closed and its timer got suspended) —
+    // self-heal instead of freezing at 0:00 forever waiting for a setInterval tick that may never come.
+    clearTimerFor(exName);
+    ui.phase = 'input';
+    const s = sets[currentIndex];
+    html += `<div class="active-block">${intraSessionNoteByEx[exName] ? `<div class="ex-sleep-flag" style="margin-bottom:10px;">${intraSessionNoteByEx[exName]}</div>` : ''}<div class="set-line1"><span class="set-num-lg">${currentIndex+1}</span><input type="number" inputmode="decimal" placeholder="0" value="${s.weight}" id="wt-${id}"><span class="lbl">lb</span><span class="set-x">×</span><input type="number" inputmode="numeric" placeholder="0" value="${s.reps}" id="reps-${id}"><span class="lbl">reps</span>${sets.length > 1 ? `<button class="rm-set" id="rm-${id}">×</button>` : ''}</div><div class="set-line2"><div class="pill-field"><label>RIR</label><select id="rir-${id}"><option value="">–</option><option value="3" ${s.rir==='3'?'selected':''}>3</option><option value="2" ${s.rir==='2'?'selected':''}>2</option><option value="1" ${s.rir==='1'?'selected':''}>1</option><option value="0" ${s.rir==='0'?'selected':''}>0</option></select></div></div><button class="log-btn" id="logbtn-${id}">Log Set ${currentIndex+1}</button></div>`;
   } else if (ui.phase === 'rest') {
     const remaining = Math.max(0, Math.round((ui.restEndAt - Date.now()) / 1000));
     const pct = Math.max(0, Math.round((remaining / ui.restDuration) * 100));
@@ -1858,9 +1865,16 @@ setInterval(() => {
     renderWeightTab();
   }
 }, 60000);
+function resyncOnResume() {
+  if (dayMode === 'active') renderMain();
+}
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible' && dayMode === 'active') renderMain();
+  if (document.visibilityState === 'visible') resyncOnResume();
 });
+// iOS (especially standalone home-screen apps) doesn't reliably fire visibilitychange on resume —
+// pageshow and focus catch the cases it misses, so a rest timer never sits frozen after backgrounding.
+window.addEventListener('pageshow', resyncOnResume);
+window.addEventListener('focus', resyncOnResume);
 
 function renderCheckinIfNeeded() {
   const slot = document.getElementById('checkinSlot');
