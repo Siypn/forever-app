@@ -325,7 +325,10 @@
   <div id="dayOverview"></div>
 
   <div id="workoutRunner" style="display:none;">
-    <button class="back-link" id="backToOverviewBtn">‹ Back to overview</button>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <button class="back-link" id="backToOverviewBtn">‹ Back to overview</button>
+      <button class="back-link" id="restartWorkoutBtn" style="color:var(--warn);">Reset workout</button>
+    </div>
     <div class="stats-strip" id="statsRow"></div>
     <main id="main"></main>
   </div>
@@ -1103,10 +1106,48 @@ function renderMain() {
   dayData.exercises.forEach(ex => {
     const card = document.createElement('div');
     card.className = 'exercise-panel';
-    card.innerHTML = `<div class="ex-header"><span class="ex-name">${ex.name}</span><span class="ex-type">${ex.type}</span></div><div class="ex-prev-slot"></div><div class="ex-body"></div>`;
+    card.innerHTML = `<div class="ex-header"><span class="ex-name">${ex.name}</span><span class="ex-type">${ex.type}</span></div><div class="ex-prev-slot"></div><div class="ex-body"></div><button class="add-set" data-reset-ex="${cssEsc(ex.name)}" style="text-align:right; color:var(--warn);">Reset this exercise's sets</button>`;
     main.appendChild(card);
     renderExerciseBody(ex, card.querySelector('.ex-body'), card.querySelector('.ex-prev-slot'));
+    card.querySelector('[data-reset-ex]').onclick = () => resetExerciseSets(ex, card.querySelector('.ex-body'), card.querySelector('.ex-prev-slot'));
   });
+
+  const allDone = dayData.exercises.every(ex => (state[ex.name] || []).length && state[ex.name].every(s => s.logged));
+  if (allDone) {
+    const doneBlock = document.createElement('div');
+    doneBlock.className = 'panel';
+    doneBlock.style.textAlign = 'center';
+    doneBlock.innerHTML = `<div class="section-title" style="justify-content:center;">Workout Complete</div><div class="ex-prev" style="margin-top:8px;">Every set logged for ${dayData.title} today. Nice work.</div><button class="btn-primary" id="completeWorkoutBtn" style="width:100%; margin-top:14px;">Complete Workout</button>`;
+    main.appendChild(doneBlock);
+    document.getElementById('completeWorkoutBtn').onclick = () => { showMode('overview'); renderDayOverview(); };
+  }
+}
+
+// Clears one exercise's logged sets and warm-up state back to fresh, without touching the rest of the day.
+// Lets someone cleanly redo a set they mis-entered or were just testing, rather than living with bad data.
+function resetExerciseSets(ex, container, prevSlot) {
+  const exName = ex.name;
+  const info = weekInfo();
+  const n = defaultSetCount(ex.type, info);
+  clearTimerFor(exName);
+  state[exName] = Array.from({ length: n }, (_, i) => makeSet(i, n, info.deload));
+  uiState[exName] = { phase: 'input', restEndAt: null, restDuration: ex.type === 'compound' ? REST_SECONDS_COMPOUND : REST_SECONDS_ISOLATION, timerId: null };
+  delete intraSessionNoteByEx[exName];
+  delete warmupDoneByEx[exName];
+  delete warmupTargetByEx[exName];
+  delete warmupTargetRepsByEx[exName];
+  delete warmupStepByEx[exName];
+  delete warmupRestEndByEx[exName];
+  renderExerciseBody(ex, container, prevSlot);
+  autoSaveDay();
+}
+
+// Clears the whole day's session — every exercise's sets and warm-up state — back to a fresh start.
+async function restartWorkout() {
+  Object.keys(uiState).forEach(clearTimerFor);
+  initState();
+  if (db) { try { await db.doc(`sessions/${todayISO()}_${currentDay}`).delete(); } catch (e) {} }
+  renderMain();
 }
 
 function renderExerciseBody(ex, container, prevSlot) {
@@ -1705,6 +1746,9 @@ async function saveBlockConfig() {
 document.getElementById('blockStart').addEventListener('change', e => { blockConfig.start = e.target.value; saveBlockConfig(); });
 document.getElementById('blockLen').addEventListener('change', e => { blockConfig.length = parseInt(e.target.value,10); saveBlockConfig(); });
 document.getElementById('backToOverviewBtn').addEventListener('click', () => showMode('overview'));
+document.getElementById('restartWorkoutBtn').addEventListener('click', () => {
+  if (confirm("Reset today's workout? This clears every logged set for this session — can't be undone.")) restartWorkout();
+});
 document.getElementById('menuExportBtn').addEventListener('click', exportAllData);
 document.getElementById('menuBtn').addEventListener('click', () => document.getElementById('menuOverlay').classList.add('open'));
 document.getElementById('menuCloseBtn').addEventListener('click', () => document.getElementById('menuOverlay').classList.remove('open'));
