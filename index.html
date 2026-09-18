@@ -1198,6 +1198,26 @@ function renderExerciseBody(ex, container, prevSlot) {
   html += `<button class="add-set" id="add-${id}">+ Add set</button>`;
   container.innerHTML = html;
   wireExerciseEvents(ex, container);
+  ensureRestTicking(ex, container, prevSlot);
+}
+
+// A rest countdown's ticking depends on a setInterval staying alive. Any full re-render that
+// clears timers first (tab switches, resuming from background, etc.) would otherwise leave the
+// number correct-but-frozen with nothing to keep advancing it. So every render of an exercise
+// in the 'rest' phase re-arms its own ticking interval if one isn't already running — the timer
+// becomes self-healing instead of depending on a single interval surviving the whole rest period.
+function ensureRestTicking(ex, container, prevSlot) {
+  const exName = ex.name;
+  const ui = uiState[exName];
+  if (!ui || ui.phase !== 'rest' || ui.timerId) return;
+  ui.timerId = setInterval(() => {
+    if (Date.now() >= ui.restEndAt) {
+      clearInterval(ui.timerId);
+      ui.timerId = null;
+      ui.phase = 'input';
+    }
+    renderExerciseBody(ex, container, prevSlot);
+  }, 1000);
 }
 
 function wireExerciseEvents(ex, container) {
@@ -1342,14 +1362,6 @@ function startRest(ex, container, prevSlot) {
   uiState[exName].restDuration = dur;
   uiState[exName].restEndAt = Date.now() + dur * 1000;
   renderExerciseBody(ex, container, prevSlot); autoSaveDay();
-  uiState[exName].timerId = setInterval(() => {
-    if (Date.now() >= uiState[exName].restEndAt) {
-      clearInterval(uiState[exName].timerId);
-      uiState[exName].timerId = null;
-      uiState[exName].phase = 'input';
-    }
-    renderExerciseBody(ex, container, prevSlot);
-  }, 1000);
 }
 
 function initState() {
