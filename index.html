@@ -73,7 +73,7 @@
     color: var(--accent); line-height: 1; flex: 0 0 auto;
   }
   #splash .kanji-mark { font-size: 20px; letter-spacing: 6px; margin-bottom: 4px; }
-  header { padding: 14px 20px; border-bottom: 1px solid var(--hairline); }
+  header { padding: 14px 20px; padding-top: calc(14px + env(safe-area-inset-top)); border-bottom: 1px solid var(--hairline); }
   .header-row { display: flex; align-items: center; gap: 12px; }
   .header-row .week-num { font-size: 12px; font-weight: 700; color: var(--accent); }
   .header-row .sub { margin: 0 0 0 auto; font-size: 11px; }
@@ -85,6 +85,7 @@
   .menu-panel {
     position: absolute; top: 0; right: 0; bottom: 0; width: 82%; max-width: 340px;
     background: var(--bg-panel); border-left: 1px solid var(--hairline); padding: 20px; overflow-y: auto;
+    padding-top: calc(20px + env(safe-area-inset-top)); padding-bottom: calc(20px + env(safe-area-inset-bottom));
     animation: fadeUp 0.22s ease-out;
   }
   .menu-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
@@ -1204,14 +1205,27 @@ function renderMain() {
     card.querySelector('[data-reset-ex]').onclick = () => resetExerciseSets(ex, card.querySelector('.ex-body'), card.querySelector('.ex-prev-slot'));
   });
 
-  const allDone = dayData.exercises.every(ex => (state[ex.name] || []).length && state[ex.name].every(s => s.logged));
-  if (allDone) {
+  // Always offer a way to finish the session from the bottom of the exercise list — not just once
+  // every single set across every exercise is logged. Gating this on 100% completion meant someone
+  // who ran out of time, skipped a set, or got pulled off the gym floor never saw any way to close
+  // out the day; they just had a workout stuck open with no confirmation it saved.
+  const totalSets = dayData.exercises.reduce((sum, ex) => sum + (state[ex.name] || []).length, 0);
+  const loggedSets = dayData.exercises.reduce((sum, ex) => sum + (state[ex.name] || []).filter(s => s.logged).length, 0);
+  const allDone = totalSets > 0 && loggedSets === totalSets;
+  if (totalSets > 0) {
     const doneBlock = document.createElement('div');
     doneBlock.className = 'panel';
     doneBlock.style.textAlign = 'center';
-    doneBlock.innerHTML = `<div class="section-title" style="justify-content:center;">Workout Complete</div><div class="ex-prev" style="margin-top:8px;">Every set logged for ${dayData.title} today. Nice work.</div><button class="btn-primary" id="completeWorkoutBtn" style="width:100%; margin-top:14px;">Complete Workout</button>`;
+    doneBlock.innerHTML = allDone
+      ? `<div class="section-title" style="justify-content:center;">Workout Complete</div><div class="ex-prev" style="margin-top:8px;">Every set logged for ${dayData.title} today. Nice work.</div><button class="btn-primary" id="completeWorkoutBtn" style="width:100%; margin-top:14px;">Complete Workout</button>`
+      : `<div class="section-title" style="justify-content:center;">Finish Here</div><div class="ex-prev" style="margin-top:8px;">${loggedSets} of ${totalSets} sets logged for ${dayData.title}. What you've logged is already saved — you can close out now and pick up the rest next time.</div><button class="btn-primary" id="completeWorkoutBtn" style="width:100%; margin-top:14px;">Complete Workout</button>`;
     main.appendChild(doneBlock);
-    document.getElementById('completeWorkoutBtn').onclick = () => { showMode('overview'); renderDayOverview(); };
+    document.getElementById('completeWorkoutBtn').onclick = async () => {
+      await autoSaveDay();
+      if (db) { try { await db.doc(`sessions/${todayISO()}_${currentDay}`).update({ finishedAt: Date.now(), completed: allDone }); } catch (e) {} }
+      showMode('overview');
+      renderDayOverview();
+    };
   }
 }
 
@@ -1478,8 +1492,18 @@ function wireExerciseEvents(ex, container) {
 
   if (ui.phase === 'input') {
     const wt = container.querySelector(`#wt-${id}`); const reps = container.querySelector(`#reps-${id}`); const rir = container.querySelector(`#rir-${id}`);
-    if (wt) wt.addEventListener('input', () => sets[currentIndex].weight = wt.value);
-    if (reps) reps.addEventListener('input', () => sets[currentIndex].reps = reps.value);
+    // Editing weight/reps on the set you're about to log also carries that number forward into
+    // every later not-yet-logged set of this exercise — same behavior as the warm-up "target"
+    // fill. Without this, changing your working weight mid-exercise meant retyping it by hand for
+    // every remaining set, since each set only ever held whatever it was pre-filled with.
+    if (wt) wt.addEventListener('input', () => {
+      sets[currentIndex].weight = wt.value;
+      for (let i = currentIndex + 1; i < sets.length; i++) { if (!sets[i].logged) sets[i].weight = wt.value; }
+    });
+    if (reps) reps.addEventListener('input', () => {
+      sets[currentIndex].reps = reps.value;
+      for (let i = currentIndex + 1; i < sets.length; i++) { if (!sets[i].logged) sets[i].reps = reps.value; }
+    });
     if (rir) rir.addEventListener('change', () => sets[currentIndex].rir = rir.value);
     const rm = container.querySelector(`#rm-${id}`);
     if (rm) rm.onclick = () => { sets.splice(currentIndex, 1); renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot')); };
@@ -1629,11 +1653,35 @@ async function loadPrevious() {
   } catch (e) { console.error('loadPrevious failed', e); }
 }
 
+// initState() always builds a fresh, blank scaffold for the day. That's correct for a program
+// change or an explicit restart, but on its own it means any progress already logged today gets
+// silently thrown away the moment the page reloads or re-enters this day — autoSaveDay() had
+// already written it to sessions/{date}_{day}, nothing just read it back. This restores it.
+async function restoreTodaySession() {
+  if (!db) return false;
+  try {
+    const snap = await db.doc(`sessions/${todayISO()}_${currentDay}`).get();
+    if (!snap.exists) return false;
+    const data = snap.data();
+    if (!data || !data.exercises) return false;
+    let restoredAny = false;
+    getDayData(currentDay).exercises.forEach(ex => {
+      const savedSets = data.exercises[ex.name];
+      if (savedSets && savedSets.length) {
+        state[ex.name] = savedSets;
+        restoredAny = true;
+      }
+    });
+    return restoredAny;
+  } catch (e) { console.error('restoreTodaySession failed', e); return false; }
+}
+
 async function loadDay() {
   renderDayNav();
   await loadProgramOverride(currentDay);
   await loadPrevious();
   initState();
+  await restoreTodaySession();
   renderCheckinIfNeeded();
   dayMode = 'overview';
   showMode('overview');
