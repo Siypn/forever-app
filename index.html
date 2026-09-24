@@ -48,10 +48,6 @@
   .stat-num, .cal-big, .bmi-num, .tdee-num { animation: glowBreathe 3.5s ease-in-out infinite; }
   @keyframes splashFade { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
   @keyframes logoPulse { 0% { opacity:0; letter-spacing: 3px; } 100% { opacity:1; letter-spacing: 9px; } }
-  @keyframes ringGlow { 0%,100% { filter: drop-shadow(0 0 4px rgba(184,150,58,0.35)); } 50% { filter: drop-shadow(0 0 11px rgba(184,150,58,0.75)); } }
-  .mark-svg { animation: ringGlow 3.5s ease-in-out infinite; }
-  #splash .mark-svg { width: 56px; height: 56px; margin-bottom: 4px; animation: ringGlow 2.2s ease-in-out infinite; }
-  .header-row .mark-svg { width: 22px; height: 22px; flex: 0 0 auto; }
   .swipe { animation: fadeUp 0.25s ease-out; }
   html { background: var(--bg); }
   body {
@@ -304,31 +300,14 @@
 </head>
 <body>
 
-<svg width="0" height="0" style="position:absolute;">
-  <defs>
-    <linearGradient id="oGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f0d47a"/>
-      <stop offset="45%" stop-color="#b8963a"/>
-      <stop offset="100%" stop-color="#7d6420"/>
-    </linearGradient>
-    <symbol id="oMark" viewBox="0 0 200 200">
-      <circle cx="100" cy="100" r="62" fill="none" stroke="url(#oGrad)" stroke-width="15" stroke-linecap="round" stroke-dasharray="331 59" stroke-dashoffset="-64"/>
-      <path d="M 175.2 110.2 Q 152 128 127 168 Q 150 150 162.8 101.8 Z" fill="url(#oGrad)"/>
-      <circle cx="168" cy="112" r="3" fill="#060606"/>
-    </symbol>
-  </defs>
-</svg>
-
 <div id="splash">
   <div style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
-    <svg class="mark-svg" viewBox="0 0 200 200"><use href="#oMark"></use></svg>
     <div class="logo">FOREVER</div>
   </div>
 </div>
 
 <header>
   <div class="header-row">
-    <svg class="mark-svg" viewBox="0 0 200 200"><use href="#oMark"></use></svg>
     <h1 style="font-size: 18px;">FOREVER</h1>
     <span class="week-num" id="weekPill">Week –</span>
     <span class="week-num" id="streakPill" style="margin-left:2px;"></span>
