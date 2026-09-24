@@ -48,6 +48,10 @@
   .stat-num, .cal-big, .bmi-num, .tdee-num { animation: glowBreathe 3.5s ease-in-out infinite; }
   @keyframes splashFade { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
   @keyframes logoPulse { 0% { opacity:0; letter-spacing: 3px; } 100% { opacity:1; letter-spacing: 9px; } }
+  @keyframes ringGlow { 0%,100% { filter: drop-shadow(0 0 4px rgba(184,150,58,0.35)); } 50% { filter: drop-shadow(0 0 11px rgba(184,150,58,0.75)); } }
+  .mark-svg { animation: ringGlow 3.5s ease-in-out infinite; }
+  #splash .mark-svg { width: 56px; height: 56px; margin-bottom: 4px; animation: ringGlow 2.2s ease-in-out infinite; }
+  .header-row .mark-svg { width: 22px; height: 22px; flex: 0 0 auto; }
   .swipe { animation: fadeUp 0.25s ease-out; }
   html { background: var(--bg); }
   body {
@@ -137,7 +141,8 @@
     flex: 0 0 auto; padding: 12px 16px 10px; background: none; border: none; border-bottom: 2px solid transparent;
     color: var(--text-dim); font-size: 12.5px; font-weight: 500; cursor: pointer; white-space: nowrap; font-family: inherit;
   }
-  nav.days button.active { color: var(--accent); border-bottom-color: var(--accent); }
+  nav.days button.active { color: var(--accent); border-bottom-color: var(--accent); animation: navGlow 2.6s ease-in-out infinite; }
+  @keyframes navGlow { 0%,100% { text-shadow: 0 0 0 rgba(184,150,58,0); } 50% { text-shadow: 0 0 8px rgba(184,150,58,0.55); } }
 
   .stats-strip { display: flex; margin: 8px 20px 4px; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 600px; }
   .stat-col { flex: 1; text-align: center; padding: 12px 4px; }
@@ -149,6 +154,8 @@
   .rest-msg { text-align: center; color: var(--text-dim); padding: 70px 20px; font-size: 13px; font-weight: 300; }
 
   .panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--r); padding: 18px; margin-bottom: 14px; }
+  .panel.attention { border-color: var(--accent); animation: attentionGlow 2.4s ease-in-out infinite; }
+  @keyframes attentionGlow { 0%,100% { box-shadow: 0 0 0 rgba(184,150,58,0); } 50% { box-shadow: 0 0 22px rgba(184,150,58,0.35); } }
   .exercise-panel { background: var(--bg-panel); border: 1px solid var(--border); border-top: 2px solid var(--accent); border-radius: var(--r); padding: 18px; margin-bottom: 14px; box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
   .ex-header { display: flex; justify-content: space-between; align-items: center; }
   .ex-name { font-family: 'Bebas Neue', sans-serif; font-size: 19px; font-weight: 400; letter-spacing: 0.6px; }
@@ -169,7 +176,8 @@
   .done-row .main-stat { color: var(--text); font-weight: 600; }
   .done-row .tag { margin-left: auto; font-size: 10px; }
 
-  .active-block { padding: 14px; margin-top: 8px; background: var(--accent-soft); border-top: 2px solid var(--accent); border-radius: var(--r); }
+  .active-block { padding: 14px; margin-top: 8px; background: var(--accent-soft); border-top: 2px solid var(--accent); border-radius: var(--r); animation: activeBlockGlow 2.8s ease-in-out infinite; }
+  @keyframes activeBlockGlow { 0%,100% { box-shadow: 0 0 0 rgba(184,150,58,0); } 50% { box-shadow: 0 0 20px rgba(184,150,58,0.22); } }
   .set-line1 { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
   .set-num-lg { font-family: 'Bebas Neue', sans-serif; font-size: 16px; font-weight: 400; color: var(--on-accent); background: var(--accent); box-shadow: 0 0 14px rgba(184,150,58,0.45); width: 26px; height: 26px; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
   .set-line1 input {
@@ -213,8 +221,9 @@
   .macro-bar-fill { height: 100%; background: var(--accent); }
   .cal-big { font-family: 'Bebas Neue', sans-serif; font-size: 42px; font-weight: 400; text-align: center; color: var(--accent); margin-top: 14px; letter-spacing: 1px; }
   .cal-sub { text-align: center; font-size: 11px; color: var(--text-dim); margin-top: 4px; font-weight: 300; }
-  .phase-row { display: flex; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--hairline); }
-  .phase-btn { flex: 1; padding: 9px 0; border-radius: 0; border: none; border-bottom: 1px solid var(--border); background: none; color: var(--text-dim); font-size: 11.5px; font-weight: 500; cursor: pointer; font-family: inherit; }
+  .phase-row { display: flex; gap: 4px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--hairline); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .phase-row::-webkit-scrollbar { display: none; }
+  .phase-btn { flex: 0 0 auto; padding: 9px 10px; border-radius: 0; border: none; border-bottom: 1px solid var(--border); background: none; color: var(--text-dim); font-size: 11px; font-weight: 500; cursor: pointer; font-family: inherit; white-space: nowrap; }
   .phase-btn.selected { color: var(--accent); border-bottom: 2px solid var(--accent); font-weight: 600; }
   .field-row { display: flex; align-items: flex-end; gap: 14px; margin-top: 14px; font-size: 12px; flex-wrap: wrap; }
   .field-row label { font-size: 9.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; display:block; margin-bottom: 4px; }
@@ -288,18 +297,38 @@
   .preview-row .pname { font-weight: 500; }
   .preview-row .ptype { color: var(--text-dim); font-size: 10.5px; text-transform: uppercase; }
   .meso-preview-body:not(:empty) { margin-top: 14px; padding-top: 4px; border-top: 1px solid var(--hairline); }
+  .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 4px; }
+  .photo-thumb { position: relative; aspect-ratio: 3/4; background-size: cover; background-position: center; border: 1px solid var(--border); cursor: pointer; padding: 0; }
+  .photo-thumb-date { position: absolute; left: 0; right: 0; bottom: 0; padding: 3px 4px; font-size: 8.5px; font-weight: 600; color: #fff; background: linear-gradient(to top, rgba(0,0,0,0.75), transparent); text-align: left; }
 </style>
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <linearGradient id="oGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0d47a"/>
+      <stop offset="45%" stop-color="#b8963a"/>
+      <stop offset="100%" stop-color="#7d6420"/>
+    </linearGradient>
+    <symbol id="oMark" viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="62" fill="none" stroke="url(#oGrad)" stroke-width="15" stroke-linecap="round" stroke-dasharray="331 59" stroke-dashoffset="-64"/>
+      <path d="M 175.2 110.2 Q 152 128 127 168 Q 150 150 162.8 101.8 Z" fill="url(#oGrad)"/>
+      <circle cx="168" cy="112" r="3" fill="#060606"/>
+    </symbol>
+  </defs>
+</svg>
+
 <div id="splash">
   <div style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
+    <svg class="mark-svg" viewBox="0 0 200 200"><use href="#oMark"></use></svg>
     <div class="logo">FOREVER</div>
   </div>
 </div>
 
 <header>
   <div class="header-row">
+    <svg class="mark-svg" viewBox="0 0 200 200"><use href="#oMark"></use></svg>
     <h1 style="font-size: 18px;">FOREVER</h1>
     <span class="week-num" id="weekPill">Week –</span>
     <span class="week-num" id="streakPill" style="margin-left:2px;"></span>
@@ -314,10 +343,11 @@
       <div class="menu-label">Block settings</div>
       <div class="field-row" style="margin-top:8px;">
         <div><label>Start date</label><input type="date" id="blockStart"></div>
-        <div><label>Length</label><select id="blockLen"><option value="6">6-wk</option><option value="4">4-wk</option></select></div>
+        <div><label>Length</label><select id="blockLen"><option value="4">4-wk</option><option value="6">6-wk</option><option value="8">8-wk</option><option value="10">10-wk</option><option value="12">12-wk</option></select></div>
       </div>
     </div>
     <button class="menu-item" id="menuHistoryBtn">Workout History</button>
+    <button class="menu-item" id="menuPhotosBtn">Progress Photos</button>
     <button class="menu-item" id="menuWarmupBtn">Warm-up &amp; Recovery library</button>
     <button class="menu-item" id="menuExportBtn">Export all data (.csv)</button>
     <button class="menu-item" id="menuOnboardBtn">Run setup wizard again</button>
@@ -343,6 +373,27 @@
   </div>
 </div>
 
+<div id="photosOverlay" class="menu-overlay">
+  <div class="menu-panel" style="left:0; right:0; width:auto; max-width:640px; margin:0 auto;">
+    <div class="menu-header"><span class="section-title" style="margin:0;">Progress Photos</span><button class="menu-close" id="photosCloseBtn">×</button></div>
+    <div id="photosList"></div>
+  </div>
+</div>
+
+<div id="photoViewerOverlay" class="menu-overlay" style="z-index:90;">
+  <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+    <div class="menu-header" style="padding:20px; padding-top:calc(20px + env(safe-area-inset-top)); margin-bottom:0;">
+      <span class="section-title" id="photoViewerDate" style="margin:0;"></span>
+      <button class="menu-close" id="photoViewerCloseBtn">×</button>
+    </div>
+    <div id="photoViewerImg" style="flex:1; background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+    <div class="overview-actions" style="padding:16px 20px calc(16px + env(safe-area-inset-bottom));">
+      <button class="btn-secondary" id="photoViewerPrev">‹ Older</button>
+      <button class="btn-secondary" id="photoViewerNext">Newer ›</button>
+    </div>
+  </div>
+</div>
+
 <section class="tabpanel active" id="tab-workout">
   <div class="control-panel">
     <div class="cp-row">
@@ -352,6 +403,7 @@
     <div class="info-panel" id="infoWeekPanel">Set counts and RIR descend on a periodized schedule: weeks 1–3 hold base volume (2 sets compound / 3 isolation), weeks 4–5 are your overload peak (3/4 sets) — mesocycle research shows adding sets is the best-supported lever for hypertrophy — and week 6 is a deload, matching what most competitive strength/physique athletes already do.</div>
   </div>
 
+  <div id="fatigueSlot"></div>
   <div id="checkinSlot"></div>
   <nav class="days" id="dayNav"></nav>
 
@@ -381,6 +433,12 @@
       <div class="info-panel" id="infoAdaptivePanel">This compares your actual trend-weight change to what you've logged eating over the same stretch to back-calculate your real maintenance calories — the same idea behind adaptive trackers like MacroFactor — instead of relying only on the Mifflin-St Jeor estimate, which is commonly off by a few hundred calories for a real person. It needs roughly two weeks of fairly consistent weigh-ins and food logging before it has enough signal to say anything, and it never changes your target on its own — you decide whether to apply it.</div>
       <div class="ex-prev" id="adaptiveText" style="margin-top:6px;"></div>
       <button class="btn-primary" id="applyAdaptiveBtn" style="width:100%; margin-top:12px; display:none;"></button>
+    </div>
+    <div class="panel" id="phaseHealthCard" style="display:none;">
+      <div class="section-title">Phase check <button class="info-btn" id="infoPhaseHealthBtn">i</button></div>
+      <div class="info-panel" id="infoPhaseHealthPanel">Reassessed every time you open this tab, using how your waist has tracked against your weight change since this phase started, compared to how that same ratio looked earlier in the phase. It's a directional signal from what you've logged, not a body-composition scan — treat "wrap up soon" as worth a look, not a verdict, and it updates automatically as new weigh-ins and measurements come in rather than locking in a one-time prediction.</div>
+      <div class="ex-prev" id="phaseHealthText" style="margin-top:6px;"></div>
+      <div class="overview-actions" id="phaseHealthActions" style="margin-top:12px; display:none;"></div>
     </div>
     <div class="panel">
       <div class="section-title">Today's targets <button class="info-btn" id="infoMacroBtn">i</button></div>
@@ -494,6 +552,11 @@
 <section class="tabpanel" id="tab-mesos">
   <div style="padding-top:14px;">
     <div class="panel">
+      <div class="section-title">This week's volume <button class="info-btn" id="infoVolumeBtn">i</button></div>
+      <div class="info-panel" id="infoVolumePanel">Weekly sets per muscle group across your whole schedule, compared to evidence-based volume landmarks (MEV = minimum to grow, MAV = the sweet spot, MRV = the most you can recover from). "Legs" is one combined bucket for quads/hamstrings/glutes/calves since exercises aren't split that finely yet — use it as a rough total-lower-body signal.</div>
+      <div id="volumePanelBody" style="margin-top:10px;"></div>
+    </div>
+    <div class="panel">
       <div class="section-title">Choose your split</div>
       <div class="ex-prev" style="margin-top:6px;">Every option here trains each muscle at least twice a week — the one piece of programming the frequency research (Schoenfeld et al.) agrees on most consistently once volume is equal. Pick the one that fits your schedule and recovery, not the one that sounds hardest.</div>
       <div id="presetList" style="margin-top:14px;"></div>
@@ -532,9 +595,10 @@ function wireInfo(btnId, panelId) {
   const btn = document.getElementById(btnId), panel = document.getElementById(panelId);
   if (btn && panel) btn.onclick = () => panel.classList.toggle('open');
 }
-['Week','Sleep','Macro','Bmi','MealTiming','ShowPrep','Builder','Adaptive','Measure'].forEach(k => wireInfo(`info${k}Btn`, `info${k}Panel`));
+['Week','Sleep','Macro','Bmi','MealTiming','ShowPrep','Builder','Adaptive','Measure','Volume','PhaseHealth'].forEach(k => wireInfo(`info${k}Btn`, `info${k}Panel`));
 
-function renderMesos() {
+async function renderMesos() {
+  renderWeeklyVolumePanel();
   const list = document.getElementById('presetList');
   let lastTier = null;
   list.innerHTML = PRESET_ORDER.map(k => {
@@ -696,10 +760,91 @@ const EXERCISE_LIBRARY = {
   ],
 };
 
+// Reverse lookup so a scheduled exercise (which only carries name+type) can be traced back to
+// which muscle group it trains, without duplicating that tag onto every program's exercise list.
+const EXERCISE_TO_MUSCLE = {};
+Object.keys(EXERCISE_LIBRARY).forEach(m => EXERCISE_LIBRARY[m].forEach(e => { EXERCISE_TO_MUSCLE[e.name] = m; }));
+
+// Weekly set-volume landmarks (MEV = minimum effective, MAV = maximum adaptive, MRV = maximum
+// recoverable), drawn from the general ranges in Israetel/RP's volume-landmark work and Schoenfeld's
+// dose-response meta-analyses. "Legs" is one bucket rather than split by quads/hamstrings/glutes/
+// calves because the exercise library doesn't tag that distinction yet — treat it as a rough signal
+// for total lower-body load, not a precise per-muscle read.
+const VOLUME_LANDMARKS = {
+  Chest: { mev: 8, mav: 14, mrv: 20 },
+  Back: { mev: 10, mav: 16, mrv: 25 },
+  Shoulders: { mev: 8, mav: 14, mrv: 20 },
+  Legs: { mev: 10, mav: 16, mrv: 24 },
+  Biceps: { mev: 6, mav: 12, mrv: 20 },
+  Triceps: { mev: 6, mav: 12, mrv: 18 },
+  Abs: { mev: 0, mav: 8, mrv: 16 },
+};
+
+// Walks the full week's schedule (not just the currently-open day) and sums this week's target set
+// count per muscle group, using the same defaultSetCount() the workout screen itself uses — so this
+// reflects actual periodized volume (base/overload/deload), not a static estimate. Days edited via
+// "Edit this day's exercises" aren't all necessarily cached in programOverrides yet (that only loads
+// for whichever day you've opened), so this fetches any day not already cached directly from the db.
+async function computeWeeklyVolumeByMuscle() {
+  const info = weekInfo();
+  const totals = {};
+  const unmapped = new Set();
+  for (const day of DAY_ORDER) {
+    let dayData = programOverrides[day];
+    if (!dayData) {
+      if (db) {
+        try {
+          const snap = await db.doc(`program/${activePreset}_${day}`).get();
+          dayData = snap.exists ? snap.data() : PRESET_PROGRAMS[activePreset][day];
+        } catch (e) { dayData = PRESET_PROGRAMS[activePreset][day]; }
+      } else {
+        dayData = PRESET_PROGRAMS[activePreset][day];
+      }
+    }
+    (dayData.exercises || []).forEach(ex => {
+      const muscle = EXERCISE_TO_MUSCLE[ex.name];
+      const sets = defaultSetCount(ex.type, info);
+      if (!muscle) { unmapped.add(ex.name); return; }
+      totals[muscle] = (totals[muscle] || 0) + sets;
+    });
+  }
+  return { totals, unmapped: [...unmapped], info };
+}
+function volumeTier(muscle, sets) {
+  const lm = VOLUME_LANDMARKS[muscle];
+  if (!lm) return null;
+  if (sets < lm.mev) return { label: 'Under', cls: 'tier-hold' };
+  if (sets > lm.mrv) return { label: 'Over', cls: 'tier-hold' };
+  if (sets >= lm.mav) return { label: 'High', cls: 'tier-reps' };
+  return { label: 'On track', cls: 'tier-progress' };
+}
+async function renderWeeklyVolumePanel() {
+  const wrap = document.getElementById('volumePanelBody');
+  if (!wrap) return;
+  const { totals, unmapped, info } = await computeWeeklyVolumeByMuscle();
+  const rows = Object.keys(VOLUME_LANDMARKS).map(muscle => {
+    const sets = totals[muscle] || 0;
+    const lm = VOLUME_LANDMARKS[muscle];
+    const tier = volumeTier(muscle, sets);
+    const pct = Math.min(100, Math.round((sets / lm.mrv) * 100));
+    return `<div class="preview-row" style="align-items:center; flex-wrap:wrap;">
+      <span class="pname" style="min-width:90px;">${muscle}</span>
+      <span class="ptype ${tier.cls}" style="text-transform:none; margin-right:8px;">${tier.label}</span>
+      <div style="flex:1; min-width:80px; height:4px; background:var(--bg-input); overflow:hidden;"><div style="height:100%; width:${pct}%; background:var(--accent);"></div></div>
+      <span class="ptype" style="text-align:right; min-width:70px;">${sets} sets/wk</span>
+    </div>`;
+  }).join('');
+  wrap.innerHTML = `
+    ${info.week ? '' : '<div class="ex-prev" style="margin-bottom:10px;">Set a block start date to see this week\'s periodized volume.</div>'}
+    ${rows}
+    ${unmapped.length ? `<div class="ex-prev" style="margin-top:10px; font-size:10.5px;">Not counted (not in the exercise library yet): ${unmapped.join(', ')}</div>` : ''}
+  `;
+}
+
 const PRESET_PROGRAMS = {
   custom: {
     Monday: { title: "Chest", focus: "Chest · Shoulders · Triceps", exercises: [
-      { name: "Incline Smith", type: "compound" },
+      { name: "Incline Smith Press", type: "compound" },
       { name: "Cable Fly Chest", type: "isolation" },
       { name: "Shoulder Fly", type: "isolation" },
       { name: "Rear Delt", type: "isolation" },
@@ -995,7 +1140,7 @@ async function saveActivePreset(preset) {
   programOverrides = {};
   if (db) { try { await db.doc('program/activePreset').set({ value: preset }); } catch (e) {} }
 }
-let blockConfig = { start: null, length: 6, lastAckedWeek: null };
+let blockConfig = { start: null, length: 6, lastAckedWeek: null, forceDeload: false };
 let sleepGoal = 8;
 let sleepHoursToday = null;
 let sorenessToday = null;
@@ -1012,6 +1157,9 @@ let warmupTimerByEx = {};
 let nutritionPhase = 'maintain';
 let maintCals = null;
 let weightPhase = 'maintain';
+let phaseStart = null;
+let plannedPhaseWeeks = null;
+let phaseAdvisorySnoozeUntil = null;
 
 function todayName() { return DAY_ORDER[(new Date().getDay() + 6) % 7]; }
 function isoOffset(daysAgo) { const d = new Date(); d.setDate(d.getDate() - daysAgo); return d.toISOString().slice(0,10); }
@@ -1031,19 +1179,76 @@ function fmtDate() {
 }
 function cssEsc(s) { return s.replace(/[^a-zA-Z0-9_-]/g, '_'); }
 
+// Base/overload/deload split, scaled to any block length instead of hardcoded to 6 weeks.
+// Deload is always the last week; overload is roughly the final third of the remaining
+// training weeks (this reduces to exactly the original 3/2/1 split at length 6).
+function blockPhaseWeeks(len) {
+  const overload = Math.max(1, Math.round((len - 1) / 3));
+  const base = Math.max(1, len - 1 - overload);
+  return { base, overload, deload: 1 };
+}
 function weekInfo() {
-  if (!blockConfig.start) return { week: null, deload: false };
+  if (!blockConfig.start) return { week: null, deload: false, overload: false };
   const start = new Date(blockConfig.start + 'T00:00:00');
   const diffDays = Math.floor((new Date() - start) / 86400000);
   const week = Math.floor(diffDays / 7) + 1;
   const len = blockConfig.length;
   const clampedWeek = ((Math.max(week,1) - 1) % len) + 1;
-  return { week: clampedWeek, deload: clampedWeek === len };
+  const phases = blockPhaseWeeks(len);
+  const isDeload = clampedWeek === len || !!blockConfig.forceDeload;
+  const isOverload = !isDeload && clampedWeek > phases.base;
+  return { week: clampedWeek, deload: isDeload, overload: isOverload };
+}
+
+// The weekly soreness/recovery check-in was being saved and then never read by anything — real
+// fatigue signals going into a black hole while set counts kept climbing on a fixed calendar
+// regardless of how beat up the check-in said someone actually was. This reads the most recent
+// check-in back out so the app can at least surface it, rather than silently ignoring its own data.
+let fatigueFlag = false;
+async function loadFatigueSignal() {
+  fatigueFlag = false;
+  if (!db) return;
+  try {
+    const snap = await db.collection('weekcheckins').orderBy('date', 'desc').limit(1).get();
+    const docs = snap.docs || [];
+    if (!docs.length) return;
+    const data = docs[0].data();
+    const sore = parseInt(data.soreness, 10), rec = parseInt(data.recovery, 10);
+    if (!isNaN(sore) && !isNaN(rec) && sore >= 4 && rec <= 2) fatigueFlag = true;
+  } catch (e) {}
+}
+function renderFatigueAdvisory() {
+  const slot = document.getElementById('fatigueSlot');
+  if (!slot) return;
+  const info = weekInfo();
+  if (blockConfig.forceDeload) {
+    slot.innerHTML = `<div class="checkin-card"><div class="checkin-title">Early deload active</div><div class="ex-prev">Set counts and RIR are running at deload levels this week regardless of your normal block position.</div><button class="btn-secondary" id="endDeloadBtn" style="margin-top:12px; width:100%;">End early deload</button></div>`;
+    document.getElementById('endDeloadBtn').onclick = async () => {
+      blockConfig.forceDeload = false;
+      if (db) { try { await db.doc('block/config').update({ forceDeload: false }); } catch (e) {} }
+      renderFatigueAdvisory();
+      renderWeekPill();
+      loadDay();
+    };
+    return;
+  }
+  if (fatigueFlag && !info.deload) {
+    slot.innerHTML = `<div class="checkin-card"><div class="checkin-title">High fatigue reported</div><div class="ex-prev">Your last check-in showed high soreness and low recovery. Pushing more volume on top of that is how a stall turns into an injury — an early deload is worth considering rather than waiting for the calendar to catch up.</div><button class="btn-secondary" id="startDeloadBtn" style="margin-top:12px; width:100%;">Deload this week</button></div>`;
+    document.getElementById('startDeloadBtn').onclick = async () => {
+      blockConfig.forceDeload = true;
+      if (db) { try { await db.doc('block/config').update({ forceDeload: true }); } catch (e) {} }
+      renderFatigueAdvisory();
+      renderWeekPill();
+      loadDay();
+    };
+    return;
+  }
+  slot.innerHTML = '';
 }
 function defaultSetCount(type, info) {
   const compound = type === 'compound';
   if (info.deload) return compound ? 1 : 2;
-  if (blockConfig.length === 6 && info.week && info.week >= 4 && info.week <= 5) return compound ? 3 : 4;
+  if (info.overload) return compound ? 3 : 4;
   return compound ? 2 : 3;
 }
 function defaultRirForSet(i, n, isDeload) {
@@ -1053,8 +1258,8 @@ function defaultRirForSet(i, n, isDeload) {
 function weekTipText(info) {
   if (!info.week) return "Set your block start date to see weekly targets and set counts.";
   if (info.deload) return "Deload week — 1 set compound, 2 isolation, light loads, RIR 3. Active recovery.";
-  if (info.week <= 3) return `Base sets (2 compound / 3 isolation), RIR descending to 0 on the last set.`;
-  return `Overload week — 3 sets compound / 4 isolation.`;
+  if (info.overload) return `Overload week — 3 sets compound / 4 isolation.`;
+  return `Base sets (2 compound / 3 isolation), RIR descending to 0 on the last set.`;
 }
 function renderWeekPill() {
   const info = weekInfo();
@@ -1256,6 +1461,32 @@ async function restartWorkout() {
   renderMain();
 }
 
+// Swaps a stalled exercise for a same-muscle-group alternative from the library, persisting it as
+// a program override so it sticks for future sessions on this day (not just today). A plateau flag
+// used to just tell you to consider swapping, with no actual way to do it from there.
+async function swapExerciseInDay(oldName, newName, newType) {
+  const dayData = getDayData(currentDay);
+  // Defense-in-depth: the alternatives list already excludes anything already in today's day, but
+  // if this is ever called from somewhere that skipped that filter, still refuse to create a
+  // duplicate exercise rather than silently doing it.
+  if (oldName !== newName && dayData.exercises.some(ex => ex.name === newName)) return;
+  const updated = {
+    title: dayData.title,
+    focus: dayData.focus,
+    exercises: dayData.exercises.map(ex => ex.name === oldName ? { name: newName, type: newType } : ex),
+  };
+  await saveProgramOverride(currentDay, updated);
+  clearTimerFor(oldName);
+  delete state[oldName]; delete uiState[oldName];
+  delete plateauByExercise[oldName]; delete prevByExercise[oldName];
+  const info = weekInfo();
+  const n = defaultSetCount(newType, info);
+  state[newName] = Array.from({ length: n }, (_, i) => makeSet(i, n, info.deload));
+  uiState[newName] = { phase: 'input', restEndAt: null, restDuration: newType === 'compound' ? REST_SECONDS_COMPOUND : REST_SECONDS_ISOLATION, timerId: null };
+  await loadPrevious();
+  renderMain();
+}
+
 function renderExerciseBody(ex, container, prevSlot) {
   const exName = ex.name;
   const id = cssEsc(exName);
@@ -1271,7 +1502,7 @@ function renderExerciseBody(ex, container, prevSlot) {
   if (suggestion && currentIndex !== -1) {
     const top = suggestion.map(s=>`${s.weight||'–'}×${s.reps||'–'}`).join(', ');
     const tags = suggestion.map(s => { const t = tierLabel(s.tier); return `<span class="${t.cls}">${t.text}</span>`; }).join(' · ');
-    html += `<div class="ex-suggest"><div class="suggest-top"><span>Suggested: ${top}</span><button class="apply-btn" id="apply-${id}">Apply</button><button class="info-btn" id="infoProg-${id}">i</button></div><div class="suggest-detail">${tags}</div><div class="info-panel" id="infoProgPanel-${id}">Double progression, not a flat weekly add: reps climb toward a target range (${ex.type==='compound'?'5–8':'10–15'} here) before load ever moves. Once you hit the top of that range, weight jumps — the full ~${ex.type==='compound'?'3':'5'}% if that set felt easy ("progressing"), a smaller jump if it was moderately hard ("reps only"), and no change at all if it was near-max effort ("holding"), since that's the one signal that means back off, not push forward.</div>${plateauByExercise[exName] ? `<div class="ex-sleep-flag" style="margin-top:8px;">Stalled 2 sessions in a row at near-max effort — this usually means a deload on this lift, a technique check, or swapping it for a variation, not just "hold and try again."</div>` : ''}</div>`;
+    html += `<div class="ex-suggest"><div class="suggest-top"><span>Suggested: ${top}</span><button class="apply-btn" id="apply-${id}">Apply</button><button class="info-btn" id="infoProg-${id}">i</button></div><div class="suggest-detail">${tags}</div><div class="info-panel" id="infoProgPanel-${id}">Double progression, not a flat weekly add: reps climb toward a target range (${ex.type==='compound'?'5–8':'10–15'} here) before load ever moves. Once you hit the top of that range, weight jumps — the full ~${ex.type==='compound'?'3':'5'}% if that set felt easy ("progressing"), a smaller jump if it was moderately hard ("reps only"), and no change at all if it was near-max effort ("holding"), since that's the one signal that means back off, not push forward.</div>${plateauByExercise[exName] ? `<div class="ex-sleep-flag" style="margin-top:8px;">Stalled 2 sessions in a row at near-max effort — this usually means a deload on this lift, a technique check, or swapping it for a variation, not just "hold and try again."</div><button class="back-link" id="altBtn-${id}" style="padding:6px 0 0; color:var(--accent);">See alternatives</button><div id="altList-${id}"></div>` : ''}</div>`;
   }
   if (sleepDebt && ex.type === 'compound' && currentIndex !== -1) {
     html += `<div class="ex-sleep-flag">Sleep debt detected — RIR nudged up 1 on this compound lift today.</div>`;
@@ -1482,6 +1713,23 @@ function wireExerciseEvents(ex, container) {
     sets.forEach((s, i) => { if (!s.logged && suggestion[i]) { s.weight = suggestion[i].weight; s.reps = suggestion[i].reps; s.rir = suggestion[i].rir; } });
     renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot'));
   };
+  const altBtn = container.querySelector(`#altBtn-${id}`);
+  if (altBtn) altBtn.onclick = () => {
+    const altListEl = container.querySelector(`#altList-${id}`);
+    if (altListEl.innerHTML) { altListEl.innerHTML = ''; return; }
+    const muscle = EXERCISE_TO_MUSCLE[exName];
+    // Exclude both the exercise being replaced and anything already elsewhere in today's day —
+    // otherwise swapping in a lift that's already programmed later in the same session (a common
+    // case, since alternatives are pulled from the same muscle group) would just duplicate it.
+    const namesInDay = new Set(getDayData(currentDay).exercises.map(e => e.name));
+    const alternatives = muscle ? EXERCISE_LIBRARY[muscle].filter(alt => !namesInDay.has(alt.name)).slice(0, 6) : [];
+    altListEl.innerHTML = alternatives.length
+      ? alternatives.map(alt => `<div class="preview-row lib-ex-row" data-name="${alt.name}" data-type="${alt.type}" style="cursor:pointer;"><span class="pname">${alt.name}</span><span class="ptype">${alt.type} · ${EQUIP_LABELS[alt.equip]}</span></div>`).join('')
+      : '<div class="ex-prev" style="margin-top:6px;">No library alternatives found for this muscle group.</div>';
+    altListEl.querySelectorAll('.lib-ex-row').forEach(row => {
+      row.onclick = () => swapExerciseInDay(exName, row.dataset.name, row.dataset.type);
+    });
+  };
   container.querySelectorAll('.done-row').forEach(row => {
     row.onclick = () => { const i = parseInt(row.dataset.i, 10); sets[i].logged = false; uiState[exName].phase = 'input'; renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot')); };
   });
@@ -1683,6 +1931,7 @@ async function loadDay() {
   initState();
   await restoreTodaySession();
   renderCheckinIfNeeded();
+  renderFatigueAdvisory();
   dayMode = 'overview';
   showMode('overview');
   renderDayOverview();
@@ -1802,7 +2051,7 @@ function renderDayOverview() {
     if (assets) {
       try {
         const result = await assets.upload(file);
-        if (db) { try { await db.doc(`photos/${currentDay}`).set({ url: result.url }); } catch (err) {} }
+        await savePhotoLogEntry(result.url);
         applyHeroPhoto(result.url);
       } catch (err) { console.error('photo upload failed', err); }
       return;
@@ -1811,19 +2060,42 @@ function renderDayOverview() {
     const reader = new FileReader();
     reader.onload = async () => {
       const dataUrl = reader.result;
-      if (db) { try { await db.doc(`photos/${currentDay}`).set({ url: dataUrl }); } catch (err) {} }
+      await savePhotoLogEntry(dataUrl);
       applyHeroPhoto(dataUrl);
     };
     reader.readAsDataURL(file);
   });
 }
 
+// Progress photos used to be saved under photos/{dayOfWeek} — meaning every "Monday" photo
+// silently overwrote the last one, with no history at all. This keys each photo by calendar date
+// instead, so every photo you take is kept and browsable as an actual timeline (see the "Progress
+// Photos" menu item), which is the whole point of taking them in the first place.
+async function savePhotoLogEntry(url) {
+  if (!db) return;
+  try { await db.doc(`photoLog/${todayISO()}`).set({ url, day: currentDay, date: todayISO(), createdAt: Date.now() }); } catch (e) {}
+}
+async function getPhotoLog(limitN) {
+  if (!db) return [];
+  try {
+    const snap = await db.collection('photoLog').orderBy('date', 'desc').limit(limitN || 90).get();
+    return (snap.docs || []).map(d => d.data()).filter(p => p && p.url);
+  } catch (e) { return []; }
+}
+
 async function loadHeroPhoto() {
   let url = DEFAULT_HERO_PHOTOS[currentDay] || null;
   if (db) {
     try {
-      const snap = await db.doc(`photos/${currentDay}`).get();
-      if (snap.exists) url = snap.data().url;
+      const log = await getPhotoLog(1);
+      if (log.length) url = log[0].url;
+      else {
+        // Fall back to a photo saved under the old day-of-week key, from before this fix, so an
+        // existing photo doesn't just disappear — it just won't grow into a timeline until a new
+        // one is taken under the new dated scheme.
+        const legacy = await db.doc(`photos/${currentDay}`).get();
+        if (legacy.exists) url = legacy.data().url;
+      }
     } catch (e) {}
   }
   if (url) applyHeroPhoto(url);
@@ -1978,6 +2250,7 @@ async function loadBlockConfig() {
       blockConfig.start = data.start || null;
       blockConfig.length = data.length || 6;
       blockConfig.lastAckedWeek = data.lastAckedWeek || null;
+      blockConfig.forceDeload = !!data.forceDeload;
     }
   } catch (e) { console.error(e); }
   document.getElementById('blockStart').value = blockConfig.start || '';
@@ -1986,7 +2259,7 @@ async function loadBlockConfig() {
 }
 async function saveBlockConfig() {
   if (!db) return;
-  try { await db.doc('block/config').set({ start: blockConfig.start, length: blockConfig.length, lastAckedWeek: blockConfig.lastAckedWeek }); }
+  try { await db.doc('block/config').set({ start: blockConfig.start, length: blockConfig.length, lastAckedWeek: blockConfig.lastAckedWeek, forceDeload: blockConfig.forceDeload }); }
   catch (e) { console.error(e); }
   renderWeekPill();
   loadDay();
@@ -2046,12 +2319,76 @@ document.getElementById('menuHistoryBtn').addEventListener('click', async () => 
 document.getElementById('historyCloseBtn').addEventListener('click', () => document.getElementById('historyOverlay').classList.remove('open'));
 document.getElementById('historyOverlay').addEventListener('click', (e) => { if (e.target.id === 'historyOverlay') e.currentTarget.classList.remove('open'); });
 
+let photoViewerLog = [];
+let photoViewerIndex = 0;
+async function renderPhotoGallery() {
+  const list = document.getElementById('photosList');
+  const log = await getPhotoLog();
+  photoViewerLog = log;
+  if (!log.length) {
+    list.innerHTML = '<div class="ex-prev" style="padding:20px 0;">No progress photos yet — add one from the "+ Add photo" button on any training day\'s overview.</div>';
+    return;
+  }
+  list.innerHTML = `<div class="photo-grid">${log.map((p, i) => `<button class="photo-thumb" data-i="${i}" style="background-image:url('${p.url}');"><span class="photo-thumb-date">${fmtHistoryDate(p.date)}</span></button>`).join('')}</div>`;
+  list.querySelectorAll('.photo-thumb').forEach(btn => { btn.onclick = () => openPhotoViewer(parseInt(btn.dataset.i, 10)); });
+}
+function openPhotoViewer(i) {
+  photoViewerIndex = i;
+  renderPhotoViewerFrame();
+  document.getElementById('photoViewerOverlay').classList.add('open');
+}
+function renderPhotoViewerFrame() {
+  const p = photoViewerLog[photoViewerIndex];
+  if (!p) return;
+  document.getElementById('photoViewerImg').style.backgroundImage = `url('${p.url}')`;
+  document.getElementById('photoViewerDate').textContent = `${fmtHistoryDate(p.date)}${p.day ? ' · ' + p.day : ''}`;
+  // Log is newest-first: a higher index is further back in time, so "Older" moves the index up
+  // and "Newer" moves it down — bounded at either end of what's actually logged.
+  document.getElementById('photoViewerPrev').disabled = photoViewerIndex >= photoViewerLog.length - 1;
+  document.getElementById('photoViewerNext').disabled = photoViewerIndex <= 0;
+}
+document.getElementById('menuPhotosBtn').addEventListener('click', async () => {
+  document.getElementById('menuOverlay').classList.remove('open');
+  await renderPhotoGallery();
+  document.getElementById('photosOverlay').classList.add('open');
+});
+document.getElementById('photosCloseBtn').addEventListener('click', () => document.getElementById('photosOverlay').classList.remove('open'));
+document.getElementById('photosOverlay').addEventListener('click', (e) => { if (e.target.id === 'photosOverlay') e.currentTarget.classList.remove('open'); });
+document.getElementById('photoViewerCloseBtn').addEventListener('click', () => document.getElementById('photoViewerOverlay').classList.remove('open'));
+document.getElementById('photoViewerPrev').addEventListener('click', () => { if (photoViewerIndex < photoViewerLog.length - 1) { photoViewerIndex++; renderPhotoViewerFrame(); } });
+document.getElementById('photoViewerNext').addEventListener('click', () => { if (photoViewerIndex > 0) { photoViewerIndex--; renderPhotoViewerFrame(); } });
+
 // First-run setup wizard. A brand-new install otherwise drops someone into a mostly-blank app
 // with no guidance — no stats, no goal, no split, no block date — and nothing works until they
 // find and fill in four separate screens themselves. This walks through the same underlying
 // settings (and calls the exact same save functions) in one guided pass instead.
 let onboardStep = 0;
-const ONBOARD_STEPS = ['welcome', 'stats', 'weight', 'goal', 'split', 'block'];
+const ONBOARD_STEPS = ['welcome', 'stats', 'weight', 'goal', 'experience', 'split', 'block'];
+// Filled in on the 'experience' step, then used to pre-select (not force) a split and block
+// length on the following two steps, so first-time setup recommends something sane instead of
+// handing a beginner a blank menu of ten splits and five block lengths with no guidance.
+let obRecommendedPreset = null;
+let obRecommendedLen = null;
+function recommendSplit(experience, equipment, days) {
+  if (experience === 'beginner') {
+    if (days <= 2) return 'fullBody2Day';
+    return equipment === 'machine' ? 'fullBodyMachine' : 'fullBodyStandard';
+  }
+  if (experience === 'intermediate') {
+    if (days >= 5) return 'upperLowerPlusArms';
+    return equipment === 'machine' ? 'upperLowerMachine' : 'upperLowerStandard';
+  }
+  // advanced
+  if (days < 5) return equipment === 'machine' ? 'upperLowerMachine' : 'upperLowerStandard';
+  return equipment === 'machine' ? 'pplHighVolume' : 'pplStandard';
+}
+function recommendBlockLength(experience) {
+  // Newer lifters get more frequent feedback loops and deloads; advanced lifters can accumulate
+  // fatigue longer before a reset is worth it.
+  if (experience === 'beginner') return 4;
+  if (experience === 'intermediate') return 6;
+  return 8;
+}
 
 function onboardStatsHTML() {
   const ft = document.getElementById('heightFt').value || '5';
@@ -2094,22 +2431,45 @@ function onboardGoalHTML() {
       ${Object.keys(PHASES).map(k => `<button class="btn-secondary onboard-goal-btn" data-p="${k}" style="width:100%; display:block; text-align:left; margin-bottom:8px; ${nutritionPhase===k?'border-color:var(--accent); color:var(--accent);':''}">${PHASES[k].label} <span style="color:var(--text-dim); font-weight:400;">— ${PHASES[k].note}</span></button>`).join('')}
     </div>`;
 }
+function onboardExperienceHTML() {
+  return `
+    <div class="section-title">Training background</div>
+    <div class="ex-prev" style="margin-top:6px;">Used to recommend a split and block length that fit where you're at right now — nothing here is locked in, both can be changed anytime from the Mesos tab or the menu.</div>
+    <div class="field-row" style="margin-top:14px;"><div><label>Experience</label>
+      <select id="obExperience" style="width:220px;">
+        <option value="beginner">New to lifting / under 1 year</option>
+        <option value="intermediate">1–3 years, consistent</option>
+        <option value="advanced">3+ years, consistent</option>
+      </select>
+    </div></div>
+    <div class="field-row" style="margin-top:10px;">
+      <div><label>Days available / week</label><select id="obDays"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></div>
+      <div><label>Prefer</label><select id="obEquipment"><option value="free">Free weights</option><option value="machine">Machines &amp; cables</option></select></div>
+    </div>`;
+}
 function onboardSplitHTML() {
   let lastTier = null;
   const rows = PRESET_ORDER.map(k => {
     const meta = PRESET_META[k];
     let tierHeader = '';
     if (meta.tier !== lastTier) { tierHeader = `<div class="menu-label" style="margin:${lastTier===null?'0':'14px'} 0 6px;">${meta.tier}</div>`; lastTier = meta.tier; }
-    return `${tierHeader}<button class="btn-secondary onboard-split-btn" data-preset="${k}" style="width:100%; display:block; text-align:left; margin-bottom:8px; ${activePreset===k?'border-color:var(--accent); color:var(--accent);':''}">${meta.label}</button>`;
+    const isRec = obRecommendedPreset === k;
+    const badge = isRec ? ` <span style="color:var(--accent); font-weight:600; font-size:10px;">RECOMMENDED</span>` : '';
+    return `${tierHeader}<button class="btn-secondary onboard-split-btn" data-preset="${k}" style="width:100%; display:block; text-align:left; margin-bottom:8px; ${isRec || activePreset===k?'border-color:var(--accent); color:var(--accent);':''}">${meta.label}${badge}</button>`;
   }).join('');
   return `<div class="section-title">Choose your split</div><div class="ex-prev" style="margin-top:6px;">You can rebuild any day from the exercise library later, or switch splits anytime from the Mesos tab.</div><div style="margin-top:14px; max-height:340px; overflow-y:auto;">${rows}</div>`;
 }
 function onboardBlockHTML() {
   const start = blockConfig.start || todayISO();
+  const len = obRecommendedLen || blockConfig.length || 6;
+  const phases = blockPhaseWeeks(len);
   return `
     <div class="section-title">Start your training block</div>
-    <div class="ex-prev" style="margin-top:6px;">A 6-week undulating block: base volume weeks 1–3, an overload peak weeks 4–5, then a deload week 6 before the next one starts. Today's a sensible default.</div>
-    <div class="field-row" style="margin-top:14px;"><div><label>Start date</label><input type="date" id="obBlockStart" value="${start}"></div></div>`;
+    <div class="ex-prev" style="margin-top:6px;">A ${len}-week undulating block: base volume weeks 1–${phases.base}, an overload peak weeks ${phases.base+1}–${phases.base+phases.overload}, then a deload week ${len} before the next one starts.${obRecommendedLen ? ' Length pre-set from your experience level — change it below if you\'d rather run something else.' : ' Today\'s a sensible default.'}</div>
+    <div class="field-row" style="margin-top:14px;">
+      <div><label>Start date</label><input type="date" id="obBlockStart" value="${start}"></div>
+      <div><label>Length</label><select id="obBlockLen"><option value="4" ${len===4?'selected':''}>4-wk</option><option value="6" ${len===6?'selected':''}>6-wk</option><option value="8" ${len===8?'selected':''}>8-wk</option><option value="10" ${len===10?'selected':''}>10-wk</option><option value="12" ${len===12?'selected':''}>12-wk</option></select></div>
+    </div>`;
 }
 
 function renderOnboardStep() {
@@ -2122,7 +2482,7 @@ function renderOnboardStep() {
   nextBtn.textContent = key === 'block' ? 'Finish' : 'Next';
 
   if (key === 'welcome') {
-    content.innerHTML = `<h1 style="font-size:26px; text-align:center; margin-top:10px;">FOREVER</h1><div class="ex-prev" style="margin-top:18px; font-size:13px; line-height:1.7; text-align:center;">A periodized training and nutrition coach — double progression on every lift, adaptive calories that adjust to your actual results, and a 6-week undulating training block. Let's get your program set up — takes about a minute.</div>`;
+    content.innerHTML = `<h1 style="font-size:26px; text-align:center; margin-top:10px;">FOREVER</h1><div class="ex-prev" style="margin-top:18px; font-size:13px; line-height:1.7; text-align:center;">A periodized training and nutrition coach — double progression on every lift, adaptive calories that adjust to your actual results, and an undulating training block sized to your experience. Let's get your program set up — takes about a minute.</div>`;
     nextBtn.textContent = 'Get Started';
   } else if (key === 'stats') {
     content.innerHTML = onboardStatsHTML();
@@ -2131,13 +2491,13 @@ function renderOnboardStep() {
   } else if (key === 'goal') {
     content.innerHTML = onboardGoalHTML();
     content.querySelectorAll('.onboard-goal-btn').forEach(btn => btn.onclick = async () => {
-      nutritionPhase = btn.dataset.p;
-      weightPhase = btn.dataset.p;
-      if (db) { try { await db.doc('nutrition/config').set({ maintCals, phase: nutritionPhase }); } catch (e) {} }
+      await setNutritionPhase(btn.dataset.p, { reason: 'onboarding' });
       await saveWeightConfig();
       onboardStep++; renderOnboardStep();
     });
     nextBtn.style.display = 'none';
+  } else if (key === 'experience') {
+    content.innerHTML = onboardExperienceHTML();
   } else if (key === 'split') {
     content.innerHTML = onboardSplitHTML();
     content.querySelectorAll('.onboard-split-btn').forEach(btn => btn.onclick = async () => {
@@ -2165,7 +2525,7 @@ async function finalizeOnboarding() {
     const kg = trend / 2.20462, cm = totalIn * 2.54;
     const bmr = sex === 'male' ? (10*kg + 6.25*cm - 5*age + 5) : (10*kg + 6.25*cm - 5*age - 161);
     maintCals = Math.round(bmr * activity);
-    if (db) { try { await db.doc('nutrition/config').set({ maintCals, phase: nutritionPhase }); } catch (e) {} }
+    await persistNutritionConfig();
   }
 }
 async function completeOnboarding() {
@@ -2185,10 +2545,19 @@ async function onboardHandleNext() {
   } else if (key === 'weight') {
     const v = parseFloat(document.getElementById('obWeight').value);
     if (!isNaN(v) && v > 0) await logWeight(v);
+  } else if (key === 'experience') {
+    const experience = document.getElementById('obExperience').value;
+    const days = parseInt(document.getElementById('obDays').value, 10);
+    const equipment = document.getElementById('obEquipment').value;
+    obRecommendedPreset = recommendSplit(experience, equipment, days);
+    obRecommendedLen = recommendBlockLength(experience);
   } else if (key === 'block') {
     const v = document.getElementById('obBlockStart').value || todayISO();
+    const lenSel = document.getElementById('obBlockLen');
     document.getElementById('blockStart').value = v;
     blockConfig.start = v;
+    if (lenSel) blockConfig.length = parseInt(lenSel.value, 10);
+    document.getElementById('blockLen').value = String(blockConfig.length);
     await finalizeOnboarding();
     await saveBlockConfig();
     await completeOnboarding();
@@ -2425,21 +2794,66 @@ function renderCheckinIfNeeded() {
     blockConfig.lastAckedWeek = info.week;
     if (db) { try { await db.doc('block/config').update({ lastAckedWeek: info.week }); } catch (e) {} }
     slot.innerHTML = '';
+    await loadFatigueSignal();
+    renderFatigueAdvisory();
     renderDayOverview();
   };
 }
 
+// `group` is what the rest of the app reasons about (pace math, the phase-health engine, the
+// mini-cut/recomp suggestion buttons) — it's what makes "Aggressive Cut" behave like a cut and
+// "Standard Bulk" behave like a bulk without duplicating that logic per phase. Existing saved
+// data only ever used the three original keys (cut/maintain/bulk), which are kept unchanged so
+// nothing already stored breaks; the new keys are additions, not replacements.
 const PHASES = {
-  cut:      { label: 'Cut',      calDelta: -500,  note: '0.5–1% bodyweight loss/week target' },
-  maintain: { label: 'Maintain', calDelta: 0,     note: 'holding steady' },
-  bulk:     { label: 'Lean Bulk',calDelta: 275,   note: '0.25–0.5 kg gain/week target' },
+  cutAggressive: { label: 'Aggressive Cut', calDelta: -750, note: '~0.75–1.25% bodyweight loss/week — faster, higher hunger and muscle-loss risk', group: 'cut' },
+  cut:           { label: 'Cut',            calDelta: -500, note: '0.5–1% bodyweight loss/week target', group: 'cut' },
+  recomp:        { label: 'Recomp',         calDelta: -150, note: 'small deficit, protein kept high, training kept heavy — body composition shifts without much scale movement', group: 'recomp' },
+  maintain:      { label: 'Maintain',       calDelta: 0,    note: 'holding steady', group: 'maintain' },
+  bulk:          { label: 'Lean Bulk',      calDelta: 275,  note: '0.25–0.5 kg gain/week target', group: 'bulk' },
+  bulkStandard:  { label: 'Standard Bulk',  calDelta: 450,  note: '0.5–0.75 kg gain/week target — faster gain, more of it will be fat', group: 'bulk' },
 };
+// The single place phase changes actually happen. nutritionPhase (drives calorie targets) and
+// weightPhase (drives the Weight tab's pace math) used to be set independently in three different
+// places, so switching phase in one tab silently left the other tab thinking you were still in the
+// old phase. This keeps both in sync, and records when the *current* phase actually started —
+// without that there's no way to know how many weeks you've been bulking, which the phase-health
+// check below depends on. It also logs a lightweight history of phase changes for future review.
+// Remembers which bulk variant (Lean vs Standard) was active right before a mini-cut/recomp
+// diversion, so "Resume bulk" puts someone back where they actually were instead of always
+// defaulting to Lean Bulk regardless of what they'd been running.
+let phaseBeforeCut = null;
+async function persistNutritionConfig() {
+  if (!db) return;
+  try { await db.doc('nutrition/config').set({ maintCals, phase: nutritionPhase, phaseStart, plannedPhaseWeeks, phaseAdvisorySnoozeUntil, phaseBeforeCut }); } catch (e) {}
+}
+async function setNutritionPhase(newPhase, opts) {
+  opts = opts || {};
+  const changed = newPhase !== nutritionPhase;
+  const prevGroup = PHASES[nutritionPhase] ? PHASES[nutritionPhase].group : nutritionPhase;
+  const newGroup = PHASES[newPhase] ? PHASES[newPhase].group : newPhase;
+  if (changed && prevGroup === 'bulk' && (newGroup === 'cut' || newGroup === 'recomp')) {
+    phaseBeforeCut = nutritionPhase;
+  }
+  nutritionPhase = newPhase;
+  weightPhase = newPhase;
+  if (changed) {
+    phaseStart = todayISO();
+    plannedPhaseWeeks = opts.plannedWeeks || null;
+    phaseAdvisorySnoozeUntil = null;
+    if (db) { try { await db.doc(`phaseHistory/${Date.now()}`).set({ phase: newPhase, date: todayISO(), reason: opts.reason || 'manual' }); } catch (e) {} }
+  } else if (opts.plannedWeeks !== undefined) {
+    plannedPhaseWeeks = opts.plannedWeeks;
+  }
+  if (opts.snoozeWeeks) { phaseAdvisorySnoozeUntil = isoOffset(-7 * opts.snoozeWeeks); }
+  await persistNutritionConfig();
+  if (db) { try { await db.doc('weight/config').update({ phase: weightPhase }); } catch (e) {} }
+}
 function renderPhaseRow() {
   const row = document.getElementById('phaseRow');
   row.innerHTML = Object.keys(PHASES).map(k => `<button class="phase-btn ${nutritionPhase===k?'selected':''}" data-p="${k}">${PHASES[k].label}</button>`).join('');
   row.querySelectorAll('.phase-btn').forEach(b => b.onclick = async () => {
-    nutritionPhase = b.dataset.p;
-    if (db) { try { await db.doc('nutrition/config').set({ maintCals, phase: nutritionPhase }); } catch(e){} }
+    await setNutritionPhase(b.dataset.p, { reason: 'manual' });
     renderNutrition();
   });
 }
@@ -2447,14 +2861,30 @@ async function loadNutritionConfig() {
   if (!db) return;
   try {
     const snap = await db.doc('nutrition/config').get();
-    if (snap.exists) { maintCals = snap.data().maintCals || null; nutritionPhase = snap.data().phase || 'maintain'; }
+    if (snap.exists) {
+      const data = snap.data();
+      maintCals = data.maintCals || null;
+      nutritionPhase = data.phase || 'maintain';
+      phaseStart = data.phaseStart || null;
+      plannedPhaseWeeks = data.plannedPhaseWeeks || null;
+      phaseAdvisorySnoozeUntil = data.phaseAdvisorySnoozeUntil || null;
+      phaseBeforeCut = data.phaseBeforeCut || null;
+      // Migrate: a phase set before this feature existed has no recorded start date. Backfilling
+      // to today isn't exactly right, but it's the honest "we don't actually know" default, and it
+      // self-corrects going forward rather than breaking the weeks-in-phase math or guessing a
+      // fake historical date.
+      if (nutritionPhase !== 'maintain' && !phaseStart) {
+        phaseStart = todayISO();
+        await persistNutritionConfig();
+      }
+    }
   } catch (e) {}
 }
 document.getElementById('maintCals').addEventListener('change', async (e) => {
   const v = parseFloat(e.target.value);
   if (isNaN(v)) return;
   maintCals = v;
-  if (db) { try { await db.doc('nutrition/config').set({ maintCals, phase: nutritionPhase }); } catch(e){} }
+  await persistNutritionConfig();
   renderNutrition();
 });
 // Scale weight swings 1-3 lb day to day from water, sodium, and glycogen — using a single
@@ -2543,8 +2973,13 @@ async function computeAdaptiveSuggestion() {
   } catch (e) { console.error('adaptive suggestion failed', e); return { status: 'error' }; }
 }
 function expectedWeeklyRangeLb(phase, baseWeight) {
-  if (phase === 'cut') return [-(baseWeight * 0.01), -(baseWeight * 0.005)];
-  if (phase === 'bulk') return [0.55, 1.1];
+  const group = PHASES[phase] ? PHASES[phase].group : phase;
+  if (group === 'cut') {
+    const mult = phase === 'cutAggressive' ? [-0.0125, -0.0075] : [-0.01, -0.005];
+    return [baseWeight * mult[0], baseWeight * mult[1]];
+  }
+  if (group === 'recomp') return [-(baseWeight * 0.003), (baseWeight * 0.001)];
+  if (group === 'bulk') return phase === 'bulkStandard' ? [0.7, 1.5] : [0.55, 1.1];
   return [-1, 1];
 }
 async function renderAdaptiveCard() {
@@ -2574,13 +3009,14 @@ async function renderAdaptiveCard() {
   const rangeLo = Math.min(lo, hi), rangeHi = Math.max(lo, hi);
   const onPace = r.weeklyRateLb >= rangeLo - 0.15 && r.weeklyRateLb <= rangeHi + 0.15;
   const phaseLabel = PHASES[nutritionPhase].label.toLowerCase();
+  const phaseGroup = PHASES[nutritionPhase].group;
   let paceNote;
-  if (nutritionPhase === 'maintain') {
-    paceNote = onPace ? "That's within a normal maintenance range." : "That's more week-to-week movement than expected for maintenance — worth a closer look at intake.";
+  if (phaseGroup === 'maintain' || phaseGroup === 'recomp') {
+    paceNote = onPace ? `That's within a normal ${phaseGroup === 'recomp' ? 'recomp' : 'maintenance'} range.` : `That's more week-to-week movement than expected for ${phaseGroup === 'recomp' ? 'a recomp' : 'maintenance'} — worth a closer look at intake.`;
   } else if (onPace) {
     paceNote = `That's right in the target range for ${phaseLabel}.`;
   } else if (Math.abs(r.weeklyRateLb) > Math.abs(rangeHi)) {
-    paceNote = `That's faster than the ${phaseLabel} target range — ${nutritionPhase === 'cut' ? 'raises muscle-loss risk' : 'likely adding more fat than needed'}.`;
+    paceNote = `That's faster than the ${phaseLabel} target range — ${phaseGroup === 'cut' ? 'raises muscle-loss risk' : 'likely adding more fat than needed'}.`;
   } else {
     paceNote = `That's slower than the ${phaseLabel} target range.`;
   }
@@ -2592,22 +3028,163 @@ async function renderAdaptiveCard() {
     btn.textContent = `Update maintenance to ${r.suggested} kcal`;
     btn.onclick = async () => {
       maintCals = r.suggested;
-      if (db) { try { await db.doc('nutrition/config').set({ maintCals, phase: nutritionPhase }); } catch (e) {} }
+      await persistNutritionConfig();
       renderNutrition();
     };
+  }
+}
+
+// Reads the current phase's actual duration and trend data fresh every call — a live, continuously
+// reassessed read, not a prediction locked in once. It can't see body composition directly, so it
+// infers a fat-gain-heavy trend from waist circumference outpacing bodyweight change *relative to
+// how that same ratio behaved earlier in this phase* — a self-referential comparison rather than an
+// invented universal threshold, since no single "X inches per pound" constant is well-supported
+// across different people. A fixed 12-week outer bound backs it up regardless of measurement noise,
+// since sustained-surplus duration risk is well-supported independent of any one signal.
+async function evaluatePhaseHealth() {
+  const phaseGroup = PHASES[nutritionPhase] ? PHASES[nutritionPhase].group : nutritionPhase;
+  // Recomp has no well-supported "how long is too long" or waist:weight heuristic the way a
+  // sustained surplus or deficit does, so it's treated like maintenance here — reassessed by feel
+  // and the pace card above, not by this duration/trend engine.
+  if (!phaseStart || phaseGroup === 'maintain' || phaseGroup === 'recomp') return { status: 'na' };
+
+  const weeksIn = Math.max(0, (new Date() - new Date(phaseStart + 'T00:00:00')) / (7 * 86400000));
+
+  if (phaseGroup === 'cut') {
+    if (plannedPhaseWeeks) {
+      if (weeksIn >= plannedPhaseWeeks) return { status: 'planned_cut_done', weeksIn, plannedPhaseWeeks };
+      return { status: 'planned_cut_in_progress', weeksIn, plannedPhaseWeeks };
+    }
+    if (weeksIn >= 12) return { status: 'long_cut', weeksIn };
+    return { status: 'on_track', weeksIn };
+  }
+
+  if (phaseGroup !== 'bulk') return { status: 'na' };
+  if (weeksIn < 4) return { status: 'too_early', weeksIn };
+
+  let weightLog = [], measureLog = [];
+  if (db) {
+    try { weightLog = (await db.collection('weight').orderBy('date', 'desc').limit(150).get()).docs.map(d => d.data()); } catch (e) {}
+    try { measureLog = (await db.collection('measurements').orderBy('date', 'desc').limit(150).get()).docs.map(d => d.data()).filter(m => m.waist != null); } catch (e) {}
+  }
+  weightLog = weightLog.filter(w => w.date >= phaseStart).sort((a, b) => a.date < b.date ? -1 : 1);
+  measureLog = measureLog.filter(m => m.date >= phaseStart).sort((a, b) => a.date < b.date ? -1 : 1);
+
+  if (weeksIn >= 12) return { status: 'long_bulk', weeksIn, severity: 'high' };
+  if (weightLog.length < 4 || measureLog.length < 3) return { status: 'insufficient_data', weeksIn };
+
+  const weightGain = weightLog[weightLog.length - 1].lb - weightLog[0].lb;
+  const midIdx = Math.floor(measureLog.length / 2);
+  const firstHalf = measureLog.slice(0, midIdx + 1);
+  const secondHalf = measureLog.slice(midIdx);
+  const weightAt = (dateIso) => {
+    // nearest weight entry on/before this measurement's date, falling back to the closest available
+    const before = weightLog.filter(w => w.date <= dateIso);
+    return before.length ? before[before.length - 1].lb : weightLog[0].lb;
+  };
+  const firstWeightSpan = weightAt(firstHalf[firstHalf.length - 1].date) - weightAt(firstHalf[0].date);
+  const secondWeightSpan = weightAt(secondHalf[secondHalf.length - 1].date) - weightAt(secondHalf[0].date);
+  const firstWaistSpan = firstHalf[firstHalf.length - 1].waist - firstHalf[0].waist;
+  const secondWaistSpan = secondHalf[secondHalf.length - 1].waist - secondHalf[0].waist;
+  // Ratio of waist-inches-gained to pounds-gained in each half. A floor on the weight denominator
+  // avoids a near-zero weight change turning a small waist blip into a wild, meaningless ratio.
+  const earlyRatio = firstWaistSpan / Math.max(0.5, firstWeightSpan);
+  const recentRatio = secondWaistSpan / Math.max(0.5, secondWeightSpan);
+
+  const result = { status: 'on_track', weeksIn, weightGain, earlyRatio, recentRatio };
+  if (weeksIn >= 6 && recentRatio > earlyRatio * 2 && recentRatio > 0.03) {
+    result.status = 'trending_off';
+    result.severity = 'high';
+  } else if (weeksIn >= 8 && recentRatio > earlyRatio * 1.5 && recentRatio > 0.02) {
+    result.status = 'trending_off';
+    result.severity = 'moderate';
+  }
+  return result;
+}
+
+async function renderPhaseHealthCard() {
+  const card = document.getElementById('phaseHealthCard');
+  const text = document.getElementById('phaseHealthText');
+  const actions = document.getElementById('phaseHealthActions');
+  if (!card || !text || !actions) return;
+  const r = await evaluatePhaseHealth();
+  actions.style.display = 'none';
+  actions.innerHTML = '';
+
+  if (r.status === 'na' || r.status === 'too_early') { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  card.classList.remove('attention');
+
+  const setPhaseBtn = (label, phase, opts, cls) => {
+    const btn = document.createElement('button');
+    btn.className = cls || 'btn-secondary';
+    btn.textContent = label;
+    btn.style.flex = '1';
+    btn.onclick = async () => { await setNutritionPhase(phase, opts); renderNutrition(); };
+    actions.appendChild(btn);
+  };
+
+  if (r.status === 'insufficient_data') {
+    text.textContent = `${Math.round(r.weeksIn)} week(s) into this ${PHASES[nutritionPhase].label.toLowerCase()}. Once there's a bit more weigh-in and waist-measurement history, this will start comparing your fat-gain trend against how the phase started.`;
+    return;
+  }
+  if (r.status === 'on_track') {
+    text.textContent = `${Math.round(r.weeksIn)} week(s) into this ${PHASES[nutritionPhase].label.toLowerCase()}, ${r.weightGain >= 0 ? '+' : ''}${r.weightGain.toFixed(1)} lb so far. Your waist-to-weight-gain ratio hasn't drifted from how the phase started — no reason to change course yet.`;
+    return;
+  }
+  if (r.status === 'long_bulk') {
+    card.classList.add('attention');
+    text.textContent = `${Math.round(r.weeksIn)} weeks into this ${PHASES[nutritionPhase].label.toLowerCase()}. Regardless of how the measurements look, a bulk running this long is well past where most trained lifters see returns turn mostly into fat — worth wrapping up now.`;
+    actions.style.display = 'flex';
+    setPhaseBtn('Start mini-cut (3 wk)', 'cut', { plannedWeeks: 3, reason: 'phase-engine: long bulk' }, 'btn-primary');
+    setPhaseBtn('Shift to recomp', 'recomp', { reason: 'phase-engine: long bulk' });
+    return;
+  }
+  if (r.status === 'trending_off') {
+    if (phaseAdvisorySnoozeUntil && todayISO() < phaseAdvisorySnoozeUntil) { card.style.display = 'none'; return; }
+    card.classList.add('attention');
+    const urgency = r.severity === 'high' ? 'Worth wrapping up in the next week or so' : 'Worth planning to wrap up in the next 1–3 weeks';
+    text.textContent = `${Math.round(r.weeksIn)} week(s) into this ${PHASES[nutritionPhase].label.toLowerCase()}. Your waist has grown faster relative to scale weight recently than it did earlier in the phase — a sign more of the gain is fat than muscle lately. ${urgency}, rather than waiting for a fixed calendar date.`;
+    actions.style.display = 'flex';
+    if (r.severity === 'high') setPhaseBtn('Start mini-cut (3 wk)', 'cut', { plannedWeeks: 3, reason: 'phase-engine: trending off' }, 'btn-primary');
+    else setPhaseBtn('Shift to recomp', 'recomp', { reason: 'phase-engine: trending off' });
+    setPhaseBtn('Keep bulking (remind in 1 wk)', nutritionPhase, { snoozeWeeks: 1, reason: 'dismissed' });
+    return;
+  }
+  if (r.status === 'planned_cut_in_progress') {
+    text.textContent = `${Math.round(r.weeksIn)} of your planned ${r.plannedPhaseWeeks}-week mini-cut done.`;
+    return;
+  }
+  if (r.status === 'planned_cut_done') {
+    card.classList.add('attention');
+    text.textContent = `Your planned ${r.plannedPhaseWeeks}-week mini-cut is up. Resume the bulk, hold at maintenance for a bit longer, or extend the cut if you want more.`;
+    actions.style.display = 'flex';
+    setPhaseBtn('Resume bulk', phaseBeforeCut || 'bulk', { reason: 'phase-engine: mini-cut complete' }, 'btn-primary');
+    setPhaseBtn('Hold at maintenance', 'maintain', { reason: 'phase-engine: mini-cut complete' });
+    setPhaseBtn('Extend cut (2 more wk)', 'cut', { plannedWeeks: r.plannedPhaseWeeks + 2, reason: 'phase-engine: extend cut' });
+    return;
+  }
+  if (r.status === 'long_cut') {
+    if (phaseAdvisorySnoozeUntil && todayISO() < phaseAdvisorySnoozeUntil) { card.style.display = 'none'; return; }
+    card.classList.add('attention');
+    text.textContent = `${Math.round(r.weeksIn)} weeks into this cut with no planned end date. Sustained deficits this long raise muscle-loss risk and diet fatigue — a maintenance break or a defined end date is worth considering.`;
+    actions.style.display = 'flex';
+    setPhaseBtn('Hold at maintenance', 'maintain', { reason: 'phase-engine: long cut' }, 'btn-primary');
+    setPhaseBtn('Keep cutting (remind in 1 wk)', 'cut', { snoozeWeeks: 1, reason: 'dismissed' });
   }
 }
 
 async function renderNutrition() {
   await renderMealTimingCard();
   await renderAdaptiveCard();
+  await renderPhaseHealthCard();
   document.getElementById('maintCals').value = maintCals || '';
   renderPhaseRow();
   const info = weekInfo();
   let target = maintCals ? maintCals + PHASES[nutritionPhase].calDelta : null;
   if (target && info.week) {
     if (info.deload) target -= 100;
-    else if (blockConfig.length === 6 && info.week >= 4 && info.week <= 5) target += 125;
+    else if (info.overload) target += 125;
   }
   const bw = await getTrendWeightLb();
   const proteinG = bw ? Math.round(bw * 1.0) : (target ? Math.round(target * 0.30 / 4) : null);
@@ -2751,7 +3328,7 @@ function renderWeightPhaseRow() {
   const row = document.getElementById('weightPhaseRow');
   row.innerHTML = Object.keys(PHASES).map(k => `<button class="phase-btn ${weightPhase===k?'selected':''}" data-p="${k}">${PHASES[k].label}</button>`).join('');
   row.querySelectorAll('.phase-btn').forEach(b => b.onclick = async () => {
-    weightPhase = b.dataset.p;
+    await setNutritionPhase(b.dataset.p, { reason: 'manual' });
     await saveWeightConfig();
     renderWeightTab();
   });
@@ -2824,7 +3401,7 @@ async function renderWeightTab() {
   document.getElementById('syncNutritionBtn').onclick = async () => {
     if (!tdee) return;
     maintCals = tdee;
-    if (db) { try { await db.doc('nutrition/config').set({ maintCals, phase: nutritionPhase }); } catch(e){} }
+    await persistNutritionConfig();
     document.getElementById('syncNutritionBtn').textContent = 'Sent ✓';
     setTimeout(() => { document.getElementById('syncNutritionBtn').textContent = 'Send to Nutrition tab'; }, 1800);
   };
@@ -3037,6 +3614,7 @@ async function init() {
   await loadSleep();
   await loadNutritionConfig();
   await loadWeightConfig();
+  await loadFatigueSignal();
   await loadDay();
   await maybeShowOnboarding();
 }
