@@ -8,7 +8,7 @@
      the app opens inside Safari chrome instead of fullscreen, and it can fail to load at all
      with no signal — all of which matter a lot for an app used mid-workout at a gym. -->
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#060606">
+<meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FOREVER">
@@ -18,12 +18,20 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap">
 <style>
   :root {
-    --bg: #060606; --bg-panel: #0e0e0e; --bg-input: rgba(201,162,39,0.07); --border: rgba(201,162,39,0.22); --hairline: rgba(201,162,39,0.22);
-    --text: #ece8de; --text-dim: #857f70;
-    --accent: #b8963a; --accent-2: #7d6420; --accent-soft: rgba(184,150,58,0.08); --on-accent: #0c0a04;
-    --rest-accent: #9a8264; --rest-2: #6b5940; --on-rest: #0c0a04;
-    --warn: #b5482f;
-    --r: 2px;
+    --bg: #000000; --bg-panel: #0a0a0c; --bg-input: rgba(255,255,255,0.06); --border: rgba(255,255,255,0.16); --hairline: rgba(255,255,255,0.13);
+    --text: #f0f0f3; --text-dim: #86868f;
+    --accent: #ffffff; --accent-2: #c9c9d3; --accent-soft: rgba(255,255,255,0.07); --on-accent: #060608;
+    --rest-accent: #a78bfa; --rest-2: #7c3aed; --on-rest: #0a0510;
+    --warn: #d1483a;
+    /* Radius scale — small (tags/pills), base (cards/inputs/buttons), large (hero/sheets).
+       Was a flat 2px everywhere, which read closer to a spec/wireframe than a finished product. */
+    --r-sm: 6px; --r: 12px; --r-lg: 20px;
+    /* A soft ambient shadow + a hairline-thin top highlight, used together on raised surfaces so
+       cards read as physical layers sitting above the background rather than flat bordered boxes. */
+    --shadow-card: 0 1px 2px rgba(0,0,0,0.4), 0 10px 28px -8px rgba(0,0,0,0.55);
+    --shadow-lift: 0 4px 16px -4px rgba(0,0,0,0.5);
+    --card-sheen: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 45%);
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
   @media (prefers-color-scheme: light) {
     :root:not([data-theme="dark"]) {
@@ -31,6 +39,9 @@
       --text: #17140d; --text-dim: #6b6252; --accent: #8a6d16; --accent-2: #6b5411;
       --accent-soft: rgba(138,109,22,0.10); --on-accent: #ffffff;
       --rest-accent: #6b5940; --rest-2: #4f4530; --on-rest: #ffffff; --warn: #9a3d24;
+      --shadow-card: 0 1px 2px rgba(30,24,8,0.06), 0 10px 24px -10px rgba(30,24,8,0.18);
+      --shadow-lift: 0 4px 14px -4px rgba(30,24,8,0.16);
+      --card-sheen: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0) 45%);
     }
   }
   :root[data-theme="light"] {
@@ -38,33 +49,75 @@
     --text: #17140d; --text-dim: #6b6252; --accent: #8a6d16; --accent-2: #6b5411;
     --accent-soft: rgba(138,109,22,0.10); --on-accent: #ffffff;
     --rest-accent: #6b5940; --rest-2: #4f4530; --on-rest: #ffffff; --warn: #9a3d24;
+    --shadow-card: 0 1px 2px rgba(30,24,8,0.06), 0 10px 24px -10px rgba(30,24,8,0.18);
+    --shadow-lift: 0 4px 14px -4px rgba(30,24,8,0.16);
+    --card-sheen: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0) 45%);
   }
   * { box-sizing: border-box; }
+  /* Themed fallback for any input/select that isn't already covered by a more specific rule
+     (an underline-style field in .control-panel/.field-row, etc.). Without this, a plain unclassed
+     <input> — like the sleep-hours/goal fields — renders in the browser's stock white/black
+     styling, which next to a bespoke dark-gold UI is one of the most jarring "unfinished" signals
+     an app can have. More specific selectors elsewhere still win and keep their own look.
+     -webkit-appearance:none also strips iOS Safari's heavy default chrome on date/number inputs. */
+  input, select, textarea {
+    font-family: inherit; background: var(--bg-input); color: var(--text);
+    border: 1px solid var(--border); border-radius: var(--r-sm); padding: 6px 8px;
+    -webkit-appearance: none; appearance: none; accent-color: var(--accent);
+    color-scheme: dark;
+  }
+  :root[data-theme="light"] input, :root[data-theme="light"] select, :root[data-theme="light"] textarea { color-scheme: light; }
+  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) input, :root:not([data-theme="dark"]) select, :root:not([data-theme="dark"]) textarea { color-scheme: light; } }
+  input::placeholder, textarea::placeholder { color: var(--text-dim); opacity: 1; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes pulseDot { 0%,100% { opacity: 0.4; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.15); } }
-  @keyframes glowBreathe { 0%,100% { text-shadow: 0 0 8px rgba(184,150,58,0.25); } 50% { text-shadow: 0 0 16px rgba(184,150,58,0.55); } }
+  @keyframes glowBreathe { 0%,100% { text-shadow: 0 0 8px rgba(255,255,255,0.25); } 50% { text-shadow: 0 0 16px rgba(255,255,255,0.55); } }
   .hero-pulse { position: absolute; top: 12px; right: 12px; display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; background: rgba(0,0,0,0.4); padding: 5px 10px; border-radius: 3px; }
   .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulseDot 2s ease-in-out infinite; }
-  .stat-num, .cal-big, .bmi-num, .tdee-num { animation: glowBreathe 3.5s ease-in-out infinite; }
+  .stat-num, .cal-big, .bmi-num, .tdee-num, .scale-readout-num { animation: glowBreathe 3.5s ease-in-out infinite; }
   @keyframes splashFade { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
   @keyframes logoPulse { 0% { opacity:0; letter-spacing: 3px; } 100% { opacity:1; letter-spacing: 9px; } }
   .swipe { animation: fadeUp 0.25s ease-out; }
+
+  /* Tactile press feedback + smooth state changes across every tappable control. Before this,
+     every interaction was an instant DOM swap with no in-between — a button click or a re-render
+     just snapped to the new state, which reads as unfinished no matter how good the layout is.
+     A quick scale-down on press (matching native iOS/Android buttons) plus eased color/shadow
+     transitions on hover/selection state is most of what separates "functional" from "polished". */
+  button, .menu-item, .done-row, .phase-btn, nav.days button, .choice-btn, .scale-btn,
+  .apply-btn, .food-add-btn, .checkin-submit, .log-btn, .confirm-btn, .sync-btn, .info-btn,
+  .back-link, .add-set, .btn-primary, .btn-secondary, .rest-actions button {
+    transition: transform 0.12s var(--ease), background-color 0.18s var(--ease),
+      border-color 0.18s var(--ease), color 0.18s var(--ease), box-shadow 0.18s var(--ease),
+      opacity 0.18s var(--ease);
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:active, .menu-item:active, .phase-btn:active, .choice-btn:active, .scale-btn:active,
+  .apply-btn:active, .food-add-btn:active, .checkin-submit:active, .log-btn:active,
+  .confirm-btn:active, .sync-btn:active, .btn-primary:active, .btn-secondary:active,
+  .rest-actions button:active {
+    transform: scale(0.96); opacity: 0.9;
+  }
+  .done-row:active { background: var(--accent-soft); }
+  nav.days button { transition: color 0.2s var(--ease); }
+  nav.days button.active { transition: color 0.2s var(--ease), border-color 0.3s var(--ease); }
   html { background: var(--bg); }
   body {
     margin: 0; color: var(--text);
     background:
-      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/></svg>"),
-      radial-gradient(ellipse 600px 260px at 20% -8%, rgba(201,162,39,0.05), transparent 60%), var(--bg);
+      radial-gradient(ellipse 600px 260px at 20% -8%, rgba(124,58,237,0.10), transparent 60%), var(--bg);
     font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased; padding-bottom: 84px; min-height: 100vh;
     font-weight: 400;
   }
   .display { font-family: 'Bebas Neue', 'Outfit', sans-serif; font-weight: 400; }
-  #splash { position: fixed; inset: 0; background: #060606; z-index: 999; display: flex; align-items: center; justify-content: center; animation: splashFade 1.4s ease forwards; }
+  #splash { position: fixed; inset: 0; background: #000000; z-index: 999; display: flex; align-items: center; justify-content: center; animation: splashFade 1.4s ease forwards; }
   #splash .logo {
     font-family: 'Cinzel', serif; font-weight: 600; font-size: 38px; letter-spacing: 8px;
-    background: linear-gradient(135deg, #f0d47a, #b8963a 45%, #7d6420);
+    background: linear-gradient(135deg, #ffffff, #d9d9e2 45%, #8b5cf6);
     -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 18px rgba(255,255,255,0.35));
     animation: logoPulse 1s ease forwards;
   }
   .kanji-mark {
@@ -84,10 +137,12 @@
   .menu-overlay.open { display: block; }
   .menu-panel {
     position: absolute; top: 0; right: 0; bottom: 0; width: 82%; max-width: 340px;
-    background: var(--bg-panel); border-left: 1px solid var(--hairline); padding: 20px; overflow-y: auto;
+    background: var(--card-sheen), var(--bg-panel); border-left: 1px solid var(--hairline); padding: 20px; overflow-y: auto;
     padding-top: calc(20px + env(safe-area-inset-top)); padding-bottom: calc(20px + env(safe-area-inset-bottom));
-    animation: fadeUp 0.22s ease-out;
+    box-shadow: -16px 0 40px rgba(0,0,0,0.45);
+    animation: sheetInRight 0.28s var(--ease);
   }
+  @keyframes sheetInRight { from { transform: translateX(24px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
   .menu-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
   .menu-close { background: none; border: none; color: var(--text-dim); font-size: 22px; cursor: pointer; }
   .menu-section { padding-bottom: 16px; margin-bottom: 6px; border-bottom: 1px solid var(--hairline); }
@@ -96,8 +151,9 @@
   .brand-row { display: flex; align-items: center; gap: 14px; }
   h1 {
     font-family: 'Cinzel', serif; font-weight: 600; font-size: 21px; margin: 0; letter-spacing: 3px;
-    background: linear-gradient(135deg, #f0d47a, #b8963a 45%, #7d6420);
+    background: linear-gradient(135deg, #ffffff, #d9d9e2 45%, #8b5cf6);
     -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.25));
   }
   .brand-sub { font-size: 9px; color: var(--text-dim); letter-spacing: 3px; text-transform: uppercase; font-weight: 500; margin-top: 2px; }
   .sub { font-size: 12px; color: var(--text-dim); margin-top: 10px; font-weight: 300; }
@@ -123,7 +179,7 @@
   .info-panel.open { display: block; }
   .sleep-note { font-size: 11px; color: var(--rest-accent); line-height: 1.55; font-weight: 400; }
 
-  .checkin-card { margin: 16px 20px 0; padding: 16px 0; border-top: 1px solid var(--accent); }
+  .checkin-card { margin: 28px 20px 0; padding: 0; background: none; border: none; border-radius: 0; box-shadow: none; }
   .checkin-title { font-weight: 600; font-size: 13px; margin-bottom: 12px; letter-spacing: 0.3px; }
   .checkin-row { margin-bottom: 14px; }
   .checkin-row label { font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 8px; font-weight: 300; }
@@ -138,7 +194,7 @@
     color: var(--text-dim); font-size: 12.5px; font-weight: 500; cursor: pointer; white-space: nowrap; font-family: inherit;
   }
   nav.days button.active { color: var(--accent); border-bottom-color: var(--accent); animation: navGlow 2.6s ease-in-out infinite; }
-  @keyframes navGlow { 0%,100% { text-shadow: 0 0 0 rgba(184,150,58,0); } 50% { text-shadow: 0 0 8px rgba(184,150,58,0.55); } }
+  @keyframes navGlow { 0%,100% { text-shadow: 0 0 0 rgba(255,255,255,0); } 50% { text-shadow: 0 0 8px rgba(255,255,255,0.55); } }
 
   .stats-strip { display: flex; margin: 8px 20px 4px; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 600px; }
   .stat-col { flex: 1; text-align: center; padding: 12px 4px; }
@@ -149,10 +205,13 @@
   main, .tabpanel { padding: 4px 20px 40px; max-width: 640px; margin: 0 auto; }
   .rest-msg { text-align: center; color: var(--text-dim); padding: 70px 20px; font-size: 13px; font-weight: 300; }
 
-  .panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--r); padding: 18px; margin-bottom: 14px; }
-  .panel.attention { border-color: var(--accent); animation: attentionGlow 2.4s ease-in-out infinite; }
-  @keyframes attentionGlow { 0%,100% { box-shadow: 0 0 0 rgba(184,150,58,0); } 50% { box-shadow: 0 0 22px rgba(184,150,58,0.35); } }
-  .exercise-panel { background: var(--bg-panel); border: 1px solid var(--border); border-top: 2px solid var(--accent); border-radius: var(--r); padding: 18px; margin-bottom: 14px; box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
+  /* No cards at all: content just sits directly on the black background, separated by
+     whitespace and typography (the all-caps section title) instead of any box, border,
+     radius, or fill. Nothing here should read as a "shape". */
+  .panel { background: none; border: none; border-radius: 0; padding: 0; margin: 0 0 40px; box-shadow: none; }
+  .panel.attention .section-title { color: var(--accent); animation: attentionGlow 2.4s ease-in-out infinite; }
+  @keyframes attentionGlow { 0%,100% { text-shadow: 0 0 0 rgba(255,255,255,0); } 50% { text-shadow: 0 0 14px rgba(255,255,255,0.65); } }
+  .exercise-panel { background: none; border: none; border-radius: 0; padding: 0; margin: 0 0 40px; box-shadow: none; }
   .ex-header { display: flex; justify-content: space-between; align-items: center; }
   .ex-name { font-family: 'Bebas Neue', sans-serif; font-size: 19px; font-weight: 400; letter-spacing: 0.6px; }
   .ex-type { font-size: 9.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; border: 1px solid var(--border); border-radius: 3px; padding: 3px 7px; }
@@ -162,7 +221,7 @@
   .suggest-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 12px; }
   .suggest-detail { font-size: 10.5px; color: var(--text-dim); margin-top: 6px; font-weight: 400; }
   .tier-progress { color: var(--accent); }
-  .tier-reps { color: #e6c878; }
+  .tier-reps { color: #ddd6fe; }
   .tier-hold { color: var(--rest-accent); }
   .ex-sleep-flag { font-size: 10.5px; color: var(--rest-accent); margin-top: 8px; }
   .apply-btn { background: none; color: var(--accent); border: 1px solid var(--accent); border-radius: 4px; padding: 4px 12px; font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit; letter-spacing: 0.3px; }
@@ -172,10 +231,10 @@
   .done-row .main-stat { color: var(--text); font-weight: 600; }
   .done-row .tag { margin-left: auto; font-size: 10px; }
 
-  .active-block { padding: 14px; margin-top: 8px; background: var(--accent-soft); border-top: 2px solid var(--accent); border-radius: var(--r); animation: activeBlockGlow 2.8s ease-in-out infinite; }
-  @keyframes activeBlockGlow { 0%,100% { box-shadow: 0 0 0 rgba(184,150,58,0); } 50% { box-shadow: 0 0 20px rgba(184,150,58,0.22); } }
+  .active-block { padding: 14px; margin-top: 8px; background: var(--card-sheen), var(--accent-soft); border-top: 2px solid var(--accent); border-radius: var(--r); animation: activeBlockGlow 2.8s ease-in-out infinite, fadeUp 0.3s var(--ease); }
+  @keyframes activeBlockGlow { 0%,100% { box-shadow: 0 0 0 rgba(255,255,255,0); } 50% { box-shadow: 0 0 20px rgba(255,255,255,0.22); } }
   .set-line1 { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-  .set-num-lg { font-family: 'Bebas Neue', sans-serif; font-size: 16px; font-weight: 400; color: var(--on-accent); background: var(--accent); box-shadow: 0 0 14px rgba(184,150,58,0.45); width: 26px; height: 26px; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+  .set-num-lg { font-family: 'Bebas Neue', sans-serif; font-size: 16px; font-weight: 400; color: var(--on-accent); background: var(--accent); box-shadow: 0 0 14px rgba(255,255,255,0.45); width: 26px; height: 26px; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
   .set-line1 input {
     background: var(--bg-card-solid); border: none; border-bottom: 2px solid var(--accent); color: var(--text);
     padding: 8px 2px; font-size: 18px; font-weight: 700; text-align: center; width: 58px; font-family: inherit; border-radius: 3px 3px 0 0;
@@ -186,7 +245,7 @@
   .pill-field { display: flex; flex-direction: column; gap: 4px; }
   .pill-field label { font-size: 9.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
   .pill-field select { background: var(--bg-card-solid); border: none; border-bottom: 2px solid var(--border); color: var(--text); padding: 5px 4px; font-size: 12px; font-family: inherit; width: 50px; border-radius: 3px 3px 0 0; }
-  .log-btn { margin-top: 16px; width: 100%; background: var(--accent); color: var(--on-accent); border: none; border-radius: 6px; padding: 13px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; letter-spacing: 0.4px; box-shadow: 0 4px 16px rgba(184,150,58,0.3); }
+  .log-btn { margin-top: 16px; width: 100%; background: var(--accent); color: var(--on-accent); border: none; border-radius: 6px; padding: 13px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; letter-spacing: 0.4px; box-shadow: 0 4px 16px rgba(255,255,255,0.3); }
 
   .confirm-block { padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--hairline); }
   .confirm-label { font-size: 11px; color: var(--text-dim); margin: 0 0 8px; font-weight: 300; }
@@ -243,15 +302,84 @@
   .tdee-sub { font-size: 10.5px; color: var(--text-dim); text-align: center; margin-top: 4px; font-weight: 300; }
   .sync-btn { width: 100%; margin-top: 12px; background: none; color: var(--rest-accent); border: 1px solid var(--rest-accent); border-radius: 4px; padding: 9px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
 
+  /* Nutrition — fuel gauge (calories-in-progress bar, stacked by macro, with a pacing marker) */
+  .fuel-gauge { margin-top: 16px; }
+  .fuel-track { position: relative; height: 24px; border-radius: 12px; background: var(--bg-input); border: 1px solid var(--border); overflow: hidden; }
+  .fuel-seg { position: absolute; top: 0; bottom: 0; transition: left 0.5s var(--ease), width 0.5s var(--ease); }
+  .fuel-seg-p { background: var(--accent); z-index: 3; }
+  .fuel-seg-c { background: var(--rest-accent); z-index: 2; }
+  .fuel-seg-f { background: var(--accent-2); z-index: 1; opacity: 0.85; }
+  .fuel-pace { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--text); opacity: 0.55; z-index: 4; transition: left 0.5s var(--ease); }
+  .fuel-pace::after { content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--text); opacity: 0.85; }
+  .fuel-legend { display: flex; justify-content: space-between; margin-top: 10px; flex-wrap: wrap; gap: 8px; }
+  .fuel-legend-item { font-size: 10px; color: var(--text-dim); font-weight: 500; display: flex; align-items: center; gap: 5px; }
+  .fuel-legend-item .fdot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex: 0 0 auto; }
+  .fuel-legend-item b { color: var(--text); font-weight: 600; }
+  @keyframes foodSlideIn { from { transform: translateX(-8px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  .food-row { animation: foodSlideIn 0.32s var(--ease); }
+
+  /* Weight — glowing scale readout with an ambient pulsing scale icon */
+  .scale-readout { position: relative; text-align: center; margin: 4px 0 22px; padding: 30px 0 4px; }
+  .scale-icon-pulse { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 96px; height: 96px; pointer-events: none; opacity: 0.5; }
+  .scale-icon-pulse svg { width: 100%; height: 100%; color: var(--rest-accent); animation: scaleBreathe 3.2s ease-in-out infinite; filter: drop-shadow(0 0 10px rgba(124,58,237,0.45)); }
+  @keyframes scaleBreathe { 0%, 100% { transform: scale(0.94); opacity: 0.55; } 50% { transform: scale(1.05); opacity: 0.9; } }
+  .scale-readout-label { font-size: 10px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; position: relative; }
+  .scale-readout-num { font-family: 'Bebas Neue', sans-serif; font-size: 58px; line-height: 1; color: var(--accent); letter-spacing: 1px; text-shadow: 0 0 18px rgba(255,255,255,0.4); position: relative; display: inline-block; }
+  .scale-readout-num.pulse { animation: glowBreathe 3.5s ease-in-out infinite, scaleReadoutPulse 0.5s var(--ease); }
+  @keyframes scaleReadoutPulse { 0% { transform: scale(1); } 30% { transform: scale(1.12); text-shadow: 0 0 28px rgba(255,255,255,0.7); } 100% { transform: scale(1); } }
+  .scale-readout-unit { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; position: relative; }
+
+  /* Mesos — a continuous journey track instead of boxed week tiles: one flowing pill-shaped
+     bar colored by phase (base/overload/deload), with a glowing marker that travels along it
+     to mark the current week, and plain text ticks underneath rather than more rectangles. */
+  .meso-track-wrap { position: relative; margin: 34px 4px 0; }
+  .meso-track { position: relative; height: 8px; border-radius: 999px; overflow: hidden; display: flex; background: var(--bg-input); border: 1px solid var(--border); }
+  .meso-track-seg { height: 100%; }
+  .meso-track-seg.base { background: var(--hairline); }
+  .meso-track-seg.overload { background: var(--rest-2); opacity: 0.75; }
+  .meso-track-seg.deload { background: var(--accent-2); opacity: 0.8; }
+  .meso-track-fill { position: absolute; top: 0; left: 0; bottom: 0; border-radius: 999px; background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.22)); transition: width 0.5s var(--ease); pointer-events: none; }
+  .meso-marker-ring { position: absolute; top: 50%; width: 30px; height: 30px; transform: translate(-50%,-50%); pointer-events: none; transition: left 0.5s var(--ease); }
+  .meso-marker-ring span { position: absolute; inset: 0; border: 1px solid var(--accent); border-radius: 50%; opacity: 0; animation: ringBreathe 2.6s ease-out infinite; }
+  .meso-marker { position: absolute; top: 50%; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg-panel); box-shadow: 0 0 14px rgba(255,255,255,0.7); transform: translate(-50%,-50%); transition: left 0.5s var(--ease); z-index: 2; }
+  .meso-ticks { display: flex; justify-content: space-between; margin-top: 12px; }
+  .meso-tick { flex: 1; text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 12px; color: var(--text-dim); letter-spacing: 0.5px; }
+  .meso-tick.current { color: var(--accent); }
+  .meso-timeline-legend { display: flex; gap: 14px; margin-top: 16px; flex-wrap: wrap; font-size: 10px; color: var(--text-dim); }
+  .meso-timeline-legend span { display: flex; align-items: center; gap: 5px; }
+  .meso-timeline-legend .ldot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: var(--hairline); }
+  .meso-timeline-legend .ldot.overload { background: var(--rest-2); }
+  .meso-timeline-legend .ldot.deload { background: var(--accent-2); }
+  .meso-timeline-caption { text-align: center; font-size: 11px; color: var(--text-dim); margin-top: 14px; font-weight: 300; }
+
+  /* Split picker — collapsed to one summary row by default instead of every preset laid out
+     at once; "Change split" expands the full list, picking one (or collapsing) folds it back. */
+  .split-summary-row { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--hairline); }
+  .split-summary-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+  .split-summary-name { font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin-top: 2px; letter-spacing: 0.5px; }
+  .split-collapse-row { display: flex; justify-content: flex-end; margin: 14px 0 4px; }
+  /* Expanded picker: options cluster into soft tier "bubbles" (a faint tint, no border) so
+     the eye can separate tiers at a glance without any hard-edged boxes. */
+  .split-tier-group { background: rgba(255,255,255,0.035); border-radius: 20px; padding: 6px 16px; margin-bottom: 16px; }
+  .split-tier-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; padding-top: 14px; }
+  .split-option { padding: 14px 0; }
+  .split-option + .split-option { border-top: 1px solid rgba(255,255,255,0.06); }
+  .split-option-header { display: flex; justify-content: space-between; align-items: center; }
+  .split-option-name { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.4px; }
+  .split-option-desc { font-size: 11px; color: var(--text-dim); margin-top: 5px; line-height: 1.55; }
+  .split-option-actions { display: flex; gap: 10px; margin-top: 12px; }
+
   .tabbar {
     position: fixed; bottom: 0; left: 0; right: 0; display: flex;
     background: var(--bg-panel); border-top: 1px solid var(--hairline);
     padding: 8px 10px calc(8px + env(safe-area-inset-bottom)); z-index: 50;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.35);
   }
-  .tabbar button { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; background: none; border: none; color: var(--text-dim); font-size: 10px; font-weight: 500; cursor: pointer; padding: 4px 0; font-family: inherit; }
-  .tabbar button .tico { width: 21px; height: 21px; color: var(--text-dim); }
-  .tabbar button.active .tico { color: var(--accent); filter: drop-shadow(0 0 5px rgba(184,150,58,0.5)); }
+  .tabbar button { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; background: none; border: none; color: var(--text-dim); font-size: 10px; font-weight: 500; cursor: pointer; padding: 4px 0; font-family: inherit; transition: color 0.2s var(--ease); }
+  .tabbar button .tico { width: 21px; height: 21px; color: var(--text-dim); transition: color 0.2s var(--ease), transform 0.2s var(--ease); }
+  .tabbar button.active .tico { color: var(--accent); filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); transform: translateY(-1px) scale(1.08); }
   .tabbar button.active { color: var(--accent); }
+  .tabbar button:active .tico { transform: scale(0.9); }
   .tabpanel { display: none; }
   .tabpanel.active { display: block; }
 
@@ -261,8 +389,9 @@
     position: relative; margin: 4px 20px 0; min-height: 220px; border: 1px solid var(--border);
     display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden;
     background-size: cover; background-position: center;
+    border-radius: var(--r-lg); box-shadow: var(--shadow-card);
   }
-  .hero-noPhoto { background: linear-gradient(160deg, #141414, #060606); }
+  .hero-noPhoto { background: linear-gradient(160deg, #141018, #000000); }
   .breathe-rings { position: absolute; top: 46%; left: 50%; transform: translate(-50%,-50%); width: 140px; height: 140px; pointer-events: none; }
   .breathe-rings span {
     position: absolute; inset: 0; border: 1px solid var(--accent); border-radius: 50%;
@@ -288,7 +417,7 @@
     cursor: pointer; font-family: inherit; border-radius: var(--r);
   }
   .btn-secondary { background: none; border: 1px solid var(--border); color: var(--text); }
-  .btn-primary { background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent); box-shadow: 0 4px 14px rgba(184,150,58,0.25); }
+  .btn-primary { background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent); box-shadow: 0 4px 14px rgba(255,255,255,0.25); }
   .preview-row { display: flex; justify-content: space-between; padding: 12px 0; border-top: 1px solid var(--hairline); font-size: 12.5px; }
   .preview-row .pname { font-weight: 500; }
   .preview-row .ptype { color: var(--text-dim); font-size: 10.5px; text-transform: uppercase; }
@@ -330,6 +459,8 @@
     <button class="menu-item" id="menuWarmupBtn">Warm-up &amp; Recovery library</button>
     <button class="menu-item" id="menuExportBtn">Export all data (.csv)</button>
     <button class="menu-item" id="menuOnboardBtn">Run setup wizard again</button>
+    <button class="menu-item" id="menuReportBugBtn" style="display:none;">Report a bug</button>
+    <button class="menu-item" id="menuLogoutBtn" style="display:none;">Log out</button>
     <div id="menuWarmupPanel"></div>
   </div>
 </div>
@@ -424,10 +555,18 @@
       <div class="info-panel" id="infoMacroPanel">Cuts target a 0.5–1% bodyweight loss per week (~500 kcal/day deficit) to preserve muscle. Lean bulks target a 200–350 kcal/day surplus (~0.25–0.5 kg/week gain) — bigger surpluses mostly add fat past that point. Protein is set near 1g per pound of bodyweight. Fat sits at 25% of calories, carbs fill the remainder. Push weeks (4–5) nudge calories up; deload nudges down.</div>
       <div class="cal-big" id="calBig">–</div>
       <div class="cal-sub" id="calSub"></div>
-      <div class="macro-row">
-        <div class="macro-box"><div class="macro-num" id="pNum">–</div><div class="macro-lbl">Protein g</div><div class="macro-bar"><div class="macro-bar-fill" id="pBar" style="width:0%"></div></div></div>
-        <div class="macro-box"><div class="macro-num" id="cNum">–</div><div class="macro-lbl">Carbs g</div><div class="macro-bar"><div class="macro-bar-fill" id="cBar" style="width:0%"></div></div></div>
-        <div class="macro-box"><div class="macro-num" id="fNum">–</div><div class="macro-lbl">Fat g</div><div class="macro-bar"><div class="macro-bar-fill" id="fBar" style="width:0%"></div></div></div>
+      <div class="fuel-gauge">
+        <div class="fuel-track" id="fuelTrack">
+          <div class="fuel-seg fuel-seg-f" id="fuelSegF" style="left:0%; width:0%"></div>
+          <div class="fuel-seg fuel-seg-c" id="fuelSegC" style="left:0%; width:0%"></div>
+          <div class="fuel-seg fuel-seg-p" id="fuelSegP" style="left:0%; width:0%"></div>
+          <div class="fuel-pace" id="fuelPace" style="left:0%"></div>
+        </div>
+        <div class="fuel-legend">
+          <div class="fuel-legend-item"><span class="fdot" style="background:var(--accent)"></span>Protein <b id="pNum">–</b></div>
+          <div class="fuel-legend-item"><span class="fdot" style="background:var(--rest-accent)"></span>Carbs <b id="cNum">–</b></div>
+          <div class="fuel-legend-item"><span class="fdot" style="background:var(--accent-2)"></span>Fat <b id="fNum">–</b></div>
+        </div>
       </div>
       <div class="phase-row" id="phaseRow"></div>
       <div class="field-row">
@@ -482,6 +621,14 @@
         <input id="weightLb" type="number" placeholder="Weigh-in (lb)">
         <button class="food-add-btn" id="logWeightBtn">Log</button>
       </div>
+      <div class="scale-readout">
+        <div class="scale-icon-pulse">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M5 7h14M5 7 2 13a3 3 0 0 0 6 0L5 7ZM19 7l-3 6a3 3 0 0 0 6 0l-3-6Z"/></svg>
+        </div>
+        <div class="scale-readout-label">Trend weight</div>
+        <div class="scale-readout-num" id="scaleReadoutNum">–</div>
+        <div class="scale-readout-unit">lb</div>
+      </div>
       <div class="bmi-result">
         <div class="bmi-num" id="bmiNum">–</div>
         <div class="bmi-cat" id="bmiCat"></div>
@@ -530,6 +677,21 @@
 
 <section class="tabpanel" id="tab-mesos">
   <div style="padding-top:14px;">
+    <div class="panel" id="mesoTimelinePanel">
+      <div class="section-title">Block Progress</div>
+      <div class="meso-track-wrap">
+        <div class="meso-track" id="mesoTrack"></div>
+        <div class="meso-marker-ring" id="mesoMarkerRing"><span></span></div>
+        <div class="meso-marker" id="mesoMarker"></div>
+      </div>
+      <div class="meso-ticks" id="mesoTicks"></div>
+      <div class="meso-timeline-legend">
+        <span><span class="ldot"></span>Base</span>
+        <span><span class="ldot overload"></span>Overload</span>
+        <span><span class="ldot deload"></span>Deload</span>
+      </div>
+      <div class="meso-timeline-caption" id="mesoTimelineCaption"></div>
+    </div>
     <div class="panel">
       <div class="section-title">This week's volume <button class="info-btn" id="infoVolumeBtn">i</button></div>
       <div class="info-panel" id="infoVolumePanel">Weekly sets per muscle group across your whole schedule, compared to evidence-based volume landmarks (MEV = minimum to grow, MAV = the sweet spot, MRV = the most you can recover from). "Legs" is one combined bucket for quads/hamstrings/glutes/calves since exercises aren't split that finely yet — use it as a rough total-lower-body signal.</div>
@@ -567,6 +729,26 @@
   </button>
 </div>
 
+<div id="authOverlay" style="display:none; position:fixed; inset:0; background:var(--bg); z-index:970; overflow-y:auto;">
+  <div style="max-width:400px; margin:0 auto; padding:60px 20px 40px;">
+    <h1 style="text-align:center; margin-bottom:4px;">FOREVER</h1>
+    <div class="ex-prev" style="text-align:center; margin-bottom:28px;" id="authSubtitle">Sign in to sync your training across devices.</div>
+    <div id="authError" style="display:none; color:#d9534f; font-size:12.5px; margin-bottom:14px; text-align:center;"></div>
+    <div id="authInfo" style="display:none; color:var(--accent); font-size:12.5px; margin-bottom:14px; text-align:center;"></div>
+    <div class="field-row"><div style="flex:1;"><label>Email</label><input type="email" id="authEmail" autocomplete="email" placeholder="you@example.com" style="width:100%;"></div></div>
+    <div class="field-row" style="margin-top:10px;"><div style="flex:1;"><label>Password</label><input type="password" id="authPassword" autocomplete="current-password" placeholder="••••••••" style="width:100%;"></div></div>
+    <button class="btn-primary" id="authSubmitBtn" style="width:100%; margin-top:18px;">Log In</button>
+    <div style="text-align:center; margin-top:16px;">
+      <button class="back-link" id="authToggleModeBtn" style="padding:0;">Need an account? Sign up</button>
+    </div>
+    <div style="text-align:center; margin-top:28px; padding-top:20px; border-top:1px solid var(--hairline);">
+      <button class="back-link" id="authGuestBtn" style="padding:0;">Continue without an account (this device only)</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://browser.sentry-cdn.com/8.55.0/bundle.tracing.min.js" crossorigin="anonymous"></script>
 <script>
 setTimeout(() => { const s = document.getElementById('splash'); if (s) s.remove(); }, 1500);
 
@@ -576,33 +758,109 @@ function wireInfo(btnId, panelId) {
 }
 ['Week','Sleep','Macro','Bmi','MealTiming','ShowPrep','Builder','Adaptive','Measure','Volume','PhaseHealth'].forEach(k => wireInfo(`info${k}Btn`, `info${k}Panel`));
 
+function renderMesoTimeline() {
+  const track = document.getElementById('mesoTrack');
+  const marker = document.getElementById('mesoMarker');
+  const ring = document.getElementById('mesoMarkerRing');
+  const ticks = document.getElementById('mesoTicks');
+  const caption = document.getElementById('mesoTimelineCaption');
+  if (!track) return;
+  if (!blockConfig.start) {
+    track.innerHTML = '';
+    if (marker) marker.style.display = 'none';
+    if (ring) ring.style.display = 'none';
+    if (ticks) ticks.innerHTML = '';
+    if (caption) caption.textContent = 'Start a training block on the Workout tab to see your progress here.';
+    return;
+  }
+  const len = blockConfig.length;
+  const phases = blockPhaseWeeks(len);
+  const info = weekInfo();
+  const currentWeek = info.week;
+
+  // One continuous pill, split into base/overload/deload zones by width share — a journey
+  // rather than a row of boxes — with a glowing dot traveling along it to mark today's week.
+  const basePct = phases.base / len * 100;
+  const overloadPct = phases.overload / len * 100;
+  const deloadPct = phases.deload / len * 100;
+  track.innerHTML = `
+    <div class="meso-track-seg base" style="width:${basePct}%"></div>
+    <div class="meso-track-seg overload" style="width:${overloadPct}%"></div>
+    <div class="meso-track-seg deload" style="width:${deloadPct}%"></div>
+  `;
+  const markerPct = currentWeek ? ((currentWeek - 0.5) / len) * 100 : 0;
+  if (marker) { marker.style.left = markerPct + '%'; marker.style.display = currentWeek ? 'block' : 'none'; }
+  if (ring) { ring.style.left = markerPct + '%'; ring.style.display = currentWeek ? 'block' : 'none'; }
+  if (ticks) {
+    ticks.innerHTML = Array.from({ length: len }, (_, i) => i + 1)
+      .map(w => `<div class="meso-tick${w === currentWeek ? ' current' : ''}">${w}</div>`)
+      .join('');
+  }
+  if (caption) {
+    const label = info.deload ? 'Deload week — recovery, not a grind.' : info.overload ? 'Overload week — pushing volume and intensity.' : 'Base week — building volume.';
+    caption.textContent = currentWeek ? `Week ${currentWeek} of ${len} · ${label}` : '';
+  }
+}
+// Every preset used to render fully expanded, all at once — a wall of cards even though you
+// only ever care about the one you're actually running. Collapsed to a single summary row by
+// default; "Change split" expands the full list, and picking one (or hitting collapse) folds
+// it back down.
+let splitPickerOpen = false;
 async function renderMesos() {
+  renderMesoTimeline();
   renderWeeklyVolumePanel();
+  renderSplitPicker();
+}
+function renderSplitPicker() {
   const list = document.getElementById('presetList');
+  if (!list) return;
+  const activeMeta = PRESET_META[activePreset];
+  if (!splitPickerOpen) {
+    list.innerHTML = `
+      <div class="split-summary-row">
+        <div>
+          <div class="split-summary-label">${activeMeta.tier}</div>
+          <div class="split-summary-name">${activeMeta.label}</div>
+        </div>
+        <button class="btn-secondary" id="splitChangeBtn">Change split</button>
+      </div>`;
+    const changeBtn = document.getElementById('splitChangeBtn');
+    if (changeBtn) changeBtn.onclick = () => { splitPickerOpen = true; renderSplitPicker(); };
+    return;
+  }
+
+  // Group presets into soft per-tier "bubbles" instead of one long flat list — makes the
+  // tier boundaries easy to scan without any hard-bordered boxes.
   let lastTier = null;
-  list.innerHTML = PRESET_ORDER.map(k => {
+  let groupsHtml = '';
+  let groupItems = '';
+  PRESET_ORDER.forEach(k => {
     const meta = PRESET_META[k];
     const isActive = activePreset === k;
-    let tierHeader = '';
     if (meta.tier !== lastTier) {
-      tierHeader = `<div class="menu-label" style="margin:${lastTier===null?'0':'18px'} 0 8px;">${meta.tier}</div>`;
+      if (lastTier !== null) groupsHtml += `<div class="split-tier-group">${groupItems}</div>`;
+      groupItems = `<div class="split-tier-label">${meta.tier}</div>`;
       lastTier = meta.tier;
     }
-    return `${tierHeader}
-    <div class="panel meso-card" data-preset="${k}" style="margin-bottom:14px;">
-      <div class="ex-header">
-        <span class="ex-name" style="font-size:16px;">${meta.label}</span>
-        <span class="ex-type">${meta.tier}</span>
-      </div>
-      <div class="ex-prev" style="margin-top:6px; line-height:1.6;">${meta.desc}</div>
-      <div class="overview-actions" style="margin:14px 0 0;">
-        <button class="btn-secondary meso-preview-btn" data-preset="${k}">Preview</button>
-        <button class="btn-primary meso-use-btn" data-preset="${k}" ${isActive?'disabled':''} style="${isActive?'opacity:0.5;':''}">${isActive ? 'Active' : 'Use this split'}</button>
-      </div>
-      <div class="meso-preview-body" id="mesoPreview-${k}"></div>
-    </div>`;
-  }).join('');
+    groupItems += `
+      <div class="split-option" data-preset="${k}">
+        <div class="split-option-header"><span class="split-option-name">${meta.label}</span></div>
+        <div class="split-option-desc">${meta.desc}</div>
+        <div class="split-option-actions">
+          <button class="btn-secondary meso-preview-btn" data-preset="${k}">Preview</button>
+          <button class="btn-primary meso-use-btn" data-preset="${k}" ${isActive?'disabled':''} style="${isActive?'opacity:0.5;':''}">${isActive ? 'Active' : 'Use this split'}</button>
+        </div>
+        <div class="meso-preview-body" id="mesoPreview-${k}"></div>
+      </div>`;
+  });
+  if (lastTier !== null) groupsHtml += `<div class="split-tier-group">${groupItems}</div>`;
 
+  list.innerHTML = `
+    <div class="split-collapse-row"><button class="back-link" id="splitCollapseBtn" style="padding:0;">Collapse ^</button></div>
+    ${groupsHtml}`;
+
+  const collapseBtn = document.getElementById('splitCollapseBtn');
+  if (collapseBtn) collapseBtn.onclick = () => { splitPickerOpen = false; renderSplitPicker(); };
   list.querySelectorAll('.meso-preview-btn').forEach(btn => {
     btn.onclick = () => {
       const k = btn.dataset.preset;
@@ -620,6 +878,7 @@ async function renderMesos() {
     if (btn.disabled) return;
     btn.onclick = async () => {
       await saveActivePreset(btn.dataset.preset);
+      splitPickerOpen = false;
       renderMesos();
       currentDay = todayName();
       renderDayNav();
@@ -1082,6 +1341,28 @@ const DEFAULT_HERO_PHOTOS = {
   Friday: "/_blob/51dd7c1443093f7645e454be629a71dd",
 };
 
+// Supabase project backing real accounts + cross-device sync. The anon key is safe to ship in
+// client code by design — it only grants what the database's row-level security policies allow,
+// which for the `documents` table is "your own rows, nothing else."
+const SUPABASE_URL = 'https://xjvlmluycmbalzujojdm.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqdmxtbHV5Y21iYWx6dWpvamRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNzQ5MDcsImV4cCI6MjEwNTg1MDkwN30.zVGVSQ3zv_ZrVjHJP5JVCF-W2c-A7XelUYmlaTgjb8A';
+let supaClient = null;
+try { supaClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null; } catch (e) { supaClient = null; }
+let currentUserId = null;
+
+// Sentry — real error tracking so bugs that only show up on a friend's device during
+// stress-testing don't just vanish. Wrapped in try/catch: if the CDN can't load (offline, GitHub
+// Pages cache hiccup), the app must keep working with no crash reporting rather than break.
+try {
+  if (window.Sentry) {
+    window.Sentry.init({
+      dsn: 'https://519576b5088ab6a9ef53d29e95480c73@o4512143832449024.ingest.us.sentry.io/4512143983116288',
+      environment: (location.hostname === 'localhost' || location.protocol === 'file:') ? 'development' : 'production',
+      tracesSampleRate: 0.1,
+    });
+  }
+} catch (e) {}
+
 let db = null;
 let currentDay = todayName();
 let state = {};
@@ -1504,7 +1785,17 @@ function renderExerciseBody(ex, container, prevSlot) {
     const t = parseFloat(target);
     const ramp = !isNaN(t) && t > 0 ? rampSpec.map(r => ({...r, w: Math.round(t*r.pct/100/5)*5})) : null;
     const step = warmupStepByEx[exName] || 0;
-    const restEnd = warmupRestEndByEx[exName];
+    let restEnd = warmupRestEndByEx[exName];
+    if (restEnd && Date.now() >= restEnd) {
+      // Self-heal, same idea as the working-set rest phase below: clearTimerFor() runs on every
+      // app resume/visibility change (an incoming call, switching apps, backgrounding) and kills
+      // whatever ramp-rest interval was ticking, with nothing left to notice the window ended —
+      // so the countdown just froze until you manually tapped "Skip rest". Catching an already-
+      // elapsed rest here means any render can complete the transition, not just a live tick.
+      warmupRestEndByEx[exName] = null;
+      restEnd = null;
+      playRestChime();
+    }
     const resting = restEnd && Date.now() < restEnd;
 
     html += `<div class="active-block">
@@ -1557,6 +1848,7 @@ function renderExerciseBody(ex, container, prevSlot) {
   container.innerHTML = html;
   wireExerciseEvents(ex, container);
   ensureRestTicking(ex, container, prevSlot);
+  ensureWarmupRestTicking(ex, container, prevSlot);
 }
 
 // window.confirm() is unreliable here — it can silently no-op instead of showing a dialog inside
@@ -1626,6 +1918,25 @@ function ensureRestTicking(ex, container, prevSlot) {
   }, 1000);
 }
 
+// Same self-healing idea as ensureRestTicking, for the warm-up ramp's rest countdown — it has its
+// own separate timer (warmupTimerByEx) and its own separate elapsed-check above, so it needs its
+// own re-arm too; ensureRestTicking only watches uiState[exName].phase === 'rest', which the
+// warm-up phase never enters.
+function ensureWarmupRestTicking(ex, container, prevSlot) {
+  const exName = ex.name;
+  const restEnd = warmupRestEndByEx[exName];
+  if (!restEnd || Date.now() >= restEnd || warmupTimerByEx[exName]) return;
+  warmupTimerByEx[exName] = setInterval(() => {
+    if (Date.now() >= warmupRestEndByEx[exName]) {
+      clearInterval(warmupTimerByEx[exName]);
+      delete warmupTimerByEx[exName];
+      warmupRestEndByEx[exName] = null;
+      playRestChime();
+    }
+    renderExerciseBody(ex, container, prevSlot);
+  }, 1000);
+}
+
 function wireExerciseEvents(ex, container) {
   const exName = ex.name; const id = cssEsc(exName);
   const sets = state[exName]; const ui = uiState[exName];
@@ -1634,7 +1945,22 @@ function wireExerciseEvents(ex, container) {
 
   const warmupInput = container.querySelector('.warmupTargetInput');
   if (warmupInput) {
-    warmupInput.addEventListener('input', () => { warmupTargetByEx[exName] = warmupInput.value; renderExerciseBody(ex, container, prevSlotEl); });
+    warmupInput.addEventListener('input', () => {
+      warmupTargetByEx[exName] = warmupInput.value;
+      const selStart = warmupInput.selectionStart;
+      const selEnd = warmupInput.selectionEnd;
+      // Re-rendering rebuilds the whole exercise body (including this very input) so the ramp
+      // weight preview updates live as you type — but replacing a focused input's DOM node blurs
+      // it, which dismisses the mobile keyboard after every single keystroke. Re-focus the
+      // freshly-rendered input synchronously, same tick, so typing feels continuous instead of
+      // needing the keyboard reopened after each digit.
+      renderExerciseBody(ex, container, prevSlotEl);
+      const freshInput = container.querySelector('.warmupTargetInput');
+      if (freshInput) {
+        freshInput.focus();
+        try { freshInput.setSelectionRange(selStart, selEnd); } catch (e) {}
+      }
+    });
   }
   const warmupRepsInput = container.querySelector('.warmupTargetRepsInput');
   if (warmupRepsInput) {
@@ -1666,16 +1992,10 @@ function wireExerciseEvents(ex, container) {
       return;
     }
     warmupRestEndByEx[exName] = Date.now() + WARMUP_REST_SECONDS * 1000;
+    // renderExerciseBody's own trailing ensureWarmupRestTicking() call arms the countdown
+    // interval — no need to create one here too (that used to leave two intervals running at
+    // once, since the render already invoked below beats this code to it).
     renderExerciseBody(ex, container, prevSlotEl);
-    warmupTimerByEx[exName] = setInterval(() => {
-      if (Date.now() >= warmupRestEndByEx[exName]) {
-        clearInterval(warmupTimerByEx[exName]);
-        delete warmupTimerByEx[exName];
-        warmupRestEndByEx[exName] = null;
-        playRestChime();
-      }
-      renderExerciseBody(ex, container, prevSlotEl);
-    }, 1000);
   };
   const skipRestBtn = container.querySelector('.warmupSkipRestBtn');
   if (skipRestBtn) skipRestBtn.onclick = () => {
@@ -1754,9 +2074,15 @@ function wireExerciseEvents(ex, container) {
           if (isPR) { loggedSet.isPR = true; renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot')); }
         });
       }
+      // Save after every confirmed set, not just the exercise's last one. Only saving on the final
+      // set meant an earlier set you logged (or a correction to one — un-logging a done row, fixing
+      // the reps, re-confirming) never reached the database until the whole exercise was finished.
+      // If the app got closed, crashed, or you just moved on mid-exercise, that "logged" set was
+      // gone — restoreTodaySession() reads from the very same doc this never got around to writing.
+      autoSaveDay();
       const hasMore = sets.some(s => !s.logged);
       if (hasMore) { startRest(ex, container, prevSlot); }
-      else { uiState[exName].phase = 'input'; renderExerciseBody(ex, container, prevSlot); autoSaveDay(); }
+      else { uiState[exName].phase = 'input'; renderExerciseBody(ex, container, prevSlot); }
     };
   }
   if (ui.phase === 'rest') {
@@ -2035,7 +2361,21 @@ function renderDayOverview() {
       } catch (err) { console.error('photo upload failed', err); }
       return;
     }
-    // Outside Claude: no asset store available — read the file as a data URL and store it directly.
+    // Signed-in with a real account: upload to Supabase Storage instead of embedding the photo as
+    // base64 in the database — keeps rows small and is the standard place for user-uploaded files.
+    if (supaClient && currentUserId && db && !db.__local) {
+      try {
+        const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
+        const path = `${currentUserId}/${Date.now()}.${ext}`;
+        const { error: upErr } = await supaClient.storage.from('photos').upload(path, file, { contentType: file.type || 'image/jpeg' });
+        if (upErr) throw upErr;
+        const { data: pub } = supaClient.storage.from('photos').getPublicUrl(path);
+        await savePhotoLogEntry(pub.publicUrl);
+        applyHeroPhoto(pub.publicUrl);
+      } catch (err) { console.error('photo upload failed', err); }
+      return;
+    }
+    // Guest/local mode: no asset store available — read the file as a data URL and store it directly.
     const reader = new FileReader();
     reader.onload = async () => {
       const dataUrl = reader.result;
@@ -2879,7 +3219,7 @@ function trendAverage(entries, n) {
 async function getTrendWeightLb() {
   if (!db) return null;
   try {
-    const snap = await db.collection('weight').orderBy('date','desc').limit(8).get();
+    const snap = await db.collection('weight').where('lb','>',0).orderBy('date','desc').limit(8).get();
     return trendAverage((snap.docs || []).map(d => d.data()), 7);
   } catch (e) {}
   return null;
@@ -3043,7 +3383,7 @@ async function evaluatePhaseHealth() {
 
   let weightLog = [], measureLog = [];
   if (db) {
-    try { weightLog = (await db.collection('weight').orderBy('date', 'desc').limit(150).get()).docs.map(d => d.data()); } catch (e) {}
+    try { weightLog = (await db.collection('weight').where('lb','>',0).orderBy('date', 'desc').limit(150).get()).docs.map(d => d.data()); } catch (e) {}
     try { measureLog = (await db.collection('measurements').orderBy('date', 'desc').limit(150).get()).docs.map(d => d.data()).filter(m => m.waist != null); } catch (e) {}
   }
   weightLog = weightLog.filter(w => w.date >= phaseStart).sort((a, b) => a.date < b.date ? -1 : 1);
@@ -3179,9 +3519,28 @@ async function renderNutrition() {
   document.getElementById('pNum').textContent = proteinG ? `${sums.p}/${proteinG}` : `${sums.p}`;
   document.getElementById('cNum').textContent = carbG ? `${sums.c}/${carbG}` : `${sums.c}`;
   document.getElementById('fNum').textContent = fatG ? `${sums.f}/${fatG}` : `${sums.f}`;
-  document.getElementById('pBar').style.width = proteinG ? Math.min(100, sums.p/proteinG*100)+'%' : '0%';
-  document.getElementById('cBar').style.width = carbG ? Math.min(100, sums.c/carbG*100)+'%' : '0%';
-  document.getElementById('fBar').style.width = fatG ? Math.min(100, sums.f/fatG*100)+'%' : '0%';
+
+  // Fuel gauge: one continuous "tank" instead of three separate rings. Calories logged so far
+  // fill the track (each macro's calorie share stacked left-to-right: protein, then carbs, then
+  // fat), and a marker shows where you "should" be by this point in the day so pacing — not just
+  // a midnight over/under — is visible at a glance.
+  const pCals = sums.p * 4, cCals = sums.c * 4, fCals = sums.f * 9;
+  const loggedCals = pCals + cCals + fCals;
+  const fuelDenom = target || Math.max(loggedCals, 1);
+  const pPct = Math.min(100, pCals / fuelDenom * 100);
+  const cPct = Math.min(100, cCals / fuelDenom * 100);
+  const fPct = Math.min(100, fCals / fuelDenom * 100);
+  const segP = document.getElementById('fuelSegP'), segC = document.getElementById('fuelSegC'), segF = document.getElementById('fuelSegF');
+  if (segP) { segP.style.left = '0%'; segP.style.width = pPct + '%'; }
+  if (segC) { segC.style.left = pPct + '%'; segC.style.width = cPct + '%'; }
+  if (segF) { segF.style.left = (pPct + cPct) + '%'; segF.style.width = fPct + '%'; }
+  const pace = document.getElementById('fuelPace');
+  if (pace) {
+    const now = new Date();
+    const dayFrac = Math.min(1, (now.getHours() * 60 + now.getMinutes()) / (22 * 60)); // most eating happens by ~10pm
+    pace.style.left = (target ? dayFrac * 100 : 0) + '%';
+    pace.style.display = target ? 'block' : 'none';
+  }
 
   renderFoodList(entries);
   renderRecentFoodsRow(await getRecentFoods());
@@ -3321,7 +3680,12 @@ document.getElementById('logWeightBtn').onclick = async () => {
   if (isNaN(v)) return;
   await logWeight(v);
   document.getElementById('weightLb').value = '';
-  renderWeightTab();
+  await renderWeightTab();
+  const readout = document.getElementById('scaleReadoutNum');
+  if (readout) {
+    readout.classList.remove('pulse'); void readout.offsetWidth; readout.classList.add('pulse');
+    setTimeout(() => readout.classList.remove('pulse'), 550);
+  }
 };
 async function getWeightLog() {
   if (!db) return [];
@@ -3338,6 +3702,9 @@ async function renderWeightTab() {
   const ft = parseInt(document.getElementById('heightFt').value,10) || 0;
   const inch = parseInt(document.getElementById('heightInPart').value,10) || 0;
   const totalIn = ft*12 + inch;
+
+  const scaleNum = document.getElementById('scaleReadoutNum');
+  if (scaleNum) scaleNum.textContent = trend ? trend.toFixed(1) : (latest ? latest.lb : '–');
 
   const trendNote = document.getElementById('trendWeightNote');
   if (trend && log.length > 1) {
@@ -3585,9 +3952,147 @@ function createLocalDb() {
   return { doc: docRef, collection: collectionRef, __local: true };
 }
 
-async function init() {
-  fmtDate();
-  try { db = await claude.use('db'); } catch (e) { db = createLocalDb(); }
+// Same doc/collection shape as createLocalDb(), backed by the Supabase `documents` table instead
+// of localStorage, so every call site elsewhere in the app (db.doc(...), db.collection(...)) works
+// unchanged regardless of which one is active. Path convention matches exactly: a "collection" is
+// every row whose path is "<prefix>/<id>" with no further slashes in <id>.
+function createSupabaseDb(client, userId) {
+  async function readDoc(path) {
+    const { data, error } = await client.from('documents').select('data').eq('user_id', userId).eq('path', path).maybeSingle();
+    if (error) throw error;
+    return data ? data.data : null;
+  }
+  async function writeDoc(path, data) {
+    const { error } = await client.from('documents').upsert(
+      { user_id: userId, path, data, updated_at: new Date().toISOString() },
+      { onConflict: 'user_id,path' }
+    );
+    if (error) throw error;
+  }
+  function docRef(path) {
+    return {
+      get: async () => { const data = await readDoc(path); return { exists: data !== null, data: () => data || {} }; },
+      set: async (data) => { await writeDoc(path, data); },
+      update: async (data) => { await writeDoc(path, { ...(await readDoc(path) || {}), ...data }); },
+      delete: async () => {
+        const { error } = await client.from('documents').delete().eq('user_id', userId).eq('path', path);
+        if (error) throw error;
+      },
+    };
+  }
+  function collectionRef(prefix) {
+    const filters = []; let order = null; let lim = null;
+    const builder = {
+      where: (field, op, val) => { filters.push([field, op, val]); return builder; },
+      orderBy: (field, dir) => { order = { field, dir: dir || 'asc' }; return builder; },
+      limit: (n) => { lim = n; return builder; },
+      get: async () => {
+        const { data: rows, error } = await client.from('documents').select('path, data').eq('user_id', userId).like('path', prefix + '/%');
+        if (error) throw error;
+        let results = (rows || [])
+          .filter(r => !r.path.slice(prefix.length + 1).includes('/'))
+          .map(r => ({ id: r.path.slice(prefix.length + 1), __data: r.data }));
+        for (const [field, op, val] of filters) {
+          results = results.filter(r => {
+            const fv = r.__data[field];
+            if (op === '==') return fv === val;
+            if (op === '>') return fv > val;
+            if (op === '<') return fv < val;
+            if (op === '>=') return fv >= val;
+            if (op === '<=') return fv <= val;
+            return true;
+          });
+        }
+        if (order) {
+          results.sort((a, b) => {
+            const av = a.__data[order.field], bv = b.__data[order.field];
+            if (av < bv) return order.dir === 'desc' ? 1 : -1;
+            if (av > bv) return order.dir === 'desc' ? -1 : 1;
+            return 0;
+          });
+        }
+        const limited = lim ? results.slice(0, lim) : results;
+        return { docs: limited.map(r => ({ id: r.id, data: () => r.__data, exists: true })) };
+      },
+    };
+    return builder;
+  }
+  return { doc: docRef, collection: collectionRef, __local: false };
+}
+
+// One-time offer, right after a fresh login, to bring in whatever's already sitting in this
+// browser's local data (from using the app before accounts existed, or from guest mode) so
+// switching to a real account doesn't look like data loss. Only offered when the account is
+// otherwise empty, so logging in on a second device never re-triggers it or clobbers real data.
+async function maybeImportLocalData(userId) {
+  const localKeys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('foreverdb:')) localKeys.push(key);
+  }
+  if (!localKeys.length) return;
+  try {
+    const { count, error } = await supaClient
+      .from('documents').select('path', { count: 'exact', head: true }).eq('user_id', userId);
+    if (error) return;
+    if (count && count > 0) return; // account already has data — never overwrite it silently
+  } catch (e) { return; }
+  let doImport = true;
+  try { doImport = confirm(`Found ${localKeys.length} item(s) of training data on this device from before you signed in. Import them into your account now?`); } catch (e) {}
+  if (!doImport) return;
+  for (const key of localKeys) {
+    const path = key.slice('foreverdb:'.length);
+    let value; try { value = JSON.parse(localStorage.getItem(key)); } catch (e) { continue; }
+    if (value === null || value === undefined) continue;
+    try { await db.doc(path).set(value); } catch (e) {}
+  }
+}
+
+function showAuthError(msg) {
+  const el = document.getElementById('authError');
+  el.textContent = msg; el.style.display = 'block';
+  document.getElementById('authInfo').style.display = 'none';
+}
+function showAuthInfo(msg) {
+  const el = document.getElementById('authInfo');
+  el.textContent = msg; el.style.display = 'block';
+  document.getElementById('authError').style.display = 'none';
+}
+
+let authMode = 'login';
+function renderAuthMode() {
+  document.getElementById('authSubmitBtn').textContent = authMode === 'login' ? 'Log In' : 'Sign Up';
+  document.getElementById('authToggleModeBtn').textContent = authMode === 'login' ? 'Need an account? Sign up' : 'Already have an account? Log in';
+  document.getElementById('authSubtitle').textContent = authMode === 'login' ? 'Sign in to sync your training across devices.' : 'Create an account to sync your training across devices.';
+}
+document.getElementById('authToggleModeBtn').onclick = () => { authMode = authMode === 'login' ? 'signup' : 'login'; renderAuthMode(); };
+
+document.getElementById('authSubmitBtn').onclick = async () => {
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  if (!email || !password) { showAuthError('Enter an email and password.'); return; }
+  const btn = document.getElementById('authSubmitBtn');
+  btn.disabled = true;
+  try {
+    if (authMode === 'login') {
+      const { data, error } = await supaClient.auth.signInWithPassword({ email, password });
+      if (error) { showAuthError(error.message); return; }
+      await useSupabaseSession(data.session);
+    } else {
+      const { data, error } = await supaClient.auth.signUp({ email, password });
+      if (error) { showAuthError(error.message); return; }
+      if (data.session) { await useSupabaseSession(data.session); }
+      else { showAuthInfo('Check your email to confirm your account, then log in.'); authMode = 'login'; renderAuthMode(); }
+    }
+  } catch (e) {
+    showAuthError('Could not reach the server. Check your connection and try again.');
+  } finally {
+    btn.disabled = false;
+  }
+};
+document.getElementById('authGuestBtn').onclick = async () => { await useLocalMode(); };
+
+async function startApp() {
   await loadActivePreset();
   await loadBlockConfig();
   await loadSleep();
@@ -3596,6 +4101,61 @@ async function init() {
   await loadFatigueSignal();
   await loadDay();
   await maybeShowOnboarding();
+}
+async function useLocalMode() {
+  db = createLocalDb();
+  document.getElementById('authOverlay').style.display = 'none';
+  await startApp();
+}
+async function useSupabaseSession(session) {
+  db = createSupabaseDb(supaClient, session.user.id);
+  currentUserId = session.user.id;
+  currentUserEmail = session.user.email || null;
+  document.getElementById('authOverlay').style.display = 'none';
+  const logoutBtn = document.getElementById('menuLogoutBtn');
+  if (logoutBtn) logoutBtn.style.display = 'block';
+  const reportBugBtn = document.getElementById('menuReportBugBtn');
+  if (reportBugBtn) reportBugBtn.style.display = 'block';
+  try {
+    if (window.Sentry) {
+      // Tags every error/report with which tester it came from — this is the whole point during
+      // friends' stress-testing: knowing whose device a bug happened on.
+      window.Sentry.setUser({ id: currentUserId, email: currentUserEmail || undefined });
+    }
+  } catch (e) {}
+  await maybeImportLocalData(session.user.id);
+  await startApp();
+}
+
+// --- Bug/crash reporting, via Sentry. Sentry's browser SDK auto-instruments window.onerror and
+// unhandledrejection on its own once initialized above, so nothing manual is needed for automatic
+// capture. This just wires the in-app "Report a bug" button to send a note alongside that same
+// error stream, tagged as manual feedback, viewable in the Sentry dashboard.
+let currentUserEmail = null;
+document.getElementById('menuReportBugBtn').addEventListener('click', () => {
+  const desc = prompt('What went wrong? (This gets logged with your account + device info so it can be fixed.)');
+  if (!desc) return;
+  try {
+    if (window.Sentry) {
+      window.Sentry.captureMessage(desc, { level: 'info', tags: { source: 'manual-feedback' } });
+    }
+  } catch (e) {}
+  alert('Thanks — logged it.');
+});
+document.getElementById('menuLogoutBtn') && (document.getElementById('menuLogoutBtn').onclick = async () => {
+  if (supaClient) { try { await supaClient.auth.signOut(); } catch (e) {} }
+  location.reload();
+});
+
+async function init() {
+  fmtDate();
+  if (!supaClient) { await useLocalMode(); return; }
+  try {
+    const { data: { session } } = await supaClient.auth.getSession();
+    if (session) { await useSupabaseSession(session); return; }
+  } catch (e) {}
+  renderAuthMode();
+  document.getElementById('authOverlay').style.display = 'block';
 }
 init();
 
