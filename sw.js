@@ -1,4 +1,4 @@
-const CACHE_NAME = 'forever-app-v1';
+const CACHE_NAME = 'forever-app-v2';
 const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', (event) => {
@@ -13,21 +13,28 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Stale-while-revalidate: answer instantly from whatever's cached — so the app still opens with
-// zero bars at the gym — while quietly fetching a fresh copy in the background so the next open
-// picks up any update, without ever blocking on a slow or absent connection.
+// Network-first with a short timeout: every open tries to fetch the latest version, so an
+// update shows up the first time you open the app (the old stale-while-revalidate version
+// always showed the previous build once). If the network is slow or gone — zero bars at the
+// gym — it falls back to the cached copy after 3 seconds so the app still opens.
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-  event.respondWith(
-    caches.open(CACHE_NAME).then(async (cache) => {
-      const cached = await cache.match(event.request);
-      const networkFetch = fetch(event.request)
-        .then((response) => {
-          if (response && response.status === 200) cache.put(event.request, response.clone());
-          return response;
-        })
-        .catch(() => null);
-      return cached || (await networkFetch) || new Response('Offline and not cached yet.', { status: 503 });
-    })
-  );
+  if (new URL(event.request.url).origin !== self.location.origin) return;
+  event.respondWith((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    const network = fetch(event.request, { cache: 'no-cache' }).then((response) => {
+      if (response && response.status === 200) cache.put(event.request, response.clone());
+      return response;
+    });
+    const timeout = new Promise((resolve) => setTimeout(resolve, 3000, null));
+    try {
+      const fresh = await Promise.race([network, timeout]);
+      if (fresh) return fresh;
+    } catch (e) { /* offline — fall through to cache */ }
+    const cached = await cache.match(event.request);
+    if (cached) return cached;
+    try { return await network; } catch (e) {
+      return new Response('Offline and not cached yet.', { status: 503 });
+    }
+  })());
 });
