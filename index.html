@@ -72,7 +72,7 @@
   input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes pulseDot { 0%,100% { opacity: 0.4; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.15); } }
-  @keyframes glowBreathe { 0%,100% { text-shadow: 0 0 8px rgba(255,255,255,0.25); } 50% { text-shadow: 0 0 16px rgba(255,255,255,0.55); } }
+  @keyframes glowBreathe { 0%,100% { text-shadow: 0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.12); } 50% { text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 34px rgba(255,255,255,0.25); } }
   .hero-pulse { position: absolute; top: 12px; right: 12px; display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; background: rgba(0,0,0,0.4); padding: 5px 10px; border-radius: 3px; }
   .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulseDot 2s ease-in-out infinite; }
   .stat-num, .cal-big, .bmi-num, .tdee-num, .scale-readout-num { animation: glowBreathe 3.5s ease-in-out infinite; }
