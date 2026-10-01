@@ -9,6 +9,7 @@
      with no signal — all of which matter a lot for an app used mid-workout at a gym. -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FOREVER">
@@ -33,26 +34,9 @@
     --card-sheen: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 45%);
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
-  @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) {
-      --bg: #f2f0e8; --bg-panel: #ffffff; --bg-input: rgba(138,109,22,0.07); --border: rgba(60,50,20,0.2); --hairline: rgba(60,50,20,0.2);
-      --text: #17140d; --text-dim: #6b6252; --accent: #8a6d16; --accent-2: #6b5411;
-      --accent-soft: rgba(138,109,22,0.10); --on-accent: #ffffff;
-      --rest-accent: #6b5940; --rest-2: #4f4530; --on-rest: #ffffff; --warn: #9a3d24;
-      --shadow-card: 0 1px 2px rgba(30,24,8,0.06), 0 10px 24px -10px rgba(30,24,8,0.18);
-      --shadow-lift: 0 4px 14px -4px rgba(30,24,8,0.16);
-      --card-sheen: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0) 45%);
-    }
-  }
-  :root[data-theme="light"] {
-    --bg: #f2f0e8; --bg-panel: #ffffff; --bg-input: rgba(138,109,22,0.07); --border: rgba(60,50,20,0.2); --hairline: rgba(60,50,20,0.2);
-    --text: #17140d; --text-dim: #6b6252; --accent: #8a6d16; --accent-2: #6b5411;
-    --accent-soft: rgba(138,109,22,0.10); --on-accent: #ffffff;
-    --rest-accent: #6b5940; --rest-2: #4f4530; --on-rest: #ffffff; --warn: #9a3d24;
-    --shadow-card: 0 1px 2px rgba(30,24,8,0.06), 0 10px 24px -10px rgba(30,24,8,0.18);
-    --shadow-lift: 0 4px 14px -4px rgba(30,24,8,0.16);
-    --card-sheen: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0) 45%);
-  }
+  /* Dark only — FOREVER is black/white/purple by design. The old light theme (cream + gold) was
+     removed so phones set to Light Mode get the same app instead of an outdated palette. */
+  html { color-scheme: dark; background: #000000; }
   * { box-sizing: border-box; }
   /* Themed fallback for any input/select that isn't already covered by a more specific rule
      (an underline-style field in .control-panel/.field-row, etc.). Without this, a plain unclassed
@@ -66,8 +50,6 @@
     -webkit-appearance: none; appearance: none; accent-color: var(--accent);
     color-scheme: dark;
   }
-  :root[data-theme="light"] input, :root[data-theme="light"] select, :root[data-theme="light"] textarea { color-scheme: light; }
-  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) input, :root:not([data-theme="dark"]) select, :root:not([data-theme="dark"]) textarea { color-scheme: light; } }
   input::placeholder, textarea::placeholder { color: var(--text-dim); opacity: 1; }
   input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
@@ -380,6 +362,47 @@
   .tabbar button.active .tico { color: var(--accent); filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); transform: translateY(-1px) scale(1.08); }
   .tabbar button.active { color: var(--accent); }
   .tabbar button:active .tico { transform: scale(0.9); }
+  /* Block review */
+  .review-card { margin-top: 24px; }
+  .review-kicker { font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--rest-accent); font-weight: 600; }
+  .review-title { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 1px; margin: 2px 0 14px; }
+  .review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px 10px; }
+  .review-stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 28px; line-height: 1; color: var(--text); text-shadow: 0 0 14px rgba(255,255,255,0.25); }
+  .review-stat-lbl { font-size: 9.5px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-dim); margin-top: 4px; font-weight: 500; }
+  .review-stat-sub { font-size: 10px; color: var(--text-dim); font-weight: 300; margin-top: 2px; }
+  .review-lifts { margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--hairline); }
+  .review-lift { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; padding: 5px 0; color: var(--text); }
+  .review-lift-v { color: var(--text-dim); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .review-lift-v em { font-style: normal; color: var(--rest-accent); margin-left: 4px; }
+  .review-rec { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--hairline); }
+  .review-rec-label { font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--text-dim); font-weight: 500; }
+  .review-rec-head { font-size: 17px; font-weight: 600; margin: 4px 0 8px; color: var(--accent); text-shadow: 0 0 16px rgba(167,139,250,0.35); }
+  .review-reason { font-size: 12px; color: var(--text-dim); font-weight: 300; line-height: 1.5; margin-top: 6px; }
+  .review-len { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; }
+  /* Fuel check */
+  .fuel-check { margin: 26px 20px 0; cursor: pointer; }
+  .fuel-check-head { display: flex; align-items: baseline; justify-content: space-between; }
+  .fuel-check-num { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.5px; }
+  .fuel-check-num span { font-family: 'Outfit', sans-serif; font-size: 11px; color: var(--text-dim); letter-spacing: 0; }
+  .fuel-check-bar { height: 4px; border-radius: 999px; background: var(--bg-input); margin-top: 8px; overflow: hidden; }
+  .fuel-check-bar div { height: 100%; background: linear-gradient(90deg, var(--rest-2), var(--rest-accent)); border-radius: 999px; transition: width 0.5s var(--ease); }
+  .fuel-check-sub { font-size: 10.5px; color: var(--text-dim); margin-top: 6px; }
+  .fuel-check-msg { font-size: 11.5px; color: var(--text-dim); font-weight: 300; line-height: 1.5; margin-top: 6px; }
+  .fuel-warn .fuel-check-msg { color: var(--text); }
+  .fuel-warn .cp-label { color: var(--rest-accent); }
+  /* Quick log */
+  .quicklog { margin: 24px 20px 0; }
+  .quicklog-row { display: flex; gap: 8px; margin: 8px 0 6px; }
+  .quicklog-row input { flex: 1; min-width: 0; padding: 9px 10px; font-size: 13px; }
+  /* Your lifts */
+  .lift-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--hairline); }
+  .lift-row:first-child { border-top: none; }
+  .lift-name { font-size: 13px; font-weight: 500; }
+  .lift-sub { font-size: 10.5px; color: var(--text-dim); font-weight: 300; margin-top: 3px; line-height: 1.4; }
+  .lift-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+  .lift-e1rm { font-family: 'Bebas Neue', sans-serif; font-size: 22px; line-height: 1; text-shadow: 0 0 12px rgba(255,255,255,0.25); }
+  .lift-e1rm span { font-family: 'Outfit', sans-serif; font-size: 9.5px; color: var(--text-dim); letter-spacing: 0.3px; margin-left: 3px; }
+  .lift-spark { color: var(--rest-accent); }
   .tabpanel { display: none; }
   .tabpanel.active { display: block; }
 
@@ -513,6 +536,8 @@
     <div class="info-panel" id="infoWeekPanel">Set counts and RIR descend on a periodized schedule: weeks 1–3 hold base volume (2 sets compound / 3 isolation), weeks 4–5 are your overload peak (3/4 sets) — mesocycle research shows adding sets is the best-supported lever for hypertrophy — and week 6 is a deload, matching what most competitive strength/physique athletes already do.</div>
   </div>
 
+  <div id="blockReviewSlot"></div>
+  <div id="missedWeekSlot"></div>
   <div id="fatigueSlot"></div>
   <div id="checkinSlot"></div>
   <nav class="days" id="dayNav"></nav>
@@ -698,6 +723,11 @@
       <div id="volumePanelBody" style="margin-top:10px;"></div>
     </div>
     <div class="panel">
+      <div class="section-title">Your lifts <button class="info-btn" id="infoLiftsBtn">i</button></div>
+      <div class="info-panel" id="infoLiftsPanel">Each lift's estimated max comes from your heaviest set each session, adjusted for how many reps you had left. The weekly rate is a trend line through your last 8 sessions of that lift — it's what the workout plan uses to decide how hard to push you on that movement. Deload weeks are left out so they don't drag the trend down.</div>
+      <div id="liftTrendsBody" style="margin-top:10px;"></div>
+    </div>
+    <div class="panel">
       <div class="section-title">Choose your split</div>
       <div class="ex-prev" style="margin-top:6px;">Every option here trains each muscle at least twice a week — the one piece of programming the frequency research (Schoenfeld et al.) agrees on most consistently once volume is equal. Pick the one that fits your schedule and recovery, not the one that sounds hardest.</div>
       <div id="presetList" style="margin-top:14px;"></div>
@@ -756,7 +786,7 @@ function wireInfo(btnId, panelId) {
   const btn = document.getElementById(btnId), panel = document.getElementById(panelId);
   if (btn && panel) btn.onclick = () => panel.classList.toggle('open');
 }
-['Week','Sleep','Macro','Bmi','MealTiming','ShowPrep','Builder','Adaptive','Measure','Volume','PhaseHealth'].forEach(k => wireInfo(`info${k}Btn`, `info${k}Panel`));
+['Week','Sleep','Macro','Bmi','MealTiming','ShowPrep','Builder','Adaptive','Measure','Volume','PhaseHealth','Lifts'].forEach(k => wireInfo(`info${k}Btn`, `info${k}Panel`));
 
 function renderMesoTimeline() {
   const track = document.getElementById('mesoTrack');
@@ -809,6 +839,7 @@ let splitPickerOpen = false;
 async function renderMesos() {
   renderMesoTimeline();
   renderWeeklyVolumePanel();
+  renderLiftTrendsPanel();
   renderSplitPicker();
 }
 function renderSplitPicker() {
@@ -894,6 +925,7 @@ document.querySelectorAll('.tabbar button').forEach(btn => {
     document.querySelectorAll('.tabpanel').forEach(p => p.classList.remove('active'));
     document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
     if (btn.dataset.tab === 'nutrition') renderNutrition();
+    if (btn.dataset.tab === 'workout') { renderFuelCheck(); renderQuickLog(); renderBlockReviewIfNeeded(); }
     if (btn.dataset.tab === 'weight') renderWeightTab();
     if (btn.dataset.tab === 'mesos') renderMesos();
   };
@@ -1400,7 +1432,7 @@ async function saveActivePreset(preset) {
   programOverrides = {};
   if (db) { try { await db.doc('program/activePreset').set({ value: preset }); } catch (e) {} }
 }
-let blockConfig = { start: null, length: 6, lastAckedWeek: null, forceDeload: false };
+let blockConfig = { start: null, length: 6, lastAckedWeek: null, forceDeload: false, reviewSnoozeUntil: null, shiftDays: 0, missedAck: null };
 let sleepGoal = 8;
 let sleepHoursToday = null;
 let sorenessToday = null;
@@ -1420,9 +1452,14 @@ let weightPhase = 'maintain';
 let phaseStart = null;
 let plannedPhaseWeeks = null;
 let phaseAdvisorySnoozeUntil = null;
+let maintAdjustedOn = null; // last time maintenance calories were auto-corrected (adaptive card or block review)
 
 function todayName() { return DAY_ORDER[(new Date().getDay() + 6) % 7]; }
-function isoOffset(daysAgo) { const d = new Date(); d.setDate(d.getDate() - daysAgo); return d.toISOString().slice(0,10); }
+// Local calendar date (YYYY-MM-DD). toISOString() is UTC, which in Pacific time rolled every log
+// made after 5pm over to TOMORROW — evening workouts, dinner, and night weigh-ins all landed on the
+// wrong day, and the nutrition day effectively reset at 5pm.
+function localISO(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+function isoOffset(daysAgo) { const d = new Date(); d.setDate(d.getDate() - daysAgo); return localISO(d); }
 function todayISO() { return isoOffset(0); }
 function dayPart(h) {
   if (h < 5) return 'Late Night';
@@ -1457,7 +1494,7 @@ function weekInfo() {
   const phases = blockPhaseWeeks(len);
   const isDeload = clampedWeek === len || !!blockConfig.forceDeload;
   const isOverload = !isDeload && clampedWeek > phases.base;
-  return { week: clampedWeek, deload: isDeload, overload: isOverload };
+  return { week: clampedWeek, rawWeek: Math.max(week, 1), deload: isDeload, overload: isOverload };
 }
 
 // The weekly soreness/recovery check-in was being saved and then never read by anything — real
@@ -1465,16 +1502,26 @@ function weekInfo() {
 // regardless of how beat up the check-in said someone actually was. This reads the most recent
 // check-in back out so the app can at least surface it, rather than silently ignoring its own data.
 let fatigueFlag = false;
+let fatigueReason = '';
 async function loadFatigueSignal() {
   fatigueFlag = false;
+  fatigueReason = '';
   if (!db) return;
+  // Daily soreness: rated 4–5 on 3 of your last 5 ratings within two weeks = accumulated fatigue.
+  try {
+    const sSnap = await db.collection('soreness').get();
+    const cutoff = isoOffset(14);
+    const recent = (sSnap.docs || []).map(d => ({ date: d.id, v: parseInt((d.data() || {}).value, 10) }))
+      .filter(x => x.date >= cutoff && !isNaN(x.v)).sort((a, b) => a.date < b.date ? 1 : -1).slice(0, 5);
+    if (recent.filter(x => x.v >= 4).length >= 3) { fatigueFlag = true; fatigueReason = 'soreness'; }
+  } catch (e) {}
   try {
     const snap = await db.collection('weekcheckins').orderBy('date', 'desc').limit(1).get();
     const docs = snap.docs || [];
     if (!docs.length) return;
     const data = docs[0].data();
     const sore = parseInt(data.soreness, 10), rec = parseInt(data.recovery, 10);
-    if (!isNaN(sore) && !isNaN(rec) && sore >= 4 && rec <= 2) fatigueFlag = true;
+    if (!isNaN(sore) && !isNaN(rec) && sore >= 4 && rec <= 2) { fatigueFlag = true; fatigueReason = 'checkin'; }
   } catch (e) {}
 }
 function renderFatigueAdvisory() {
@@ -1493,7 +1540,7 @@ function renderFatigueAdvisory() {
     return;
   }
   if (fatigueFlag && !info.deload) {
-    slot.innerHTML = `<div class="checkin-card"><div class="checkin-title">High fatigue reported</div><div class="ex-prev">Your last check-in showed high soreness and low recovery. Pushing more volume on top of that is how a stall turns into an injury — an early deload is worth considering rather than waiting for the calendar to catch up.</div><button class="btn-secondary" id="startDeloadBtn" style="margin-top:12px; width:100%;">Deload this week</button></div>`;
+    slot.innerHTML = `<div class="checkin-card"><div class="checkin-title">High fatigue reported</div><div class="ex-prev">${fatigueReason === 'soreness' ? 'You\'ve rated yourself very sore on 3 of your last 5 days.' : 'Your last check-in showed high soreness and low recovery.'} Pushing more volume on top of that is how a stall turns into an injury — an early deload is worth considering rather than waiting for the calendar to catch up.</div><button class="btn-secondary" id="startDeloadBtn" style="margin-top:12px; width:100%;">Deload this week</button></div>`;
     document.getElementById('startDeloadBtn').onclick = async () => {
       blockConfig.forceDeload = true;
       if (db) { try { await db.doc('block/config').update({ forceDeload: true }); } catch (e) {} }
@@ -1505,6 +1552,499 @@ function renderFatigueAdvisory() {
   }
   slot.innerHTML = '';
 }
+// ============================================================================================
+// Training ↔ nutrition link: shared targets, end-of-block review, fuel check, quick-log reminder
+// ============================================================================================
+function escHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function phaseGroupOf(phase) { return PHASES[phase] ? PHASES[phase].group : phase; }
+// One place for "what should I eat today" so the Nutrition tab, the Workout tab's fuel check and
+// the block review can never disagree. Overload weeks get a little more, deload weeks a little less.
+function calorieTargetFor(info) {
+  if (!maintCals) return null;
+  let t = maintCals + (PHASES[nutritionPhase] ? PHASES[nutritionPhase].calDelta : 0);
+  if (info && info.week) {
+    if (info.deload) t -= 100;
+    else if (info.overload) t += 125;
+  }
+  return Math.round(t);
+}
+function proteinTargetFor(bw, target) {
+  if (bw) return Math.round(bw * 1.0);
+  return target ? Math.round(target * 0.30 / 4) : null;
+}
+function addDaysISO(iso, n) { const d = new Date(iso + 'T00:00:00'); d.setDate(d.getDate() + n); return localISO(d); }
+function daysBetweenISO(a, b) { return Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 86400000); }
+function sumEntries(entries) {
+  return (entries || []).reduce((a, f) => ({ cals: a.cals + (Number(f.cals) || 0), prot: a.prot + (Number(f.prot) || 0) }), { cals: 0, prot: 0 });
+}
+
+// ---------- End-of-block review: pure math (no DOM, no db) so it can be unit-tested ----------
+function bestE1rm(sets) {
+  let best = 0;
+  (sets || []).forEach(s => {
+    const w = parseFloat(s.weight), r = parseFloat(s.reps);
+    if (s.logged && w > 0 && r > 0 && r <= 20) best = Math.max(best, epley1RM(w, r));
+  });
+  return best;
+}
+function linearSlopePerDay(points) { // points: [{x: dayIndex, y}]
+  const n = points.length;
+  if (n < 2) return null;
+  const mx = points.reduce((a, p) => a + p.x, 0) / n, my = points.reduce((a, p) => a + p.y, 0) / n;
+  let num = 0, den = 0;
+  points.forEach(p => { num += (p.x - mx) * (p.y - my); den += (p.x - mx) * (p.x - mx); });
+  return den ? num / den : null;
+}
+function computeBlockReviewStats(raw) {
+  const { start, len, today } = raw;
+  const extra = raw.extraDays || 0; // weeks repeated after missed training stretch the block
+  const end = addDaysISO(start, len * 7 + extra); // exclusive
+  const inBlock = d => d && d >= start && d < end;
+  const weekOf = d => Math.floor(daysBetweenISO(start, d) / 7) + 1;
+  const phases = blockPhaseWeeks(len);
+
+  // Training: sessions actually trained, and strength early vs late in the block.
+  const sessions = (raw.sessions || []).filter(s => inBlock(s.date) && s.exercises);
+  const trained = sessions.filter(s => Object.values(s.exercises).some(sets => (sets || []).some(x => x.logged)));
+  const planned = (raw.plannedPerWeek || 0) * len;
+  const earlyWeeks = new Set([1, 2]);
+  const lateLast = len - 1; // last non-deload week
+  const lateWeeks = new Set([lateLast, lateLast - 1].filter(w => w > 2));
+  const early = {}, late = {};
+  trained.forEach(s => {
+    const w = s.week || weekOf(s.date);
+    Object.keys(s.exercises).forEach(ex => {
+      const e = bestE1rm(s.exercises[ex]);
+      if (!e) return;
+      if (earlyWeeks.has(w)) early[ex] = Math.max(early[ex] || 0, e);
+      if (lateWeeks.has(w)) late[ex] = Math.max(late[ex] || 0, e);
+    });
+  });
+  const lifts = Object.keys(early).filter(ex => late[ex])
+    .map(ex => ({ name: ex, from: early[ex], to: late[ex], pct: (late[ex] - early[ex]) / early[ex] * 100 }))
+    .sort((a, b) => b.from - a.from);
+  let strengthPct = null;
+  if (lifts.length) {
+    const pcts = lifts.map(l => l.pct).sort((a, b) => a - b);
+    strengthPct = pcts[Math.floor(pcts.length / 2)]; // median — one fluke lift can't swing it
+  }
+  const prCount = (raw.prs || []).filter(p => inBlock(p.date)).length;
+
+  // Body weight: regression slope over the block's weigh-ins (smooths daily water noise).
+  const weights = (raw.weights || []).filter(w => inBlock(w.date) && w.lb > 0).sort((a, b) => a.date < b.date ? -1 : 1);
+  let weightRate = null, weightDelta = null;
+  if (weights.length >= 4 && daysBetweenISO(weights[0].date, weights[weights.length - 1].date) >= 10) {
+    const slope = linearSlopePerDay(weights.map(w => ({ x: daysBetweenISO(start, w.date), y: w.lb })));
+    if (slope != null) {
+      weightRate = slope * 7;
+      weightDelta = slope * daysBetweenISO(weights[0].date, weights[weights.length - 1].date);
+    }
+  }
+  const startWeight = weights.length ? weights.slice(0, 3).reduce((a, w) => a + w.lb, 0) / Math.min(3, weights.length) : null;
+
+  // Waist: first vs last in the block (baseline may be up to a week before it started).
+  const waists = (raw.measures || []).filter(m => m.waist != null && m.date >= addDaysISO(start, -7) && m.date < end)
+    .sort((a, b) => a.date < b.date ? -1 : 1);
+  const waistDelta = waists.length >= 2 ? waists[waists.length - 1].waist - waists[0].waist : null;
+
+  // Food: only fully-finished days count (today is still in progress).
+  const days = (raw.nutrition || []).filter(n => inBlock(n.date) && n.date < today && n.entries && n.entries.length);
+  const totals = days.map(d => sumEntries(d.entries));
+  const avgCals = totals.length ? totals.reduce((a, t) => a + t.cals, 0) / totals.length : null;
+  const avgProt = totals.length ? totals.reduce((a, t) => a + t.prot, 0) / totals.length : null;
+  const elapsedDays = Math.max(1, Math.min(len * 7 + extra, daysBetweenISO(start, today)));
+
+  // Recovery check-ins.
+  const checks = (raw.checkins || []).filter(c => c.id && c.id.startsWith(start + '_w'));
+  const nums = k => checks.map(c => parseInt(c[k], 10)).filter(v => !isNaN(v));
+  const avg = arr => arr.length ? arr.reduce((a, v) => a + v, 0) / arr.length : null;
+
+  return {
+    start, end, len, phases,
+    sessionsDone: trained.length, sessionsPlanned: planned,
+    lifts, strengthPct, prCount,
+    weighIns: weights.length, weightRate, weightDelta, startWeight,
+    waistDelta, waistCount: waists.length,
+    loggedDays: days.length, elapsedDays, avgCals, avgProt,
+    target: raw.target || null, proteinTarget: raw.proteinTarget || null,
+    avgSoreness: avg(nums('soreness')), avgRecovery: avg(nums('recovery')),
+  };
+}
+
+// Turns the numbers into ONE recommendation with plain-language reasons. Deliberately conservative:
+// with thin data it says "keep going and log more" rather than guessing.
+function recommendNextBlock(st, ctx) {
+  const reasons = [];
+  const group = ctx.group;
+  const phaseLabel = PHASES[ctx.phase] ? PHASES[ctx.phase].label : ctx.phase;
+  const enough = st.weighIns >= 6 && st.loggedDays >= Math.round(st.elapsedDays * 0.4);
+  const range = ctx.range; // [lo, hi] lb/week
+  const rate = st.weightRate;
+  const underEating = st.avgCals != null && st.target != null && st.avgCals < st.target - 200;
+  const overEating = st.avgCals != null && st.target != null && st.avgCals > st.target + 200;
+  const canAdjustCals = !!ctx.maintCals;
+  const fmtRate = r => `${r >= 0 ? '+' : ''}${r.toFixed(2)} lb/week`;
+  const fmtRange = r => `${r[0] >= 0 ? '+' : ''}${r[0].toFixed(2)} to ${r[1] >= 0 ? '+' : ''}${r[1].toFixed(2)} lb/week`;
+  let action = { type: 'keep' };
+  let headline = `Keep your ${phaseLabel.toLowerCase()} going`;
+
+  const calAction = (delta, why) => {
+    if (ctx.maintAdjustedRecently) { reasons.push(why + ' Your maintenance calories were already adjusted in the last two weeks, so give that change time to show up before adjusting again.'); return; }
+    if (!canAdjustCals) { reasons.push(why + ' Set your maintenance calories on the Nutrition tab so the app can adjust your target.'); return; }
+    action = { type: 'calories', delta };
+    headline = `${delta > 0 ? 'Add' : 'Cut'} ${Math.abs(delta)} calories a day and keep going`;
+    reasons.push(why);
+  };
+
+  if (group === 'bulk') {
+    const waistRatio = (st.waistDelta != null && st.weightDelta != null && st.weightDelta > 1) ? st.waistDelta / st.weightDelta : null;
+    if (ctx.health && (ctx.health.status === 'long_bulk' || (ctx.health.status === 'trending_off' && ctx.health.severity === 'high' && !ctx.phaseSnoozed))) {
+      action = { type: 'phase', phase: 'cut', plannedWeeks: 3 };
+      headline = 'Time for a 3-week mini-cut';
+      reasons.push(ctx.health.status === 'long_bulk'
+        ? `You've been bulking about ${Math.round(ctx.weeksInPhase)} weeks. Past ~12 weeks most of the new weight tends to be fat — a short cut resets that before the next push.`
+        : 'Your waist has been growing faster relative to your weight than it did early in the bulk — more of the recent gain looks like fat.');
+    } else if (!ctx.phaseSnoozed && waistRatio != null && waistRatio > 0.25 && st.waistDelta >= 0.75) { // >1" of waist per 4 lb gained is mostly fat
+      action = { type: 'phase', phase: 'cut', plannedWeeks: 3 };
+      headline = 'Time for a 3-week mini-cut';
+      reasons.push(`Waist +${st.waistDelta.toFixed(2)}" for about ${st.weightDelta.toFixed(1)} lb gained this block — that's a high share of fat. A short cut now keeps the next bulk leaner.`);
+    } else if (!enough || rate == null) {
+      reasons.push('Not enough weigh-ins or food logs this block to judge your pace. Keep the bulk going and aim to weigh in most mornings and log food most days.');
+    } else if (rate < range[0]) {
+      if (underEating) reasons.push(`Gaining ${fmtRate(rate)}, under your target of ${fmtRange(range)} — but you averaged ${Math.round(st.avgCals)} kcal against a ${st.target} target. Hit the target consistently before adding more.`);
+      else calAction(150, `Gaining ${fmtRate(rate)} while eating to target — slower than the ${fmtRange(range)} you're aiming for, so your real maintenance is likely higher than set.`);
+    } else if (rate > range[1] * 1.25) {
+      calAction(-150, `Gaining ${fmtRate(rate)} — faster than the ${fmtRange(range)} target. Slowing down means more of the gain stays muscle.`);
+    } else {
+      reasons.push(`Gaining ${fmtRate(rate)} — right in your ${fmtRange(range)} target.`);
+    }
+  } else if (group === 'cut') {
+    if (ctx.plannedPhaseWeeks && ctx.weeksInPhase >= ctx.plannedPhaseWeeks) {
+      const back = ctx.phaseBeforeCut || 'bulk';
+      action = { type: 'phase', phase: back };
+      headline = `Mini-cut done — back to ${(PHASES[back] ? PHASES[back].label : back).toLowerCase()}`;
+      reasons.push(`Your planned ${ctx.plannedPhaseWeeks}-week cut is complete.`);
+    } else if (ctx.weeksInPhase >= 12) {
+      action = { type: 'phase', phase: 'maintain' };
+      headline = 'Take a maintenance break';
+      reasons.push(`About ${Math.round(ctx.weeksInPhase)} weeks in a deficit. A couple of weeks at maintenance lowers muscle-loss risk and diet fatigue before continuing.`);
+    } else if (st.strengthPct != null && st.strengthPct < -5) {
+      if (ctx.phase === 'cutAggressive') {
+        action = { type: 'phase', phase: 'cut' };
+        headline = 'Slow the cut down';
+        reasons.push(`Strength dropped about ${Math.abs(st.strengthPct).toFixed(0)}% this block. Moving from Aggressive Cut to a standard cut protects muscle.`);
+      } else calAction(150, `Strength dropped about ${Math.abs(st.strengthPct).toFixed(0)}% this block — a slightly smaller deficit protects muscle.`);
+    } else if (!enough || rate == null) {
+      reasons.push('Not enough weigh-ins or food logs this block to judge your pace. Keep cutting and aim to weigh in most mornings and log food most days.');
+    } else if (rate < range[0] * 1.25) {
+      calAction(150, `Losing ${fmtRate(rate)} — faster than your ${fmtRange(range)} target, which raises muscle-loss risk.`);
+    } else if (rate < range[0]) {
+      reasons.push(`Losing ${fmtRate(rate)} — a touch faster than your ${fmtRange(range)} target. Fine for now; keep an eye on strength.`);
+    } else if (rate > range[1]) {
+      if (overEating) reasons.push(`Losing ${fmtRate(rate)}, slower than your ${fmtRange(range)} target — but you averaged ${Math.round(st.avgCals)} kcal against a ${st.target} target. Tighten up adherence first.`);
+      else calAction(-150, `Losing ${fmtRate(rate)} while eating to target — slower than the ${fmtRange(range)} you're aiming for.`);
+    } else {
+      reasons.push(`Losing ${fmtRate(rate)} — right in your ${fmtRange(range)} target.`);
+    }
+  } else { // maintain / recomp
+    if (!enough || rate == null) {
+      reasons.push('Not enough weigh-ins or food logs this block to judge. Keep going and log a bit more consistently.');
+    } else if (group === 'maintain' && Math.abs(rate) > 0.75) {
+      calAction(rate > 0 ? -150 : 150, `Weight drifted ${fmtRate(rate)} while trying to hold steady.`);
+    } else if (group === 'recomp' && rate > 0.3) {
+      calAction(-150, `Gaining ${fmtRate(rate)} — a recomp should hold roughly steady.`);
+    } else if (group === 'recomp' && rate < -0.8) {
+      calAction(150, `Losing ${fmtRate(rate)} — faster than a recomp should; that's effectively a cut.`);
+    } else {
+      reasons.push(`Weight steady at ${fmtRate(rate)}.`);
+    }
+  }
+  if (st.avgProt != null && st.proteinTarget && st.avgProt < st.proteinTarget * 0.8) {
+    reasons.push(`Protein averaged ${Math.round(st.avgProt)} g against a ${st.proteinTarget} g target — the single easiest thing to fix for muscle.`);
+  }
+
+  // Training side.
+  let training, suggestLen = st.len;
+  const poorRecovery = (st.avgRecovery != null && st.avgRecovery <= 2) || (st.avgSoreness != null && st.avgSoreness >= 4);
+  const completion = st.sessionsPlanned ? st.sessionsDone / st.sessionsPlanned : null;
+  if (completion != null && st.sessionsPlanned >= 4 && completion < 0.6) {
+    training = `You trained ${st.sessionsDone} of ${st.sessionsPlanned} planned sessions. If the schedule is the problem, a split with fewer days (Mesos tab) will beat one you can't keep up with.`;
+  } else if (poorRecovery) {
+    suggestLen = Math.max(4, st.len - 2);
+    training = `Recovery check-ins ran low this block. Next block starts back at base volume either way; a shorter ${suggestLen}-week block gets you to the next deload sooner.`;
+  } else if (st.strengthPct != null && st.strengthPct > 1) {
+    training = `Strength up about ${st.strengthPct.toFixed(0)}% across your main lifts${st.prCount ? ` with ${st.prCount} PR${st.prCount === 1 ? '' : 's'}` : ''}. Same split — loads keep progressing automatically.`;
+  } else if (st.strengthPct != null && group === 'cut') {
+    training = 'Strength held steady — on a cut, that\'s a win. Same split next block.';
+  } else if (st.strengthPct != null) {
+    training = 'Strength was flat this block. Sleep and hitting your calorie target are the first things to check; if a lift stalls again, swap it for a variation.';
+  } else {
+    training = 'Not enough logged sets early and late in the block to compare strength. Same split next block.';
+  }
+  return { headline, reasons, action, training, suggestLen };
+}
+
+// ---------- End-of-block review: data + UI ----------
+async function loadBlockReviewRaw() {
+  const out = { sessions: [], weights: [], measures: [], nutrition: [], checkins: [], prs: [] };
+  if (!db) return out;
+  const grab = async (fn) => { try { return await fn(); } catch (e) { return []; } };
+  out.sessions = await grab(async () => (await db.collection('sessions').orderBy('date', 'desc').limit(200).get()).docs.map(d => d.data()));
+  out.weights = await grab(async () => (await db.collection('weight').where('lb', '>', 0).orderBy('date', 'desc').limit(150).get()).docs.map(d => d.data()));
+  out.measures = await grab(async () => (await db.collection('measurements').orderBy('date', 'desc').limit(60).get()).docs.map(d => d.data()));
+  out.nutrition = await grab(async () => (await db.collection('nutrition').orderBy('date', 'desc').limit(150).get()).docs.map(d => d.data()));
+  out.checkins = await grab(async () => (await db.collection('weekcheckins').get()).docs.map(d => ({ id: d.id, ...d.data() })));
+  out.prs = await grab(async () => (await db.collection('prs').get()).docs.map(d => d.data()));
+  return out;
+}
+function trainingDaysPerWeek() {
+  try { return DAY_ORDER.filter(d => (getDayData(d).exercises || []).length > 0).length; } catch (e) { return 0; }
+}
+function blockReviewDue() {
+  const info = weekInfo();
+  if (!blockConfig.start || !info.rawWeek || info.rawWeek <= blockConfig.length) return false;
+  if (blockConfig.reviewSnoozeUntil && todayISO() < blockConfig.reviewSnoozeUntil) return false;
+  return true;
+}
+async function buildBlockReview() {
+  const raw = await loadBlockReviewRaw();
+  const bw = await getTrendWeightLb();
+  // Average of the week-by-week targets (overload weeks +125, deload −100), same as the other tabs.
+  const baseT = calorieTargetFor(null);
+  const ph = blockPhaseWeeks(blockConfig.length);
+  const target = baseT == null ? null : Math.round(baseT + (ph.overload * 125 - 100) / blockConfig.length);
+  const st = computeBlockReviewStats({
+    start: blockKey(), extraDays: blockConfig.shiftDays || 0, len: blockConfig.length, today: todayISO(), ...raw,
+    plannedPerWeek: trainingDaysPerWeek(), target, proteinTarget: proteinTargetFor(bw, target),
+  });
+  let health = null;
+  try { health = await evaluatePhaseHealth(); } catch (e) {}
+  const weeksInPhase = phaseStart ? Math.max(0, daysBetweenISO(phaseStart, todayISO()) / 7) : 0;
+  const rec = recommendNextBlock(st, {
+    phase: nutritionPhase, group: phaseGroupOf(nutritionPhase),
+    range: expectedWeeklyRangeLb(nutritionPhase, bw || st.startWeight || 180),
+    health, weeksInPhase, plannedPhaseWeeks, phaseBeforeCut, maintCals,
+    maintAdjustedRecently: !!(maintAdjustedOn && daysBetweenISO(maintAdjustedOn, todayISO()) < 14),
+    phaseSnoozed: !!(phaseAdvisorySnoozeUntil && todayISO() < phaseAdvisorySnoozeUntil),
+  });
+  return { st, rec };
+}
+function reviewStatHTML(label, value, sub) {
+  return `<div class="review-stat"><div class="review-stat-num">${value}</div><div class="review-stat-lbl">${label}</div>${sub ? `<div class="review-stat-sub">${sub}</div>` : ''}</div>`;
+}
+function actionLabel(action) {
+  if (action.type === 'phase') {
+    const p = PHASES[action.phase] ? PHASES[action.phase].label : action.phase;
+    if (action.plannedWeeks) return `Start ${action.plannedWeeks}-week mini-cut + next block`;
+    return `Switch to ${p} + start next block`;
+  }
+  if (action.type === 'calories') return `${action.delta > 0 ? '+' : '−'}${Math.abs(action.delta)} kcal/day + start next block`;
+  return 'Start next block';
+}
+async function renderBlockReviewIfNeeded() {
+  const slot = document.getElementById('blockReviewSlot');
+  if (!slot) return;
+  if (!blockReviewDue()) { slot.innerHTML = ''; return; }
+  const { st, rec } = await buildBlockReview();
+  if (!blockReviewDue()) { slot.innerHTML = ''; return; }
+  const fmtPct = v => v == null ? '—' : `${v >= 0 ? '+' : ''}${v.toFixed(0)}%`;
+  const weightVal = st.weightRate == null ? '—' : `${st.weightRate >= 0 ? '+' : ''}${st.weightRate.toFixed(1)}`;
+  const calVal = st.avgCals == null ? '—' : Math.round(st.avgCals).toLocaleString();
+  const lifts = st.lifts.slice(0, 4).map(l =>
+    `<div class="review-lift"><span>${escHtml(l.name)}</span><span class="review-lift-v">${Math.round(l.from)} → ${Math.round(l.to)} <em>${fmtPct(l.pct)}</em></span></div>`).join('');
+  const lenOpts = [4, 6, 8, 10, 12].map(n => `<option value="${n}" ${n === rec.suggestLen ? 'selected' : ''}>${n}-wk</option>`).join('');
+  slot.innerHTML = `
+    <div class="checkin-card review-card swipe">
+      <div class="review-kicker">Block complete · ${st.len} weeks</div>
+      <div class="review-title">Your block review</div>
+      <div class="review-grid">
+        ${reviewStatHTML('Strength', fmtPct(st.strengthPct), st.lifts.length ? `median of ${st.lifts.length} lift${st.lifts.length === 1 ? '' : 's'}` : 'not enough sets')}
+        ${reviewStatHTML('Sessions', `${st.sessionsDone}${st.sessionsPlanned ? `/${st.sessionsPlanned}` : ''}`, st.prCount ? `${st.prCount} PR${st.prCount === 1 ? '' : 's'}` : '')}
+        ${reviewStatHTML('Weight / wk', weightVal, `${st.weighIns} weigh-in${st.weighIns === 1 ? '' : 's'}`)}
+        ${reviewStatHTML('Waist', st.waistDelta == null ? '—' : `${st.waistDelta >= 0 ? '+' : ''}${st.waistDelta.toFixed(2)}"`, st.waistCount < 2 ? 'log weekly' : '')}
+        ${reviewStatHTML('Avg kcal', calVal, st.target ? `target ${st.target}` : `${st.loggedDays} days logged`)}
+        ${reviewStatHTML('Recovery', st.avgRecovery == null ? '—' : `${st.avgRecovery.toFixed(1)}/5`, st.avgSoreness == null ? '' : `soreness ${st.avgSoreness.toFixed(1)}/5`)}
+      </div>
+      ${lifts ? `<div class="review-lifts">${lifts}</div>` : ''}
+      <div class="review-rec">
+        <div class="review-rec-label">Recommendation</div>
+        <div class="review-rec-head">${escHtml(rec.headline)}</div>
+        ${rec.reasons.map(r => `<div class="review-reason">${escHtml(r)}</div>`).join('')}
+        <div class="review-reason">${escHtml(rec.training)}</div>
+      </div>
+      <div class="review-len"><span class="cp-label">Next block length</span><select id="reviewLenSel">${lenOpts}</select></div>
+      <button class="btn-primary" id="reviewApplyBtn" style="width:100%; margin-top:14px;">${escHtml(actionLabel(rec.action))}</button>
+      ${rec.action.type !== 'keep' ? `<button class="btn-secondary" id="reviewKeepBtn" style="width:100%; margin-top:10px;">Start next block, no changes</button>` : ''}
+      <button class="back-link" id="reviewLaterBtn" style="width:100%; padding-top:12px;">Remind me tomorrow</button>
+    </div>`;
+  let applying = false;
+  const startNext = async (applyAction) => {
+    if (applying) return; // a second tap while saving would apply the change twice and skip a block
+    applying = true;
+    slot.querySelectorAll('button, select').forEach(b => { b.disabled = true; });
+    const lenSel = document.getElementById('reviewLenSel');
+    const newLen = lenSel ? parseInt(lenSel.value, 10) : blockConfig.length;
+    const a = rec.action;
+    if (applyAction && a.type === 'phase') await setNutritionPhase(a.phase, { plannedWeeks: a.plannedWeeks, reason: 'block-review' });
+    if (applyAction && a.type === 'calories' && maintCals) { maintCals = Math.round(maintCals + a.delta); maintAdjustedOn = todayISO(); await persistNutritionConfig(); }
+    if (db) {
+      try {
+        await db.doc(`blockReviews/${blockKey()}`).set({
+          start: blockKey(), length: blockConfig.length, reviewedOn: todayISO(),
+          stats: { strengthPct: st.strengthPct, sessionsDone: st.sessionsDone, sessionsPlanned: st.sessionsPlanned, weightRate: st.weightRate,
+                   waistDelta: st.waistDelta, avgCals: st.avgCals, avgProt: st.avgProt, avgRecovery: st.avgRecovery, prCount: st.prCount },
+          recommendation: rec.headline, applied: applyAction ? a : { type: 'keep' }, nextLength: newLen,
+        });
+      } catch (e) {}
+    }
+    // Keep the weekday rhythm if the review happens within a week of the block ending; otherwise
+    // (came back after a break) the new block starts today.
+    const blockEnd = addDaysISO(blockConfig.start, blockConfig.length * 7);
+    blockConfig.start = daysBetweenISO(blockEnd, todayISO()) < 7 ? blockEnd : todayISO();
+    blockConfig.length = newLen;
+    blockConfig.lastAckedWeek = null;
+    blockConfig.forceDeload = false;
+    blockConfig.reviewSnoozeUntil = null;
+    blockConfig.shiftDays = 0;
+    blockConfig.missedAck = null;
+    const bs = document.getElementById('blockStart'), bl = document.getElementById('blockLen');
+    if (bs) bs.value = blockConfig.start;
+    if (bl) bl.value = String(newLen);
+    slot.innerHTML = '';
+    await saveBlockConfig();
+  };
+  document.getElementById('reviewApplyBtn').onclick = () => startNext(true);
+  const keep = document.getElementById('reviewKeepBtn');
+  if (keep) keep.onclick = () => startNext(false);
+  document.getElementById('reviewLaterBtn').onclick = async () => {
+    blockConfig.reviewSnoozeUntil = isoOffset(-1);
+    slot.innerHTML = '';
+    await saveBlockConfig();
+  };
+}
+
+// ---------- Fuel check (Workout tab) ----------
+async function computeFuelStatus() {
+  const info = weekInfo();
+  const target = calorieTargetFor(info);
+  if (!db) return { target };
+  const bw = await getTrendWeightLb();
+  const proteinTarget = proteinTargetFor(bw, target);
+  let todayEntries = [];
+  try { const snap = await db.doc(`nutrition/${todayISO()}`).get(); if (snap.exists) todayEntries = snap.data().entries || []; } catch (e) {}
+  const today = sumEntries(todayEntries);
+  // Last 3 finished days that were actually logged (unlogged days are "unknown", not zero).
+  const recent = [];
+  for (let i = 1; i <= 5 && recent.length < 3; i++) {
+    try {
+      const snap = await db.doc(`nutrition/${isoOffset(i)}`).get();
+      if (snap.exists && (snap.data().entries || []).length) recent.push(sumEntries(snap.data().entries).cals);
+    } catch (e) {}
+  }
+  const recentAvg = recent.length >= 2 ? recent.reduce((a, v) => a + v, 0) / recent.length : null;
+  return { target, proteinTarget, todayCals: today.cals, todayProt: today.prot, loggedToday: todayEntries.length > 0, recentAvg, recentDays: recent.length };
+}
+function fuelMessage(f, hour, isRest) {
+  if (!f.target) return { tone: 'dim', text: 'Set your maintenance calories on the Nutrition tab to see how fueled you are before training.' };
+  const baseTarget = f.target;
+  if (f.recentAvg != null && f.recentAvg < baseTarget * 0.8) {
+    return { tone: 'warn', text: `You've averaged ${Math.round(f.recentAvg).toLocaleString()} kcal over your last ${f.recentDays} logged days — well under your ${baseTarget.toLocaleString()} target. Expect lower numbers today; hold loads rather than chasing PRs, and get some carbs and protein in before you train.` };
+  }
+  if (isRest) return { tone: 'ok', text: 'Rest day — hitting your calories and protein today is what turns yesterday\'s session into muscle.' };
+  if (!f.loggedToday && hour >= 10) return { tone: 'warn', text: 'Nothing logged yet today. Aim for a meal with 30–40 g protein and some carbs 1–3 hours before you train.' };
+  if (f.proteinTarget && f.todayProt < f.proteinTarget * 0.25 && hour >= 14) return { tone: 'dim', text: `Only ${Math.round(f.todayProt)} g protein so far — a protein-heavy meal before or after training closes the gap.` };
+  return { tone: 'ok', text: 'On track. A meal with protein and carbs a few hours before training is all you need.' };
+}
+async function renderFuelCheck() {
+  const slot = document.getElementById('fuelCheckSlot');
+  if (!slot) return;
+  const isRest = (getDayData(currentDay).exercises || []).length === 0;
+  if (currentDay !== todayName()) { slot.innerHTML = ''; return; } // only meaningful for today
+  const f = await computeFuelStatus();
+  const msg = fuelMessage(f, new Date().getHours(), isRest);
+  const pct = f.target ? Math.min(100, (f.todayCals || 0) / f.target * 100) : 0;
+  slot.innerHTML = `
+    <div class="fuel-check fuel-${msg.tone}" id="fuelCheckCard" role="button" tabindex="0">
+      <div class="fuel-check-head">
+        <span class="cp-label">Fuel today</span>
+        <span class="fuel-check-num">${f.target ? `${Math.round(f.todayCals || 0).toLocaleString()} <span>/ ${f.target.toLocaleString()} kcal</span>` : '—'}</span>
+      </div>
+      ${f.target ? `<div class="fuel-check-bar"><div style="width:${pct}%"></div></div>` : ''}
+      ${f.proteinTarget ? `<div class="fuel-check-sub">Protein ${Math.round(f.todayProt || 0)} / ${f.proteinTarget} g</div>` : ''}
+      <div class="fuel-check-msg">${escHtml(msg.text)}</div>
+    </div>`;
+  const card = document.getElementById('fuelCheckCard');
+  card.onclick = () => { const b = document.querySelector('.tabbar button[data-tab="nutrition"]'); if (b) b.click(); };
+}
+
+// ---------- Quick log: weekly waist + weigh-in reminders (Workout tab) ----------
+async function quickLogNeeds() {
+  if (!db) return { waist: false, weight: false };
+  const group = phaseGroupOf(nutritionPhase);
+  let lastWaist = null, lastWeight = null;
+  try {
+    const m = (await db.collection('measurements').orderBy('date', 'desc').limit(20).get()).docs.map(d => d.data()).find(x => x.waist != null);
+    lastWaist = m ? m.date : null;
+  } catch (e) {}
+  try {
+    const w = (await db.collection('weight').where('lb', '>', 0).orderBy('date', 'desc').limit(1).get()).docs.map(d => d.data())[0];
+    lastWeight = w ? w.date : null;
+  } catch (e) {}
+  let snoozeUntil = null;
+  try { const s = await db.doc('meta/quickLogSnooze').get(); if (s.exists) snoozeUntil = s.data().until || null; } catch (e) {}
+  if (snoozeUntil && todayISO() < snoozeUntil) return { waist: false, weight: false };
+  const waistDue = group !== 'maintain' && (!lastWaist || daysBetweenISO(lastWaist, todayISO()) >= 7);
+  const weightDue = !lastWeight || daysBetweenISO(lastWeight, todayISO()) >= 3;
+  return { waist: waistDue, weight: weightDue, lastWaist, lastWeight };
+}
+async function renderQuickLog() {
+  const slot = document.getElementById('quickLogSlot');
+  if (!slot) return;
+  if (currentDay !== todayName()) { slot.innerHTML = ''; return; }
+  const need = await quickLogNeeds();
+  if (!need.waist && !need.weight) { slot.innerHTML = ''; return; }
+  const why = need.waist
+    ? 'A weekly waist measurement is what lets the app tell muscle gain from fat gain — it powers your phase check and block review.'
+    : 'A few weigh-ins a week keeps your trend weight and calorie target accurate.';
+  slot.innerHTML = `
+    <div class="quicklog">
+      <div class="cp-label">${need.waist && need.weight ? 'Quick check-in' : need.waist ? 'Weekly waist check' : 'Weigh-in'}</div>
+      <div class="quicklog-row">
+        ${need.weight ? `<input type="number" inputmode="decimal" step="0.1" id="qlWeight" placeholder="Weight (lb)">` : ''}
+        ${need.waist ? `<input type="number" inputmode="decimal" step="0.25" id="qlWaist" placeholder="Waist (in)">` : ''}
+        <button class="apply-btn" id="qlSaveBtn">Log</button>
+      </div>
+      <div class="ex-prev">${escHtml(why)}${need.waist ? ' Measure at the navel, relaxed, first thing in the morning.' : ''}</div>
+      <button class="back-link" id="qlSnoozeBtn" style="padding:8px 0 0;">Not now</button>
+    </div>`;
+  document.getElementById('qlSaveBtn').onclick = async () => {
+    const wEl = document.getElementById('qlWeight'), waEl = document.getElementById('qlWaist');
+    const w = wEl ? parseFloat(wEl.value) : NaN, wa = waEl ? parseFloat(waEl.value) : NaN;
+    if (isNaN(w) && isNaN(wa)) return;
+    if (!isNaN(w)) await logWeight(w);
+    if (!isNaN(wa)) await saveMeasurement({ waist: wa });
+    renderQuickLog();
+    renderFuelCheck();
+  };
+  document.getElementById('qlSnoozeBtn').onclick = async () => {
+    if (db) { try { await db.doc('meta/quickLogSnooze').set({ until: isoOffset(-2) }); } catch (e) {} }
+    slot.innerHTML = '';
+  };
+}
+// Merges into today's record, so logging chest after waist (or waist from the Workout tab and the
+// rest from the Weight tab) no longer wipes out what was already logged today.
+async function saveMeasurement(fields) {
+  if (!db) return;
+  const path = `measurements/${todayISO()}`;
+  try {
+    const snap = await db.doc(path).get();
+    const prev = snap.exists ? snap.data() : {};
+    await db.doc(path).set({ ...prev, ...fields, date: todayISO() });
+  } catch (e) {}
+}
+
 function defaultSetCount(type, info) {
   const compound = type === 'compound';
   if (info.deload) return compound ? 1 : 2;
@@ -1551,7 +2091,7 @@ async function computeStreak() {
     const cursor = new Date();
     if (!loggedDates.has(todayISO())) cursor.setDate(cursor.getDate() - 1);
     for (let i = 0; i < 400; i++) {
-      const iso = cursor.toISOString().slice(0, 10);
+      const iso = localISO(cursor);
       if (loggedDates.has(iso)) { streak++; cursor.setDate(cursor.getDate() - 1); }
       else break;
     }
@@ -1597,48 +2137,377 @@ const LOAD_JUMP_PCT = { compound: 0.03, isolation: 0.05 };
 const LOAD_JUMP_MIN = { compound: 5, isolation: 2.5 };
 const LOAD_ROUND = { compound: 5, isolation: 2.5 };
 
-function computeSuggestion(exName, type) {
-  const prev = prevByExercise[exName];
-  if (!prev || !prev.sets || !prev.sets.length) return null;
-  const info = weekInfo();
-  const targetCount = defaultSetCount(type, info);
-  const range = REP_RANGE[type];
-  const out = [];
-  for (let i = 0; i < targetCount; i++) {
-    const basis = prev.sets[Math.min(i, prev.sets.length - 1)];
-    const bw = parseFloat(basis.weight), br = parseInt(basis.reps, 10);
-    if (info.deload) {
-      out.push({ weight: isNaN(bw)?'':Math.round(bw*0.6*2)/2, reps: isNaN(br)?'':Math.max(br-2,1), rir: '3', tier: 'deload' });
-      continue;
+// ============================================================================================
+// Personal progression engine
+// Learns, per lift, how strong you are right now (estimated max, adjusted for how many reps you
+// had left in the tank), how fast YOU progress on that lift, and how much your reps drop from set
+// to set. Every working set's weight and reps are prescribed from that — and re-prescribed live
+// after each set you log, from what you actually did — instead of copying the last number typed.
+// ============================================================================================
+const SET_FATIGUE_DEFAULT = { compound: 0.975, isolation: 0.965 }; // est.-max kept from one set to the next
+const SESSION_GAIN_DEFAULT = { compound: 0.015, isolation: 0.01 };  // expected progress per session before we know you
+const MAX_JUMP = { compound: 0.10, isolation: 0.15 };               // biggest load jump allowed in one session
+let exerciseHistory = {}; // exName -> [{date, sets (logged only), planned, deload}] newest first, today excluded
+let planMetaByEx = {};    // exName -> { targetE, fatigue, tier, note, model }
+let liftModelCache = {};  // exName -> model; rebuilt only when history reloads (not every render/keystroke)
+
+function clampNum(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function medianOf(arr) { if (!arr.length) return null; const a = [...arr].sort((x, y) => x - y); return a[Math.floor(a.length / 2)]; }
+// The 1–10 "how hard was that set" rating is read as RPE: 10 = nothing left, 8 = ~2 reps left.
+function setRirActual(s) {
+  const d = parseInt(s.difficulty, 10);
+  if (!isNaN(d) && d >= 1 && d <= 10) return clampNum(10 - d, 0, 5);
+  const r = parseInt(s.rir, 10);
+  return isNaN(r) ? 2 : clampNum(r, 0, 5);
+}
+// Epley estimated max, counting the reps you had left — 8 reps at RPE 6 says more about your
+// strength than 8 reps at RPE 10, which is exactly what "crushing" a prescribed set looks like.
+function setE1rmAdj(s) {
+  const w = parseFloat(s.weight), r = parseFloat(s.reps);
+  if (!(w > 0) || !(r > 0)) return 0;
+  return w * (1 + Math.min(20, r + setRirActual(s)) / 30);
+}
+function repsAt(E, w, rir) {
+  if (!(E > 0) || !(w > 0)) return null;
+  return clampNum(Math.floor(30 * (E / w - 1) - rir + 0.2), 1, 30);
+}
+function roundLoad(w, type) { const st = LOAD_ROUND[type] || 5; return Math.max(st, Math.round(w / st) * st); }
+
+function buildLiftModel(hist, type) {
+  const all = (hist || []).map(h => {
+    const working = h.sets.filter(s => parseFloat(s.weight) > 0 && parseFloat(s.reps) > 0);
+    return {
+      date: h.date, deload: !!h.deload, sets: working, planned: h.planned || h.sets.length, logged: h.sets.length,
+      e1rm: working.length ? Math.max(...working.map(setE1rmAdj)) : 0,
+      topWeight: working.length ? Math.max(...working.map(s => parseFloat(s.weight))) : 0,
+    };
+  }).filter(x => x.e1rm > 0);
+  if (!all.length) return null;
+  const sess = all.filter(x => !x.deload).length ? all.filter(x => !x.deload) : all; // deload sets understate strength
+  // Your personal set-to-set drop-off, from sets done at the same weight.
+  const ratios = [];
+  sess.slice(0, 8).forEach(x => {
+    for (let k = 0; k + 1 < x.sets.length; k++) {
+      const a = x.sets[k], b = x.sets[k + 1];
+      if (parseFloat(a.weight) !== parseFloat(b.weight)) continue;
+      const ea = setE1rmAdj(a), eb = setE1rmAdj(b);
+      if (ea > 0 && eb > 0) ratios.push(eb / ea);
     }
-    let rir = defaultRirForSet(i, targetCount, false);
-    if (sleepDebt && type === 'compound') rir = String(Math.min(3, parseInt(rir,10) + 1));
-
-    const diff = parseInt(basis.difficulty, 10);
-    const conf = basis.confidence;
-    let tier;
-    if (conf === 'Fuzzy' || (!isNaN(diff) && diff >= 9)) tier = 'hold';
-    else if (!isNaN(diff) && diff >= 7) tier = 'reps';
-    else tier = 'progress';
-
-    let newWeight = bw, newReps = br;
-    if (!isNaN(bw) && !isNaN(br)) {
-      if (tier === 'hold') {
-        newWeight = bw; newReps = br;
-      } else if (br >= range.hi) {
-        const jump = Math.max(bw * LOAD_JUMP_PCT[type], LOAD_JUMP_MIN[type]) * (tier === 'reps' ? 0.6 : 1);
-        newWeight = Math.round((bw + jump) / LOAD_ROUND[type]) * LOAD_ROUND[type];
-        newReps = range.lo;
-      } else {
-        newReps = br + 1; newWeight = bw;
+  });
+  const fatigue = ratios.length >= 3 ? clampNum(medianOf(ratios), 0.9, 1.0) : SET_FATIGUE_DEFAULT[type];
+  // Your personal rate of progress on this lift.
+  const recent = sess.slice(0, 8);
+  let weeklyPct = null, perSession = null;
+  if (recent.length >= 3) {
+    const oldest = recent[recent.length - 1].date;
+    const span = daysBetweenISO(oldest, recent[0].date);
+    if (span >= 10) {
+      const slope = linearSlopePerDay(recent.map(x => ({ x: daysBetweenISO(oldest, x.date), y: x.e1rm })));
+      const mean = recent.reduce((a, x) => a + x.e1rm, 0) / recent.length;
+      if (slope != null && mean > 0) {
+        weeklyPct = slope * 7 / mean;
+        perSession = weeklyPct / Math.max(0.5, (recent.length - 1) / (span / 7));
       }
     }
-    out.push({ weight: isNaN(bw) ? '' : newWeight, reps: isNaN(br) ? '' : newReps, rir, tier });
   }
-  return out;
+  const gain = perSession == null ? SESSION_GAIN_DEFAULT[type] : clampNum(perSession, 0.005, 0.03);
+  const last = sess[0];
+  // Mostly your latest session, steadied by your last three so one bad day doesn't tank the plan.
+  const base = 0.7 * last.e1rm + 0.3 * medianOf(sess.slice(0, 3).map(x => x.e1rm));
+  return { sessions: sess, all, last, latestAny: all[0], base, fatigue, weeklyPct, gain, n: sess.length };
+}
+
+// rirs: target reps-in-reserve for each set today. Returns {sets:[{weight,reps,rir}], tier, note, targetE}.
+function planLift(model, type, o) {
+  if (!model) return null;
+  const range = REP_RANGE[type] || REP_RANGE.compound;
+  const rirs = o.rirs;
+  const last = model.last;
+  const w0 = last.topWeight;
+  if (!(w0 > 0)) return null;
+  const notes = [];
+  const latest = model.latestAny;
+  if (latest && latest.logged < latest.planned) {
+    notes.push(`Last time you got ${latest.logged} of ${latest.planned} sets — today is planned from the sets you did, so there's nothing to make up.`);
+  }
+  if (o.deload) {
+    const w = roundLoad(w0 * 0.6, type);
+    const firstReps = parseInt(last.sets[0].reps, 10) || range.lo;
+    return { sets: rirs.map(r => ({ weight: w, reps: Math.max(firstReps - 2, 1), rir: String(r) })), tier: 'deload', note: notes.join(' '), targetE: null };
+  }
+  const daysOff = daysBetweenISO((latest || last).date, o.today);
+  let target = model.base * (1 + (o.noProgress ? 0 : model.gain));
+  let tier = 'progress';
+  if (daysOff >= 12) {
+    const cut = Math.min(0.15, 0.02 + 0.03 * (daysOff - 7) / 7);
+    target = model.base * (1 - cut);
+    tier = 'reentry';
+    notes.unshift(`${daysOff} days since you last did this — eased in about ${Math.round(cut * 100)}% so you rebuild instead of grinding.`);
+  } else if (o.noProgress) {
+    tier = 'hold';
+  }
+  const repsFor = w => rirs.map((r, i) => repsAt(target * Math.pow(model.fatigue, i), w, r));
+  const step = LOAD_ROUND[type] || 5;
+  let w = roundLoad(w0, type);
+  let reps = repsFor(w);
+  if (reps[0] >= range.hi && !o.noProgress && tier !== 'reentry') { // never push load when very sore or easing back in
+    // Top of the rep range reached: take the heaviest jump where even your last set still lands in range.
+    const cap = Math.max(w0 * (1 + MAX_JUMP[type]), w + step); // light loads (15 lb raises) can always go up one plate step
+    const firstStep = w + step;
+    for (let cand = firstStep; cand <= cap + 1e-9; cand += step) {
+      const rr = repsFor(cand);
+      // The smallest possible jump gets 2 reps of slack: on light dumbbells one plate step is
+      // 15%+, and refusing it would leave you adding reps forever far above the range.
+      const need = cand === firstStep ? range.lo - 2 : range.lo;
+      if (Math.min(...rr) >= need) { w = cand; reps = rr; } else break;
+    }
+    if (w > w0 && tier === 'progress') tier = 'load';
+  } else if (Math.min(...reps) < range.lo) {
+    const floorW = w0 * 0.85;
+    while (w - step >= floorW && Math.min(...reps) < range.lo) { w -= step; reps = repsFor(w); }
+    if (tier === 'progress') tier = 'hold';
+  }
+  return { sets: rirs.map((r, i) => ({ weight: w, reps: reps[i], rir: String(r) })), tier, note: notes.join(' '), targetE: target };
+}
+
+// Extra reps-in-reserve today: sore (4–5/5) or short on sleep (compound lifts) → leave more in the tank.
+function rirBoostFor(type) {
+  let b = 0;
+  const sore = parseInt(sorenessToday, 10);
+  if (!isNaN(sore) && sore >= 4) b += 1;
+  if (sleepDebt && type === 'compound') b += 1;
+  return Math.min(2, b);
+}
+function plannedRirs(n, type, deload) {
+  const boost = deload ? 0 : rirBoostFor(type);
+  return Array.from({ length: n }, (_, i) => Math.min(4, parseInt(defaultRirForSet(i, n, deload), 10) + boost));
+}
+function computeSuggestion(exName, type) {
+  const info = weekInfo();
+  const n = (state[exName] && state[exName].length) || defaultSetCount(type, info);
+  if (!(exName in liftModelCache)) liftModelCache[exName] = buildLiftModel(exerciseHistory[exName], type);
+  const model = liftModelCache[exName];
+  const sore = parseInt(sorenessToday, 10);
+  const plan = planLift(model, type, { rirs: plannedRirs(n, type, info.deload), today: todayISO(), deload: info.deload, noProgress: !isNaN(sore) && sore >= 5 });
+  planMetaByEx[exName] = plan ? { targetE: plan.targetE, fatigue: model.fatigue, tier: plan.tier, note: plan.note, model } : null;
+  if (!plan) return null;
+  return plan.sets.map(s => ({ ...s, tier: plan.tier }));
+}
+
+// Fills the plan into every set you haven't logged or hand-edited. force = "Reset to plan".
+function applyPlanToExercise(ex, force) {
+  const sets = state[ex.name];
+  if (!sets) return;
+  const plan = computeSuggestion(ex.name, ex.type);
+  if (plan) {
+    sets.forEach((s, i) => {
+      if (s.logged) return;
+      const p = plan[Math.min(i, plan.length - 1)];
+      if (force) { s.wEdited = false; s.rEdited = false; s.rirEdited = false; }
+      if (!s.wEdited) s.weight = p.weight;
+      if (!s.rEdited) s.reps = p.reps;
+      if (!s.rirEdited) s.rir = p.rir;
+    });
+  } else {
+    // No history yet: still give every set its descending RIR target (plus soreness/sleep buffer).
+    const rirs = plannedRirs(sets.length, ex.type, weekInfo().deload);
+    sets.forEach((s, i) => { if (!s.logged && (force || !s.rirEdited)) s.rir = String(rirs[i]); });
+  }
+  if (sets.some(s => s.logged)) replanRemaining(ex, { quiet: true });
+}
+function applyPlanToAll(force) {
+  (getDayData(currentDay).exercises || []).forEach(ex => applyPlanToExercise(ex, force));
+}
+
+// After a set is logged: re-prescribe the rest of this exercise from what you ACTUALLY just did.
+// Harder than planned → fewer reps (or a lighter weight if you'd fall out of the rep range);
+// easier → more reps (or a heavier weight if you'd blow past the top of it).
+function replanRemaining(ex, opts) {
+  opts = opts || {};
+  const sets = state[ex.name];
+  let k = -1;
+  sets.forEach((s, i) => { if (s.logged && setE1rmAdj(s) > 0) k = i; });
+  if (k === -1) return;
+  const range = REP_RANGE[ex.type] || REP_RANGE.compound;
+  const meta = planMetaByEx[ex.name];
+  const f = (meta && meta.fatigue) || SET_FATIGUE_DEFAULT[ex.type];
+  const E = setE1rmAdj(sets[k]);
+  const step = LOAD_ROUND[ex.type] || 5;
+  const loggedW = parseFloat(sets[k].weight);
+  const remaining = [];
+  for (let j = k + 1; j < sets.length; j++) if (!sets[j].logged) remaining.push(j);
+  if (!remaining.length) { delete intraSessionNoteByEx[ex.name]; return; }
+  const before = remaining.map(j => `${sets[j].weight}×${sets[j].reps}`).join(',');
+  const rirOf = j => { const r = parseInt(sets[j].rir, 10); return isNaN(r) ? 1 : r; };
+  const repsAtW = (j, w) => repsAt(E * Math.pow(f, j - k), w, rirOf(j));
+  const nextJ = remaining[0];
+  let w = sets[nextJ].wEdited ? parseFloat(sets[nextJ].weight) : loggedW;
+  let direction = 0;
+  if (!sets[nextJ].wEdited && w > 0) {
+    const lastJ = remaining[remaining.length - 1];
+    const floorW = loggedW * 0.85, capW = loggedW * 1.1;
+    if (repsAtW(lastJ, w) < range.lo - 1) {
+      while (w - step >= floorW && repsAtW(lastJ, w) < range.lo) w -= step;
+      direction = -1;
+    } else if (repsAtW(nextJ, w) > range.hi + 3) {
+      while (w + step <= capW && repsAtW(lastJ, w + step) >= range.lo && repsAtW(nextJ, w) > range.hi) w += step;
+      direction = w > loggedW ? 1 : 0;
+    }
+  }
+  remaining.forEach(j => {
+    if (!sets[j].wEdited && w > 0) sets[j].weight = w;
+    const wj = parseFloat(sets[j].weight);
+    if (!sets[j].rEdited && wj > 0) sets[j].reps = repsAtW(j, wj);
+  });
+  if (opts.quiet) return;
+  const after = remaining.map(j => `${sets[j].weight}×${sets[j].reps}`).join(',');
+  const d = parseInt(sets[k].difficulty, 10);
+  if (after === before) { delete intraSessionNoteByEx[ex.name]; return; }
+  const nxt = sets[nextJ];
+  const how = direction < 0 ? 'harder than planned — dropped the weight so your next sets stay in range'
+    : direction > 0 ? 'easier than planned — bumped the weight'
+    : (!isNaN(d) ? `rated ${d}/10 — adjusted the reps to match` : 'adjusted the reps to match');
+  intraSessionNoteByEx[ex.name] = `Set ${k + 1} ${how}: next set ${nxt.weight || '–'} × ${nxt.reps || '–'}. Edit if you'd rather push as planned.`;
+}
+
+// Hand-typed weight on the current set: carry the weight forward and re-predict reps at it.
+function onCurrentWeightEdited(ex, idx, value) {
+  const sets = state[ex.name];
+  sets[idx].weight = value; sets[idx].wEdited = true;
+  for (let i = idx + 1; i < sets.length; i++) if (!sets[i].logged) { sets[i].weight = value; sets[i].wEdited = true; }
+  const w = parseFloat(value);
+  if (!(w > 0)) return null;
+  if (sets.some(s => s.logged)) { replanRemaining(ex, { quiet: true }); }
+  const meta = planMetaByEx[ex.name];
+  if (meta && meta.targetE && !sets.some(s => s.logged)) {
+    sets.forEach((s, i) => { if (!s.logged && !s.rEdited) s.reps = repsAt(meta.targetE * Math.pow(meta.fatigue, i), parseFloat(s.weight), parseInt(s.rir, 10) || 0); });
+  }
+  return sets[idx].rEdited ? null : sets[idx].reps;
+}
+
+async function loadExerciseHistory() {
+  exerciseHistory = {};
+  liftModelCache = {};
+  if (!db) return;
+  try {
+    const snap = await db.collection('sessions').orderBy('date', 'desc').limit(150).get();
+    const today = todayISO();
+    (snap.docs || []).forEach(d => {
+      const data = d.data();
+      if (!data || !data.exercises || !data.date || data.date >= today) return;
+      Object.keys(data.exercises).forEach(exName => {
+        const all = data.exercises[exName] || [];
+        const logged = all.filter(s => s.logged && s.weight !== '' && s.weight != null && s.reps !== '' && s.reps != null);
+        if (!logged.length) return;
+        (exerciseHistory[exName] = exerciseHistory[exName] || []).push({ date: data.date, sets: logged, planned: all.length, deload: !!data.deload });
+      });
+    });
+    Object.values(exerciseHistory).forEach(arr => arr.sort((a, b) => a.date < b.date ? 1 : -1));
+  } catch (e) { console.error('loadExerciseHistory failed', e); }
+}
+
+// ---------- "Your lifts" — per-movement strength trends (Mesos tab) ----------
+function exerciseTypeOf(exName) {
+  for (const m of Object.keys(EXERCISE_LIBRARY)) { const hit = EXERCISE_LIBRARY[m].find(e => e.name === exName); if (hit) return hit.type; }
+  for (const p of Object.values(PRESET_PROGRAMS)) for (const d of Object.values(p)) { const hit = (d.exercises || []).find(e => e.name === exName); if (hit) return hit.type; }
+  return 'compound';
+}
+function sparklineSVG(vals) {
+  if (vals.length < 2) return '';
+  const W = 84, H = 26, lo = Math.min(...vals), hi = Math.max(...vals), span = hi - lo || 1;
+  const pts = vals.map((v, i) => `${(i / (vals.length - 1) * W).toFixed(1)},${(H - 3 - (v - lo) / span * (H - 6)).toFixed(1)}`).join(' ');
+  return `<svg class="lift-spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+function liftTrendText(m) {
+  if (m.weeklyPct == null) return `${m.n} session${m.n === 1 ? '' : 's'} — a trend shows after 3 sessions over 10+ days`;
+  const p = m.weeklyPct * 100;
+  if (p >= 1.5) return `+${p.toFixed(1)}%/week — progressing fast; the plan jumps load sooner for you here`;
+  if (p >= 0.3) return `+${p.toFixed(1)}%/week — steady progress`;
+  if (p > -0.5) return `${p >= 0 ? '+' : ''}${p.toFixed(1)}%/week — flat lately; check sleep and food, or swap the variation`;
+  return `${p.toFixed(1)}%/week — trending down; fatigue or a cut is likely the cause`;
+}
+async function renderLiftTrendsPanel() {
+  const body = document.getElementById('liftTrendsBody');
+  if (!body) return;
+  await loadExerciseHistory();
+  const rows = Object.keys(exerciseHistory).map(name => ({ name, m: buildLiftModel(exerciseHistory[name], exerciseTypeOf(name)) }))
+    .filter(r => r.m)
+    .sort((a, b) => b.m.n - a.m.n || b.m.last.e1rm - a.m.last.e1rm)
+    .slice(0, 10);
+  if (!rows.length) { body.innerHTML = '<div class="ex-prev">Log a few sessions and each lift gets its own strength trend here.</div>'; return; }
+  body.innerHTML = rows.map(r => {
+    const series = r.m.sessions.slice(0, 10).map(x => x.e1rm).reverse();
+    return `<div class="lift-row">
+      <div class="lift-main"><div class="lift-name">${escHtml(r.name)}</div><div class="lift-sub">${escHtml(liftTrendText(r.m))}</div></div>
+      <div class="lift-right"><div class="lift-e1rm">${Math.round(r.m.last.e1rm)}<span> lb est. max</span></div>${sparklineSVG(series)}</div>
+    </div>`;
+  }).join('');
+}
+
+// ---------- Missed most of a week → offer to repeat it ----------
+function blockKey() { return blockConfig.start ? addDaysISO(blockConfig.start, -(blockConfig.shiftDays || 0)) : null; }
+async function renderMissedWeekIfNeeded() {
+  const slot = document.getElementById('missedWeekSlot');
+  if (!slot) return;
+  slot.innerHTML = '';
+  const info = weekInfo();
+  if (!db || !blockConfig.start || !info.week || info.week < 2 || info.rawWeek > blockConfig.length) return;
+  const prevWeek = info.week - 1;
+  const ackKey = `${blockKey()}_w${prevWeek}_${blockConfig.shiftDays || 0}`;
+  if (blockConfig.missedAck === ackKey) return;
+  const planned = trainingDaysPerWeek();
+  if (!planned) return;
+  const from = addDaysISO(blockConfig.start, (prevWeek - 1) * 7), to = addDaysISO(blockConfig.start, prevWeek * 7);
+  let done = 0;
+  try {
+    const snap = await db.collection('sessions').orderBy('date', 'desc').limit(40).get();
+    const dates = new Set();
+    (snap.docs || []).forEach(d => { const s = d.data(); if (s && s.date >= from && s.date < to && s.exercises && Object.values(s.exercises).some(a => (a || []).some(x => x.logged))) dates.add(s.date); });
+    done = dates.size;
+  } catch (e) { return; }
+  if (done / planned >= 0.5) return;
+  const prevInfoDeload = prevWeek === blockConfig.length;
+  if (prevInfoDeload) return;
+  slot.innerHTML = `
+    <div class="checkin-card swipe">
+      <div class="checkin-title">Week ${prevWeek}: ${done} of ${planned} sessions</div>
+      <div class="ex-prev">Life happens. Missed sessions don't need to be made up — but moving on to week ${info.week}'s ${info.overload ? 'higher volume' : 'targets'} after a light week can outrun your recovery. You can run week ${prevWeek} again instead; your loads are already planned from what you actually lifted.</div>
+      <div class="overview-actions" style="margin-top:12px;">
+        <button class="btn-secondary" id="missedKeepBtn">Keep going</button>
+        <button class="btn-primary" id="missedRepeatBtn">Repeat week ${prevWeek}</button>
+      </div>
+    </div>`;
+  let busy = false;
+  document.getElementById('missedRepeatBtn').onclick = async () => {
+    if (busy) return; busy = true;
+    blockConfig.shiftDays = (blockConfig.shiftDays || 0) + 7;
+    blockConfig.start = addDaysISO(blockConfig.start, 7);
+    blockConfig.lastAckedWeek = prevWeek; // you already checked in for that week
+    const bs = document.getElementById('blockStart'); if (bs) bs.value = blockConfig.start;
+    slot.innerHTML = '';
+    await saveBlockConfig();
+  };
+  document.getElementById('missedKeepBtn').onclick = async () => {
+    if (busy) return; busy = true;
+    blockConfig.missedAck = ackKey;
+    slot.innerHTML = '';
+    await saveBlockConfig();
+  };
+}
+
+// ---------- Soreness → today's plan ----------
+function sorenessEffectText(v) {
+  const n = parseInt(v, 10);
+  if (isNaN(n)) return 'Rate it before you train — at 4–5 today\'s plan leaves extra reps in reserve.';
+  if (n <= 2) return 'Fresh — today\'s plan runs as normal.';
+  if (n === 3) return 'Normal training soreness — plan runs as normal. Warm up a little longer.';
+  if (n === 4) return 'Pretty sore — every set today leaves 1 extra rep in reserve. Loads still follow your plan.';
+  return 'Very sore — 1 extra rep in reserve and no load increases today. Skipping the last set of each exercise is fine; next week plans from what you do.';
 }
 function tierLabel(tier) {
-  if (tier === 'progress') return { text: 'progressing', cls: 'tier-progress' };
+  if (tier === 'progress') return { text: 'adding reps', cls: 'tier-progress' };
+  if (tier === 'load') return { text: 'weight up', cls: 'tier-progress' };
+  if (tier === 'reentry') return { text: 'easing back in', cls: 'tier-hold' };
   if (tier === 'reps') return { text: 'reps only', cls: 'tier-reps' };
   if (tier === 'hold') return { text: 'holding', cls: 'tier-hold' };
   if (tier === 'deload') return { text: 'deload', cls: 'tier-hold' };
@@ -1760,9 +2629,16 @@ function renderExerciseBody(ex, container, prevSlot) {
 
   let html = '';
   if (suggestion && currentIndex !== -1) {
-    const top = suggestion.map(s=>`${s.weight||'–'}×${s.reps||'–'}`).join(', ');
-    const tags = suggestion.map(s => { const t = tierLabel(s.tier); return `<span class="${t.cls}">${t.text}</span>`; }).join(' · ');
-    html += `<div class="ex-suggest"><div class="suggest-top"><span>Suggested: ${top}</span><button class="apply-btn" id="apply-${id}">Apply</button><button class="info-btn" id="infoProg-${id}">i</button></div><div class="suggest-detail">${tags}</div><div class="info-panel" id="infoProgPanel-${id}">Double progression, not a flat weekly add: reps climb toward a target range (${ex.type==='compound'?'5–8':'10–15'} here) before load ever moves. Once you hit the top of that range, weight jumps — the full ~${ex.type==='compound'?'3':'5'}% if that set felt easy ("progressing"), a smaller jump if it was moderately hard ("reps only"), and no change at all if it was near-max effort ("holding"), since that's the one signal that means back off, not push forward.</div>${plateauByExercise[exName] ? `<div class="ex-sleep-flag" style="margin-top:8px;">Stalled 2 sessions in a row at near-max effort — this usually means a deload on this lift, a technique check, or swapping it for a variation, not just "hold and try again."</div><button class="back-link" id="altBtn-${id}" style="padding:6px 0 0; color:var(--accent);">See alternatives</button><div id="altList-${id}"></div>` : ''}</div>`;
+    const meta = planMetaByEx[exName] || {};
+    const sameW = suggestion.every(x => String(x.weight) === String(suggestion[0].weight));
+    const top = sameW ? `${suggestion[0].weight} lb × ${suggestion.map(x => x.reps).join(' / ')}` : suggestion.map(x => `${x.weight}×${x.reps}`).join(', ');
+    const t = tierLabel(suggestion[0].tier);
+    const m = meta.model;
+    const why = m ? `Est. max ${Math.round(m.last.e1rm)} lb last time${m.weeklyPct != null ? ` · you're progressing ${m.weeklyPct >= 0 ? '+' : ''}${(m.weeklyPct * 100).toFixed(1)}%/week on this lift` : ''}` : '';
+    const edited = sets.some(x => !x.logged && (x.wEdited || x.rEdited));
+    html += `<div class="ex-suggest"><div class="suggest-top"><span>Today's plan: ${top}</span>${edited ? `<button class="apply-btn" id="apply-${id}">Reset</button>` : ''}<button class="info-btn" id="infoProg-${id}">i</button></div><div class="suggest-detail"><span class="${t.cls}">${t.text}</span>${why ? ` · ${why}` : ''}</div>${meta.note ? `<div class="suggest-detail" style="margin-top:4px;">${escHtml(meta.note)}</div>` : ''}<div class="info-panel" id="infoProgPanel-${id}">Built from your own history on this lift. Each set you log gives an estimated max — adjusted for how many reps you had left (your 1–10 rating), so an easy set counts for more than a grind. The plan aims a little above your recent level at the rate you personally progress, keeps reps in the ${ex.type==='compound'?'5–8':'10–15'} range, and moves the weight up as soon as even your last set would still land in range. After every set it re-plans the rest from what you actually did, and your set-to-set rep drop is learned from your own logs too.</div>${plateauByExercise[exName] ? `<div class="ex-sleep-flag" style="margin-top:8px;">No new best on this lift in your last 2 sessions — usually a sign to check sleep and food, take an early deload on it, or swap it for a variation, rather than grinding the same weight.</div><button class="back-link" id="altBtn-${id}" style="padding:6px 0 0; color:var(--accent);">See alternatives</button><div id="altList-${id}"></div>` : ''}</div>`;
+  } else if (currentIndex !== -1 && !prev) {
+    html += `<div class="ex-suggest"><div class="suggest-detail">First time logging this lift — pick a weight you could do for about ${ex.type==='compound'?'8':'12'} reps with 2 left in the tank. From the next session on, the plan is built from what you do today.</div></div>`;
   }
   if (sleepDebt && ex.type === 'compound' && currentIndex !== -1) {
     html += `<div class="ex-sleep-flag">Sleep debt detected — RIR nudged up 1 on this compound lift today.</div>`;
@@ -2008,8 +2884,7 @@ function wireExerciseEvents(ex, container) {
   if (infoProgBtn) infoProgBtn.onclick = () => container.querySelector(`#infoProgPanel-${id}`).classList.toggle('open');
   const applyBtn = container.querySelector(`#apply-${id}`);
   if (applyBtn) applyBtn.onclick = () => {
-    const suggestion = computeSuggestion(exName, ex.type);
-    sets.forEach((s, i) => { if (!s.logged && suggestion[i]) { s.weight = suggestion[i].weight; s.reps = suggestion[i].reps; s.rir = suggestion[i].rir; } });
+    applyPlanToExercise(ex, true);
     renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot'));
   };
   const altBtn = container.querySelector(`#altBtn-${id}`);
@@ -2033,7 +2908,7 @@ function wireExerciseEvents(ex, container) {
     row.onclick = () => { const i = parseInt(row.dataset.i, 10); sets[i].logged = false; uiState[exName].phase = 'input'; renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot')); };
   });
   const addBtn = container.querySelector(`#add-${id}`);
-  if (addBtn) addBtn.onclick = () => { const arr = state[exName]; arr.push(makeSet(arr.length, arr.length + 1, weekInfo().deload)); renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot')); };
+  if (addBtn) addBtn.onclick = () => { const arr = state[exName]; arr.push(makeSet(arr.length, arr.length + 1, weekInfo().deload)); applyPlanToExercise(ex, false); renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot')); };
 
   if (currentIndex === -1) return;
 
@@ -2043,15 +2918,18 @@ function wireExerciseEvents(ex, container) {
     // every later not-yet-logged set of this exercise — same behavior as the warm-up "target"
     // fill. Without this, changing your working weight mid-exercise meant retyping it by hand for
     // every remaining set, since each set only ever held whatever it was pre-filled with.
+    // Weight carries forward to later sets (you rarely change plates mid-exercise) and reps are
+    // re-predicted at the new weight. Reps you type apply to THIS set only — each later set keeps
+    // its own prescribed reps instead of copying yours (that copying was the old bug).
     if (wt) wt.addEventListener('input', () => {
-      sets[currentIndex].weight = wt.value;
-      for (let i = currentIndex + 1; i < sets.length; i++) { if (!sets[i].logged) sets[i].weight = wt.value; }
+      const predicted = onCurrentWeightEdited(ex, currentIndex, wt.value);
+      if (reps && predicted != null && document.activeElement !== reps) reps.value = predicted;
     });
     if (reps) reps.addEventListener('input', () => {
       sets[currentIndex].reps = reps.value;
-      for (let i = currentIndex + 1; i < sets.length; i++) { if (!sets[i].logged) sets[i].reps = reps.value; }
+      sets[currentIndex].rEdited = true;
     });
-    if (rir) rir.addEventListener('change', () => sets[currentIndex].rir = rir.value);
+    if (rir) rir.addEventListener('change', () => { sets[currentIndex].rir = rir.value; sets[currentIndex].rirEdited = true; });
     const rm = container.querySelector(`#rm-${id}`);
     if (rm) rm.onclick = () => { sets.splice(currentIndex, 1); renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot')); };
     const logBtn = container.querySelector(`#logbtn-${id}`);
@@ -2067,7 +2945,7 @@ function wireExerciseEvents(ex, container) {
     if (confirmBtn) confirmBtn.onclick = () => {
       const loggedSet = sets[currentIndex];
       loggedSet.logged = true;
-      applyIntraSessionAdjustment(ex, currentIndex);
+      replanRemaining(ex);
       const w = parseFloat(loggedSet.weight), r = parseInt(loggedSet.reps, 10);
       if (!isNaN(w) && !isNaN(r) && w > 0 && r > 0) {
         checkAndRecordPR(exName, w, r).then(isPR => {
@@ -2095,15 +2973,17 @@ function wireExerciseEvents(ex, container) {
 }
 
 function fillTargetIntoWorkingSets(exName) {
+  // Your warm-up target weight becomes the working weight (reps re-predicted at it); target reps
+  // apply to the first working set only — later sets keep their own prescribed reps.
+  const ex = (getDayData(currentDay).exercises || []).find(e => e.name === exName);
+  const sets = state[exName];
+  if (!sets || !ex) return;
+  const idx = sets.findIndex(s => !s.logged);
+  if (idx === -1) return;
   const w = parseFloat(warmupTargetByEx[exName]);
   const r = parseInt(warmupTargetRepsByEx[exName], 10);
-  const sets = state[exName];
-  if (!sets) return;
-  sets.forEach(s => {
-    if (s.logged) return;
-    if (!isNaN(w) && w > 0) s.weight = w;
-    if (!isNaN(r) && r > 0) s.reps = r;
-  });
+  if (!isNaN(w) && w > 0 && w !== parseFloat(sets[idx].weight)) onCurrentWeightEdited(ex, idx, w);
+  if (!isNaN(r) && r > 0) { sets[idx].reps = r; sets[idx].rEdited = true; }
 }
 
 // Estimated-1RM PR tracking (Epley formula) — a cheap, high-value touch that most competing
@@ -2124,22 +3004,6 @@ async function checkAndRecordPR(exName, weight, reps) {
   } catch (e) { return false; }
 }
 
-function applyIntraSessionAdjustment(ex, i) {
-  const sets = state[ex.name];
-  const s = sets[i];
-  const targetRir = parseInt(s.rir, 10);
-  const diff = parseInt(s.difficulty, 10);
-  const ranHot = (!isNaN(diff) && !isNaN(targetRir) && targetRir >= 1 && diff >= 9) || (!isNaN(diff) && s.confidence === 'Fuzzy' && diff >= 8);
-  if (!ranHot) { delete intraSessionNoteByEx[ex.name]; return; }
-  const next = sets[i + 1];
-  if (!next || next.logged) { delete intraSessionNoteByEx[ex.name]; return; }
-  const baseW = parseFloat(s.weight);
-  const step = ex.type === 'compound' ? 5 : 2.5;
-  if (!isNaN(baseW) && baseW > 0) next.weight = Math.max(0, baseW - step);
-  next.rir = String(Math.min(3, (parseInt(next.rir, 10) || 0) + 1));
-  intraSessionNoteByEx[ex.name] = `That set ran harder than the RIR ${isNaN(targetRir)?'target':targetRir} you were aiming for (difficulty ${diff}/10) — trimmed next set down ${step} lb and added RIR buffer, right now, for today. Edit if you'd rather push as planned.`;
-}
-
 function startRest(ex, container, prevSlot) {
   const exName = ex.name;
   const dur = ex.type === 'compound' ? REST_SECONDS_COMPOUND : REST_SECONDS_ISOLATION;
@@ -2150,7 +3014,7 @@ function startRest(ex, container, prevSlot) {
 }
 
 function initState() {
-  state = {}; uiState = {}; warmupDoneByEx = {}; warmupTargetByEx = {}; warmupStepByEx = {}; warmupRestEndByEx = {}; intraSessionNoteByEx = {};
+  state = {}; uiState = {}; warmupDoneByEx = {}; warmupTargetByEx = {}; warmupTargetRepsByEx = {}; warmupStepByEx = {}; warmupRestEndByEx = {}; intraSessionNoteByEx = {};
   Object.values(warmupTimerByEx).forEach(t => clearInterval(t));
   warmupTimerByEx = {};
   const info = weekInfo();
@@ -2182,28 +3046,17 @@ function sessionTierForExercise(sets) {
 async function loadPrevious() {
   prevByExercise = {};
   plateauByExercise = {};
-  if (!db) return;
-  try {
-    const snap = await db.collection('sessions').where('day','==',currentDay).orderBy('date','desc').limit(6).get();
-    const historyByExercise = {};
-    (snap.docs || []).forEach(d => {
-      const data = d.data();
-      if (!data.exercises) return;
-      Object.keys(data.exercises).forEach(exName => {
-        const sets = data.exercises[exName];
-        if (!sets || !sets.length) return;
-        const hasRealData = sets.some(s => s.weight !== '' && s.weight != null && s.reps !== '' && s.reps != null);
-        if (!hasRealData) return;
-        if (!prevByExercise[exName]) prevByExercise[exName] = { date: data.date, sets };
-        if (!historyByExercise[exName]) historyByExercise[exName] = [];
-        historyByExercise[exName].push(sessionTierForExercise(sets));
-      });
-    });
-    Object.keys(historyByExercise).forEach(exName => {
-      const hist = historyByExercise[exName];
-      plateauByExercise[exName] = hist.length >= 2 && hist[0] === 'hold' && hist[1] === 'hold';
-    });
-  } catch (e) { console.error('loadPrevious failed', e); }
+  planMetaByEx = {};
+  await loadExerciseHistory(); // every day this lift was trained, logged sets only, today excluded
+  Object.keys(exerciseHistory).forEach(exName => {
+    const hist = exerciseHistory[exName];
+    prevByExercise[exName] = { date: hist[0].date, sets: hist[0].sets, planned: hist[0].planned };
+    // Stalled = no new best estimated max in either of your last two sessions vs the two before
+    // them. (The old rule flagged any session with a set rated 9+, which every planned to-failure
+    // last set is — so it cried "stalled" on lifts that were climbing.)
+    const sess = hist.filter(h => !h.deload).map(h => Math.max(0, ...h.sets.map(setE1rmAdj))).filter(e => e > 0);
+    plateauByExercise[exName] = sess.length >= 4 && Math.max(sess[0], sess[1]) <= Math.max(sess[2], sess[3]) * 1.005;
+  });
 }
 
 // initState() always builds a fresh, blank scaffold for the day. That's correct for a program
@@ -2235,8 +3088,11 @@ async function loadDay() {
   await loadPrevious();
   initState();
   await restoreTodaySession();
+  applyPlanToAll(false); // fills today's prescribed weight × reps into every set you haven't logged or edited
   renderCheckinIfNeeded();
   renderFatigueAdvisory();
+  renderBlockReviewIfNeeded();
+  renderMissedWeekIfNeeded();
   dayMode = 'overview';
   showMode('overview');
   renderDayOverview();
@@ -2293,6 +3149,8 @@ function renderDayOverview() {
       </div>
     </div>
     ${statsOrRecoveryHTML}
+    <div id="fuelCheckSlot"></div>
+    <div id="quickLogSlot"></div>
     <div class="overview-checkin">
       <div class="cp-row" style="padding-top:0;">
         <span class="cp-label">Sleep last night</span><input type="number" id="sleepHours" step="0.5" min="0" max="14" style="width:44px" placeholder="hrs">
@@ -2307,6 +3165,7 @@ function renderDayOverview() {
         <span class="cp-label">Soreness today</span>
         <div class="scale-row" id="sorenessRow" style="flex:1;">${[1,2,3,4,5].map(n=>`<button class="scale-btn" data-v="${n}">${n}</button>`).join('')}</div>
       </div>
+      <div class="ex-prev" id="sorenessEffect" style="margin-top:8px;">${escHtml(sorenessEffectText(sorenessToday))}</div>
     </div>
     ${actionsHTML}
   `;
@@ -2325,6 +3184,8 @@ function renderDayOverview() {
     renderSleepNoteUI();
   });
   renderSleepNoteUI();
+  renderFuelCheck();
+  renderQuickLog();
 
   document.querySelectorAll('#sorenessRow .scale-btn').forEach(b => {
     if (String(sorenessToday) === b.dataset.v) b.classList.add('selected');
@@ -2332,7 +3193,12 @@ function renderDayOverview() {
       sorenessToday = b.dataset.v;
       document.querySelectorAll('#sorenessRow .scale-btn').forEach(x => x.classList.remove('selected'));
       b.classList.add('selected');
-      if (db) { try { await db.doc(`soreness/${todayISO()}`).set({ value: sorenessToday }); } catch(e){} }
+      const eff = document.getElementById('sorenessEffect');
+      if (eff) eff.textContent = sorenessEffectText(sorenessToday);
+      applyPlanToAll(false); // re-plan today's unlogged sets with the new reps-in-reserve buffer
+      if (db) { try { await db.doc(`soreness/${todayISO()}`).set({ value: sorenessToday, date: todayISO() }); } catch(e){} }
+      await loadFatigueSignal();
+      renderFatigueAdvisory();
     };
   });
 
@@ -2369,9 +3235,11 @@ function renderDayOverview() {
         const path = `${currentUserId}/${Date.now()}.${ext}`;
         const { error: upErr } = await supaClient.storage.from('photos').upload(path, file, { contentType: file.type || 'image/jpeg' });
         if (upErr) throw upErr;
-        const { data: pub } = supaClient.storage.from('photos').getPublicUrl(path);
-        await savePhotoLogEntry(pub.publicUrl);
-        applyHeroPhoto(pub.publicUrl);
+        // Progress photos are private: the bucket isn't public, so we store the file's path and
+        // mint a short-lived signed link each time it's shown, instead of a permanent public URL.
+        await savePhotoLogEntry(null, path);
+        const signed = await signPhotoPaths([path]);
+        if (signed[path]) applyHeroPhoto(signed[path]);
       } catch (err) { console.error('photo upload failed', err); }
       return;
     }
@@ -2390,15 +3258,44 @@ function renderDayOverview() {
 // silently overwrote the last one, with no history at all. This keys each photo by calendar date
 // instead, so every photo you take is kept and browsable as an actual timeline (see the "Progress
 // Photos" menu item), which is the whole point of taking them in the first place.
-async function savePhotoLogEntry(url) {
+async function savePhotoLogEntry(url, storagePath) {
   if (!db) return;
-  try { await db.doc(`photoLog/${todayISO()}`).set({ url, day: currentDay, date: todayISO(), createdAt: Date.now() }); } catch (e) {}
+  const rec = { url: url || null, day: currentDay, date: todayISO(), createdAt: Date.now() };
+  if (storagePath) rec.storagePath = storagePath;
+  try { await db.doc(`photoLog/${todayISO()}_${rec.createdAt}`).set(rec); } catch (e) {}
+}
+// Signed links last an hour; keep them for 50 minutes so re-renders reuse the same link (and the
+// browser's image cache) instead of re-downloading every photo each time a screen redraws.
+const signedPhotoCache = {};
+async function signPhotoPaths(paths) {
+  const out = {};
+  const now = Date.now();
+  const need = [];
+  for (const p of paths) {
+    const hit = signedPhotoCache[p];
+    if (hit && hit.exp > now) out[p] = hit.url; else need.push(p);
+  }
+  if (need.length && supaClient) {
+    try {
+      const { data, error } = await supaClient.storage.from('photos').createSignedUrls(need, 3600);
+      if (!error) (data || []).forEach(r => {
+        if (r && r.signedUrl && r.path) { out[r.path] = r.signedUrl; signedPhotoCache[r.path] = { url: r.signedUrl, exp: now + 50 * 60000 }; }
+      });
+    } catch (e) {}
+  }
+  return out;
 }
 async function getPhotoLog(limitN) {
   if (!db) return [];
   try {
-    const snap = await db.collection('photoLog').orderBy('date', 'desc').limit(limitN || 90).get();
-    return (snap.docs || []).map(d => d.data()).filter(p => p && p.url);
+    const snap = await db.collection('photoLog').orderBy('createdAt', 'desc').limit(limitN || 90).get();
+    const log = (snap.docs || []).map(d => d.data()).filter(p => p && (p.url || p.storagePath));
+    const paths = log.filter(p => p.storagePath).map(p => p.storagePath);
+    if (paths.length) {
+      const signed = await signPhotoPaths(paths);
+      log.forEach(p => { if (p.storagePath) p.url = signed[p.storagePath] || null; });
+    }
+    return log.filter(p => p.url);
   } catch (e) { return []; }
 }
 
@@ -2433,7 +3330,10 @@ function renderWorkoutPreview() {
   let html = `<button class="back-link" id="backFromPreviewBtn">‹ Back to overview</button>`;
   dayData.exercises.forEach(ex => {
     const n = defaultSetCount(ex.type, info);
-    html += `<div class="preview-row"><span class="pname">${ex.name}</span><span class="ptype">${ex.type} · ${n} sets</span></div>`;
+    const st = (state[ex.name] || []);
+    const planTxt = st.length && st.every(x => x.weight !== '' && x.weight != null) && st.every(x => String(x.weight) === String(st[0].weight))
+      ? `${st[0].weight} lb × ${st.map(x => x.reps || '–').join(' / ')}` : `${ex.type} · ${n} sets`;
+    html += `<div class="preview-row"><span class="pname">${escHtml(ex.name)}</span><span class="ptype" style="text-transform:none;">${planTxt}</span></div>`;
   });
   html += `<div class="overview-actions"><button class="btn-primary" id="startFromPreviewBtn" style="flex:1;">Start Workout</button></div>`;
   wrap.innerHTML = html;
@@ -2570,6 +3470,9 @@ async function loadBlockConfig() {
       blockConfig.length = data.length || 6;
       blockConfig.lastAckedWeek = data.lastAckedWeek || null;
       blockConfig.forceDeload = !!data.forceDeload;
+      blockConfig.reviewSnoozeUntil = data.reviewSnoozeUntil || null;
+      blockConfig.shiftDays = data.shiftDays || 0;
+      blockConfig.missedAck = data.missedAck || null;
     }
   } catch (e) { console.error(e); }
   document.getElementById('blockStart').value = blockConfig.start || '';
@@ -2578,12 +3481,12 @@ async function loadBlockConfig() {
 }
 async function saveBlockConfig() {
   if (!db) return;
-  try { await db.doc('block/config').set({ start: blockConfig.start, length: blockConfig.length, lastAckedWeek: blockConfig.lastAckedWeek, forceDeload: blockConfig.forceDeload }); }
+  try { await db.doc('block/config').set({ start: blockConfig.start, length: blockConfig.length, lastAckedWeek: blockConfig.lastAckedWeek, forceDeload: blockConfig.forceDeload, reviewSnoozeUntil: blockConfig.reviewSnoozeUntil || null, shiftDays: blockConfig.shiftDays || 0, missedAck: blockConfig.missedAck || null }); }
   catch (e) { console.error(e); }
   renderWeekPill();
   loadDay();
 }
-document.getElementById('blockStart').addEventListener('change', e => { blockConfig.start = e.target.value; saveBlockConfig(); });
+document.getElementById('blockStart').addEventListener('change', e => { blockConfig.start = e.target.value; blockConfig.shiftDays = 0; blockConfig.missedAck = null; saveBlockConfig(); });
 document.getElementById('blockLen').addEventListener('change', e => { blockConfig.length = parseInt(e.target.value,10); saveBlockConfig(); });
 document.getElementById('backToOverviewBtn').addEventListener('click', () => showMode('overview'));
 armConfirm(document.getElementById('restartWorkoutBtn'), "Tap again to confirm — can't be undone", restartWorkout);
@@ -2875,6 +3778,8 @@ async function onboardHandleNext() {
     const lenSel = document.getElementById('obBlockLen');
     document.getElementById('blockStart').value = v;
     blockConfig.start = v;
+    blockConfig.shiftDays = 0;
+    blockConfig.missedAck = null;
     if (lenSel) blockConfig.length = parseInt(lenSel.value, 10);
     document.getElementById('blockLen').value = String(blockConfig.length);
     await finalizeOnboarding();
@@ -3092,6 +3997,7 @@ function renderCheckinIfNeeded() {
   slot.innerHTML = '';
   const info = weekInfo();
   if (!info.week || blockConfig.lastAckedWeek === info.week) return;
+  if (info.rawWeek > blockConfig.length) return; // block finished — the block review takes this slot
   const card = document.createElement('div');
   card.className = 'checkin-card swipe';
   card.innerHTML = `
@@ -3109,7 +4015,7 @@ function renderCheckinIfNeeded() {
   card.querySelectorAll('#soreRow .scale-btn').forEach(b => b.onclick = () => { sore = b.dataset.v; card.querySelectorAll('#soreRow .scale-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); });
   card.querySelectorAll('#recRow .scale-btn').forEach(b => b.onclick = () => { rec = b.dataset.v; card.querySelectorAll('#recRow .scale-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); });
   card.querySelector('#checkinSubmit').onclick = async () => {
-    if (db) { try { await db.doc(`weekcheckins/${blockConfig.start}_w${info.week}`).set({ soreness: sore, recovery: rec, date: todayISO() }); } catch (e) {} }
+    if (db) { try { await db.doc(`weekcheckins/${blockKey()}_w${info.week}`).set({ soreness: sore, recovery: rec, date: todayISO() }); } catch (e) {} }
     blockConfig.lastAckedWeek = info.week;
     if (db) { try { await db.doc('block/config').update({ lastAckedWeek: info.week }); } catch (e) {} }
     slot.innerHTML = '';
@@ -3144,7 +4050,7 @@ const PHASES = {
 let phaseBeforeCut = null;
 async function persistNutritionConfig() {
   if (!db) return;
-  try { await db.doc('nutrition/config').set({ maintCals, phase: nutritionPhase, phaseStart, plannedPhaseWeeks, phaseAdvisorySnoozeUntil, phaseBeforeCut }); } catch (e) {}
+  try { await db.doc('nutrition/config').set({ maintCals, phase: nutritionPhase, phaseStart, plannedPhaseWeeks, phaseAdvisorySnoozeUntil, phaseBeforeCut, maintAdjustedOn }); } catch (e) {}
 }
 async function setNutritionPhase(newPhase, opts) {
   opts = opts || {};
@@ -3188,6 +4094,7 @@ async function loadNutritionConfig() {
       plannedPhaseWeeks = data.plannedPhaseWeeks || null;
       phaseAdvisorySnoozeUntil = data.phaseAdvisorySnoozeUntil || null;
       phaseBeforeCut = data.phaseBeforeCut || null;
+      maintAdjustedOn = data.maintAdjustedOn || null;
       // Migrate: a phase set before this feature existed has no recorded start date. Backfilling
       // to today isn't exactly right, but it's the honest "we don't actually know" default, and it
       // self-corrects going forward rather than breaking the weeks-in-phase math or guessing a
@@ -3342,11 +4249,17 @@ async function renderAdaptiveCard() {
 
   const diff = r.suggested - maintCals;
   text.innerHTML = `Over the last ~${r.daysSpan} days you've averaged <b>${r.avgIntake} kcal/day</b> and moved from ${r.trendPrior.toFixed(1)} → ${r.trendNow.toFixed(1)} lb trend (${r.weeklyRateLb >= 0 ? '+' : ''}${r.weeklyRateLb.toFixed(2)} lb/week). ${paceNote} Based on that, your real maintenance looks closer to <b>${r.measuredMaint} kcal</b> than the ${maintCals} kcal currently set.`;
-  if (Math.abs(diff) >= 40) {
+  // Both this card and the block review correct maintenance from the same weigh-ins + food logs.
+  // After either one adjusts it, wait two weeks for data at the new number before suggesting again,
+  // so the same shortfall never gets corrected twice.
+  if (maintAdjustedOn && daysBetweenISO(maintAdjustedOn, todayISO()) < 14) {
+    text.innerHTML += ` <br><br>Maintenance was just updated on ${escHtml(maintAdjustedOn)} — this re-checks after two weeks of data at the new number.`;
+  } else if (Math.abs(diff) >= 40) {
     btn.style.display = 'block';
     btn.textContent = `Update maintenance to ${r.suggested} kcal`;
     btn.onclick = async () => {
       maintCals = r.suggested;
+      maintAdjustedOn = todayISO();
       await persistNutritionConfig();
       renderNutrition();
     };
@@ -3397,7 +4310,11 @@ async function evaluatePhaseHealth() {
   const firstHalf = measureLog.slice(0, midIdx + 1);
   const secondHalf = measureLog.slice(midIdx);
   const weightAt = (dateIso) => {
-    // nearest weight entry on/before this measurement's date, falling back to the closest available
+    // Smoothed weight around this measurement's date (every weigh-in within ±3 days). A single
+    // weigh-in swings 1-3 lb on water alone, which was enough to fake a "waist growing faster than
+    // weight" signal and recommend a mini-cut on a perfectly healthy bulk.
+    const near = weightLog.filter(w => Math.abs(daysBetweenISO(w.date, dateIso)) <= 3);
+    if (near.length) return near.reduce((a, w) => a + w.lb, 0) / near.length;
     const before = weightLog.filter(w => w.date <= dateIso);
     return before.length ? before[before.length - 1].lb : weightLog[0].lb;
   };
@@ -3500,18 +4417,14 @@ async function renderNutrition() {
   document.getElementById('maintCals').value = maintCals || '';
   renderPhaseRow();
   const info = weekInfo();
-  let target = maintCals ? maintCals + PHASES[nutritionPhase].calDelta : null;
-  if (target && info.week) {
-    if (info.deload) target -= 100;
-    else if (info.overload) target += 125;
-  }
+  const target = calorieTargetFor(info);
   const bw = await getTrendWeightLb();
-  const proteinG = bw ? Math.round(bw * 1.0) : (target ? Math.round(target * 0.30 / 4) : null);
+  const proteinG = proteinTargetFor(bw, target);
   const fatG = target ? Math.round((target * 0.25) / 9) : null;
   const carbG = target && proteinG && fatG ? Math.round((target - proteinG*4 - fatG*9) / 4) : null;
 
   document.getElementById('calBig').textContent = target ? `${Math.round(target)} kcal` : '—';
-  document.getElementById('calSub').textContent = target ? `${PHASES[nutritionPhase].label} · ${PHASES[nutritionPhase].note}${info.deload ? ' · deload adjusted' : ''}` : 'Enter maintenance calories to set targets';
+  document.getElementById('calSub').textContent = target ? `${PHASES[nutritionPhase].label} · ${PHASES[nutritionPhase].note}${info.deload ? ' · deload week −100' : info.overload ? ' · overload week +125' : ''}` : 'Enter maintenance calories to set targets';
 
   const entries = await getFoodEntries();
   const sums = entries.reduce((a,f) => ({cals:a.cals+(f.cals||0), p:a.p+(f.prot||0), c:a.c+(f.carb||0), f:a.f+(f.fat||0)}), {cals:0,p:0,c:0,f:0});
@@ -3558,7 +4471,7 @@ function renderFoodList(entries) {
   if (!entries.length) { list.innerHTML = '<div style="color:var(--text-dim);font-size:11.5px;font-weight:300;padding-top:10px;">No food logged yet today.</div>'; return; }
   list.innerHTML = entries.map((f,i) => `
     <div class="food-row">
-      <div><div class="fname">${f.name}</div><div class="fmacros">${f.cals||0} kcal · P${f.prot||0} C${f.carb||0} F${f.fat||0}</div></div>
+      <div><div class="fname">${escHtml(f.name)}</div><div class="fmacros">${f.cals||0} kcal · P${f.prot||0} C${f.carb||0} F${f.fat||0}</div></div>
       <button class="frm" data-i="${i}">×</button>
     </div>
   `).join('');
@@ -3598,7 +4511,7 @@ function renderRecentFoodsRow(items) {
   if (!items.length) { row.innerHTML = ''; return; }
   row.innerHTML = `
     <div class="choice-row" style="margin-bottom:2px;">
-      ${items.map((it, i) => `<button class="choice-btn recent-food-chip" data-i="${i}">${it.name} · ${it.cals || 0}kcal</button>`).join('')}
+      ${items.map((it, i) => `<button class="choice-btn recent-food-chip" data-i="${i}">${escHtml(it.name)} · ${it.cals || 0}kcal</button>`).join('')}
     </div>`;
   row.querySelectorAll('.recent-food-chip').forEach(chip => {
     chip.onclick = async () => {
@@ -3754,12 +4667,15 @@ async function renderWeightTab() {
 
   const box = document.getElementById('targetBox');
   if (trend) {
-    if (weightPhase === 'cut') {
-      const lo = (trend * 0.99).toFixed(1), hi = (trend * 0.995).toFixed(1);
-      box.textContent = `Cutting target: next week's trend weight around ${lo}–${hi} lb (0.5–1% loss from ${trend.toFixed(1)} lb trend).`;
-    } else if (weightPhase === 'bulk') {
-      const lo = (trend + 0.55).toFixed(1), hi = (trend + 1.1).toFixed(1);
-      box.textContent = `Lean bulk target: next week's trend weight around ${lo}–${hi} lb (0.25–0.5 kg gain from ${trend.toFixed(1)} lb trend).`;
+    // Covers every phase (Aggressive Cut, Standard Bulk and Recomp used to fall through to the
+    // maintenance message) using the same pace ranges as the Nutrition tab and block review.
+    const grp = phaseGroupOf(weightPhase);
+    const label = PHASES[weightPhase] ? PHASES[weightPhase].label : 'Target';
+    if (grp === 'cut' || grp === 'bulk' || grp === 'recomp') {
+      const r = expectedWeeklyRangeLb(weightPhase, trend);
+      const a = (trend + Math.min(r[0], r[1])).toFixed(1), b = (trend + Math.max(r[0], r[1])).toFixed(1);
+      const fmt = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}`;
+      box.textContent = `${label} target: next week's trend weight around ${a}–${b} lb (${fmt(r[0])} to ${fmt(r[1])} lb/week from ${trend.toFixed(1)} lb trend).`;
     } else {
       box.textContent = `Maintenance: aim to stay within about 1 lb of ${trend.toFixed(1)} lb trend week to week.`;
     }
@@ -3784,7 +4700,8 @@ document.getElementById('logMeasureBtn').onclick = async () => {
     if (!isNaN(v)) { rec[k] = v; any = true; }
   });
   if (!any) return;
-  if (db) { try { await db.doc(`measurements/${todayISO()}`).set(rec); } catch(e){} }
+  delete rec.date;
+  await saveMeasurement(rec);
   Object.values(fields).forEach(id => document.getElementById(id).value = '');
   renderMeasurements();
 };
@@ -3957,17 +4874,143 @@ function createLocalDb() {
 // unchanged regardless of which one is active. Path convention matches exactly: a "collection" is
 // every row whose path is "<prefix>/<id>" with no further slashes in <id>.
 function createSupabaseDb(client, userId) {
-  async function readDoc(path) {
-    const { data, error } = await client.from('documents').select('data').eq('user_id', userId).eq('path', path).maybeSingle();
-    if (error) throw error;
-    return data ? data.data : null;
+  // Offline safety net. Gyms often have no signal, and before this every save made without a
+  // connection threw an error that was silently swallowed, so logged sets, food and weigh-ins just
+  // vanished. Now every write lands in a local cache first; if the server can't be reached it waits
+  // in an "outbox" on the phone and is sent automatically once the connection comes back. Reads fall
+  // back to the local cache when offline, and always show still-unsent writes, so nothing looks lost.
+  const OUTBOX_KEY = `forever_outbox_${userId}`;
+  const CACHE_PREFIX = `forever_cache_${userId}/`;
+  const cacheable = (path) => !path.startsWith('photos/'); // legacy base64 photos are too big for localStorage
+  function loadOutbox() { try { return JSON.parse(localStorage.getItem(OUTBOX_KEY)) || {}; } catch (e) { return {}; } }
+  // The outbox holds the ONLY copy of unsent data, so it must never fail quietly. If the phone's
+  // storage is full, drop the read cache (always re-downloadable) to make room, then try again;
+  // if it still won't fit, throw so the save is reported as failed instead of vanishing.
+  function saveOutbox(ob) {
+    const json = JSON.stringify(ob);
+    try { localStorage.setItem(OUTBOX_KEY, json); return; } catch (e) {}
+    clearLocalCache();
+    localStorage.setItem(OUTBOX_KEY, json);
   }
-  async function writeDoc(path, data) {
+  function cachePut(path, data) {
+    if (!cacheable(path)) return;
+    try {
+      if (data === null) { localStorage.removeItem(CACHE_PREFIX + path); return; }
+      const json = JSON.stringify(data);
+      if (json.length > 50000) { localStorage.removeItem(CACHE_PREFIX + path); return; } // e.g. an old inline photo
+      localStorage.setItem(CACHE_PREFIX + path, json);
+    } catch (e) {}
+  }
+  // Only connection problems are worth retrying. A permanent rejection from the database (permission,
+  // bad data) would otherwise sit at the front of the outbox forever and block every save behind it.
+  function isPermanent(err) {
+    const code = String((err && err.code) || '');
+    return /^(42|23|22)/.test(code);
+  }
+  function cacheGet(path) {
+    try { const v = localStorage.getItem(CACHE_PREFIX + path); return v === null ? undefined : JSON.parse(v); } catch (e) { return undefined; }
+  }
+  function cacheList(prefix) {
+    const out = [];
+    const full = CACHE_PREFIX + prefix + '/';
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith(full)) continue;
+      try { out.push({ path: key.slice(CACHE_PREFIX.length), data: JSON.parse(localStorage.getItem(key)) }); } catch (e) {}
+    }
+    return out;
+  }
+  async function remoteWrite(path, data) {
     const { error } = await client.from('documents').upsert(
       { user_id: userId, path, data, updated_at: new Date().toISOString() },
       { onConflict: 'user_id,path' }
     );
     if (error) throw error;
+  }
+  async function remoteDelete(path) {
+    const { error } = await client.from('documents').delete().eq('user_id', userId).eq('path', path);
+    if (error) throw error;
+  }
+  let queueSeq = 0;
+  function queue(path, op, data) {
+    const ob = loadOutbox();
+    ob[path] = { op, data: data === undefined ? null : data, ts: `${Date.now()}-${++queueSeq}` }; // unique even within the same millisecond
+    saveOutbox(ob);
+    scheduleFlush();
+  }
+  function clearQueued(path) {
+    const ob = loadOutbox();
+    if (ob[path]) { delete ob[path]; try { saveOutbox(ob); } catch (e) {} }
+  }
+  function dropIfUnchanged(path, ts) {
+    const latest = loadOutbox();
+    if (latest[path] && latest[path].ts === ts) { delete latest[path]; try { saveOutbox(latest); } catch (e) {} }
+  }
+  // Paths currently being sent by the flusher. A new save to one of these goes through the outbox
+  // (behind the in-flight one) rather than straight to the server, so an older value can never land
+  // on the server after a newer one.
+  const inflight = new Set();
+  let flushPromise = null, flushTimer = null;
+  function flushOutbox() {
+    if (!flushPromise) flushPromise = runFlush().finally(() => { flushPromise = null; });
+    return flushPromise;
+  }
+  async function runFlush() {
+    for (let pass = 0; pass < 5; pass++) {
+      const entries = Object.entries(loadOutbox());
+      if (!entries.length) return;
+      let sentAny = false;
+      for (const [path, entry] of entries) {
+        inflight.add(path);
+        try {
+          if (entry.op === 'delete') await remoteDelete(path); else await remoteWrite(path, entry.data);
+          dropIfUnchanged(path, entry.ts);
+          sentAny = true;
+        } catch (e) {
+          if (isPermanent(e)) {
+            dropIfUnchanged(path, entry.ts);
+            try { if (window.Sentry) window.Sentry.captureException(e, { tags: { source: 'outbox' }, extra: { path } }); } catch (x) {}
+            continue;
+          }
+          inflight.delete(path);
+          scheduleFlush();
+          return; // still offline — try again later
+        } finally { inflight.delete(path); }
+      }
+      if (!sentAny) break;
+    }
+    if (Object.keys(loadOutbox()).length) scheduleFlush();
+  }
+  function scheduleFlush() {
+    if (flushTimer) return;
+    flushTimer = setTimeout(() => { flushTimer = null; flushOutbox(); }, 20000);
+  }
+  try {
+    window.addEventListener('online', () => flushOutbox());
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') flushOutbox(); });
+  } catch (e) {}
+  flushOutbox();
+
+  async function readDoc(path) {
+    const pending = loadOutbox()[path];
+    if (pending) return pending.op === 'delete' ? null : pending.data;
+    try {
+      const { data, error } = await client.from('documents').select('data').eq('user_id', userId).eq('path', path).maybeSingle();
+      if (error) throw error;
+      const val = data ? data.data : null;
+      cachePut(path, val);
+      return val;
+    } catch (e) {
+      const cached = cacheGet(path);
+      if (cached !== undefined) return cached;
+      throw e;
+    }
+  }
+  async function writeDoc(path, data) {
+    cachePut(path, data);
+    if (loadOutbox()[path] || inflight.has(path)) { queue(path, 'set', data); flushOutbox(); return; }
+    try { await remoteWrite(path, data); clearQueued(path); }
+    catch (e) { if (isPermanent(e)) throw e; queue(path, 'set', data); }
   }
   function docRef(path) {
     return {
@@ -3975,8 +5018,10 @@ function createSupabaseDb(client, userId) {
       set: async (data) => { await writeDoc(path, data); },
       update: async (data) => { await writeDoc(path, { ...(await readDoc(path) || {}), ...data }); },
       delete: async () => {
-        const { error } = await client.from('documents').delete().eq('user_id', userId).eq('path', path);
-        if (error) throw error;
+        cachePut(path, null);
+        if (loadOutbox()[path] || inflight.has(path)) { queue(path, 'delete'); flushOutbox(); return; }
+        try { await remoteDelete(path); clearQueued(path); }
+        catch (e) { if (isPermanent(e)) throw e; queue(path, 'delete'); }
       },
     };
   }
@@ -3987,11 +5032,24 @@ function createSupabaseDb(client, userId) {
       orderBy: (field, dir) => { order = { field, dir: dir || 'asc' }; return builder; },
       limit: (n) => { lim = n; return builder; },
       get: async () => {
-        const { data: rows, error } = await client.from('documents').select('path, data').eq('user_id', userId).like('path', prefix + '/%');
-        if (error) throw error;
-        let results = (rows || [])
-          .filter(r => !r.path.slice(prefix.length + 1).includes('/'))
-          .map(r => ({ id: r.path.slice(prefix.length + 1), __data: r.data }));
+        let rows;
+        try {
+          const { data, error } = await client.from('documents').select('path, data').eq('user_id', userId).like('path', prefix + '/%');
+          if (error) throw error;
+          rows = data || [];
+          rows.forEach(r => cachePut(r.path, r.data));
+        } catch (e) {
+          rows = cacheList(prefix);
+        }
+        // Overlay writes that haven't reached the server yet.
+        const byPath = new Map(rows.map(r => [r.path, r.data]));
+        for (const [path, entry] of Object.entries(loadOutbox())) {
+          if (!path.startsWith(prefix + '/')) continue;
+          if (entry.op === 'delete') byPath.delete(path); else byPath.set(path, entry.data);
+        }
+        let results = [...byPath.entries()]
+          .filter(([path]) => !path.slice(prefix.length + 1).includes('/'))
+          .map(([path, data]) => ({ id: path.slice(prefix.length + 1), __data: data || {} }));
         for (const [field, op, val] of filters) {
           results = results.filter(r => {
             const fv = r.__data[field];
@@ -4017,7 +5075,13 @@ function createSupabaseDb(client, userId) {
     };
     return builder;
   }
-  return { doc: docRef, collection: collectionRef, __local: false };
+  function clearLocalCache() {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(CACHE_PREFIX)) keys.push(k); }
+    keys.forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+  }
+  return { doc: docRef, collection: collectionRef, __local: false, flushOutbox, clearLocalCache,
+           pendingCount: () => Object.keys(loadOutbox()).length };
 }
 
 // One-time offer, right after a fresh login, to bring in whatever's already sitting in this
@@ -4143,6 +5207,11 @@ document.getElementById('menuReportBugBtn').addEventListener('click', () => {
   alert('Thanks — logged it.');
 });
 document.getElementById('menuLogoutBtn') && (document.getElementById('menuLogoutBtn').onclick = async () => {
+  // Push any saves still waiting from being offline, then wipe this account's cached copy so the
+  // next person to use this phone can't see it. Unsent saves stay queued (per account) and go up
+  // next time this account logs in here.
+  if (db && db.flushOutbox) { try { await db.flushOutbox(); } catch (e) {} }
+  if (db && db.clearLocalCache) { try { db.clearLocalCache(); } catch (e) {} }
   if (supaClient) { try { await supaClient.auth.signOut(); } catch (e) {} }
   location.reload();
 });
