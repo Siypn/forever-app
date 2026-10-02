@@ -1101,6 +1101,48 @@
   .hist-tech { font-style: normal; font-size: 10.5px; color: var(--rest-accent); }
   /* The logo art sits on black, so it's cropped to the mark and blends into the page. */
   .brand-mark { display: block; width: 210px; height: 92px; object-fit: cover; object-position: center; margin: 0 auto 6px; mix-blend-mode: screen; }
+  .acct-email { font-size: 17px; color: #fff; margin: 2px 0 10px; word-break: break-all; text-shadow: 0 0 14px rgba(167,139,250,0.4); }
+
+  /* ---- Compact menu ---- */
+  .menu-profile { display: flex; align-items: center; gap: 14px; width: 100%; background: none; border: none; border-bottom: 1px solid var(--hairline); padding: 4px 0 16px; margin-bottom: 14px; color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+  .mp-av, .acct-av-in { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; overflow: hidden; background: radial-gradient(circle at 30% 25%, rgba(167,139,250,0.45), rgba(124,58,237,0.15) 60%, #0b0a10); border: 1px solid rgba(167,139,250,0.45); box-shadow: 0 0 18px -4px rgba(167,139,250,0.6); flex-shrink: 0; }
+  .mp-av { width: 48px; height: 48px; }
+  .mp-av img, .acct-av-in img { width: 100%; height: 100%; object-fit: cover; }
+  .mp-av span { font-size: 16px; font-weight: 600; letter-spacing: 1px; color: #fff; }
+  .mp-t { flex: 1; min-width: 0; }
+  .mp-t b { display: block; font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mp-t em { display: block; font-style: normal; font-size: 11.5px; color: var(--text-dim); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mp-chev { color: var(--text-dim); font-size: 22px; font-weight: 300; }
+  .menu-block { padding-bottom: 14px; }
+  .mg-l { margin: 16px 0 8px; }
+  .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .menu-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .menu-item.mt { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; border: 1px solid var(--hairline); border-radius: 14px; padding: 12px; font-size: 12.5px; background: rgba(255,255,255,0.02); transition: border-color .2s var(--ease), background-color .2s var(--ease); }
+  .menu-grid-3 .menu-item.mt { align-items: center; text-align: center; padding: 12px 6px; }
+  .menu-item.mt svg { width: 20px; height: 20px; stroke: var(--rest-accent); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(167,139,250,0.45)); }
+  .menu-item.mt:active { border-color: var(--rest-accent); background: rgba(124,58,237,0.12); }
+  .menu-item.mt .mt-l { line-height: 1.25; }
+  .menu-foot { display: flex; justify-content: center; gap: 22px; margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--hairline); }
+  .menu-foot .text-btn { font-size: 12px; text-decoration: none; }
+  /* ---- Account page ---- */
+  .acct-panel { text-align: center; }
+  .acct-av { position: relative; display: inline-block; cursor: pointer; margin: 6px auto 0; }
+  .acct-av input { display: none; }
+  .acct-av-in { width: 104px; height: 104px; }
+  .acct-av-in span { font-size: 34px; font-weight: 600; letter-spacing: 2px; color: #fff; }
+  .acct-av-in.busy { opacity: 0.4; }
+  .acct-av-edit { position: absolute; right: -2px; bottom: 2px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; background: #0e0c14; border: 1px solid rgba(167,139,250,0.5); color: var(--rest-accent); border-radius: 999px; padding: 4px 8px; }
+  .acct-name { display: block; width: 100%; margin: 14px 0 6px; text-align: center; font-size: 22px !important; font-weight: 600; background: none !important; border: none !important; border-bottom: 1px solid transparent !important; border-radius: 0 !important; color: #fff; padding: 4px 0 !important; }
+  .acct-name:focus { border-bottom-color: var(--rest-accent) !important; }
+  .acct-tier { display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 12px; color: var(--text-dim); }
+  .tier-chip { font-size: 10px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; color: #fff; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--rest-accent); background: rgba(124,58,237,0.22); box-shadow: 0 0 14px -4px rgba(167,139,250,0.8); }
+  .acct-rows { margin-top: 22px; border-top: 1px solid var(--hairline); text-align: left; }
+  .acct-row { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: none; border-bottom: 1px solid var(--hairline); padding: 14px 0; color: var(--text); font: inherit; font-size: 13px; cursor: pointer; text-align: left; }
+  .acct-row span { color: var(--text-dim); width: 104px; flex-shrink: 0; }
+  .acct-row b { flex: 1; min-width: 0; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .acct-row i { font-style: normal; color: var(--text-dim); font-size: 18px; }
+  div.acct-row { cursor: default; }
+  .acct-del { display: block; margin: 16px auto 0; color: #e07a6f !important; font-size: 12px; }
 </style>
 </head>
 <body>
@@ -1123,28 +1165,44 @@
 <div id="menuOverlay" class="menu-overlay">
   <div class="menu-panel">
     <div class="menu-header"><span class="section-title" style="margin:0;">Menu</span><button class="menu-close" id="menuCloseBtn">×</button></div>
-    <div class="menu-section">
-      <div class="menu-label">Block settings</div>
+    <button class="menu-profile" id="menuProfileBtn">
+      <span class="mp-av" id="menuAvatar"></span>
+      <span class="mp-t"><b id="menuName">Guest</b><em id="menuSub">This device only · Sign in to sync</em></span>
+      <span class="mp-chev">›</span>
+    </button>
+    <div class="menu-section menu-block">
+      <div class="menu-label">Training block</div>
       <div class="field-row" style="margin-top:8px;">
         <div><label>Start date</label><input type="date" id="blockStart"></div>
         <div><label>Length</label><select id="blockLen"><option value="4">4-wk</option><option value="6">6-wk</option><option value="8">8-wk</option><option value="10">10-wk</option><option value="12">12-wk</option></select></div>
       </div>
     </div>
-    <button class="menu-item menu-coach" id="menuCoachDashBtn" style="display:none;">Coach dashboard</button>
-    <button class="menu-item" id="menuHistoryBtn">Workout History</button>
-    <button class="menu-item" id="menuPhotosBtn">Progress photos</button>
-    <button class="menu-item" id="menuWarmupBtn">Warm-up &amp; Recovery library</button>
-    <button class="menu-item" id="menuExportBtn">Export workouts &amp; food (.csv)</button>
-    <button class="menu-item" id="menuBackupBtn">Download full backup</button>
-    <button class="menu-item" id="menuRestoreBtn">Restore from backup</button>
+    <div class="menu-label mg-l">Training</div>
+    <div class="menu-grid">
+      <button class="menu-item mt" id="menuHistoryBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v3.5h3.5"/><path d="M12 8v4l3 2"/></svg><span class="mt-l">History</span></button>
+      <button class="menu-item mt" id="menuPhotosBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span class="mt-l">Photos</span></button>
+      <button class="menu-item mt" id="menuWarmupBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c2 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z"/></svg><span class="mt-l">Warm-ups</span></button>
+      <button class="menu-item mt" id="menuOnboardBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span class="mt-l">Setup wizard</span></button>
+    </div>
+    <div class="menu-label mg-l" id="menuCoachLabel" style="display:none;">Coaching</div>
+    <div class="menu-grid" id="menuCoachGrid" style="display:none;">
+      <button class="menu-item mt" id="menuCoachDashBtn" style="display:none;"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span class="mt-l">Coach dashboard</span></button>
+      <button class="menu-item mt" id="menuConnectCoachBtn" style="display:none;"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 19a6 6 0 0 1 12 0"/><path d="M16 11l2 2 4-4"/></svg><span class="mt-l">Connect to a coach</span></button>
+    </div>
+    <div class="menu-label mg-l">Your data</div>
+    <div class="menu-grid menu-grid-3">
+      <button class="menu-item mt" id="menuExportBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M4 19h16"/></svg><span class="mt-l">Export .csv</span></button>
+      <button class="menu-item mt" id="menuBackupBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4 4 0 0 1-.5-8A6 6 0 0 1 18 9a4.5 4.5 0 0 1-1 9z"/><path d="M12 11v6M9.5 13.5 12 11l2.5 2.5"/></svg><span class="mt-l">Backup</span></button>
+      <button class="menu-item mt" id="menuRestoreBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v3.5h-3.5"/></svg><span class="mt-l">Restore</span></button>
+    </div>
     <input type="file" id="restoreFileInput" accept="application/json,.json" style="display:none;">
-    <button class="menu-item" id="menuOnboardBtn">Run setup wizard again</button>
-    <button class="menu-item" id="menuRemindersBtn" style="display:none;">Reminders</button>
-    <button class="menu-item" id="menuConnectCoachBtn" style="display:none;">Connect to a coach</button>
-    <button class="menu-item" id="menuReportBugBtn" style="display:none;">Report a bug</button>
-    <button class="menu-item" id="menuLogoutBtn" style="display:none;">Log out</button>
-    <a class="menu-item" id="menuPrivacyLink" href="privacy.html" target="_blank" rel="noopener">Privacy policy</a>
-    <button class="menu-item menu-danger" id="menuDeleteDataBtn" style="display:none;">Delete all my data</button>
+    <div class="menu-foot">
+      <button class="text-btn" id="menuReportBugBtn" style="display:none;">Report a bug</button>
+      <a class="text-btn" id="menuPrivacyLink" href="privacy.html" target="_blank" rel="noopener">Privacy</a>
+    </div>
+    <div style="display:none;">
+      <button id="menuRemindersBtn"></button><button id="menuPasswordBtn"></button><button id="menuLogoutBtn"></button><button id="menuDeleteDataBtn"></button>
+    </div>
     <div id="menuWarmupPanel"></div>
   </div>
 </div>
@@ -1508,6 +1566,7 @@
     <div class="field-row"><div style="flex:1;"><label>Email</label><input type="email" id="authEmail" autocomplete="email" placeholder="you@example.com" style="width:100%;"></div></div>
     <div class="field-row" style="margin-top:10px;"><div style="flex:1;"><label>Password</label><input type="password" id="authPassword" autocomplete="current-password" placeholder="••••••••" style="width:100%;"></div></div>
     <button class="btn-primary" id="authSubmitBtn" style="width:100%; margin-top:18px;">Log In</button>
+    <div style="text-align:center; margin-top:12px;"><button class="back-link" id="authForgotBtn" style="padding:0; font-size:12.5px;">Forgot password?</button></div>
     <div class="auth-legal">By creating an account you agree to the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. FOREVER gives general training and nutrition guidance, not medical advice.</div>
     <div style="text-align:center; margin-top:16px;">
       <button class="back-link" id="authToggleModeBtn" style="padding:0;">Need an account? Sign up</button>
@@ -2597,7 +2656,7 @@ function uiDialog(o) {
       ${o.kicker ? `<div class="is-kicker">${escHtml(o.kicker)}</div>` : ''}
       ${o.title ? `<div class="is-title">${escHtml(o.title)}</div>` : ''}
       ${o.text ? `<div class="ui-text">${para(o.text)}</div>` : ''}
-      ${o.input ? `<input id="uiInput" class="ui-input" ${o.input.inputmode ? `inputmode="${o.input.inputmode}"` : ''} placeholder="${escHtml(o.input.placeholder || '')}" value="${escHtml(o.input.value != null ? String(o.input.value) : '')}" ${o.input.readonly ? 'readonly' : ''} autocomplete="off" autocapitalize="${o.input.caps || 'sentences'}">` : ''}
+      ${o.input ? `<input id="uiInput" class="ui-input" type="${o.input.type || 'text'}" ${o.input.type === 'password' ? 'autocomplete="new-password"' : ''} ${o.input.inputmode ? `inputmode="${o.input.inputmode}"` : ''} placeholder="${escHtml(o.input.placeholder || '')}" value="${escHtml(o.input.value != null ? String(o.input.value) : '')}" ${o.input.readonly ? 'readonly' : ''} autocomplete="off" autocapitalize="${o.input.caps || 'sentences'}">` : ''}
       <button class="${o.danger ? 'btn-primary ui-danger' : 'btn-primary'}" id="uiOk" style="width:100%; margin-top:18px;">${escHtml(o.ok || 'OK')}</button>
       ${o.cancel ? `<button class="btn-secondary" id="uiCancel" style="width:100%; margin-top:10px;">${escHtml(o.cancel)}</button>` : ''}
     </div>`;
@@ -6824,7 +6883,7 @@ document.getElementById('blockLen').addEventListener('change', e => { blockConfi
 document.getElementById('backToOverviewBtn').addEventListener('click', () => showMode('overview'));
 armConfirm(document.getElementById('restartWorkoutBtn'), "Tap again to confirm — can't be undone", restartWorkout);
 document.getElementById('menuExportBtn').addEventListener('click', exportAllData);
-document.getElementById('menuBtn').addEventListener('click', () => document.getElementById('menuOverlay').classList.add('open'));
+document.getElementById('menuBtn').addEventListener('click', () => { try { renderMenuProfile(); } catch (e) {} document.getElementById('menuOverlay').classList.add('open'); });
 document.getElementById('menuCloseBtn').addEventListener('click', () => document.getElementById('menuOverlay').classList.remove('open'));
 document.getElementById('menuOverlay').addEventListener('click', (e) => { if (e.target.id === 'menuOverlay') e.currentTarget.classList.remove('open'); });
 
@@ -8726,9 +8785,11 @@ async function loadCoachState() {
   if (!(supaClient && currentUserId)) return;
   try { const { data } = await supaClient.from('coaches').select('code, display_name').eq('user_id', currentUserId).maybeSingle(); if (data) coachProfile = data; } catch (e) {}
   try { const { data } = await supaClient.rpc('my_coaches'); myCoaches = data || []; } catch (e) {}
-  const dash = document.getElementById('menuCoachDashBtn'); if (dash) dash.style.display = coachProfile ? 'block' : 'none';
+  const dash = document.getElementById('menuCoachDashBtn'); if (dash) dash.style.display = coachProfile ? 'flex' : 'none';
   const con = document.getElementById('menuConnectCoachBtn');
-  if (con) { con.style.display = 'block'; con.textContent = myCoaches.length ? `Coach: ${myCoaches[0].display_name}` : 'Connect to a coach'; }
+  if (con) { con.style.display = 'flex'; const l = con.querySelector('.mt-l') || con; l.textContent = myCoaches.length ? `Coach: ${myCoaches[0].display_name}` : 'Connect to a coach'; }
+  ['menuCoachLabel', 'menuCoachGrid'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = ''; });
+  try { renderMenuProfile(); } catch (e) {}
 }
 document.getElementById('menuConnectCoachBtn').addEventListener('click', async () => {
   if (!(supaClient && currentUserId)) { await uiAlert('Sign in first', 'Connecting to a coach needs an account, so your coach has something to see.'); return; }
@@ -8835,9 +8896,9 @@ async function renderCoachDashboard(useCache) {
     <div class="ex-prev" style="margin:8px 0 4px;">Clients enter this under Menu → Connect to a coach. Shown to them as <button class="link-btn" id="coachNameBtn">${escHtml(coachProfile.display_name || 'Your coach')}</button>.</div>
     ${coachClients.length ? coachClients.map((c, i) => { try {
       const s = c.sum;
-      if (!s) return `<div class="coach-card"><div class="cc-name">${nm(c.client_email)}</div><div class="ex-prev">Couldn't load this client's data.</div></div>`;
+      if (!s) return `<div class="coach-card"><div class="cc-name">${escHtml(clientDisplayName(c))}</div><div class="ex-prev">Couldn't load this client's data.</div></div>`;
       return `<button class="coach-card" data-i="${i}">
-        <div class="cc-top"><span class="cc-dot ${s.status}"></span><span class="cc-name">${nm(c.client_email)}</span><span class="cc-phase">${escHtml(s.phaseLabel)}</span></div>
+        <div class="cc-top"><span class="cc-dot ${s.status}"></span><span class="cc-name">${escHtml(clientDisplayName(c))}</span><span class="cc-phase">${escHtml(s.phaseLabel)}</span></div>
         <div class="cc-stats">
           <span><b>${s.workouts7}</b> workouts/7d</span>
           <span><b>${s.weightNow ? s.weightNow.toFixed(1) : '—'}</b> lb${s.rate != null ? ` <em>${s.rate >= 0 ? '+' : ''}${s.rate.toFixed(1)}/wk</em>` : ''}</span>
@@ -8845,7 +8906,7 @@ async function renderCoachDashboard(useCache) {
         </div>
         ${s.flags.length ? `<div class="cc-flags">${s.flags.map(f => `<span class="cc-flag l${f.lvl}">${escHtml(f.t)}</span>`).join('')}</div>` : '<div class="cc-flags"><span class="cc-flag ok">On track</span></div>'}
       </button>`;
-    } catch (e) { return `<div class="coach-card"><div class="cc-name">${nm(c.client_email)}</div><div class="ex-prev">Some of this client's data couldn't be read.</div></div>`; }
+    } catch (e) { return `<div class="coach-card"><div class="cc-name">${escHtml(clientDisplayName(c))}</div><div class="ex-prev">Some of this client's data couldn't be read.</div></div>`; }
     }).join('') : `<div class="ex-prev" style="padding:20px 0;">No clients yet. Share your code and they'll show up here once they connect.</div>`}`;
   document.getElementById('coachShareBtn').onclick = async () => {
     const text = `Join my coaching on FOREVER. Open ${location.origin}${location.pathname}, create an account, then Menu → Connect to a coach → ${coachProfile.code}`;
@@ -8868,6 +8929,10 @@ async function renderCoachDashboard(useCache) {
 async function coachWrite(clientId, path, data) {
   const { error } = await supaClient.from('documents').upsert({ user_id: clientId, path, data, updated_at: new Date().toISOString() }, { onConflict: 'user_id,path' });
   if (error) throw error;
+}
+function clientDisplayName(c) {
+  const p = ((c.docs || []).find(d => d.path === 'profile/account') || {}).data || {};
+  return (p.name && String(p.name).trim()) || (c.client_email || 'Client').split('@')[0];
 }
 function clientDoc(c, path) { const d = c.docs.find(x => x.path === path); return d ? d.data : null; }
 function clientProgram(c) {
@@ -8972,7 +9037,7 @@ function renderCoachDayEdit(c, day) {
 }
 async function renderCoachClient(c) {
   const body = document.getElementById('coachBody');
-  const s = c.sum, nm = (c.client_email || 'Client').split('@')[0];
+  const s = c.sum, nm = clientDisplayName(c);
   document.getElementById('coachTitle').textContent = nm;
   const f = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}`;
   const days = Array.from({ length: 7 }, (_, i) => isoOffset(6 - i)); // oldest → today
@@ -9498,6 +9563,32 @@ function renderAuthMode() {
   document.getElementById('authSubmitBtn').textContent = authMode === 'login' ? 'Log In' : 'Sign Up';
   document.getElementById('authToggleModeBtn').textContent = authMode === 'login' ? 'Need an account? Sign up' : 'Already have an account? Log in';
   document.getElementById('authSubtitle').textContent = authMode === 'login' ? 'Sign in to sync your training across devices.' : 'Create an account to sync your training across devices.';
+  const fg = document.getElementById('authForgotBtn'); if (fg) fg.parentElement.style.display = authMode === 'login' ? '' : 'none';
+}
+// Forgot password: email a reset link that brings you back here to choose a new one.
+document.getElementById('authForgotBtn').onclick = async () => {
+  const email = document.getElementById('authEmail').value.trim();
+  if (!email) { showAuthError('Type your email above first, then tap Forgot password.'); return; }
+  try {
+    const { error } = await supaClient.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+    if (error) { showAuthError(error.message); return; }
+    showAuthInfo('Check your email for a reset link. Open it on this phone to set a new password.');
+  } catch (e) { showAuthError('Could not reach the server. Check your connection and try again.'); }
+};
+async function askNewPassword(title, text) {
+  for (let tries = 0; tries < 3; tries++) {
+    const v = await uiPrompt(title, text, { type: 'password', placeholder: 'At least 8 characters' }, 'Save password');
+    if (v == null) return false;
+    if (v.length < 8) { await uiAlert('Too short', 'Use at least 8 characters.'); continue; }
+    const { error } = await supaClient.auth.updateUser({ password: v });
+    if (error) { await uiAlert("Couldn't change it", error.message); return false; }
+    await uiAlert('Password saved', 'Use it next time you log in.');
+    return true;
+  }
+  return false;
+}
+if (supaClient) {
+  try { supaClient.auth.onAuthStateChange((event) => { if (event === 'PASSWORD_RECOVERY') setTimeout(() => askNewPassword('Choose a new password', 'You opened a reset link. Pick the password you’ll use from now on.'), 600); }); } catch (e) {}
 }
 document.getElementById('authToggleModeBtn').onclick = () => { authMode = authMode === 'login' ? 'signup' : 'login'; renderAuthMode(); };
 
@@ -9573,9 +9664,8 @@ async function useSupabaseSession(session) {
   const logoutBtn = document.getElementById('menuLogoutBtn');
   if (logoutBtn) logoutBtn.style.display = 'block';
   const reportBugBtn = document.getElementById('menuReportBugBtn');
-  if (reportBugBtn) reportBugBtn.style.display = 'block';
-  const remBtn = document.getElementById('menuRemindersBtn');
-  if (remBtn) remBtn.style.display = 'block';
+  if (reportBugBtn) reportBugBtn.style.display = 'inline-block';
+  loadAccountProfile();
   const delBtn = document.getElementById('menuDeleteDataBtn');
   if (delBtn) delBtn.style.display = 'block';
   try {
@@ -9692,6 +9782,131 @@ async function openReminders() {
   if (off) off.onclick = async () => { await disableReminders(); openReminders(); };
 }
 document.getElementById('menuRemindersBtn').addEventListener('click', openReminders);
+// ---------- Account / profile ----------
+// Name and photo live in profile/account; join date and email come from the login itself.
+let accountProfile = { name: '', avatarPath: null, avatarUrl: null };
+let accountMeta = { createdAt: null };
+function membershipTier() {
+  if (coachProfile) return { label: 'Coach', note: 'Coach tools unlocked' };
+  if (myCoaches && myCoaches.length) return { label: 'Coached', note: `With ${myCoaches[0].display_name}` };
+  return { label: 'Founding member', note: 'Free during beta' };
+}
+function initialsOf(name, email) {
+  const src = (name || (email || '').split('@')[0] || '?').trim();
+  const parts = src.split(/[\s._-]+/).filter(Boolean);
+  return ((parts[0] || '?')[0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+}
+async function avatarSrc() {
+  if (accountProfile.avatarUrl) return accountProfile.avatarUrl;
+  if (accountProfile.avatarPath) { const m = await signPhotoPaths([accountProfile.avatarPath]); return m[accountProfile.avatarPath] || null; }
+  return null;
+}
+async function paintAvatar(el) {
+  if (!el) return;
+  const src = await avatarSrc();
+  el.innerHTML = src ? `<img src="${escHtml(src)}" alt="">` : `<span>${escHtml(initialsOf(accountProfile.name, currentUserEmail))}</span>`;
+}
+async function loadAccountProfile() {
+  if (db) { try { const snap = await db.doc('profile/account').get(); if (snap.exists) accountProfile = { ...accountProfile, ...snap.data() }; } catch (e) {} }
+  if (supaClient && currentUserId) { try { const { data } = await supaClient.auth.getUser(); if (data && data.user) accountMeta.createdAt = data.user.created_at; } catch (e) {} }
+  renderMenuProfile();
+}
+function renderMenuProfile() {
+  const signed = !!(supaClient && currentUserId);
+  const n = document.getElementById('menuName'), sub = document.getElementById('menuSub');
+  if (!n) return;
+  n.textContent = accountProfile.name || (signed ? (currentUserEmail || '').split('@')[0] : 'Guest');
+  sub.textContent = signed ? `${membershipTier().label} · ${currentUserEmail || ''}` : 'This device only · Tap to sign in';
+  paintAvatar(document.getElementById('menuAvatar'));
+}
+async function saveAccountProfile(patch) {
+  accountProfile = { ...accountProfile, ...patch };
+  if (db) { try { await db.doc('profile/account').set({ name: accountProfile.name || '', avatarPath: accountProfile.avatarPath || null, avatarUrl: accountProfile.avatarUrl || null }); } catch (e) {} }
+  renderMenuProfile();
+}
+// Square-crop and shrink a photo before upload (a profile picture never needs to be big).
+function squareJpeg(file, size) {
+  return new Promise((res) => {
+    const img = new Image(); const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const c = document.createElement('canvas'); c.width = c.height = size;
+      const k = Math.min(img.width, img.height), sx = (img.width - k) / 2, sy = (img.height - k) / 2;
+      c.getContext('2d').drawImage(img, sx, sy, k, k, 0, 0, size, size);
+      URL.revokeObjectURL(url);
+      c.toBlob(b => res(b), 'image/jpeg', 0.86);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); res(null); };
+    img.src = url;
+  });
+}
+async function uploadAvatar(file) {
+  const blob = await squareJpeg(file, 320);
+  if (!blob) throw new Error('That photo couldn’t be read.');
+  if (supaClient && currentUserId && db && !db.__local) {
+    const path = `${currentUserId}/avatar-${Date.now()}.jpg`;
+    const { error } = await supaClient.storage.from('photos').upload(path, blob, { contentType: 'image/jpeg' });
+    if (error) throw error;
+    const old = accountProfile.avatarPath;
+    await saveAccountProfile({ avatarPath: path, avatarUrl: null });
+    if (old) { try { await supaClient.storage.from('photos').remove([old]); } catch (e) {} }
+  } else {
+    const dataUrl = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
+    await saveAccountProfile({ avatarUrl: dataUrl, avatarPath: null });
+  }
+}
+async function openAccount() {
+  document.getElementById('menuOverlay').classList.remove('open');
+  const signed = !!(supaClient && currentUserId);
+  if (!signed) {
+    if (supaClient) { document.getElementById('authOverlay').style.display = 'block'; return; }
+    await uiAlert('Sign-in unavailable', 'Accounts need a connection to the server. Try again when you’re online.'); return;
+  }
+  let el = document.getElementById('accountOverlay');
+  if (!el) { el = document.createElement('div'); el.id = 'accountOverlay'; el.className = 'menu-overlay'; document.body.appendChild(el); }
+  const tier = membershipTier();
+  const since = accountMeta.createdAt ? new Date(accountMeta.createdAt).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }) : '—';
+  el.innerHTML = `<div class="menu-panel acct-panel">
+    <div class="menu-header"><span class="section-title" style="margin:0;">Account</span><button class="menu-close" id="acctCloseBtn">×</button></div>
+    <label class="acct-av" id="acctAv"><span class="acct-av-in" id="acctAvIn"></span><span class="acct-av-edit">Edit</span><input type="file" accept="image/*" id="acctAvInput"></label>
+    <input class="acct-name" id="acctName" value="${escHtml(accountProfile.name || '')}" placeholder="Your name" maxlength="40" autocomplete="name">
+    <div class="acct-tier"><span class="tier-chip">${escHtml(tier.label)}</span><span>${escHtml(tier.note)}</span></div>
+    <div class="acct-rows">
+      <div class="acct-row"><span>Member since</span><b>${escHtml(since)}</b></div>
+      <button class="acct-row" id="acctEmail"><span>Email</span><b>${escHtml(currentUserEmail || '')}</b><i>›</i></button>
+      <button class="acct-row" id="acctPw"><span>Password</span><b>••••••••</b><i>›</i></button>
+      <button class="acct-row" id="acctRem"><span>Reminders</span><b>Weigh-ins, workouts, photos</b><i>›</i></button>
+    </div>
+    <div class="ex-prev" style="margin-top:12px;">Your training, food, weight and photos are saved to this account, so they're safe if you delete or reinstall the app.</div>
+    <button class="btn-secondary" id="acctOut" style="width:100%; margin-top:22px;">Log out</button>
+    <button class="text-btn acct-del" id="acctDel">Delete all my data</button>
+  </div>`;
+  el.classList.add('open');
+  paintAvatar(el.querySelector('#acctAvIn'));
+  const close = () => el.classList.remove('open');
+  el.querySelector('#acctCloseBtn').onclick = close;
+  el.onclick = e => { if (e.target === el) close(); };
+  const nameEl = el.querySelector('#acctName');
+  nameEl.onchange = () => saveAccountProfile({ name: nameEl.value.trim().slice(0, 40) }).then(() => paintAvatar(el.querySelector('#acctAvIn')));
+  el.querySelector('#acctAvInput').onchange = async (e) => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    const box = el.querySelector('#acctAvIn'); box.classList.add('busy');
+    try { await uploadAvatar(f); await paintAvatar(box); } catch (err) { await uiAlert("That photo didn't upload", (err && err.message) || 'Check your connection and try again.'); }
+    box.classList.remove('busy');
+  };
+  el.querySelector('#acctEmail').onclick = async () => {
+    const v = await uiPrompt('Change email', `Now: ${currentUserEmail || ''}. We'll send a confirmation link to the new address; the change happens once you open it.`, { type: 'email', placeholder: 'new@example.com', caps: 'none', value: '' }, 'Send link');
+    if (!v || !v.trim()) return;
+    const { error } = await supaClient.auth.updateUser({ email: v.trim() });
+    if (error) { await uiAlert("Couldn't change email", error.message); return; }
+    await uiAlert('Check your inbox', `Open the link sent to ${v.trim()} to finish. Until then, keep logging in with ${currentUserEmail}.`);
+  };
+  el.querySelector('#acctPw').onclick = () => askNewPassword('Change password', `Signed in as ${currentUserEmail || 'your account'}. No old password needed while you're signed in.`);
+  el.querySelector('#acctRem').onclick = () => { close(); openReminders(); };
+  el.querySelector('#acctOut').onclick = () => { close(); const b = document.getElementById('menuLogoutBtn'); if (b && b.onclick) b.onclick(); };
+  el.querySelector('#acctDel').onclick = () => { close(); document.getElementById('menuDeleteDataBtn').click(); };
+}
+document.getElementById('menuProfileBtn').addEventListener('click', openAccount);
+document.getElementById('menuPasswordBtn').addEventListener('click', openAccount);
 document.getElementById('menuReportBugBtn').addEventListener('click', async () => {
   document.getElementById('menuOverlay').classList.remove('open');
   const desc = await uiPrompt('Report a bug', "What went wrong? It's sent with your account and device info so it can be fixed.", { placeholder: 'e.g. Rest timer froze after…' }, 'Send');
