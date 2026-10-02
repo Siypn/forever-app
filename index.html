@@ -1099,6 +1099,8 @@
   .rem-tog.on { background: rgba(124,58,237,0.35); border-color: var(--rest-accent); }
   .rem-tog.on span { transform: translateX(18px); background: #fff; box-shadow: 0 0 10px rgba(167,139,250,0.9); }
   .hist-tech { font-style: normal; font-size: 10.5px; color: var(--rest-accent); }
+  /* The logo art sits on black, so it's cropped to the mark and blends into the page. */
+  .brand-mark { display: block; width: 210px; height: 92px; object-fit: cover; object-position: center; margin: 0 auto 6px; mix-blend-mode: screen; }
 </style>
 </head>
 <body>
@@ -1498,6 +1500,7 @@
 
 <div id="authOverlay" style="display:none; position:fixed; inset:0; background:var(--bg); z-index:970; overflow-y:auto;">
   <div style="max-width:400px; margin:0 auto; padding:60px 20px 40px;">
+    <img class="brand-mark" src="icon-512.png" alt="" aria-hidden="true">
     <h1 style="text-align:center; margin-bottom:4px;">FOREVER</h1>
     <div class="ex-prev" style="text-align:center; margin-bottom:28px;" id="authSubtitle">Sign in to sync your training across devices.</div>
     <div id="authError" style="display:none; color:#d9534f; font-size:12.5px; margin-bottom:14px; text-align:center;"></div>
@@ -7104,7 +7107,7 @@ function renderOnboardStep() {
   nextBtn.textContent = key === 'block' ? 'Finish' : 'Next';
 
   if (key === 'welcome') {
-    content.innerHTML = `<h1 style="font-size:26px; text-align:center; margin-top:10px;">FOREVER</h1><div class="ex-prev" style="margin-top:18px; font-size:13px; line-height:1.7; text-align:center;">A periodized training and nutrition coach — double progression on every lift, adaptive calories that adjust to your actual results, and an undulating training block sized to your experience. Let's get your program set up — takes about a minute.</div>`;
+    content.innerHTML = `<img class="brand-mark" src="icon-512.png" alt="" aria-hidden="true"><h1 style="font-size:26px; text-align:center; margin-top:0;">FOREVER</h1><div class="ex-prev" style="margin-top:18px; font-size:13px; line-height:1.7; text-align:center;">A periodized training and nutrition coach — double progression on every lift, adaptive calories that adjust to your actual results, and an undulating training block sized to your experience. Let's get your program set up — takes about a minute.</div>`;
     nextBtn.textContent = 'Get Started';
   } else if (key === 'stats') {
     content.innerHTML = onboardStatsHTML();
