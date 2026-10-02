@@ -1143,6 +1143,7 @@
   .acct-row i { font-style: normal; color: var(--text-dim); font-size: 18px; }
   div.acct-row { cursor: default; }
   .acct-del { display: block; margin: 16px auto 0; color: #e07a6f !important; font-size: 12px; }
+  .tier-chip.founder { background: linear-gradient(135deg, rgba(167,139,250,0.45), rgba(124,58,237,0.25)); border-color: #c4b5fd; box-shadow: 0 0 18px -2px rgba(167,139,250,0.95); }
 </style>
 </head>
 <body>
@@ -9786,7 +9787,9 @@ document.getElementById('menuRemindersBtn').addEventListener('click', openRemind
 // Name and photo live in profile/account; join date and email come from the login itself.
 let accountProfile = { name: '', avatarPath: null, avatarUrl: null };
 let accountMeta = { createdAt: null };
+const FOUNDER_ID = '361c934a-bbd1-4002-a4d2-20db22bd9880';
 function membershipTier() {
+  if (currentUserId === FOUNDER_ID) return { label: 'Founder', note: 'Built FOREVER' };
   if (coachProfile) return { label: 'Coach', note: 'Coach tools unlocked' };
   if (myCoaches && myCoaches.length) return { label: 'Coached', note: `With ${myCoaches[0].display_name}` };
   return { label: 'Founding member', note: 'Free during beta' };
@@ -9869,7 +9872,7 @@ async function openAccount() {
     <div class="menu-header"><span class="section-title" style="margin:0;">Account</span><button class="menu-close" id="acctCloseBtn">×</button></div>
     <label class="acct-av" id="acctAv"><span class="acct-av-in" id="acctAvIn"></span><span class="acct-av-edit">Edit</span><input type="file" accept="image/*" id="acctAvInput"></label>
     <input class="acct-name" id="acctName" value="${escHtml(accountProfile.name || '')}" placeholder="Your name" maxlength="40" autocomplete="name">
-    <div class="acct-tier"><span class="tier-chip">${escHtml(tier.label)}</span><span>${escHtml(tier.note)}</span></div>
+    <div class="acct-tier"><span class="tier-chip${tier.label === 'Founder' ? ' founder' : ''}">${escHtml(tier.label)}</span><span>${escHtml(tier.note)}</span></div>
     <div class="acct-rows">
       <div class="acct-row"><span>Member since</span><b>${escHtml(since)}</b></div>
       <button class="acct-row" id="acctEmail"><span>Email</span><b>${escHtml(currentUserEmail || '')}</b><i>›</i></button>
