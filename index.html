@@ -890,6 +890,15 @@
   @media (max-width: 380px) { .bld-ex { padding-left: 0; } .bld-day-n { min-width: 0; } }
 
   .prio-chip.dim, .prio-chip:disabled { opacity: 0.28; cursor: default; }
+
+  #choiceSheet { position: fixed; inset: 0; z-index: 980; display: none; }
+  #choiceSheet.open { display: block; }
+  #choiceSheet .is-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.62); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); animation: isFade .3s var(--ease); }
+  #choiceSheet .is-panel { position: absolute; left: 0; right: 0; bottom: 0; max-width: 560px; margin: 0 auto; background: linear-gradient(180deg, #0e0c14, #060509);
+    border-top: 1px solid rgba(167,139,250,0.35); border-radius: 22px 22px 0 0; padding: 22px 22px calc(22px + env(safe-area-inset-bottom)); box-shadow: 0 -20px 60px -20px rgba(124,58,237,0.45); animation: isUp .42s var(--ease); }
+  #choiceSheet .is-grab { width: 36px; height: 4px; border-radius: 4px; background: var(--hairline); margin: -8px auto 14px; }
+  #choiceSheet .is-kicker { font-size: 10px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--rest-accent); }
+  #choiceSheet .is-title { font-family: 'Bebas Neue', 'Outfit', sans-serif; font-size: 30px; letter-spacing: 0.5px; line-height: 1.05; margin: 8px 0 10px; }
 </style>
 </head>
 <body>
@@ -1366,8 +1375,41 @@ function renderMesoTimeline() {
 let splitPickerOpen = false;
 // Restart the current block at week 1 starting today. Workout history, PRs and your lift trends
 // are kept — only the week counter (base → overload → deload) starts over.
-async function restartBlock() {
-  blockConfig.start = todayISO();
+// Blocks start on a Monday so every block week runs Mon–Sun. Mid-week, the default is the coming
+// Monday (finish this week as it is); "start today" is there for anyone who wants it.
+function nextBlockMonday(fromIso) {
+  const iso = fromIso || todayISO();
+  const idx = DAY_ORDER.indexOf(DAY_ORDER[(new Date(iso + 'T12:00:00').getDay() + 6) % 7]);
+  return idx === 0 ? iso : addDaysISO(iso, 7 - idx);
+}
+function chooseBlockStart() {
+  const today = todayISO(), mon = nextBlockMonday(today);
+  if (mon === today) return Promise.resolve(today);
+  return new Promise(resolve => {
+    let el = document.getElementById('choiceSheet');
+    if (!el) { el = document.createElement('div'); el.id = 'choiceSheet'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); document.body.appendChild(el); }
+    const day = d => new Date(d + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
+    el.innerHTML = `<div class="is-backdrop"></div><div class="is-panel">
+      <div class="is-grab"></div>
+      <div class="is-kicker">New block</div>
+      <div class="is-title">When should week 1 start?</div>
+      <div class="ex-prev" style="margin-bottom:18px;">Starting on a Monday keeps every block week Monday to Sunday, so overload and deload weeks line up with your calendar.</div>
+      <button class="btn-primary" id="csMon" style="width:100%;">Start ${escHtml(day(mon))}</button>
+      <button class="btn-secondary" id="csToday" style="width:100%; margin-top:10px;">Start today instead</button>
+      <button class="back-link" id="csCancel" style="display:block; margin:14px auto 0;">Cancel</button>
+    </div>`;
+    el.classList.add('open');
+    const done = v => { el.classList.remove('open'); resolve(v); };
+    el.querySelector('#csMon').onclick = () => done(mon);
+    el.querySelector('#csToday').onclick = () => done(today);
+    el.querySelector('#csCancel').onclick = () => done(null);
+    el.querySelector('.is-backdrop').onclick = () => done(null);
+  });
+}
+async function restartBlock(startIso) {
+  const start = typeof startIso === 'string' ? startIso : await chooseBlockStart();
+  if (!start) return false;
+  blockConfig.start = start;
   volumeState = { blockKey: null, hist: {} }; // each block learns your volume fresh
   blockConfig.lastAckedWeek = null;
   blockConfig.forceDeload = false;
@@ -1381,15 +1423,19 @@ async function restartBlock() {
   renderWeeklyVolumePanel();
   wireRestartBlock();
   const note = document.getElementById('restartBlockNote');
-  if (note) note.textContent = `Block restarted — week 1 begins today. Your history and lift trends are kept.`;
+  if (note) note.textContent = start === todayISO()
+    ? `Block restarted — week 1 begins today. Your history and lift trends are kept.`
+    : `New block set — week 1 begins ${fmtHistoryDate(start)}. Finish this week as planned; your history and lift trends are kept.`;
+  try { renderWeekPill(); } catch (e) {}
+  return true;
 }
 function wireRestartBlock() {
   const btn = document.getElementById('restartBlockBtn');
   if (!btn) return;
   const started = !!blockConfig.start;
-  btn.textContent = started ? 'Restart block' : 'Start block today';
+  btn.textContent = started ? 'Restart block' : 'Start a block';
   const note = document.getElementById('restartBlockNote');
-  if (note && !note.textContent) note.textContent = started ? 'Starts week 1 over from today. Workout history, PRs and lift trends stay.' : '';
+  if (note && !note.textContent) note.textContent = started ? 'Starts week 1 over — from Monday, or today if you prefer. Workout history, PRs and lift trends stay.' : '';
   if (started) armConfirm(btn, 'Tap again to restart at week 1', restartBlock);
   else btn.onclick = restartBlock;
 }
@@ -2332,13 +2378,13 @@ function renderBuilderPreview(opts) {
         <div class="ex-prev" style="text-align:center;">It's on the Workout tab now — ${r.weekdays.map(d => d.slice(0, 3)).join(', ')}.</div>
         <div class="overview-actions" style="margin:22px 0 0;">
           <button class="btn-secondary" id="bldKeepBlockBtn">Keep my current block</button>
-          <button class="btn-primary" id="bldNewBlockBtn">Start week 1 today</button>
+          <button class="btn-primary" id="bldNewBlockBtn">Start a fresh block</button>
         </div>
         <div class="ex-prev" style="margin-top:10px; text-align:center;">A new program usually starts a fresh block so the weeks line up.</div>
       </div>`;
     const close = () => document.getElementById('builderOverlay').classList.remove('open');
     document.getElementById('bldKeepBlockBtn').onclick = close;
-    document.getElementById('bldNewBlockBtn').onclick = async () => { await restartBlock(); try { renderWeekPill(); await loadDay(); } catch (e) {} close(); };
+    document.getElementById('bldNewBlockBtn').onclick = async () => { if (!(await restartBlock())) return; try { renderWeekPill(); await loadDay(); } catch (e) {} close(); };
   };
 }
 async function renderBuilderUndo() {
@@ -2564,11 +2610,19 @@ function dateForWeekday(day) {
   const todayIdx = DAY_ORDER.indexOf(todayName()), idx = DAY_ORDER.indexOf(day);
   return isoOffset(todayIdx - idx); // same calendar week (Mon–Sun); positive offset = earlier this week
 }
+// An earlier day this week shows what you logged — unless your current block started after it.
+// After "Restart block" mid-week, Monday belongs to the old block, so it's shown as next Monday's plan.
+function isPastDayInBlock(day) {
+  const d = dateForWeekday(day);
+  if (d >= todayISO()) return false;
+  if (blockConfig.start && d < blockConfig.start) return false;
+  return true;
+}
 async function renderPastDaySnapshot() {
   const slot = document.getElementById('pastDaySlot');
   if (!slot) return;
   const date = dateForWeekday(currentDay);
-  if (currentDay === todayName() || date > todayISO()) { slot.innerHTML = ''; return; }
+  if (currentDay === todayName() || !isPastDayInBlock(currentDay)) { slot.innerHTML = ''; return; }
   let sess = null, sleepH = null, sore = null, food = null;
   try { const s = await db.doc(`sessions/${date}_${currentDay}`).get(); if (s.exists) sess = s.data(); } catch (e) {}
   // Did this weekday's workout get done on a later day this week instead (e.g. Monday's on Wednesday)?
@@ -3005,12 +3059,13 @@ function weekInfo() {
   const start = new Date(blockConfig.start + 'T00:00:00');
   const diffDays = Math.floor((new Date() - start) / 86400000);
   const week = Math.floor(diffDays / 7) + 1;
+  const pre = diffDays < 0; // block starts on an upcoming Monday — run week-1 targets until then
   const len = blockConfig.length;
   const clampedWeek = ((Math.max(week,1) - 1) % len) + 1;
   const phases = blockPhaseWeeks(len);
   const isDeload = clampedWeek === len || !!blockConfig.forceDeload;
   const isOverload = !isDeload && clampedWeek > phases.base;
-  return { week: clampedWeek, rawWeek: Math.max(week, 1), deload: isDeload, overload: isOverload };
+  return { week: clampedWeek, rawWeek: Math.max(week, 1), deload: isDeload, overload: isOverload, pre, startsOn: pre ? blockConfig.start : null };
 }
 
 // The weekly soreness/recovery check-in was being saved and then never read by anything — real
@@ -3494,7 +3549,7 @@ async function renderBlockReviewIfNeeded() {
     // Keep the weekday rhythm if the review happens within a week of the block ending; otherwise
     // (came back after a break) the new block starts today.
     const blockEnd = addDaysISO(blockConfig.start, blockConfig.length * 7);
-    blockConfig.start = daysBetweenISO(blockEnd, todayISO()) < 7 ? blockEnd : todayISO();
+    blockConfig.start = daysBetweenISO(blockEnd, todayISO()) < 7 ? blockEnd : nextBlockMonday(todayISO());
     blockConfig.length = newLen;
     blockConfig.lastAckedWeek = null;
     blockConfig.forceDeload = false;
@@ -3874,7 +3929,8 @@ function renderWeekPill() {
   if (!info.week) { pill.textContent = 'No block yet'; pill.classList.remove('deload'); pill.classList.add('is-empty'); }
   else {
     pill.classList.remove('is-empty');
-    pill.textContent = info.deload ? `Week ${info.week} · Deload` : `Week ${info.week}`;
+    pill.textContent = info.pre ? `Week 1 · Starts ${new Date(info.startsOn + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'short' })}`
+      : info.deload ? `Week ${info.week} · Deload` : `Week ${info.week}`;
     pill.classList.toggle('deload', info.deload);
   }
   const tipEl = document.getElementById('weekTip');
@@ -3882,7 +3938,7 @@ function renderWeekPill() {
   if (!info.week && !blockConfig.start) {
     // First run: give the one action that unlocks weekly targets right here, not two tabs away.
     const cta = document.createElement('button');
-    cta.className = 'tip-cta'; cta.id = 'tipStartBlockBtn'; cta.textContent = 'Start week 1 today →';
+    cta.className = 'tip-cta'; cta.id = 'tipStartBlockBtn'; cta.textContent = 'Start your block →';
     cta.onclick = async () => { await restartBlock(); try { renderWeekPill(); await loadDay(); } catch (e) {} };
     tipEl.appendChild(document.createElement('br'));
     tipEl.appendChild(cta);
@@ -5534,7 +5590,7 @@ function renderDayOverview() {
   const totalSets = isRest ? 0 : dayData.exercises.reduce((sum, ex) => sum + setCountFor(ex, currentDay, info), 0);
   const estMin = Math.round(totalSets * 2.5);
   // Earlier days this week show what you saved that day (read-only) instead of today's inputs.
-  const isPastDay = dateForWeekday(currentDay) < todayISO();
+  const isPastDay = isPastDayInBlock(currentDay);
 
   const statsOrRecoveryHTML = isRest ? `
     <div class="panel" style="margin:12px 0 0;"><div class="section-title">Recovery</div>
@@ -6243,7 +6299,7 @@ function onboardSplitHTML() {
   return `<div class="section-title">Your program</div>${build}<div class="cp-label" style="margin:18px 0 8px; text-transform:none; letter-spacing:0; font-size:12px;">Or pick a ready-made split</div><div style="max-height:300px; overflow-y:auto;">${rows}</div>`;
 }
 function onboardBlockHTML() {
-  const start = blockConfig.start || todayISO();
+  const start = blockConfig.start || nextBlockMonday(todayISO()); // Monday by default; any date works
   const len = obRecommendedLen || blockConfig.length || 6;
   const phases = blockPhaseWeeks(len);
   return `
