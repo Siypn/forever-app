@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>FOREVER</title>
 <!-- PWA install/offline support: without these, the home-screen icon is a generic screenshot,
      the app opens inside Safari chrome instead of fullscreen, and it can fail to load at all
@@ -1151,6 +1151,40 @@
   .cc-who { display: flex; flex-direction: column; gap: 2px; margin-bottom: 12px; }
   .cc-who b { font-size: 18px; font-weight: 600; }
   .cc-who a { font-size: 12.5px; color: var(--rest-accent); text-decoration: none; }
+  /* iPhone zooms into small text boxes when tapped; maximum-scale=1 in the viewport tag stops that (pinch-zoom still works). */
+  /* Logo mark next to the wordmark: cropped to the infinity, black blended away so it sits on the header glow. */
+  .hdr-brand { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .hdr-mark { width: 40px; height: 22px; object-fit: cover; object-position: center; transform: scale(1.18); mix-blend-mode: screen; flex-shrink: 0; }
+  @media (max-width: 360px) { .hdr-mark { width: 32px; height: 18px; } }
+
+  /* ---- Messages ---- */
+  .mt-badge { position: absolute; top: 10px; right: 10px; min-width: 18px; height: 18px; border-radius: 9px; background: var(--rest-accent); color: #fff; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; padding: 0 5px; box-shadow: 0 0 10px rgba(167,139,250,0.9); }
+  .menu-item.mt { position: relative; }
+  .menu-btn { position: relative; }
+  .menu-dot { position: absolute; top: 4px; right: 2px; width: 8px; height: 8px; border-radius: 50%; background: var(--rest-accent); box-shadow: 0 0 8px rgba(167,139,250,0.95); }
+  .chat-panel { display: flex; flex-direction: column; left: 0; right: 0; width: auto; max-width: 640px; margin: 0 auto; padding-bottom: 0 !important; }
+  .chat-head { display: flex; flex-direction: column; }
+  .chat-head b { font-size: 17px; font-weight: 600; }
+  .chat-head em { font-style: normal; font-size: 11px; color: var(--rest-accent); letter-spacing: 1px; text-transform: uppercase; }
+  .chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding: 6px 0 12px; }
+  .coach-chat { max-height: 340px; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); margin-top: 8px; padding: 10px 0; }
+  .chat-empty { color: var(--text-dim); font-size: 13px; text-align: center; padding: 24px 0; }
+  .chat-day { text-align: center; font-size: 10.5px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--text-dim); margin: 10px 0 4px; }
+  .chat-sys { text-align: center; font-size: 11.5px; color: var(--rest-accent); margin: 4px 0; }
+  .chat-b { max-width: 78%; padding: 9px 13px 6px; border-radius: 18px; font-size: 14px; line-height: 1.45; }
+  .chat-b.them { align-self: flex-start; background: rgba(255,255,255,0.07); border-bottom-left-radius: 6px; }
+  .chat-b.me { align-self: flex-end; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; border-bottom-right-radius: 6px; box-shadow: 0 6px 18px -8px rgba(124,58,237,0.8); }
+  .chat-time { font-size: 10px; opacity: 0.6; margin-top: 2px; text-align: right; }
+  .chat-input { display: flex; align-items: flex-end; gap: 8px; padding: 10px 0 calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--hairline); background: inherit; }
+  .chat-input.inline { padding-bottom: 6px; border-top: none; }
+  .chat-input textarea { flex: 1; resize: none; font: inherit; font-size: 15px; line-height: 1.4; padding: 10px 14px; border-radius: 20px; border: 1px solid var(--hairline); background: var(--bg-input); color: var(--text); max-height: 120px; }
+  .chat-input textarea:focus { border-color: var(--rest-accent); outline: none; }
+  .chat-input button { width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--rest-accent); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; box-shadow: 0 0 14px -2px rgba(167,139,250,0.8); }
+  .chat-input button svg { width: 18px; height: 18px; fill: #fff; }
+  .cc-unread { font-size: 10px; font-weight: 700; color: #fff; background: var(--rest-accent); border-radius: 999px; padding: 2px 7px; margin-left: 8px; box-shadow: 0 0 10px rgba(167,139,250,0.8); }
+  /* ---- Update bar ---- */
+  .update-bar { position: fixed; left: 12px; right: 12px; bottom: calc(76px + env(safe-area-inset-bottom)); z-index: 960; max-width: 520px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 16px; border-radius: 16px; background: rgba(14,12,20,0.92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid rgba(167,139,250,0.45); box-shadow: 0 10px 30px -10px rgba(124,58,237,0.6); font-size: 13px; animation: isUp .4s var(--ease); }
+  .update-bar button { background: #fff; color: #000; border: none; border-radius: 999px; padding: 8px 16px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -1163,10 +1197,10 @@
 
 <header>
   <div class="header-row">
-    <h1 style="font-size: 18px;">FOREVER</h1>
+    <span class="hdr-brand"><img class="hdr-mark" src="icon-192.png" alt="" aria-hidden="true"><h1 style="font-size: 18px;">FOREVER</h1></span>
     <span class="week-num is-empty" id="weekPill">No block yet</span>
     <span class="week-num" id="streakPill" style="margin-left:2px;"></span>
-    <button class="menu-btn" id="menuBtn" style="margin-left:auto;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <button class="menu-btn" id="menuBtn" style="margin-left:auto;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><i class="menu-dot" id="menuDot" style="display:none;"></i></button>
   </div>
 </header>
 
@@ -1196,6 +1230,7 @@
     <div class="menu-grid" id="menuCoachGrid" style="display:none;">
       <button class="menu-item mt" id="menuCoachDashBtn" style="display:none;"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span class="mt-l">Coach dashboard</span></button>
       <button class="menu-item mt" id="menuConnectCoachBtn" style="display:none;"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 19a6 6 0 0 1 12 0"/><path d="M16 11l2 2 4-4"/></svg><span class="mt-l">Connect to a coach</span></button>
+      <button class="menu-item mt" id="menuMessagesBtn" style="display:none;"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg><span class="mt-l">Messages</span><b class="mt-badge" id="msgBadge" style="display:none;"></b></button>
     </div>
     <div class="menu-label mg-l">Your data</div>
     <div class="menu-grid menu-grid-3">
@@ -3353,6 +3388,8 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // Supabase project backing real accounts + cross-device sync. The anon key is safe to ship in
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
+// Bumped with every release; the app compares it with the published copy to offer a refresh.
+const APP_BUILD = '2026-10-02.3';
 const SUPABASE_URL = 'https://xjvlmluycmbalzujojdm.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqdmxtbHV5Y21iYWx6dWpvamRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNzQ5MDcsImV4cCI6MjEwNTg1MDkwN30.zVGVSQ3zv_ZrVjHJP5JVCF-W2c-A7XelUYmlaTgjb8A';
 let supaClient = null;
@@ -8798,6 +8835,8 @@ async function loadCoachState() {
   const con = document.getElementById('menuConnectCoachBtn');
   if (con) { con.style.display = 'flex'; const l = con.querySelector('.mt-l') || con; l.textContent = myCoaches.length ? `Coach: ${myCoaches[0].display_name}` : 'Connect to a coach'; }
   ['menuCoachLabel', 'menuCoachGrid'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = ''; });
+  const mb = document.getElementById('menuMessagesBtn'); if (mb) mb.style.display = myCoaches.length ? 'flex' : 'none';
+  if (myCoaches.length) refreshMsgBadge();
   try { renderMenuProfile(); } catch (e) {}
 }
 document.getElementById('menuConnectCoachBtn').addEventListener('click', async () => {
@@ -8896,6 +8935,7 @@ async function renderCoachDashboard(useCache) {
     try { const docs = await fetchClientDocs(l.client_id); let sum = null; try { sum = clientSummary(docs, today); } catch (e) {} return { ...l, docs, sum }; }
     catch (e) { return { ...l, docs: [], sum: null, err: true }; }
   }));
+  await loadCoachSeen();
   const rank = c => !c.sum ? 3 : c.sum.status === 'red' ? 0 : c.sum.status === 'amber' ? 1 : 2;
   coachClients.sort((a, b) => rank(a) - rank(b));
   }
@@ -8910,7 +8950,7 @@ async function renderCoachDashboard(useCache) {
       const s = c.sum;
       if (!s) return `<div class="coach-card"><div class="cc-name">${escHtml(clientDisplayName(c))}</div><div class="ex-prev">Couldn't load this client's data.</div></div>`;
       return `<button class="coach-card" data-i="${i}">
-        <div class="cc-top"><span class="cc-dot ${s.status}"></span><span class="cc-name">${escHtml(clientDisplayName(c))}</span><span class="cc-phase">${escHtml(s.phaseLabel)}</span></div>
+        <div class="cc-top"><span class="cc-dot ${s.status}"></span><span class="cc-name">${escHtml(clientDisplayName(c))}</span>${clientUnread(c) ? `<span class="cc-unread">${clientUnread(c)} new</span>` : ''}<span class="cc-phase">${escHtml(s.phaseLabel)}</span></div>
         <div class="cc-email">${escHtml(c.client_email || '')}</div>
         <div class="cc-stats">
           <span><b>${s.workouts7}</b> workouts/7d</span>
@@ -8974,10 +9014,7 @@ function coachManageHTML(c) {
     <datalist id="cmLib">${libNames.map(n => `<option value="${escHtml(n)}">`).join('')}</datalist>
     <div class="cm-days">${DAY_ORDER.map(d => `<button class="cm-day" data-d="${d}"><span>${d.slice(0, 3)}</span><b>${escHtml(prog.days[d].title || 'Rest')}</b><em>${(prog.days[d].exercises || []).length || ''}</em></button>`).join('')}</div>
     <div id="cmDayEdit"></div>
-    <div class="cp-label" style="margin-top:20px;">Send a note</div>
-    <textarea id="cmNote" rows="3" placeholder="e.g. Great week. Push the last set on curls to failure."></textarea>
-    <button class="btn-primary" id="cmSendNote" style="width:100%; margin-top:10px;">Send note</button>
-    <div class="ex-prev" style="margin-top:6px;">They see it the next time they open the app.</div>`;
+`;
 }
 function wireCoachManage(c) {
   const body = document.getElementById('coachBody');
@@ -9003,11 +9040,7 @@ function wireCoachManage(c) {
     await coachNote(c, '', changes.join(', '));
     await refreshClient(c);
   });
-  document.getElementById('cmSendNote').onclick = (e) => {
-    const v = document.getElementById('cmNote').value.trim();
-    if (!v) return;
-    busy(e.target, async () => { await coachNote(c, v.slice(0, 2000)); document.getElementById('cmNote').value = ''; }, 'Sent');
-  };
+
   body.querySelectorAll('.cm-day').forEach(b => b.onclick = () => {
     body.querySelectorAll('.cm-day').forEach(x => x.classList.toggle('selected', x === b));
     renderCoachDayEdit(c, b.dataset.d);
@@ -9049,6 +9082,143 @@ function renderCoachDayEdit(c, day) {
     } catch (e) { btn.disabled = false; btn.textContent = `Save ${day}`; await uiAlert("Couldn't save", (e && e.message) || 'Check your connection and try again.'); }
   };
 }
+
+// ---------- Messages (coach ⇄ client) ----------
+// One thread per client, stored in the CLIENT's documents: coachNotes/<ts> are written by the coach
+// (plan changes are logged there too), messages/<ts> are the client's replies. Database rules already
+// let a client write their own docs and a linked coach read them and write coachNotes/*.
+function threadFromDocs(docs) {
+  const out = [];
+  docs.forEach(d => {
+    const x = d.data || {};
+    if (!x.ts) return;
+    if (d.path.startsWith('coachNotes/')) {
+      if (x.text) out.push({ who: 'coach', text: x.text, ts: x.ts, from: x.from });
+      if (x.changed) out.push({ who: 'system', text: `${x.from || 'Coach'} updated your ${x.changed}.`, ts: x.ts + (x.text ? 1 : 0) });
+    } else if (d.path.startsWith('messages/') && x.text) out.push({ who: 'client', text: x.text, ts: x.ts });
+  });
+  return out.sort((a, b) => a.ts - b.ts);
+}
+function threadHTML(msgs, mine) {
+  if (!msgs.length) return `<div class="chat-empty">No messages yet. Say hi 👋</div>`;
+  let lastDay = '';
+  return msgs.map(m => {
+    const d = new Date(m.ts), day = d.toDateString();
+    const sep = day !== lastDay ? `<div class="chat-day">${escHtml(d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }))}</div>` : '';
+    lastDay = day;
+    if (m.who === 'system') return sep + `<div class="chat-sys">${escHtml(m.text)}</div>`;
+    const me = m.who === mine;
+    return sep + `<div class="chat-b ${me ? 'me' : 'them'}"><div class="chat-t">${escHtml(m.text).replace(/\n/g, '<br>')}</div><div class="chat-time">${escHtml(d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }))}</div></div>`;
+  }).join('');
+}
+async function notifyMessage(toUserId, text) {
+  try {
+    const { data } = await supaClient.auth.getSession();
+    const token = data && data.session && data.session.access_token;
+    if (!token) return;
+    await fetch(`${SUPABASE_URL}/functions/v1/send-reminders`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, apikey: SUPABASE_ANON_KEY }, body: JSON.stringify({ mode: 'message', to: toUserId, text: String(text).slice(0, 140) }) });
+  } catch (e) {}
+}
+// --- client side ---
+async function loadClientThread() {
+  const docs = [];
+  for (const col of ['coachNotes', 'messages']) {
+    try { const snap = await db.collection(col).get(); (snap.docs || []).forEach(d => docs.push({ path: `${col}/${d.id}`, data: d.data() })); } catch (e) {}
+  }
+  return threadFromDocs(docs);
+}
+async function refreshMsgBadge() {
+  if (!db || db.__local || !myCoaches.length) return;
+  let seen = 0;
+  try { const m = await db.doc('meta/coachNoteSeen').get(); if (m.exists) seen = m.data().ts || 0; } catch (e) {}
+  const msgs = await loadClientThread();
+  const n = msgs.filter(m => m.who !== 'client' && m.ts > seen).length;
+  const b = document.getElementById('msgBadge'); if (b) { b.textContent = n; b.style.display = n ? '' : 'none'; }
+  const dot = document.getElementById('menuDot'); if (dot) dot.style.display = n ? '' : 'none';
+}
+let chatPoll = null;
+async function openClientChat() {
+  document.getElementById('menuOverlay').classList.remove('open');
+  if (!myCoaches.length) { await uiAlert('No coach yet', 'Connect to a coach from the menu first.'); return; }
+  const coach = myCoaches[0];
+  let el = document.getElementById('chatOverlay');
+  if (!el) { el = document.createElement('div'); el.id = 'chatOverlay'; el.className = 'menu-overlay'; document.body.appendChild(el); }
+  el.innerHTML = `<div class="menu-panel chat-panel">
+    <div class="menu-header"><span class="chat-head"><b>${escHtml(coach.display_name || 'Your coach')}</b><em>Your coach</em></span><button class="menu-close" id="chatClose">×</button></div>
+    <div class="chat-list" id="chatList"><div class="chat-empty">Loading…</div></div>
+    <div class="chat-input"><textarea id="chatText" rows="1" maxlength="2000" placeholder="Message ${escHtml(coach.display_name || 'your coach')}"></textarea><button id="chatSend" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg></button></div>
+  </div>`;
+  el.classList.add('open');
+  const list = el.querySelector('#chatList'), ta = el.querySelector('#chatText');
+  const draw = async () => {
+    const msgs = await loadClientThread();
+    const atBottom = list.scrollHeight - list.scrollTop - list.clientHeight < 60;
+    list.innerHTML = threadHTML(msgs, 'client');
+    if (atBottom || !list.dataset.drawn) list.scrollTop = list.scrollHeight;
+    list.dataset.drawn = '1';
+    const lastCoach = msgs.filter(m => m.who !== 'client').pop();
+    if (lastCoach) { try { await db.doc('meta/coachNoteSeen').set({ ts: Math.max(lastCoach.ts, Date.now()) }); } catch (e) {} }
+    refreshMsgBadge();
+  };
+  const close = () => { el.classList.remove('open'); if (chatPoll) { clearInterval(chatPoll); chatPoll = null; } };
+  el.querySelector('#chatClose').onclick = close;
+  ta.oninput = () => { ta.style.height = 'auto'; ta.style.height = Math.min(120, ta.scrollHeight) + 'px'; };
+  el.querySelector('#chatSend').onclick = async () => {
+    const t = ta.value.trim(); if (!t) return;
+    ta.value = ''; ta.style.height = 'auto';
+    const ts = Date.now();
+    try { await db.doc(`messages/${ts}`).set({ text: t.slice(0, 2000), ts, date: todayISO() }); } catch (e) { ta.value = t; await uiAlert("Couldn't send", 'Check your connection and try again.'); return; }
+    await draw();
+    notifyMessage(coach.coach_id, t);
+  };
+  await draw();
+  if (chatPoll) clearInterval(chatPoll);
+  chatPoll = setInterval(() => { if (el.classList.contains('open')) draw(); else { clearInterval(chatPoll); chatPoll = null; } }, 15000);
+}
+document.getElementById('menuMessagesBtn').addEventListener('click', openClientChat);
+// --- coach side ---
+async function fetchThreadFor(clientId) {
+  const { data, error } = await supaClient.from('documents').select('path,data').eq('user_id', clientId).or('path.like.coachNotes/%,path.like.messages/%');
+  if (error) throw error;
+  return threadFromDocs(data || []);
+}
+let coachSeenMap = {};
+async function loadCoachSeen() {
+  coachSeenMap = {};
+  try { const snap = await db.collection('coachSeen').get(); (snap.docs || []).forEach(d => { coachSeenMap[d.id] = (d.data() || {}).ts || 0; }); } catch (e) {}
+}
+function clientUnread(c) {
+  const seen = coachSeenMap[c.client_id] || 0;
+  return (c.docs || []).filter(d => d.path.startsWith('messages/') && d.data && d.data.ts > seen && d.data.text).length;
+}
+let coachChatPoll = null;
+async function wireCoachChat(c) {
+  const list = document.getElementById('ccChat'), ta = document.getElementById('ccChatText');
+  if (!list) return;
+  const draw = async () => {
+    if (!document.getElementById('ccChat')) { if (coachChatPoll) { clearInterval(coachChatPoll); coachChatPoll = null; } return; }
+    let msgs = [];
+    try { msgs = await fetchThreadFor(c.client_id); } catch (e) { list.innerHTML = '<div class="chat-empty">Couldn’t load messages.</div>'; return; }
+    list.innerHTML = threadHTML(msgs.slice(-40), 'coach');
+    list.scrollTop = list.scrollHeight;
+    const lastClient = msgs.filter(m => m.who === 'client').pop();
+    if (lastClient && lastClient.ts > (coachSeenMap[c.client_id] || 0)) {
+      coachSeenMap[c.client_id] = lastClient.ts;
+      try { await db.doc(`coachSeen/${c.client_id}`).set({ ts: lastClient.ts }); } catch (e) {}
+    }
+  };
+  ta.oninput = () => { ta.style.height = 'auto'; ta.style.height = Math.min(120, ta.scrollHeight) + 'px'; };
+  document.getElementById('ccChatSend').onclick = async () => {
+    const t = ta.value.trim(); if (!t) return;
+    ta.value = ''; ta.style.height = 'auto';
+    try { await coachNote(c, t.slice(0, 2000)); } catch (e) { ta.value = t; await uiAlert("Couldn't send", (e && e.message) || 'Check your connection and try again.'); return; }
+    await draw();
+    notifyMessage(c.client_id, t);
+  };
+  await draw();
+  if (coachChatPoll) clearInterval(coachChatPoll);
+  coachChatPoll = setInterval(draw, 15000);
+}
 async function renderCoachClient(c) {
   const body = document.getElementById('coachBody');
   const s = c.sum, nm = clientDisplayName(c);
@@ -9069,6 +9239,9 @@ async function renderCoachClient(c) {
   body.innerHTML = `
     <button class="back-link" id="coachBackBtn" style="padding:0 0 10px;">‹ All clients</button>
     <div class="cc-who"><b>${escHtml(clientDisplayName(c))}</b><a href="mailto:${escHtml(c.client_email || '')}">${escHtml(c.client_email || '')}</a></div>
+    <div class="cp-label" style="margin-top:6px;">Messages</div>
+    <div class="chat-list coach-chat" id="ccChat"><div class="chat-empty">Loading…</div></div>
+    <div class="chat-input inline"><textarea id="ccChatText" rows="1" maxlength="2000" placeholder="Message ${escHtml(clientDisplayName(c))}"></textarea><button id="ccChatSend" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg></button></div>
     <div class="cc-flags" style="margin-bottom:12px;">${s.flags.length ? s.flags.map(fl => `<span class="cc-flag l${fl.lvl}">${escHtml(fl.t)}</span>`).join('') : '<span class="cc-flag ok">On track</span>'}</div>
     <div class="coach-grid">
       <div><div class="bc-num">${s.weightNow ? s.weightNow.toFixed(1) : '—'}</div><div class="bc-lbl">lb${s.rate != null ? ` · ${f(s.rate)}/wk` : ''}</div></div>
@@ -9084,8 +9257,9 @@ async function renderCoachClient(c) {
     <div id="coachPhotos" class="coach-photos"><div class="ex-prev">Loading…</div></div>
     ${coachManageHTML(c)}
     <button class="btn-secondary" id="coachRemoveBtn" style="width:100%; margin-top:22px;">Remove client</button>`;
-  document.getElementById('coachBackBtn').onclick = () => renderCoachDashboard(true);
+  document.getElementById('coachBackBtn').onclick = () => { if (coachChatPoll) { clearInterval(coachChatPoll); coachChatPoll = null; } renderCoachDashboard(); };
   wireCoachManage(c);
+  wireCoachChat(c);
   document.getElementById('coachRemoveBtn').onclick = async () => {
     if (!(await uiConfirm(`Remove ${nm}?`, "You'll stop seeing their data. They can reconnect with your code.", 'Remove', { danger: true }))) return;
     try { await supaClient.from('coach_links').delete().eq('coach_id', currentUserId).eq('client_id', c.client_id); } catch (e) {}
@@ -9667,9 +9841,12 @@ async function maybeShowCoachNote() {
     if (!fresh.length) return;
     if (document.querySelector('#uiSheet.open, #introSheet.open, #choiceSheet.open, #remSheet.open') || (document.getElementById('onboardingOverlay') || {}).style && document.getElementById('onboardingOverlay').style.display === 'block') { setTimeout(maybeShowCoachNote, 4000); return; }
     const n = fresh[0];
-    await uiDialog({ kicker: `From ${n.from || 'your coach'}`, title: fresh.length > 1 ? `${fresh.length} new notes` : 'A note from your coach',
-      text: fresh.slice(0, 4).map(x => `${x.date ? fmtHistoryDate(x.date) + ' — ' : ''}${x.text || ''}${x.text && x.changed ? ' ' : ''}${x.changed ? `Updated your ${x.changed}.` : ''}`).join('\n\n'), ok: 'Got it' });
+    const hasText = fresh.some(x => x.text);
+    const r = await uiDialog({ kicker: `From ${n.from || 'your coach'}`, title: fresh.length > 1 ? `${fresh.length} new messages` : (hasText ? 'New message from your coach' : 'Your coach updated your plan'),
+      text: fresh.slice(0, 4).map(x => `${x.text || ''}${x.text && x.changed ? ' ' : ''}${x.changed ? `Updated your ${x.changed}.` : ''}`).join('\n\n'), ok: hasText ? 'Reply' : 'Got it', cancel: hasText ? 'Later' : null });
     await db.doc('meta/coachNoteSeen').set({ ts: n.ts });
+    refreshMsgBadge();
+    if (hasText && r.ok) openClientChat();
   } catch (e) {}
 }
 async function useLocalMode() {
@@ -9709,6 +9886,36 @@ async function useSupabaseSession(session) {
 // error stream, tagged as manual feedback, viewable in the Sentry dashboard.
 let currentUserEmail = null;
 
+
+// ---------- "New version ready" ----------
+// Phones keep running whatever copy they opened. Every so often (and when you come back to the app)
+// check the published index.html; if its build is newer, offer a one-tap refresh.
+let updateCheckedAt = 0, updateShown = false;
+async function checkForUpdate(force) {
+  if (updateShown || location.protocol === 'file:' || !navigator.onLine) return;
+  if (!force && Date.now() - updateCheckedAt < 5 * 60000) return;
+  updateCheckedAt = Date.now();
+  try {
+    const res = await fetch(`${location.pathname.replace(/[^/]*$/, '')}index.html?check=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) return;
+    const m = (await res.text()).match(/const APP_BUILD = '([^']+)'/);
+    if (m && m[1] && m[1] !== APP_BUILD) showUpdateBar();
+  } catch (e) {}
+}
+function showUpdateBar() {
+  if (updateShown) return; updateShown = true;
+  const bar = document.createElement('div');
+  bar.className = 'update-bar';
+  bar.innerHTML = `<span>New version of FOREVER ready</span><button>Refresh</button>`;
+  bar.querySelector('button').onclick = () => {
+    if (dayMode === 'active') { try { autoSaveDay(); } catch (e) {} }
+    setTimeout(() => location.reload(), 300);
+  };
+  document.body.appendChild(bar);
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checkForUpdate(); });
+setInterval(() => checkForUpdate(), 30 * 60000);
+setTimeout(() => checkForUpdate(true), 8000);
 // ---------- Reminders (web push) ----------
 // The server checks hourly in your time zone and only nudges when something's still undone:
 // weigh-in, today's workout, Friday photos, the weekly check-in. On iPhone, web notifications only
