@@ -1,4 +1,4 @@
-const CACHE_NAME = 'forever-app-v8';
+const CACHE_NAME = 'forever-app-v9';
 // Fonts live in their own cache so an app update never throws them away.
 const FONT_CACHE = 'forever-fonts-v1';
 const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png',
@@ -61,4 +61,25 @@ self.addEventListener('fetch', (event) => {
       return new Response('Offline and not cached yet.', { status: 503 });
     }
   })());
+});
+
+// Reminders (sent by the server only when something's still undone today).
+self.addEventListener('push', (event) => {
+  let d = {};
+  try { d = event.data ? event.data.json() : {}; } catch (e) { d = { body: event.data ? event.data.text() : '' }; }
+  event.waitUntil(self.registration.showNotification(d.title || 'FOREVER', {
+    body: d.body || '',
+    tag: d.tag || 'forever',
+    icon: './icon-192.png',
+    badge: './icon-192.png',
+    data: { url: d.url || './' },
+  }));
+});
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = new URL((event.notification.data && event.notification.data.url) || './', self.registration.scope).href;
+  event.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+    for (const c of list) { if (c.url.startsWith(self.registration.scope) && 'focus' in c) return c.focus(); }
+    return self.clients.openWindow(url);
+  }));
 });

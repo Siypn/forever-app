@@ -984,7 +984,8 @@
   .rate-scale { height: 2px; box-shadow: 0 0 12px rgba(167,139,250,0.55); }
   .run-note { text-shadow: 0 0 14px rgba(167,139,250,0.35); }
   .pr-chase { text-shadow: 0 0 14px rgba(167,139,250,0.6); }
-  .run-next-n { text-shadow: 0 0 12px rgba(255,255,255,0.12); }
+  .run-next-n { text-shadow: none; }
+  .run-next.ready .run-next-n { text-shadow: none !important; filter: drop-shadow(0 0 10px rgba(255,255,255,0.4)) drop-shadow(0 0 22px rgba(167,139,250,0.35)); }
   /* Recovery question: underline segments, not pills */
   .rec-opts { gap: 0; border-bottom: 1px solid var(--hairline); }
   .rec-opts button { border: none; border-radius: 0; padding: 10px 4px 11px; font-size: 12.5px; color: var(--text-dim); position: relative; transition: color .2s var(--ease); }
@@ -1019,6 +1020,85 @@
   .conf-opt { background: none; border: none; font: inherit; font-size: 12px; color: var(--text-dim); padding: 6px 10px; cursor: pointer; position: relative; }
   .conf-opt.selected { color: #fff; }
   .conf-opt.selected::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: 1px; height: 2px; border-radius: 2px; background: var(--rest-accent); box-shadow: 0 0 8px rgba(167,139,250,0.8); }
+
+  .form-cue { margin: 2px 0 6px; }
+  .form-cue summary { list-style: none; display: inline-flex; align-items: center; gap: 6px; font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--rest-accent); cursor: pointer; padding: 4px 0; }
+  .form-cue summary::-webkit-details-marker { display: none; }
+  .form-cue summary::after { content: '+'; font-size: 13px; letter-spacing: 0; transition: transform .25s var(--ease); }
+  .form-cue[open] summary::after { transform: rotate(45deg); }
+  .cue-l { display: grid; grid-template-columns: 54px 1fr; gap: 8px; font-size: 12.5px; line-height: 1.5; color: var(--text); padding: 5px 0; border-bottom: 1px solid var(--hairline); }
+  .cue-l:last-child { border-bottom: none; }
+  .cue-l b { font-weight: 500; font-size: 10.5px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-dim); padding-top: 2px; }
+
+  .bw-note { text-align: center; font-size: 11px; color: var(--text-dim); margin-top: 14px; }
+
+  .kick-ss { color: #fff !important; }
+  .ss-banner { display: inline-block; margin: 2px 0 6px; font-size: 11.5px; color: var(--rest-accent); text-shadow: 0 0 12px rgba(167,139,250,0.5); }
+  .run-dot.in-ss::after { background: rgba(167,139,250,0.22); }
+  .run-dot.ss-cont { margin-left: -3px; }
+  .tech-block { margin-top: 26px; text-align: center; }
+  .tech-k { font-size: 10.5px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--rest-accent); }
+  .tech-title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 0.6px; line-height: 1; margin: 6px 0 8px; text-shadow: 0 0 20px rgba(255,255,255,0.3), 0 0 40px rgba(167,139,250,0.3); }
+  .tech-how { font-size: 12.5px; color: var(--text-dim); line-height: 1.5; max-width: 340px; margin: 0 auto 16px; }
+  .tech-minis { border-top: 1px solid var(--hairline); margin: 0 0 14px; }
+  .tech-mini { display: flex; justify-content: space-between; padding: 9px 2px; border-bottom: 1px solid var(--hairline); font-size: 13px; }
+  .tech-mini span:first-child { color: var(--text-dim); }
+  .tech-count { font-family: 'Bebas Neue', sans-serif; font-size: 84px; line-height: 1; color: #fff; filter: drop-shadow(0 0 14px rgba(255,255,255,0.4)) drop-shadow(0 0 30px rgba(167,139,250,0.6)); }
+  .tech-msg { font-size: 12.5px; color: var(--text-dim); margin-top: 6px; }
+  .tech-inputs { display: flex; justify-content: center; gap: 18px; }
+  .tech-inputs label { display: flex; flex-direction: column; gap: 6px; font-size: 10.5px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--text-dim); }
+  .tech-inputs input { width: 110px; text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 40px !important; padding: 6px 0 !important; background: none !important; border: none !important; border-bottom: 1px solid var(--hairline) !important; border-radius: 0 !important; color: #fff; }
+
+  .pv-help { font-size: 12px; color: var(--text-dim); line-height: 1.55; margin: 10px 0 14px; }
+  .pv-help b { color: var(--text); font-weight: 500; }
+  .pv-row { border-top: 1px solid var(--hairline); padding: 6px 0 8px; }
+  .pv-row.in-ss { border-left: 2px solid var(--rest-accent); padding-left: 12px; box-shadow: -8px 0 16px -12px rgba(167,139,250,0.8); }
+  .pv-ss-tag { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--rest-accent); margin: 4px 0 2px; }
+  .pv-tech { display: flex; align-items: center; gap: 10px; font-size: 11.5px; color: var(--text-dim); }
+  .pv-tech select { background: none; border: none; border-bottom: 1px solid var(--hairline); border-radius: 0; color: var(--text); font-size: 12px; padding: 3px 2px; }
+  .pv-link { display: block; width: 100%; background: none; border: none; color: var(--text-dim); font: inherit; font-size: 11px; padding: 6px 0; cursor: pointer; text-align: center; letter-spacing: 0.3px; }
+  .pv-link.on { color: var(--rest-accent); }
+
+  .ss-tag { display: inline-block; min-width: 20px; margin-right: 8px; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; color: var(--rest-accent); }
+
+  .cm-row { display: flex; gap: 12px; }
+  .cm-row label { flex: 1; display: flex; flex-direction: column; gap: 6px; font-size: 11px; color: var(--text-dim); }
+  .cm-row select, .cm-row input { width: 100%; }
+  .cm-days { display: grid; grid-template-columns: repeat(7, 1fr); border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
+  .cm-day { background: none; border: none; color: var(--text-dim); font: inherit; padding: 10px 2px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; position: relative; min-width: 0; }
+  .cm-day span { font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; }
+  .cm-day b { font-size: 10px; font-weight: 500; color: var(--text); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cm-day em { font-style: normal; font-size: 10px; color: var(--rest-accent); min-height: 12px; }
+  .cm-day.selected::after { content: ''; position: absolute; left: 20%; right: 20%; bottom: -1px; height: 2px; background: var(--rest-accent); box-shadow: 0 0 8px rgba(167,139,250,0.8); }
+  .cm-edit { padding: 12px 0 0; }
+  .cm-edit #cmTitle { width: 100%; margin-bottom: 8px; }
+  .cm-ex { display: flex; gap: 6px; margin-bottom: 6px; }
+  .cm-ex .cm-ex-n { flex: 1; min-width: 0; }
+  .cm-ex .cm-ex-t { width: 104px; }
+  .cm-x { background: none; border: none; color: var(--text-dim); font-size: 20px; width: 30px; cursor: pointer; }
+  #cmNote { width: 100%; resize: vertical; font: inherit; font-size: 14px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--hairline); background: var(--bg-input); color: var(--text); }
+
+  .rem-sheet { position: fixed; inset: 0; z-index: 985; display: none; }
+  .rem-sheet.open { display: block; }
+  .rem-sheet .is-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.62); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+  .rem-sheet .is-panel { position: absolute; left: 0; right: 0; bottom: 0; max-width: 560px; margin: 0 auto; max-height: 88vh; overflow-y: auto; background: linear-gradient(180deg, #0e0c14, #060509);
+    border-top: 1px solid rgba(167,139,250,0.35); border-radius: 22px 22px 0 0; padding: 22px 22px calc(22px + env(safe-area-inset-bottom)); box-shadow: 0 -20px 60px -20px rgba(124,58,237,0.45); animation: isUp .38s var(--ease); }
+  .rem-sheet .is-grab { width: 36px; height: 4px; border-radius: 4px; background: var(--hairline); margin: -8px auto 14px; }
+  .rem-sheet .is-kicker { font-size: 10px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--rest-accent); }
+  .rem-sheet .is-title { font-family: 'Bebas Neue', 'Outfit', sans-serif; font-size: 28px; letter-spacing: 0.5px; line-height: 1.05; margin: 6px 0 8px; }
+  .rem-text { font-size: 13px; line-height: 1.55; color: var(--text-dim); }
+  .rem-steps { margin: 10px 0 0 18px; padding: 0; font-size: 13.5px; line-height: 1.7; }
+  .rem-row { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--hairline); }
+  .rem-row:first-of-type { border-top: 1px solid var(--hairline); margin-top: 14px; }
+  .rem-l { flex: 1; min-width: 0; }
+  .rem-l b { display: block; font-weight: 500; font-size: 14px; }
+  .rem-l em { display: block; font-style: normal; font-size: 11.5px; color: var(--text-dim); margin-top: 2px; }
+  .rem-row select { background: none; border: none; border-bottom: 1px solid var(--hairline); border-radius: 0; color: var(--text); font-size: 13px; padding: 3px 2px; }
+  .rem-tog { width: 42px; height: 24px; border-radius: 999px; border: 1px solid var(--hairline); background: rgba(255,255,255,0.06); position: relative; cursor: pointer; flex-shrink: 0; transition: background .25s var(--ease), border-color .25s var(--ease); }
+  .rem-tog span { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: var(--text-dim); transition: transform .25s var(--ease), background .25s var(--ease); }
+  .rem-tog.on { background: rgba(124,58,237,0.35); border-color: var(--rest-accent); }
+  .rem-tog.on span { transform: translateX(18px); background: #fff; box-shadow: 0 0 10px rgba(167,139,250,0.9); }
+  .hist-tech { font-style: normal; font-size: 10.5px; color: var(--rest-accent); }
 </style>
 </head>
 <body>
@@ -1057,6 +1137,7 @@
     <button class="menu-item" id="menuRestoreBtn">Restore from backup</button>
     <input type="file" id="restoreFileInput" accept="application/json,.json" style="display:none;">
     <button class="menu-item" id="menuOnboardBtn">Run setup wizard again</button>
+    <button class="menu-item" id="menuRemindersBtn" style="display:none;">Reminders</button>
     <button class="menu-item" id="menuConnectCoachBtn" style="display:none;">Connect to a coach</button>
     <button class="menu-item" id="menuReportBugBtn" style="display:none;">Report a bug</button>
     <button class="menu-item" id="menuLogoutBtn" style="display:none;">Log out</button>
@@ -1888,6 +1969,8 @@ const EXERCISE_LIBRARY = {
   ],
 };
 
+// Short form cues for every library exercise (shown in the workout under the exercise name).
+const EXERCISE_CUES = {"Push-Up":{"setup":"Hands slightly wider than shoulders, body straight from head to heels.","do":"Lower your chest to the floor over 2-3 s, then press up without sagging hips.","feel":"Chest and triceps; scale on knees or an incline if needed."},"Deficit Push-Up":{"setup":"Hands on plates or handles, body straight, core braced.","do":"Lower slowly below hand level for a deep chest stretch, then press up smoothly.","feel":"Deep chest stretch; don't let hips sag or shoulders shrug."},"Dumbbell Bench Press":{"setup":"Lie flat, shoulder blades pinched, feet planted, dumbbells over chest.","do":"Lower 2-3 s to a deep stretch beside your chest, then press up and slightly in.","feel":"Chest working; keep elbows about 45 degrees, not flared wide."},"Incline Dumbbell Press":{"setup":"Bench at 30-45 degrees, shoulder blades back and down.","do":"Lower 2-3 s to upper-chest level for a deep stretch, then press up.","feel":"Upper chest; don't let the bench angle turn it into shoulders."},"Dumbbell Floor Press":{"setup":"Lie on the floor, knees bent, dumbbells over chest.","do":"Lower until upper arms lightly touch the floor, pause, then press up.","feel":"Chest and triceps; don't bounce elbows off the floor."},"Dumbbell Fly":{"setup":"Lie flat, dumbbells over chest, palms facing, slight bend in elbows.","do":"Open arms wide over 2-3 s to a deep chest stretch, then hug back up.","feel":"Stretch across the chest; keep elbow bend fixed, don't press."},"Incline Dumbbell Fly":{"setup":"Bench at 30 degrees, dumbbells over chest, elbows softly bent.","do":"Arc the weights out and down to a deep stretch, then squeeze back together.","feel":"Upper chest stretch; don't lower past where shoulders feel strained."},"Band Chest Fly":{"setup":"Anchor band behind you at chest height, arms out, elbows soft.","do":"Bring hands together in front in a wide arc, then return slowly.","feel":"Squeeze the chest at the middle; don't bend elbows to press."},"Barbell Bench Press":{"setup":"Eyes under bar, shoulder blades pinched, feet planted, grip slightly wider than shoulders.","do":"Lower 2-3 s to mid-chest with elbows tucked about 45 degrees, then press up.","feel":"Chest driving the bar; don't bounce it off your chest."},"Smith Bench Press":{"setup":"Bench set so the bar lands on mid-chest, shoulder blades pinched.","do":"Lower the bar 2-3 s to touch mid-chest, then press up under control.","feel":"Chest and triceps; keep shoulders pinned down, not rolling forward."},"Incline Barbell Press":{"setup":"Bench at 30-45 degrees, grip slightly wider than shoulders, blades pinched.","do":"Lower 2-3 s to upper chest, then press straight up.","feel":"Upper chest; avoid flaring elbows straight out."},"Incline Smith Press":{"setup":"Incline bench at 30-45 degrees, bar lined up with upper chest.","do":"Lower 2-3 s to upper chest for a full stretch, then press up.","feel":"Upper chest; keep shoulder blades pinned throughout."},"Decline Barbell Press":{"setup":"Lie on decline bench, legs secured, grip slightly wider than shoulders.","do":"Lower 2-3 s to lower chest, then press up over your chest.","feel":"Lower chest; use a spotter and never bounce the bar."},"Machine Chest Press":{"setup":"Seat so handles align with mid-chest, back flat, blades pinched.","do":"Press out without locking hard, then return slowly for a full chest stretch.","feel":"Chest working; don't let shoulders roll forward at lockout."},"Dips":{"setup":"Grip parallel bars, lean torso slightly forward, elbows tucked.","do":"Lower 2-3 s until a deep chest stretch, then press up without swinging.","feel":"Chest and triceps; use assistance if you can't control the bottom."},"Pec Deck":{"setup":"Seat so handles are at chest height, back flat against pad.","do":"Bring arms together in an arc, squeeze, then open slowly to a deep stretch.","feel":"Inner and middle chest; don't let shoulders roll forward."},"Cable Fly Chest":{"setup":"Pulleys at shoulder height, staggered stance, slight lean, elbows softly bent.","do":"Arc hands together in front of chest, then open slowly to a full stretch.","feel":"Chest squeeze at the middle; keep elbow angle fixed."},"Cable Crossover":{"setup":"Pulleys set high, step forward, slight lean, elbows softly bent.","do":"Sweep hands down and together in front of hips, then return slowly.","feel":"Lower chest; don't turn it into a pressing motion."},"Low-to-High Cable Fly":{"setup":"Pulleys set low, stand between them, elbows softly bent.","do":"Sweep hands up and together to upper-chest height, then lower slowly.","feel":"Upper chest; don't shrug or use your front delts to lift."},"Plate-Loaded Chest Press":{"setup":"Seat so handles line up with mid-chest, back flat, blades pinched.","do":"Press out smoothly, then return 2-3 s to a deep chest stretch.","feel":"Chest working; keep shoulders down, not shrugged."},"Plate-Loaded Incline Press":{"setup":"Seat so handles align with upper chest, back flat, blades pinched.","do":"Press up and out, then lower 2-3 s to a full stretch.","feel":"Upper chest; don't let lower back arch off the pad."},"Converging Chest Press":{"setup":"Seat so handles start at mid-chest, shoulder blades pinched.","do":"Press handles forward and together, then return slowly for a deep stretch.","feel":"Chest squeezing as handles converge; avoid locking elbows hard."},"Decline Chest Press Machine":{"setup":"Seat so handles line up with lower chest, back flat against pad.","do":"Press down and out, then return 2-3 s to a full stretch.","feel":"Lower chest; keep shoulders back, not rolled forward."},"Incline Pec Deck":{"setup":"Adjust seat so handles track toward upper chest, back flat.","do":"Arc arms together and up, squeeze, then open slowly to a deep stretch.","feel":"Upper chest; don't shrug shoulders toward ears."},"Pull-Up":{"setup":"Overhand grip slightly wider than shoulders, hang with arms straight.","do":"Pull chest toward the bar driving elbows down, then lower 2-3 s to a full hang.","feel":"Lats; avoid kipping, use bands or assistance to scale."},"Chin-Up":{"setup":"Underhand grip shoulder-width, hang with arms straight.","do":"Pull chin over the bar driving elbows down, then lower 2-3 s fully.","feel":"Lats and biceps; no swinging or half reps."},"Inverted Row":{"setup":"Lie under a bar at hip height, body straight, heels on floor.","do":"Pull chest to the bar squeezing shoulder blades, then lower slowly.","feel":"Mid back; bend knees to make it easier."},"Dumbbell Row":{"setup":"One hand and knee on bench, back flat, dumbbell hanging straight down.","do":"Pull dumbbell toward your hip, then lower 2-3 s to a full stretch.","feel":"Lats; don't twist your torso to heave the weight."},"Chest-Supported Dumbbell Row":{"setup":"Lie chest-down on an incline bench, dumbbells hanging straight down.","do":"Row elbows back past your torso, then lower slowly to a full stretch.","feel":"Upper and mid back; keep chest glued to the pad."},"Band Pulldown":{"setup":"Anchor band overhead, kneel or sit, arms extended up.","do":"Pull elbows down to your sides, then let arms rise slowly.","feel":"Lats; don't lean back or shrug."},"Dumbbell Pullover":{"setup":"Lie across or along a bench, hold one dumbbell over chest with both hands.","do":"Lower behind your head with soft elbows to a deep stretch, then pull back over.","feel":"Lats stretching; don't bend elbows more to turn it into a press."},"Barbell Row":{"setup":"Hinge to about 45 degrees, flat back, overhand grip just outside knees.","do":"Row bar to lower ribs, then lower 2-3 s to full arm extension.","feel":"Mid back and lats; don't stand up or jerk the weight."},"Pendlay Row":{"setup":"Torso nearly parallel to floor, flat back, bar on the floor.","do":"Pull bar explosively to lower chest, then lower under control to the floor.","feel":"Upper back; keep torso angle fixed, no hip pop."},"Smith Row":{"setup":"Hinge to about 45 degrees under the Smith bar, flat back, overhand grip.","do":"Row bar to lower ribs, then lower 2-3 s to a full stretch.","feel":"Mid back and lats; keep your torso still."},"Pulldown":{"setup":"Grip bar slightly wider than shoulders, thighs locked under pads.","do":"Pull bar to upper chest driving elbows down, then let it rise 2-3 s.","feel":"Lats; avoid leaning way back or yanking with momentum."},"Close-Grip Pulldown":{"setup":"Use a close neutral handle, thighs locked under pads.","do":"Pull handle to upper chest, elbows tight, then rise slowly to a full stretch.","feel":"Lower lats; don't swing your torso."},"Seated Cable Row":{"setup":"Sit tall, feet on platform, knees soft, grab handle with arms extended.","do":"Row handle to your stomach, then reach forward slowly for a full stretch.","feel":"Mid back and lats; don't rock your torso back and forth."},"Single-Arm Cable Row":{"setup":"Cable at mid height, staggered stance or seated, arm extended.","do":"Pull elbow back past your torso, then reach forward slowly to stretch.","feel":"Lat on the working side; avoid twisting to cheat."},"Close Grip Machine Row":{"setup":"Chest against pad, close neutral grip, arms fully extended.","do":"Row elbows back close to your sides, then return 2-3 s to full stretch.","feel":"Lats and mid back; keep chest on the pad."},"Machine High Row":{"setup":"Thighs under pad, grab handles overhead and in front.","do":"Pull elbows down and back, then let arms rise slowly to a full stretch.","feel":"Upper lats and upper back; don't shrug."},"Assisted Pull-Up Machine":{"setup":"Kneel or stand on platform, overhand grip slightly wider than shoulders.","do":"Pull chin toward the bar driving elbows down, then lower 2-3 s.","feel":"Lats; reduce assistance over time as you get stronger."},"Meadows Row":{"setup":"Stand side-on to a landmine bar, staggered stance, overhand grip on bar end.","do":"Row elbow up and back, then lower slowly to a deep stretch.","feel":"Upper back and lats; don't rotate your torso to lift."},"Straight-Arm Pulldown":{"setup":"Face a high cable, slight hip hinge, arms straight with soft elbows.","do":"Sweep the bar down to your thighs, then let it rise slowly overhead.","feel":"Lats; keep arms straight, don't turn it into a pushdown."},"Trap Bar Deadlift":{"setup":"Stand centered in the bar, hips back, chest up, grip handles.","do":"Push the floor away to stand tall, then lower under control.","feel":"Legs and back; keep spine neutral, don't round."},"Conventional Deadlift":{"setup":"Feet hip-width, bar over midfoot, flat back, grip just outside legs.","do":"Push through the floor keeping bar close, lock out, then lower under control.","feel":"Hamstrings, glutes, back; never round your lower back."},"Rack Pull":{"setup":"Bar on pins just below or above knees, flat back, grip outside legs.","do":"Drive hips forward to stand tall, then lower 2-3 s to the pins.","feel":"Upper back and glutes; don't hyperextend at the top."},"Chest-Supported T-Bar Row":{"setup":"Chest on pad, feet planted, grab handles with arms extended.","do":"Row elbows back past your torso, then lower 2-3 s to a full stretch.","feel":"Mid and upper back; keep chest glued to the pad."},"Plate-Loaded Iso Row":{"setup":"Chest on pad, grab handles with arms fully extended.","do":"Row one or both handles back, then return slowly to a deep stretch.","feel":"Lats and mid back; don't lift chest off the pad."},"Plate-Loaded Low Row":{"setup":"Sit tall, chest against pad, arms extended to low handles.","do":"Pull elbows back toward hips, then return slowly to full stretch.","feel":"Lats; avoid leaning back to finish reps."},"Plate-Loaded Pulldown":{"setup":"Thighs under pad, grip handles overhead with arms extended.","do":"Pull elbows down to your sides, then let handles rise slowly.","feel":"Lats; don't shrug at the top of the rep."},"Seal Row":{"setup":"Lie face-down on a high bench, bar hanging at arm's length.","do":"Row bar to the bench underside, then lower 2-3 s to full stretch.","feel":"Upper back; no body English possible, so stay strict."},"Pullover Machine":{"setup":"Seat so shoulders align with the machine pivot, elbows on pads.","do":"Drive elbows down in an arc, then let them rise slowly to a deep stretch.","feel":"Lats; don't grip hard and pull with arms."},"Reverse Hyperextension":{"setup":"Lie face-down on pad, hips at the edge, legs hanging.","do":"Raise legs to hip level squeezing glutes, then lower slowly.","feel":"Glutes and lower back; don't swing or overarch."},"Dumbbell Shoulder Press":{"setup":"Sit upright, dumbbells at ear level, elbows slightly forward.","do":"Press overhead without clanking, then lower 2-3 s to ear level.","feel":"Front and side delts; don't arch your lower back."},"Arnold Press":{"setup":"Sit upright, dumbbells at chin height with palms facing you.","do":"Rotate palms forward as you press overhead, reverse slowly on the way down.","feel":"Front delts; keep the rotation smooth, not rushed."},"Pike Push-Up":{"setup":"Hips high in an inverted V, hands shoulder-width.","do":"Lower head toward the floor between hands, then press back up.","feel":"Shoulders; elevate hands or feet to adjust difficulty."},"Shoulder Fly":{"setup":"Stand tall, dumbbells at sides, slight forward lean, elbows softly bent.","do":"Raise arms out to about shoulder height leading with elbows, lower 2-3 s.","feel":"Side delts; don't shrug or swing the weights."},"Lean-Away Lateral Raise":{"setup":"Hold a post with one hand, lean away, dumbbell in the other.","do":"Raise arm out to about shoulder height, then lower slowly past your body.","feel":"Side delt; lead with the elbow, no swinging."},"Band Lateral Raise":{"setup":"Stand on band, handles at sides, elbows softly bent.","do":"Raise arms out to about shoulder height, then lower slowly.","feel":"Side delts; avoid shrugging traps up."},"Overhead Press":{"setup":"Stand, grip just outside shoulders, bar on front delts, glutes braced.","do":"Press bar straight overhead moving head back then through, lower 2-3 s.","feel":"Shoulders; don't lean back into a standing incline press."},"Smith Overhead Press":{"setup":"Sit under the Smith bar, grip just outside shoulders, back supported.","do":"Press overhead, then lower 2-3 s to chin level.","feel":"Front delts; keep lower back against the pad."},"Machine Shoulder Press":{"setup":"Seat so handles start at shoulder height, back flat against pad.","do":"Press up without locking hard, then lower 2-3 s to full depth.","feel":"Front and side delts; don't shrug at the top."},"Cable Lateral Raise":{"setup":"Low pulley, stand side-on, handle in far hand across your body.","do":"Raise arm out to about shoulder height leading with elbow, lower slowly.","feel":"Side delt; don't lean or swing to move weight."},"Cable Y-Raise":{"setup":"Low pulleys crossed, hold opposite handles, slight forward lean.","do":"Raise arms up and out into a Y overhead, then lower slowly.","feel":"Side and rear delts; don't shrug traps."},"Upright Row":{"setup":"Stand tall, grip slightly wider than shoulders, bar at thighs.","do":"Pull bar up leading with elbows to about chest height, lower 2-3 s.","feel":"Side delts; stop if you feel shoulder pinching."},"Plate-Loaded Shoulder Press":{"setup":"Seat so handles start at shoulder height, back against the pad.","do":"Press overhead smoothly, then lower 2-3 s to full depth.","feel":"Front delts; keep ribs down, don't arch."},"Lateral Raise Machine":{"setup":"Seat so shoulders align with pivot, arms against pads.","do":"Raise elbows to about shoulder height, then lower slowly.","feel":"Side delts; don't shrug up into the pads."},"Rear Delt":{"setup":"Hinge forward with flat back, dumbbells hanging, elbows softly bent.","do":"Raise arms out to the sides, pinky leading, then lower 2-3 s.","feel":"Rear delts; don't squeeze shoulder blades together hard."},"Chest-Supported Rear Delt Raise":{"setup":"Lie chest-down on an incline bench, dumbbells hanging, elbows soft.","do":"Raise arms wide to shoulder height, then lower slowly.","feel":"Rear delts; keep chest on the pad, no swinging."},"Band Face Pull":{"setup":"Anchor band at face height, overhand grip, step back.","do":"Pull band toward your face, elbows high and out, then return slowly.","feel":"Rear delts and upper back; keep elbows high."},"Band Pull-Apart":{"setup":"Hold band at shoulder height, arms straight, hands shoulder-width.","do":"Pull band apart until it touches your chest, then return slowly.","feel":"Rear delts; don't arch your back or shrug."},"Cable Rear Delt Fly":{"setup":"Pulleys at shoulder height, cross cables, hold opposite handles.","do":"Sweep arms out and back to a T, then return slowly across.","feel":"Rear delts; keep arms nearly straight, don't row."},"Reverse Pec Deck":{"setup":"Face the pad, handles at shoulder height, arms nearly straight.","do":"Sweep arms back to your sides, then return slowly forward.","feel":"Rear delts; don't pinch shoulder blades or shrug."},"Face Pull":{"setup":"Rope at upper-chest or face height, overhand grip, step back.","do":"Pull rope to your face, elbows high, hands apart, then return slowly.","feel":"Rear delts and upper back; don't lean back to pull."},"Rear Delt Row":{"setup":"Cable at chest height, overhand grip, arms extended.","do":"Row with elbows flared out to shoulder height, then return slowly.","feel":"Rear delts; keep elbows wide, not tucked."},"Dumbbell Shrug":{"setup":"Stand tall, dumbbells at sides, arms straight.","do":"Shrug shoulders straight up toward ears, pause, lower slowly.","feel":"Upper traps; no rolling shoulders or bending elbows."},"Barbell Shrug":{"setup":"Stand tall, bar at thighs, grip just outside legs.","do":"Shrug straight up toward ears, pause, then lower to a full stretch.","feel":"Upper traps; don't roll shoulders or use your legs."},"Smith Shrug":{"setup":"Stand tall under the Smith bar, grip just outside thighs.","do":"Shrug straight up, hold a beat, then lower slowly.","feel":"Upper traps; keep arms straight, no rolling."},"Cable Shrug":{"setup":"Low pulley, bar or handles at thighs, stand tall.","do":"Shrug straight up toward ears, pause, then lower slowly.","feel":"Upper traps; keep the movement straight up and down."},"Shrug Machine":{"setup":"Stand or sit with shoulders under pads or handles at sides.","do":"Shrug straight up, pause at the top, lower 2-3 s.","feel":"Upper traps; no rolling or bending elbows."},"Goblet Squat":{"setup":"Hold a dumbbell at chest, feet shoulder-width, toes slightly out.","do":"Squat down 2-3 s between your knees as deep as you can, then stand.","feel":"Quads and glutes; keep chest up and heels down."},"Bulgarian Split Squat":{"setup":"Rear foot on bench, front foot far enough forward, dumbbells at sides.","do":"Lower 2-3 s until back knee nears the floor, then drive up.","feel":"Front leg quads and glutes; don't push off the back leg."},"Dumbbell Walking Lunge":{"setup":"Stand tall with dumbbells at sides.","do":"Step forward and lower until back knee nears floor, then step through.","feel":"Quads and glutes; keep torso upright, don't rush."},"Dumbbell Step-Up":{"setup":"Face a knee-height box, dumbbells at sides, one foot on box.","do":"Drive through the top foot to stand, then lower slowly.","feel":"Front leg glutes and quads; don't push off the back foot."},"Dumbbell RDL":{"setup":"Stand with dumbbells in front of thighs, soft knees.","do":"Hinge at hips sliding dumbbells down your legs to a hamstring stretch, then stand.","feel":"Hamstrings; keep back flat, don't squat it down."},"Dumbbell Hip Thrust":{"setup":"Upper back on bench, dumbbell on hips, feet flat and hip-width.","do":"Drive hips up, chin tucked, ribs down, tuck pelvis at top, lower slowly.","feel":"Glutes; don't arch your lower back to finish."},"Glute Bridge":{"setup":"Lie on back, knees bent, feet flat and hip-width.","do":"Drive hips up, squeeze glutes with pelvis tucked, then lower slowly.","feel":"Glutes; don't arch your lower back at the top."},"Sissy Squat":{"setup":"Hold a support, rise onto toes, knees forward.","do":"Lean back and lower knees toward the floor slowly, then rise.","feel":"Quads stretching; limit depth to what your knees tolerate."},"Nordic Curl":{"setup":"Kneel with ankles anchored, body straight from knees to head.","do":"Lower forward as slowly as possible, catch with hands, push back up.","feel":"Hamstrings; control the descent and don't bend at hips."},"Single-Leg Calf Raise":{"setup":"Stand on one foot on a step edge, dumbbell in same-side hand.","do":"Lower heel 2-3 s to a deep stretch, pause, rise onto your toes.","feel":"Calf; pause in the stretch, don't bounce."},"Back Squat":{"setup":"Bar on upper back, feet shoulder-width, brace your core.","do":"Sit down 2-3 s to at least parallel, then drive up.","feel":"Quads and glutes; keep chest up and knees tracking toes."},"Front Squat":{"setup":"Bar on front delts, elbows high, feet shoulder-width.","do":"Squat down 2-3 s keeping torso upright, then drive up.","feel":"Quads; don't let elbows drop or back round."},"Smith Squat":{"setup":"Bar on upper back, feet slightly in front of the bar.","do":"Lower 2-3 s to full depth, then drive up through your whole foot.","feel":"Quads and glutes; keep knees tracking over toes."},"Leg Press":{"setup":"Back flat on pad, feet shoulder-width mid-platform.","do":"Lower sled 2-3 s as deep as possible without hips lifting, then press.","feel":"Quads and glutes; don't lock knees or round your low back."},"Hack Squat":{"setup":"Shoulders under pads, back flat, feet shoulder-width on platform.","do":"Lower 2-3 s to full depth, then drive up without locking out.","feel":"Quads; keep heels down and back on the pad."},"Romanian Deadlift":{"setup":"Stand with bar at thighs, grip just outside legs, soft knees.","do":"Hinge at hips keeping bar close, lower to a hamstring stretch, then stand.","feel":"Hamstrings; keep back flat, push hips back, not down."},"Smith RDL":{"setup":"Stand at the Smith bar, grip just outside thighs, soft knees.","do":"Hinge at hips sliding bar down your legs to a hamstring stretch, stand.","feel":"Hamstrings and glutes; keep back flat throughout."},"Good Morning":{"setup":"Bar on upper back, feet hip-width, soft knees.","do":"Hinge at hips until torso nears parallel or hamstrings stretch, then stand.","feel":"Hamstrings; keep back flat, start light."},"Hip Thrust":{"setup":"Upper back on bench, padded bar on hips, feet flat hip-width.","do":"Drive hips up, chin tucked, ribs down, tuck pelvis at top, lower slowly.","feel":"Glutes; don't overarch your lower back at lockout."},"Cable Pull-Through":{"setup":"Face away from a low cable, rope between legs, step forward.","do":"Hinge hips back to a hamstring stretch, then drive hips forward to stand.","feel":"Glutes and hamstrings; don't squat or pull with arms."},"Leg Extension":{"setup":"Back against pad, knees at the pivot, pad on lower shins.","do":"Extend legs fully, squeeze, then lower 2-3 s to a full bend.","feel":"Quads; don't kick or lift hips off the seat."},"Seated Hamstring Curl":{"setup":"Knees at the pivot, thigh pad snug, lean slightly forward.","do":"Curl heels under you, squeeze, then return 2-3 s to full stretch.","feel":"Hamstrings; don't let hips rise off the seat."},"Lying Leg Curl":{"setup":"Lie face-down, knees just off the pad, ankle pad above heels.","do":"Curl heels toward glutes, then lower 2-3 s to full extension.","feel":"Hamstrings; keep hips pressed into the pad."},"Hip Adduction Machine":{"setup":"Sit back, pads on inner knees, legs spread as wide as comfortable.","do":"Squeeze legs together, pause, then open slowly to a deep stretch.","feel":"Inner thighs; don't let the weight slam back."},"Hip Abduction Machine":{"setup":"Sit back, pads on outer knees, legs together.","do":"Push knees apart as far as you can, then return slowly.","feel":"Outer glutes; lean slightly forward to bias glutes more."},"Calf Raise":{"setup":"Balls of feet on the platform edge, knees straight.","do":"Lower heels 2-3 s to a deep stretch, pause, rise high on toes.","feel":"Calves; pause in the stretch, no bouncing."},"Smith Calf Raise":{"setup":"Bar on upper back, balls of feet on a raised plate or step.","do":"Lower heels 2-3 s to a deep stretch, then rise fully.","feel":"Calves; pause at the bottom, don't bounce."},"Seated Calf Raise":{"setup":"Knees under pad, balls of feet on the platform edge.","do":"Lower heels 2-3 s to a deep stretch, pause, push up fully.","feel":"Lower calves (soleus); don't bounce out of the bottom."},"Standing Calf Raise Machine":{"setup":"Shoulders under pads, balls of feet on platform, knees straight.","do":"Lower heels 2-3 s to a deep stretch, pause, rise high on toes.","feel":"Calves; keep knees straight, no bouncing."},"Leg Press Calf Raise":{"setup":"Sit in the leg press, balls of feet on the platform's bottom edge.","do":"Let toes come back 2-3 s to a deep stretch, then press fully.","feel":"Calves; keep knees straight and don't bounce."},"Pendulum Squat":{"setup":"Back on pad, shoulders under pads, feet mid-platform.","do":"Lower 2-3 s as deep as possible, then drive up smoothly.","feel":"Quads; keep heels down and back flat on the pad."},"Belt Squat":{"setup":"Belt around hips, feet shoulder-width on platform.","do":"Squat down 2-3 s as deep as comfortable, then drive up.","feel":"Quads and glutes; stay upright, use rails for balance only."},"V-Squat Machine":{"setup":"Shoulders under pads, back on pad, feet shoulder-width.","do":"Lower 2-3 s to full depth, then press up without locking knees.","feel":"Quads and glutes; keep heels down throughout."},"Plate-Loaded 45° Leg Press":{"setup":"Back flat on pad, feet shoulder-width mid-platform.","do":"Lower sled 2-3 s as deep as possible without hips lifting, then press.","feel":"Quads and glutes; don't lock knees at the top."},"Hip Thrust Machine":{"setup":"Upper back against pad, belt or pad across hips, feet flat.","do":"Drive hips up, chin tucked, ribs down, tuck pelvis at top, lower slowly.","feel":"Glutes; don't overarch your lower back."},"Glute Ham Raise":{"setup":"Ankles locked, knees just behind the pad, body straight.","do":"Lower forward slowly until straight, then curl back up with hamstrings.","feel":"Hamstrings; control the descent, don't bend at hips."},"45° Hip Extension":{"setup":"Hips on the pad edge, ankles locked, slight upper-back round.","do":"Hinge down to a hamstring stretch, then drive hips into the pad to rise.","feel":"Glutes and hamstrings; don't hyperextend your back at the top."},"Kneeling Leg Curl":{"setup":"Kneel on the pad, one ankle under the roller, forearms supported.","do":"Curl heel toward glute, then lower 2-3 s to full extension.","feel":"Hamstring; keep hips still, don't arch."},"Glute Kickback Machine":{"setup":"Chest or forearms on pad, working foot on platform.","do":"Push leg back and up squeezing glute, then return slowly.","feel":"Glute; don't arch your lower back to get higher."},"Donkey Calf Raise Machine":{"setup":"Hinge at hips under pad, balls of feet on platform edge.","do":"Lower heels 2-3 s to a deep stretch, pause, rise fully.","feel":"Calves; keep knees straight, no bouncing."},"Dumbbell Curl":{"setup":"Stand tall, dumbbells at sides, palms forward, elbows at sides.","do":"Curl up without swinging, then lower 2-3 s to full extension.","feel":"Biceps; don't let elbows drift forward or swing."},"Hammer Curl":{"setup":"Stand tall, dumbbells at sides, palms facing each other.","do":"Curl up keeping neutral grip, then lower 2-3 s fully.","feel":"Brachialis and forearms; no swinging."},"Dumbbell Incline Curl":{"setup":"Sit back on a 45-60 degree bench, arms hanging straight down.","do":"Curl up keeping elbows back, then lower slowly to a deep stretch.","feel":"Biceps stretch at the bottom; don't let elbows swing forward."},"Concentration Curl":{"setup":"Sit, elbow braced against inner thigh, arm extended.","do":"Curl toward your shoulder, squeeze, then lower 2-3 s fully.","feel":"Biceps peak; keep upper arm still."},"Spider Curl":{"setup":"Lie chest-down on an incline bench, arms hanging straight down.","do":"Curl up keeping upper arms vertical, squeeze, lower slowly.","feel":"Biceps at the top; don't swing the elbows back."},"Band Curl":{"setup":"Stand on band, handles at sides, palms forward.","do":"Curl up with elbows pinned, then lower slowly.","feel":"Biceps; keep tension, don't let the band snap down."},"Barbell Curl":{"setup":"Stand tall, shoulder-width underhand grip, elbows at sides.","do":"Curl bar up without leaning back, then lower 2-3 s fully.","feel":"Biceps; no hip swing or body English."},"EZ-Bar Curl":{"setup":"Stand tall, grip the angled part of the bar, elbows at sides.","do":"Curl up without swinging, then lower 2-3 s to full extension.","feel":"Biceps; keep elbows from drifting forward."},"Preacher Curl":{"setup":"Armpits snug on pad, underhand grip on bar, arms extended.","do":"Curl up, then lower 2-3 s to nearly straight arms.","feel":"Biceps stretch at bottom; don't drop the weight fast."},"Dumbbell Preacher Curl":{"setup":"Upper arm flat on preacher pad, dumbbell in hand.","do":"Curl up, then lower 2-3 s to nearly full extension.","feel":"Biceps; keep the back of the arm on the pad."},"Cable Curl":{"setup":"Low pulley, handle or bar, stand tall, elbows at sides.","do":"Curl up, squeeze, then lower 2-3 s to full extension.","feel":"Biceps; don't lean back or let elbows drift."},"Cable Bar Curl":{"setup":"Low pulley with straight bar, underhand grip, elbows at sides.","do":"Curl the bar up, then lower 2-3 s fully.","feel":"Biceps; keep torso still, no swinging."},"Pronated Cable Bar Curl":{"setup":"Low pulley with straight bar, overhand grip, elbows at sides.","do":"Curl up keeping wrists straight, then lower 2-3 s fully.","feel":"Brachialis and forearms; don't let wrists bend back."},"Bayesian Cable Curl":{"setup":"Face away from a low pulley, step forward, arm behind your body.","do":"Curl forward keeping elbow behind you, then lower slowly to a deep stretch.","feel":"Biceps stretched at the bottom; don't let elbow swing forward."},"Machine Preacher Curl":{"setup":"Seat so armpits rest on pad, elbows at pivot.","do":"Curl up, then lower 2-3 s to nearly straight arms.","feel":"Biceps; don't lift your arms off the pad."},"Biceps Curl Machine":{"setup":"Elbows aligned with the pivot, upper arms on pad.","do":"Curl up, squeeze, then lower 2-3 s fully.","feel":"Biceps; don't shrug or lean back."},"Close-Grip Push-Up":{"setup":"Hands under shoulders, elbows tucked close, body straight.","do":"Lower chest to hands over 2-3 s, then press up.","feel":"Triceps; scale on knees or an incline if needed."},"Bench Dip":{"setup":"Hands on bench edge behind you, legs out, hips close to bench.","do":"Lower until upper arms are about parallel, then press up.","feel":"Triceps; bend knees to scale, stop if shoulders hurt."},"Dumbbell Skull Crusher":{"setup":"Lie flat, dumbbells over shoulders, palms facing each other.","do":"Bend elbows to lower dumbbells beside your head slowly, then extend.","feel":"Triceps; keep upper arms still, don't flare elbows."},"Overhead Dumbbell Extension":{"setup":"Sit or stand, hold one dumbbell overhead with both hands.","do":"Lower behind your head to a deep stretch, then extend up.","feel":"Long head of triceps; keep elbows pointing forward."},"Dumbbell Kickback":{"setup":"Hinge forward, upper arm parallel to floor, elbow at side.","do":"Extend arm straight back, squeeze, then lower slowly.","feel":"Triceps; keep upper arm still, don't swing."},"Band Pushdown":{"setup":"Anchor band overhead, elbows pinned to sides.","do":"Push hands down to full lockout, then return slowly.","feel":"Triceps; keep elbows from drifting forward."},"Close-Grip Bench Press":{"setup":"Lie flat, grip about shoulder-width, shoulder blades pinched.","do":"Lower 2-3 s to lower chest with elbows tucked, then press up.","feel":"Triceps; don't grip so narrow your wrists bend."},"Smith Close-Grip Bench":{"setup":"Bench under the Smith bar, grip about shoulder-width.","do":"Lower 2-3 s to lower chest elbows tucked, then press up.","feel":"Triceps; keep elbows tucked close to your sides."},"JM Press":{"setup":"Lie under the Smith bar, shoulder-width grip, elbows forward.","do":"Lower bar toward your chin by bending elbows forward, then press up.","feel":"Triceps; go light and stay controlled."},"Skull Crusher":{"setup":"Lie flat, EZ-bar or barbell over shoulders, narrow grip.","do":"Bend elbows to lower bar toward forehead slowly, then extend.","feel":"Triceps; keep elbows from flaring out."},"Cable Rope Pushdown":{"setup":"High pulley with rope, elbows pinned to sides.","do":"Push down and spread the rope at the bottom, then return slowly.","feel":"Triceps; don't let elbows drift forward or lean in."},"Single-Arm Cable Pushdown":{"setup":"High pulley with handle, elbow pinned at your side.","do":"Extend arm to lockout, squeeze, then return slowly.","feel":"Triceps; keep upper arm still."},"Overhead Tricep Extension":{"setup":"Face away from a cable, rope overhead, staggered stance.","do":"Extend arms forward and up, then return slowly to a deep stretch.","feel":"Long head of triceps; keep elbows pointing forward."},"Machine Tricep Extension":{"setup":"Elbows on pad aligned with the pivot, grip handles.","do":"Extend arms fully, then return 2-3 s to full bend.","feel":"Triceps; don't lift elbows off the pad."},"Seated Dip Machine":{"setup":"Sit tall, grip handles at your sides, elbows tucked.","do":"Press handles down to lockout, then return slowly.","feel":"Triceps; don't shrug or lean forward."},"Plate-Loaded Tricep Press":{"setup":"Sit tall, grip handles at your sides, elbows tucked back.","do":"Press down to full lockout, then return 2-3 s slowly.","feel":"Triceps; keep shoulders down, not shrugged."},"Dumbbell Wrist Curl":{"setup":"Forearms on bench, palms up, wrists just past the edge.","do":"Let dumbbell roll to fingertips, then curl wrist up fully.","feel":"Forearm flexors; keep forearms flat on the bench."},"Dumbbell Reverse Wrist Curl":{"setup":"Forearms on bench, palms down, wrists past the edge.","do":"Lower hand slowly, then raise the back of your hand up.","feel":"Forearm extensors; go light, keep forearms still."},"Reverse Dumbbell Curl":{"setup":"Stand tall, dumbbells at sides, palms facing back.","do":"Curl up with overhand grip, then lower 2-3 s.","feel":"Forearms and brachialis; keep wrists straight."},"Farmer's Carry":{"setup":"Heavy dumbbells at sides, stand tall, shoulders back.","do":"Walk with short controlled steps for distance or time.","feel":"Grip and forearms; don't let shoulders slump forward."},"Reverse EZ-Bar Curl":{"setup":"Stand tall, overhand grip on EZ-bar, elbows at sides.","do":"Curl up keeping wrists straight, then lower 2-3 s.","feel":"Forearms and brachialis; no swinging."},"Behind-the-Back Wrist Curl":{"setup":"Stand, bar behind your thighs, palms facing back.","do":"Let bar roll to fingertips, then curl wrists up.","feel":"Forearm flexors; keep arms straight, move only wrists."},"Cable Wrist Curl":{"setup":"Low pulley, forearms on bench or knees, palms up.","do":"Let handle roll to fingertips, then curl wrist up fully.","feel":"Forearm flexors; keep forearms flat and still."},"Plank":{"setup":"Forearms under shoulders, body straight from head to heels.","do":"Hold, squeezing glutes and abs, breathing steadily.","feel":"Abs; don't let hips sag or pike up."},"Crunch":{"setup":"Lie on back, knees bent, hands lightly behind head.","do":"Curl ribs toward hips lifting shoulder blades, then lower slowly.","feel":"Abs; don't yank your neck with your hands."},"Reverse Crunch":{"setup":"Lie on back, knees bent at 90 degrees, arms at sides.","do":"Curl hips off the floor toward your chest, then lower slowly.","feel":"Lower abs; don't swing legs for momentum."},"Dead Bug":{"setup":"Lie on back, arms up, knees over hips, lower back flat.","do":"Extend opposite arm and leg slowly, return, then switch sides.","feel":"Deep abs; keep lower back pressed into the floor."},"Hanging Leg Raise":{"setup":"Hang from a bar, arms straight, body still.","do":"Curl pelvis up raising legs, then lower 2-3 s without swinging.","feel":"Abs; bend knees to scale, avoid swinging."},"Ab Wheel Rollout":{"setup":"Kneel holding the wheel under shoulders, core braced.","do":"Roll forward slowly as far as you can control, then pull back.","feel":"Abs; don't let your lower back sag."},"Cable Crunch":{"setup":"Kneel facing a high pulley, rope beside your head.","do":"Crunch ribs toward hips rounding your spine, then return slowly.","feel":"Abs; don't just hinge at hips or pull with arms."},"Decline Sit-Up":{"setup":"Lie on decline bench, feet hooked, arms crossed on chest.","do":"Curl up to sitting, then lower 2-3 s under control.","feel":"Abs; don't jerk up with momentum."},"Captain's Chair Leg Raise":{"setup":"Back against pad, forearms on rests, legs hanging.","do":"Curl knees or legs up tilting pelvis, then lower slowly.","feel":"Lower abs; don't swing your legs."},"Ab Crunch Machine":{"setup":"Seat so pads rest on chest or shoulders, feet secured.","do":"Crunch ribs toward hips, squeeze, then return slowly.","feel":"Abs; don't pull with your arms."}};
 // Reverse lookup so a scheduled exercise (which only carries name+type) can be traced back to
 // which muscle group it trains, without duplicating that tag onto every program's exercise list.
 const EXERCISE_TO_MUSCLE = {};
@@ -2310,6 +2393,23 @@ function builderTargets(experience, focus, prio) {
   });
   return t;
 }
+// Opposing muscles recover while the other works, so pairing them costs nothing in performance.
+const ANTAGONISTS = [['Biceps', 'Triceps'], ['Chest', 'Back'], ['Shoulders', 'Rear Delts'], ['Quads', 'Hamstrings'], ['Calves', 'Abs'], ['Forearms', 'Traps']];
+function pairAntagonists(day) {
+  const iso = day.exercises.filter(e => e.type === 'isolation');
+  const used = new Set(); const pairs = {}; const order = [];
+  iso.forEach(a => {
+    if (used.has(a.name)) return;
+    const ma = primaryMusclesOf(a)[0];
+    const want = (ANTAGONISTS.find(p => p.includes(ma)) || []).find(m => m !== ma);
+    const b = want && iso.find(x => !used.has(x.name) && x !== a && primaryMusclesOf(x)[0] === want);
+    if (!b) return;
+    used.add(a.name); used.add(b.name); pairs[a.name] = b.name; order.push(a, b);
+  });
+  if (!order.length) return;
+  day.exercises = [...day.exercises.filter(e => e.type === 'compound'), ...order, ...iso.filter(e => !used.has(e.name))];
+  day.pairs = pairs;
+}
 // Pure. opts: { days, minutes, tier, experience, focus }
 function buildProgram(opts) {
   const days = Math.max(2, Math.min(6, parseInt(opts.days, 10) || 4));
@@ -2320,6 +2420,8 @@ function buildProgram(opts) {
   let style = focus !== 'glutes' && BUILDER_STYLES[opts.style] ? opts.style : 'auto';
   if (style !== 'auto' && !BUILDER_STYLES[style].days.includes(days)) style = 'auto';
   const maxEx = BUILDER_MAX_EX[minutes] - (experience === 'beginner' && minutes >= 75 ? 1 : 0);
+  // Supersets of opposing accessories save ~40% of their time. On by default for short sessions.
+  const supersets = opts.supersets != null ? !!opts.supersets : minutes <= 60;
   const plan = style !== 'auto' ? BUILDER_STYLE_PLANS[style][days] : BUILDER_PLANS[focus][days];
   const weekdays = BUILDER_WEEKDAYS[days];
   const rank = BUILDER_EQUIP_RANK[tier];
@@ -2438,16 +2540,18 @@ function buildProgram(opts) {
   weekdays.forEach(d => {
     const ex = prog[d].exercises;
     prog[d].exercises = [...ex.filter(e => e.type === 'compound'), ...ex.filter(e => e.type !== 'compound')];
+    if (supersets) pairAntagonists(prog[d]);
     const ms = [];
     prog[d].exercises.forEach(e => primaryMusclesOf(e).forEach(m => { if (!ms.includes(m)) ms.push(m); }));
     prog[d].focus = ms.slice(0, 5).join(' · ');
     delete prog[d].key;
   });
   const totals = vol();
-  const estMin = d => Math.round(prog[d].exercises.reduce((a, e) => a + setsFor(e.type) * SET_MINUTES[e.type], 0) + 8);
+  const estMin = d => { const linked = new Set(); Object.entries(prog[d].pairs || {}).forEach(([a, b]) => { linked.add(a); linked.add(b); });
+    return Math.round(prog[d].exercises.reduce((a, e) => a + setsFor(e.type) * SET_MINUTES[e.type] * (linked.has(e.name) ? SS_TIME_FACTOR : 1), 0) + 8); };
   return {
     program: prog, weekdays, totals, targets, estMin: Object.fromEntries(weekdays.map(d => [d, estMin(d)])),
-    meta: { days, minutes, tier, experience, focus, style, prio,
+    meta: { days, minutes, tier, experience, focus, style, prio, supersets,
       split: style !== 'auto' ? BUILDER_STYLES[style].label + (focus === 'upper' ? ' · Upper body focus' : '') : focus === 'balanced' ? BUILDER_SPLIT_NAMES[days] : `${BUILDER_FOCUS[focus].label} focus`,
       oncePerWeek: builderOncePerWeek(style, days), legsOnce: builderLegsOnce(style, days) },
     // Only flag real gaps: under the minimum that keeps a muscle growing (not just under a stretch target).
@@ -2513,7 +2617,7 @@ let builderResult = null;
 let builderContext = {}; // { onApplied } when opened from first-time setup
 async function loadBuilderInputs() {
   if (!db) return;
-  try { const s = await db.doc('meta/builder').get(); if (s.exists) { const d = s.data(); builderInputs = { ...builderInputs, ...['days', 'minutes', 'experience', 'focus', 'style'].reduce((o, k) => (d[k] != null ? { ...o, [k]: d[k] } : o), {}) }; } } catch (e) {}
+  try { const s = await db.doc('meta/builder').get(); if (s.exists) { const d = s.data(); builderInputs = { ...builderInputs, ...['days', 'minutes', 'experience', 'focus', 'style', 'supersets', 'prio'].reduce((o, k) => (d[k] != null ? { ...o, [k]: d[k] } : o), {}) }; } } catch (e) {}
 }
 function chipRow(name, options, current) {
   return `<div class="bld-chips" data-name="${name}">${options.map(([v, l]) => `<button class="prio-chip ${String(current) === String(v) ? 'selected' : ''}" data-v="${v}">${l}</button>`).join('')}</div>`;
@@ -2534,6 +2638,7 @@ function renderBuilderForm() {
     <div class="bld-q">Days per week</div>${chipRow('days', [[2, '2'], [3, '3'], [4, '4'], [5, '5'], [6, '6']], bi.days)}
     ${bi.focus !== 'glutes' && bi.style && bi.style !== 'auto' ? `<div class="bc-note" style="margin-top:8px;">${escHtml(BUILDER_STYLES[bi.style].label)} runs on ${BUILDER_STYLES[bi.style].days.join(' or ')} days a week.</div>` : ''}
     <div class="bld-q">Time per session</div>${chipRow('minutes', [[45, '45 min'], [60, '60 min'], [75, '75 min'], [90, '90 min']], bi.minutes)}
+    <div class="bld-q">Supersets</div>${chipRow('supersets', [['on', 'Pair accessories'], ['off', 'Straight sets']], (bi.supersets != null ? bi.supersets : bi.minutes <= 60) ? 'on' : 'off')}
     <div class="bld-q">Experience</div>${chipRow('experience', [['beginner', 'Under 1 year'], ['intermediate', '1–3 years'], ['advanced', '3+ years']], bi.experience)}
     <div class="bld-q">Where you train</div>${chipRow('tier', Object.keys(GYM_TIERS).map(k => [k, GYM_TIERS[k].label]), bi.tier)}
     <button class="btn-primary" id="builderGoBtn" style="width:100%; margin-top:26px;">Build it</button>
@@ -2546,7 +2651,7 @@ function renderBuilderForm() {
   });
   body.querySelectorAll('.bld-chips').forEach(row => row.querySelectorAll('[data-v]').forEach(b => b.onclick = () => {
     const k = row.dataset.name; const v = b.dataset.v;
-    builderInputs[k] = ['days', 'minutes'].includes(k) ? parseInt(v, 10) : v;
+    builderInputs[k] = ['days', 'minutes'].includes(k) ? parseInt(v, 10) : k === 'supersets' ? v === 'on' : v;
     if (k === 'style') {
       const allowed = BUILDER_STYLES[v].days;
       if (!allowed.includes(builderInputs.days)) builderInputs.days = allowed.reduce((a, d) => Math.abs(d - builderInputs.days) < Math.abs(a - builderInputs.days) ? d : a, allowed[0]);
@@ -2586,13 +2691,16 @@ function renderBuilderPreview(opts) {
     ${r.weekdays.map(d => `
       <div class="bld-day">
         <div class="bld-day-h"><span class="bld-day-n">${d}</span><span class="bld-day-t">${escHtml(r.program[d].title)}</span><span class="bld-day-m">~${r.estMin[d]} min</span></div>
-        ${r.program[d].exercises.map(e => `<div class="bld-ex"><span>${escHtml(e.name)}</span><em>${e.type === 'compound' ? 'Compound' : 'Isolation'}</em></div>`).join('')}
+        ${(() => { const p = r.program[d].pairs || {}; const inv = {}; Object.entries(p).forEach(([a, b]) => { inv[b] = a; });
+          let L = 0; const tag = {}; Object.keys(p).forEach(a => { const t = String.fromCharCode(65 + L++); tag[a] = t + '1'; tag[p[a]] = t + '2'; });
+          return r.program[d].exercises.map(e => `<div class="bld-ex"><span>${tag[e.name] ? `<b class="ss-tag">${tag[e.name]}</b>` : ''}${escHtml(e.name)}</span><em>${e.type === 'compound' ? 'Compound' : 'Isolation'}</em></div>`).join(''); })()}
       </div>`).join('')}
     <div class="cp-label" style="margin:22px 0 6px;">Weekly sets per muscle (block average)</div>
     ${volRows}
     ${(() => { const behind = VOLUME_MUSCLES.filter(x => P[x] === 'more' && (r.totals[x] || 0) < r.targets[x] - 2); return !behind.length ? '' : behind.length > 4
       ? `<div class="bc-note">Bringing up ${behind.length} muscles at once needs more training time than ${m.days} days × ${m.minutes} min. Add a day or longer sessions, or pick the 2–4 muscles that matter most right now. That's how bodybuilders specialize: a few muscles get extra work for a block while the rest keep growing at normal volume, then you rotate.</div>`
       : `<div class="bc-note">Marked to bring up but still short of that target: ${escHtml(behind.join(', '))}. ${m.days} days × ${m.minutes} min only fits so much. More time, another day, or bringing up fewer muscles at once gets them there.</div>`; })()}
+    ${r.weekdays.some(d => Object.keys(r.program[d].pairs || {}).length) ? `<div class="bc-note">A1 + A2 are a superset: one set of each back to back, then rest. Pairing opposing muscles (biceps with triceps, side with rear delts) costs nothing in performance and saves about 40% of that time.</div>` : ''}
     ${m.legsOnce ? `<div class="bc-note">Legs get one day a week on this split, so that day carries all your leg work. The 5-day version adds a second lower day.</div>` : ''}
     ${m.oncePerWeek ? `<div class="bc-note" style="color:#e6b3a8;">This split trains most muscles once a week. Twice a week usually grows a bit more for the same total sets — but the best split is the one you'll actually run, so it's yours if you like it.</div>` : ''}
     <div class="bc-note">Sets per exercise follow your block: lighter base weeks, heavier overload weeks, then a deload. Your feedback after each workout keeps adjusting each muscle from here.${r.shortfalls.length ? ` ${escHtml(r.shortfalls.join(', '))} ${r.shortfalls.length > 1 ? 'are' : 'is'} a little light at ${m.days} days × ${m.minutes} min — more time or another day fixes that.` : ''}</div>
@@ -3196,6 +3304,75 @@ try {
 let db = null;
 let currentDay = todayName();
 let state = {};
+
+// ---------- Bodyweight lifts ----------
+// Pull-ups, dips, push-ups etc. are tracked as the load you actually move: the share of your body
+// weight the movement lifts (from your latest weigh-in) plus any belt/vest weight, or minus the
+// help on an assisted machine. Internally a set's weight is that effective load, so progression,
+// PRs and estimated maxes work exactly like any other lift — and stay right as your weight changes.
+const BW_FRACTION = {
+  'Pull-Up': 1, 'Chin-Up': 1, 'Dips': 1, 'Assisted Pull-Up Machine': 1,
+  'Push-Up': 0.64, 'Deficit Push-Up': 0.68, 'Close-Grip Push-Up': 0.64, 'Pike Push-Up': 0.7, 'Bench Dip': 0.65,
+  'Inverted Row': 0.6, 'Glute Bridge': 0.6, 'Sissy Squat': 0.7, 'Nordic Curl': 0.6,
+  'Crunch': 0.3, 'Reverse Crunch': 0.3, 'Hanging Leg Raise': 0.35, 'Ab Wheel Rollout': 0.5, 'Decline Sit-Up': 0.35, 'Dead Bug': 0.2,
+};
+let bodyweightLb = null; // latest weigh-in
+async function loadBodyweight() {
+  if (!db) return;
+  try {
+    const snap = await db.collection('weight').where('lb', '>', 0).orderBy('date', 'desc').limit(1).get();
+    const w = snap.docs && snap.docs[0] ? snap.docs[0].data().lb : null;
+    if (w > 0) bodyweightLb = w;
+  } catch (e) {}
+}
+function isBodyweightLift(name) { return BW_FRACTION[name] != null; }
+function isAssisted(name) { return /Assisted/.test(name); }
+function bwBase(name) { return isBodyweightLift(name) && bodyweightLb > 0 ? Math.round(bodyweightLb * BW_FRACTION[name]) : 0; }
+// What you type/see on a bodyweight lift: added weight (or assistance) rather than the total.
+function bwInputFromLoad(name, w) {
+  const base = bwBase(name); w = parseFloat(w);
+  if (!base || !(w > 0)) return w > 0 ? w : '';
+  const v = isAssisted(name) ? base - w : w - base;
+  return Math.round(v * 2) / 2;
+}
+function bwLoadFromInput(name, v) {
+  const base = bwBase(name); v = parseFloat(v);
+  if (!base) return isNaN(v) ? '' : v;
+  if (isNaN(v)) v = 0;
+  return Math.max(1, Math.round((isAssisted(name) ? base - v : base + v) * 2) / 2);
+}
+// Sets logged on a bodyweight lift before this tracking existed hold what was typed: usually the
+// added weight (or the assistance on the machine), sometimes the full body weight. New sets are
+// marked (bwv) and already hold the total. Convert old ones so plans and "Last time" stay right.
+function normalizeBwSet(name, s) {
+  if (!s || s.bwv || !isBodyweightLift(name)) return s;
+  const base = bwBase(name), w = parseFloat(s.weight);
+  if (!base || isNaN(w)) return s;
+  let total;
+  if (isAssisted(name)) total = w < base ? base - w : w;            // assistance typed → total moved
+  else total = w >= base * 0.6 ? w : base + w;                       // full weight typed vs. added typed
+  return { ...s, weight: Math.max(1, Math.round(total)), bwv: 1 };
+}
+// Display label for a set's load: "BW", "BW+25", "Assist 40", or plain pounds.
+function fmtLoad(name, w) {
+  const n = parseFloat(w);
+  if (!(n > 0)) return '–';
+  const base = bwBase(name);
+  if (!base) return String(w);
+  const v = bwInputFromLoad(name, n);
+  if (isAssisted(name)) return v > 0 ? `Assist ${v}` : 'BW';
+  return Math.abs(v) < 1 ? 'BW' : v > 0 ? `BW+${v}` : `BW−${-v}`;
+}
+// Keep a planned load sensible for a bodyweight lift: added weight in 5 lb steps, never below
+// body weight on a non-assisted lift (that would need assistance you don't have).
+function snapBwLoad(name, w) {
+  const base = bwBase(name);
+  if (!base || !(w > 0)) return w;
+  let v = isAssisted(name) ? base - w : w - base;
+  v = Math.round(v / 5) * 5;
+  if (!isAssisted(name)) v = Math.max(0, v); else v = Math.max(0, v);
+  return isAssisted(name) ? base - v : base + v;
+}
 let uiState = {};
 let prevByExercise = {};
 let plateauByExercise = {};
@@ -3219,6 +3396,19 @@ async function loadAllProgramOverrides() {
 async function saveProgramOverride(day, data) {
   programOverrides[day] = data;
   if (db) { try { await db.doc(`program/${activePreset}_${day}`).set(data); } catch (e) {} }
+  saveScheduleDoc();
+}
+// A tiny summary of which days you train (title + exercise count), so the reminder server knows
+// "Today: Arms" even for days you've never edited (built-in programs live only in the app).
+let lastScheduleJson = null;
+async function saveScheduleDoc() {
+  if (!db || db.__local) return;
+  const days = {};
+  DAY_ORDER.forEach(d => { const x = getProgramDay(d) || {}; days[d] = { title: x.title || 'Rest', n: (x.exercises || []).length }; });
+  const json = JSON.stringify(days);
+  if (json === lastScheduleJson) return;
+  lastScheduleJson = json;
+  try { await db.doc('meta/schedule').set({ days, preset: activePreset }); } catch (e) {}
 }
 async function resetProgramOverride(day) {
   delete programOverrides[day];
@@ -3236,6 +3426,7 @@ async function saveActivePreset(preset) {
   programOverrides = {};
   if (db) { try { await db.doc('program/activePreset').set({ value: preset }); } catch (e) {} }
   await loadAllProgramOverrides();
+  saveScheduleDoc();
 }
 let blockConfig = { start: null, length: 6, lastAckedWeek: null, forceDeload: false, reviewSnoozeUntil: null, shiftDays: 0, missedAck: null };
 let sleepGoal = 8;
@@ -4233,7 +4424,7 @@ function renderStatsRow() {
   if (!dayData.exercises.length) { row.innerHTML = ''; return; }
   const info = weekInfo();
   const totalSets = dayData.exercises.reduce((sum, ex) => sum + setCountFor(ex, currentDay, info), 0);
-  const estMin = Math.round(totalSets * 2.5);
+  const estMin = estDayMinutes(dayData, info);
   row.innerHTML = `
     <div class="stat-col"><div class="stat-num">${dayData.exercises.length}</div><div class="stat-lbl">Exercises</div></div>
     <div class="stat-col"><div class="stat-num">${totalSets}</div><div class="stat-lbl">Sets</div></div>
@@ -4245,6 +4436,12 @@ function makeSet(i, n, isDeload) {
 }
 
 const REP_RANGE = { compound: { lo: 5, hi: 8 }, isolation: { lo: 10, hi: 15 } };
+// Bodyweight lifts climb reps first and only add a belt/vest once reps are high — most people
+// can't add 2.5 lb at a time, and 12 good pull-ups beats a grinding 5 with a plate.
+function repRangeFor(name, type) {
+  if (isBodyweightLift(name)) return type === 'isolation' ? { lo: 10, hi: 20 } : { lo: 5, hi: 12 };
+  return REP_RANGE[type] || REP_RANGE.compound;
+}
 const LOAD_JUMP_PCT = { compound: 0.03, isolation: 0.05 };
 const LOAD_JUMP_MIN = { compound: 5, isolation: 2.5 };
 const LOAD_ROUND = { compound: 5, isolation: 2.5 };
@@ -4339,7 +4536,7 @@ function buildLiftModel(hist, type) {
 // rirs: target reps-in-reserve for each set today. Returns {sets:[{weight,reps,rir}], tier, note, targetE}.
 function planLift(model, type, o) {
   if (!model) return null;
-  const range = REP_RANGE[type] || REP_RANGE.compound;
+  const range = o.range || REP_RANGE[type] || REP_RANGE.compound;
   const rirs = o.rirs;
   const last = model.last;
   const w0 = last.topWeight;
@@ -4371,7 +4568,8 @@ function planLift(model, type, o) {
   let reps = repsFor(w);
   if (reps[0] >= range.hi && !o.noProgress && tier !== 'reentry') { // never push load when very sore or easing back in
     // Top of the rep range reached: take the heaviest jump where even your last set still lands in range.
-    const cap = Math.max(w0 * (1 + MAX_JUMP[type]), w + step); // light loads (15 lb raises) can always go up one plate step
+    let cap = Math.max(w0 * (1 + MAX_JUMP[type]), w + step); // light loads (15 lb raises) can always go up one plate step
+    if (o.maxAdd) cap = Math.min(cap, w0 + o.maxAdd);
     const firstStep = w + step;
     for (let cand = firstStep; cand <= cap + 1e-9; cand += step) {
       const rr = repsFor(cand);
@@ -4411,9 +4609,28 @@ function computeSuggestion(exName, type) {
   if (!(exName in liftModelCache)) liftModelCache[exName] = buildLiftModel(exerciseHistory[exName], type);
   const model = liftModelCache[exName];
   const sore = parseInt(sorenessToday, 10);
-  const plan = planLift(model, type, { rirs: plannedRirs(n, type, info.deload), today: todayISO(), deload: info.deload, noProgress: !isNaN(sore) && sore >= 5 });
+  const bw = bwBase(exName) > 0;
+  const plan = planLift(model, type, { rirs: plannedRirs(n, type, info.deload), today: todayISO(), deload: info.deload, noProgress: !isNaN(sore) && sore >= 5,
+    range: bw ? repRangeFor(exName, type) : null, maxAdd: bw ? 5 : null });
   planMetaByEx[exName] = plan ? { targetE: plan.targetE, fatigue: model.fatigue, tier: plan.tier, note: plan.note, model } : null;
   if (!plan) return null;
+  const bestAtBw = w => Math.max(0, ...((model.last && model.last.sets) || []).filter(x => parseFloat(x.weight) >= w - 1e-9).map(x => parseInt(x.reps, 10) || 0));
+  if (bwBase(exName) && !plan.targetE) {
+    // Deload on a bodyweight lift: you can't take 40% off your body, so cut the reps (and on the
+    // assisted machine, add a little help rather than removing it).
+    const base = bwBase(exName);
+    const w = isAssisted(exName) ? snapBwLoad(exName, Math.max(1, Math.min(model.last.topWeight || base, base) - 10)) : base;
+    plan.sets = plan.sets.map(st => ({ ...st, weight: w, reps: Math.max(3, Math.round((parseInt(st.reps, 10) + 2) * 0.6)) }));
+  } else if (bwBase(exName) && plan.targetE) {
+    // Bodyweight lift: snap to real-world loads (BW, BW+5, BW+10…) and re-predict reps at that load.
+    plan.sets = plan.sets.map((st, i) => {
+      const w = snapBwLoad(exName, parseFloat(st.weight));
+      let r = repsAt(plan.targetE * Math.pow(model.fatigue, i), w, parseInt(st.rir, 10) || 0);
+      const best = bestAtBw(w);
+      if (r != null && best > 0) r = Math.min(r, best + 2); // same 2-rep limit as every other lift
+      return { ...st, weight: w, reps: r == null ? st.reps : r };
+    });
+  }
   return plan.sets.map(s => ({ ...s, tier: plan.tier }));
 }
 
@@ -4434,7 +4651,8 @@ function applyPlanToExercise(ex, force) {
   } else {
     // No history yet: still give every set its descending RIR target (plus soreness/sleep buffer).
     const rirs = plannedRirs(sets.length, ex.type, weekInfo().deload);
-    sets.forEach((s, i) => { if (!s.logged && (force || !s.rirEdited)) s.rir = String(rirs[i]); });
+    const base = bwBase(ex.name);
+    sets.forEach((s, i) => { if (!s.logged && (force || !s.rirEdited)) s.rir = String(rirs[i]); if (base && !s.logged && !s.wEdited && !(parseFloat(s.weight) > 0)) s.weight = base; });
   }
   if (sets.some(s => s.logged)) replanRemaining(ex, { quiet: true });
 }
@@ -4451,7 +4669,7 @@ function replanRemaining(ex, opts) {
   let k = -1;
   sets.forEach((s, i) => { if (s.logged && setE1rmAdj(s) > 0) k = i; });
   if (k === -1) return;
-  const range = REP_RANGE[ex.type] || REP_RANGE.compound;
+  const range = repRangeFor(ex.name, ex.type);
   const meta = planMetaByEx[ex.name];
   const f = (meta && meta.fatigue) || SET_FATIGUE_DEFAULT[ex.type];
   const E = setE1rmAdj(sets[k]);
@@ -4485,6 +4703,7 @@ function replanRemaining(ex, opts) {
   const loggedR = parseInt(sets[k].reps, 10) || 0;
   const guessed = sets[k].confidence === 'Fuzzy';
   if (guessed) direction = Math.min(direction, 0), w = Math.min(w, loggedW);
+  if (bwBase(ex.name) && w > 0) w = snapBwLoad(ex.name, w);
   remaining.forEach(j => {
     if (!handW(j) && w > 0) sets[j].weight = w;
     const wj = parseFloat(sets[j].weight);
@@ -4503,7 +4722,7 @@ function replanRemaining(ex, opts) {
   const how = direction < 0 ? 'harder than planned — dropped the weight so your next sets stay in range'
     : direction > 0 ? (!isNaN(d) && d <= 5 ? 'felt easy — added weight instead of piling on reps' : 'easier than planned — bumped the weight')
     : (!isNaN(d) ? `had ${d <= 5 ? '5+' : 10 - d} rep${10 - d === 1 ? '' : 's'} left${guessed ? ' (a guess, so only eased off)' : ''} — adjusted the reps to match` : 'adjusted the reps to match');
-  intraSessionNoteByEx[ex.name] = `Set ${k + 1} ${how}: next set ${nxt.weight || '–'} × ${nxt.reps || '–'}. Edit if you'd rather push as planned.`;
+  intraSessionNoteByEx[ex.name] = `Set ${k + 1} ${how}: next set ${fmtLoad(ex.name, nxt.weight)} × ${nxt.reps || '–'}. Edit if you'd rather push as planned.`;
 }
 
 // Hand-typed weight on the current set: carry the weight forward and re-predict reps at it.
@@ -4535,7 +4754,7 @@ async function loadExerciseHistory() {
       if (!data || !data.exercises || !data.date || data.date >= today) return;
       Object.keys(data.exercises).forEach(exName => {
         const all = data.exercises[exName] || [];
-        const logged = all.filter(s => s.logged && s.weight !== '' && s.weight != null && s.reps !== '' && s.reps != null);
+        const logged = all.filter(s => s.logged && s.weight !== '' && s.weight != null && s.reps !== '' && s.reps != null).map(s => normalizeBwSet(exName, s));
         if (!logged.length) return;
         (exerciseHistory[exName] = exerciseHistory[exName] || []).push({ date: data.date, sets: logged, planned: all.length, deload: !!data.deload });
       });
@@ -4678,7 +4897,7 @@ function startWorkoutClock() {
 let activeSessionDate = null;
 function sessionDate() { return activeSessionDate || todayISO(); }
 let sessionFinishMeta = null; // finishedAt / summary for today's session, kept so later autosaves don't wipe it
-function freshSessionMods() { return { order: null, swaps: {}, skipped: [], startedAt: null, timeCapMin: null, recovery: {}, pump: {} }; }
+function freshSessionMods() { return { order: null, swaps: {}, skipped: [], startedAt: null, timeCapMin: null, recovery: {}, pump: {}, pairs: {}, techniques: {} }; }
 // The saved program for a day, without today's one-off changes. Use this for anything that EDITS
 // the program, so a "swap for today" or a reorder never gets baked into your split.
 function getProgramDay(day) { return programOverrides[day] || PRESET_PROGRAMS[activePreset][day]; }
@@ -4690,10 +4909,70 @@ function prioritySorted(dayObj) {
   if (sorted.every((e, i) => e === dayObj.exercises[i])) return dayObj;
   return { ...dayObj, exercises: sorted };
 }
+// ---------- Supersets, giant sets and finishers ----------
+// A day can link an exercise to the one after it (day.pairs[name] = nextName). Linked exercises
+// run as a superset (2) or giant set (3+): one set of each back to back, then one rest. A day can
+// also give an exercise a finisher on its last set (day.techniques[name] = 'drop' | 'restpause' |
+// 'myo' | 'partials'). "Short on time" adds today-only pairs/finishers in sessionMods.
+const TECHNIQUES = {
+  drop: { label: 'Drop set', short: 'Drop', how: 'Right after your last set, strip about 25% and go again to failure, no rest. Up to two drops.' },
+  restpause: { label: 'Rest-pause', short: 'Rest-pause', how: 'After your last set, rest 15 seconds, then as many reps as you can at the same weight. Twice.' },
+  myo: { label: 'Myo-reps', short: 'Myo-reps', how: 'After your last set, take 5 deep breaths (~15 s), then 3–5 reps. Repeat until you can’t get 3.' },
+  partials: { label: 'Lengthened partials', short: 'Partials', how: 'When you can’t do another full rep, keep going with half reps in the stretched position to failure.' },
+};
+function annotateGroups(dayObj, extraPairs, extraTech, rename) {
+  const ren = n => (rename && rename[n]) || n;
+  const pairs = {}; Object.entries({ ...(dayObj.pairs || {}), ...(extraPairs || {}) }).forEach(([a, b]) => { if (b) pairs[ren(a)] = ren(b); });
+  const tech = {}; Object.entries({ ...(dayObj.techniques || {}), ...(extraTech || {}) }).forEach(([a, k]) => { if (k) tech[ren(a)] = k; });
+  const exs = dayObj.exercises || [];
+  if (!Object.keys(pairs).length && !Object.keys(tech).length) return dayObj;
+  const byName = {}; exs.forEach(e => { byName[e.name] = e; });
+  const isFollower = n => Object.keys(pairs).some(a => a !== n && pairs[a] === n && byName[a]);
+  const placed = new Set(); const out = [];
+  const place = e => { if (!e || placed.has(e.name)) return; placed.add(e.name); out.push(e); let nx = byName[pairs[e.name]]; while (nx && !placed.has(nx.name)) { placed.add(nx.name); out.push(nx); nx = byName[pairs[nx.name]]; } };
+  exs.forEach(e => { if (!isFollower(e.name)) place(e); });
+  exs.forEach(e => place(e)); // anything left (e.g. a loop of links)
+  const res = out.map(e => ({ ...e }));
+  let letter = 0;
+  for (let i = 0; i < res.length; i++) {
+    if (res[i].ss || !res[i + 1] || pairs[res[i].name] !== res[i + 1].name) continue;
+    let j = i; while (j + 1 < res.length && pairs[res[j].name] === res[j + 1].name) j++;
+    const id = String.fromCharCode(65 + letter++);
+    for (let k = i; k <= j; k++) res[k].ss = { id, pos: k - i, size: j - i + 1 };
+  }
+  res.forEach(e => { if (tech[e.name]) e.technique = tech[e.name]; });
+  return { ...dayObj, exercises: res, pairs, techniques: tech };
+}
+function groupNames(exName) {
+  const exs = getDayData(currentDay).exercises;
+  const me = exs.find(e => e.name === exName);
+  if (!me || !me.ss) return null;
+  return exs.filter(e => e.ss && e.ss.id === me.ss.id).map(e => e.name);
+}
+function techniqueFor(ex) {
+  const k = ex && ex.technique;
+  if (!k || !TECHNIQUES[k] || weekInfo().deload) return null;
+  return techniqueAllowed(ex, k) ? k : null;
+}
+// Finishers are for isolation work and machines. Not for heavy free-weight compounds (a failed
+// rep under a bar is a safety problem), and no drop sets on your own body weight.
+function techniqueAllowed(ex, k) {
+  const lib = libraryEntry(ex.name);
+  const equip = lib ? lib.equip : null;
+  if (ex.type === 'compound' && ['barbell', 'dumbbell'].includes(equip)) return false;
+  if (k === 'drop' && isBodyweightLift(ex.name) && !isAssisted(ex.name)) return false;
+  return true;
+}
 function getDayData(day) {
-  const base = prioritySorted(getProgramDay(day));
+  const raw = prioritySorted(getProgramDay(day));
+  const isToday = day === currentDay && sessionMods;
+  // Today-only pairs/finishers may name a swapped-in exercise; map them back to the program's
+  // names (the swap is applied below and keeps the grouping).
+  const orig = {};
+  if (isToday) Object.keys(sessionMods.swaps || {}).forEach(n => { if (sessionMods.swaps[n]) orig[sessionMods.swaps[n].name] = n; });
+  const base = annotateGroups(raw, isToday ? sessionMods.pairs : null, isToday ? sessionMods.techniques : null, orig);
   if (day !== currentDay || !sessionMods || (!sessionMods.order && !Object.keys(sessionMods.swaps || {}).length)) return base;
-  let exercises = (base.exercises || []).map(ex => (sessionMods.swaps && sessionMods.swaps[ex.name]) ? { ...sessionMods.swaps[ex.name], swappedFrom: ex.name } : ex);
+  let exercises = (base.exercises || []).map(ex => (sessionMods.swaps && sessionMods.swaps[ex.name]) ? { ...sessionMods.swaps[ex.name], swappedFrom: ex.name, ss: ex.ss, technique: ex.technique } : ex);
   if (sessionMods.order && sessionMods.order.length) {
     const pos = n => { const i = sessionMods.order.indexOf(n); return i === -1 ? 999 : i; };
     exercises = exercises.map((e, i) => ({ e, i })).sort((a, b) => (pos(a.e.name) - pos(b.e.name)) || (a.i - b.i)).map(x => x.e);
@@ -4744,7 +5023,7 @@ function celebratePR(exName, w, r) {
   const e1 = Math.round(epley1RM(parseFloat(w), parseInt(r, 10)));
   const el = document.createElement('div');
   el.className = 'pr-burst';
-  el.innerHTML = `<div class="pr-burst-glow"></div><div class="pr-burst-card"><div class="pr-kicker">New PR</div><div class="pr-lift">${escHtml(exName)}</div><div class="pr-set">${escHtml(w)} × ${escHtml(r)}</div><div class="pr-e1">est. max <span id="prCount">0</span> lb</div></div>`;
+  el.innerHTML = `<div class="pr-burst-glow"></div><div class="pr-burst-card"><div class="pr-kicker">New PR</div><div class="pr-lift">${escHtml(exName)}</div><div class="pr-set">${escHtml(fmtLoad(exName, w))} × ${escHtml(r)}</div><div class="pr-e1">est. max <span id="prCount">0</span> lb</div></div>`;
   document.body.appendChild(el);
   const span = el.querySelector('#prCount'), t0 = performance.now();
   const tick = (t) => { const k = Math.min(1, (t - t0) / 900); span.textContent = Math.round(e1 * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(tick); };
@@ -4782,8 +5061,10 @@ function renderMain() {
     <div class="run-dots" id="runDots"></div>
     <div id="runSheet"></div>
     <div class="focus-card swipe" id="focusCard">
-      <div class="focus-kicker">${focusIdx + 1} of ${exs.length}<span class="kick-type">${ex.type === 'compound' ? 'Compound' : 'Isolation'}</span>${ex.swappedFrom ? `<span class="kick-type">In for ${escHtml(ex.swappedFrom)} today</span>` : ''}</div>
+      <div class="focus-kicker">${focusIdx + 1} of ${exs.length}<span class="kick-type">${ex.type === 'compound' ? 'Compound' : 'Isolation'}</span>${ex.ss ? `<span class="kick-type kick-ss">${ex.ss.size > 2 ? 'Giant set' : 'Superset'} ${ex.ss.id} · ${ex.ss.pos + 1}/${ex.ss.size}</span>` : ''}${techniqueFor(ex) ? `<span class="kick-type">+ ${escHtml(TECHNIQUES[techniqueFor(ex)].short)}</span>` : ''}${ex.swappedFrom ? `<span class="kick-type">In for ${escHtml(ex.swappedFrom)} today</span>` : ''}</div>
+      ${ssBanner && ssBanner.name === ex.name ? `<div class="ss-banner">${escHtml(ssBanner.text)}</div>` : ''}
       <div class="focus-name">${escHtml(ex.name)}</div>
+      ${cueHTML(ex)}
       <div id="recAskSlot">${recoveryAskHTML(ex)}</div>
       <div class="ex-prev-slot"></div>
       <div class="ex-body"></div>
@@ -4814,6 +5095,14 @@ function renderMain() {
     el.textContent = st ? fmtClock(Date.now() - st) : '0:00';
   }, 1000);
   const st = sessionStartMs(); const tEl = document.getElementById('runTimer'); if (tEl && st) tEl.textContent = fmtClock(Date.now() - st);
+}
+// Form cues: open automatically the first time you do a lift, one tap away after that.
+function cueHTML(ex) {
+  const c = EXERCISE_CUES[ex.name];
+  if (!c) return '';
+  const open = !prevByExercise[ex.name] && !(state[ex.name] || []).some(s => s.logged);
+  return `<details class="form-cue"${open ? ' open' : ''}><summary>Form</summary>
+    <div class="cue-l"><b>Set up</b>${escHtml(c.setup)}</div><div class="cue-l"><b>Do</b>${escHtml(c.do)}</div><div class="cue-l"><b>Feel</b>${escHtml(c.feel)}</div></details>`;
 }
 // Before a muscle's first set of the day: did it recover from last time? (one tap, skippable)
 function recoveryAskHTML(ex) {
@@ -4852,7 +5141,7 @@ function updateRunChrome() {
   const exs = getDayData(currentDay).exercises;
   dots.innerHTML = exs.map((ex, i) => {
     const st = exerciseStatus(ex);
-    return `<button class="run-dot ${st} ${i === focusIdx ? 'current' : ''}" data-i="${i}" aria-label="${escHtml(ex.name)}"></button>`;
+    return `<button class="run-dot ${st} ${i === focusIdx ? 'current' : ''} ${ex.ss ? 'in-ss' + (ex.ss.pos > 0 ? ' ss-cont' : '') : ''}" data-i="${i}" aria-label="${escHtml(ex.name)}"></button>`;
   }).join('');
   dots.querySelectorAll('.run-dot').forEach(b => b.onclick = () => goToExercise(parseInt(b.dataset.i, 10)));
   const cur = exs[focusIdx];
@@ -4979,33 +5268,58 @@ function saveSessionMods() {
 
 // ---------- short on time ----------
 const SET_MINUTES = { compound: 2.75, isolation: 2.0 }; // work + rest
-function estimateMinutesLeft(plan) {
-  return plan.reduce((t, p) => t + (p.left > 0 ? p.left * SET_MINUTES[p.type] + 1 : 0), 0);
+const SS_TIME_FACTOR = 0.6; // in a superset, the sets share one rest per round
+function estDayMinutes(dayData, info) {
+  const exs = (dayData && dayData.exercises) || [];
+  if (!exs.length) return 0;
+  return Math.round(exs.reduce((sum, ex) => sum + setCountFor(ex, currentDay, info) * (SET_MINUTES[ex.type] || 2.5) * (ex.ss ? SS_TIME_FACTOR : 1), 0) + 4);
 }
-// Pure: given what's left today, decide what to cut to fit `minutes`. Cuts redundant isolation
-// work first (a muscle already hit by another lift today), then last sets — early sets carry most
-// of a session's growth stimulus, so the last set is the cheapest thing to lose.
+function estimateMinutesLeft(plan) {
+  return plan.reduce((t, p) => t + (p.left > 0 ? p.left * SET_MINUTES[p.type] * (p.grouped ? SS_TIME_FACTOR : 1) + 1 : 0) + (p.myo ? 0.7 : 0), 0);
+}
+// Pure: given what's left today, decide how to fit `minutes`.
+// 1) Time-savers first — nothing is lost: pair exercises that don't share muscles into supersets
+//    (one rest per round), then turn the last 2 sets of an isolation move into 1 set + myo-reps
+//    (about the same growth stimulus in a fraction of the time).
+// 2) Only then cut: redundant isolation work (a muscle already hit by another lift today), then
+//    last sets — early sets carry most of a session's stimulus, so the last set is cheapest to lose.
 function trimSessionToFit(exs, minutes, keepName) {
-  const plan = exs.map(ex => ({ ex, type: ex.type, left: (state[ex.name] || []).filter(s => !s.logged).length, done: (state[ex.name] || []).filter(s => s.logged).length, cut: 0, drop: false }))
+  const plan = exs.map(ex => ({ ex, type: ex.type, left: (state[ex.name] || []).filter(s => !s.logged).length, done: (state[ex.name] || []).filter(s => s.logged).length, cut: 0, drop: false, grouped: !!ex.ss, myo: false }))
     .filter(p => !isSkipped(p.ex.name));
   const before = estimateMinutesLeft(plan);
-  const cuts = [];
+  const cuts = [], pairs = [], myo = [];
+  const heavyFree = p => p.type === 'compound' && ['barbell', 'dumbbell'].includes((libraryEntry(p.ex.name) || {}).equip);
+  // 1a) supersets
+  const open = plan.filter(p => p.left > 0 && !p.grouped);
+  for (let i = 0; i + 1 < open.length && estimateMinutesLeft(plan) > minutes; i++) {
+    const a = open[i];
+    if (a.grouped) continue;
+    const b = open.slice(i + 1).find(q => !q.grouped && overlapScore(a.ex, q.ex) === 0 && !(heavyFree(a) && heavyFree(q)));
+    if (!b) continue;
+    a.grouped = b.grouped = true;
+    pairs.push([a.ex.name, b.ex.name]);
+  }
+  // 1b) myo-rep finishers on isolation work with 3+ sets left
+  plan.filter(p => p.type === 'isolation' && p.left >= 3 && !p.ex.technique && techniqueAllowed(p.ex, 'myo')).reverse().forEach(p => {
+    if (estimateMinutesLeft(plan) <= minutes) return;
+    p.left -= 2; p.myo = true; myo.push(p.ex.name);
+  });
+  // 2) cuts
   let guard = 0;
   while (estimateMinutesLeft(plan) > minutes && guard++ < 200) {
-    // 1) a not-started isolation whose muscles are already worked directly by another exercise today
     const redundant = [...plan].reverse().find(p => !p.drop && p.left > 0 && p.done === 0 && p.type === 'isolation' && p.ex.name !== keepName &&
       musclesOf(p.ex).every(m => plan.some(q => q !== p && !q.drop && (q.left + q.done) > 0 && musclesOf(q.ex).includes(m))));
-    if (redundant) { redundant.cut += redundant.left; redundant.left = 0; redundant.drop = true; continue; }
-    // 2) trim a last set from whatever has the most sets left (isolations first), keeping ≥1 each
+    if (redundant) { redundant.cut += redundant.left; redundant.left = 0; redundant.drop = true; redundant.myo = false; continue; }
     const trimmable = plan.filter(p => p.left > 1).sort((a, b) => (b.left - a.left) || ((a.type === 'isolation' ? 0 : 1) - (b.type === 'isolation' ? 0 : 1)));
     if (trimmable.length) { trimmable[0].left--; trimmable[0].cut++; continue; }
-    // 3) everything is down to 1 set: drop unstarted isolations from the end
     const lastIso = [...plan].reverse().find(p => !p.drop && p.left > 0 && p.done === 0 && p.type === 'isolation' && p.ex.name !== keepName);
-    if (lastIso) { lastIso.cut += lastIso.left; lastIso.left = 0; lastIso.drop = true; continue; }
+    if (lastIso) { lastIso.cut += lastIso.left; lastIso.left = 0; lastIso.drop = true; lastIso.myo = false; continue; }
     break;
   }
   plan.forEach(p => { if (p.cut) cuts.push({ name: p.ex.name, cut: p.cut, drop: p.drop }); });
-  return { cuts, before: Math.round(before), after: Math.round(estimateMinutesLeft(plan)), fits: estimateMinutesLeft(plan) <= minutes };
+  const dropped = new Set(cuts.filter(c => c.drop).map(c => c.name));
+  return { cuts, pairs: pairs.filter(([a, b]) => !dropped.has(a) && !dropped.has(b)), myo: plan.filter(p => p.myo).map(p => p.ex.name),
+    before: Math.round(before), after: Math.round(estimateMinutesLeft(plan)), fits: estimateMinutesLeft(plan) <= minutes };
 }
 function renderShortSheet() {
   const sheet = document.getElementById('runSheet');
@@ -5025,12 +5339,22 @@ function renderShortSheet() {
     const m = parseInt(b.dataset.min, 10);
     const r = trimSessionToFit(exs, m, exs[focusIdx] && exs[focusIdx].name);
     const pv = document.getElementById('shortPreview');
-    if (!r.cuts.length) { pv.innerHTML = `<div class="ex-prev">You'll fit everything in ${m} min — no cuts needed.</div>`; return; }
+    if (!r.cuts.length && !r.pairs.length && !r.myo.length) { pv.innerHTML = `<div class="ex-prev">You'll fit everything in ${m} min — no changes needed.</div>`; return; }
     pv.innerHTML = `
+      ${r.pairs.map(([a, b2]) => `<div class="opt-delta"><span>${escHtml(a)} + ${escHtml(b2)}</span><span>superset</span></div>`).join('')}
+      ${r.myo.map(n => { const left = (state[n] || []).filter(x => !x.logged).length - 2; return `<div class="opt-delta"><span>${escHtml(n)}</span><span>${left} set${left === 1 ? '' : 's'} + myo-reps</span></div>`; }).join('')}
       ${r.cuts.map(c => `<div class="opt-delta"><span>${escHtml(c.name)}</span><span>${c.drop ? 'skip today' : `−${c.cut} set${c.cut === 1 ? '' : 's'}`}</span></div>`).join('')}
-      <div class="ex-prev" style="margin-top:8px;">~${r.before} → ~${r.after} min.${r.fits ? '' : ' Still tight — this is as lean as it gets while keeping every main lift.'} Cuts go first to isolation work for muscles you already hit today, then to last sets, which add the least. Next week plans from what you actually do.</div>
-      <button class="btn-primary" id="applyShortBtn" style="width:100%; margin-top:12px;">Trim to ${m} min</button>`;
+      <div class="ex-prev" style="margin-top:8px;">~${r.before} → ~${r.after} min.${r.fits ? '' : ' Still tight — this is as lean as it gets while keeping every main lift.'} ${r.pairs.length || r.myo.length ? 'Time-savers come first: supersets of lifts that don’t share muscles, and myo-reps in place of the last sets, keep nearly all the work. ' : ''}${r.cuts.length ? 'Any cuts go to isolation work for muscles you already hit today, then to last sets, which add the least. ' : ''}Next week plans from what you actually do.</div>
+      <button class="btn-primary" id="applyShortBtn" style="width:100%; margin-top:12px;">Fit it in ${m} min</button>`;
     document.getElementById('applyShortBtn').onclick = () => {
+      sessionMods.pairs = { ...(sessionMods.pairs || {}) };
+      r.pairs.forEach(([a, b2]) => { sessionMods.pairs[a] = b2; });
+      sessionMods.techniques = { ...(sessionMods.techniques || {}) };
+      r.myo.forEach(n => {
+        sessionMods.techniques[n] = 'myo';
+        const sets = state[n] || []; let k = 2;
+        for (let i = sets.length - 1; i >= 0 && k > 0; i--) if (!sets[i].logged) { sets.splice(i, 1); k--; }
+      });
       r.cuts.forEach(c => {
         const sets = state[c.name] || [];
         if (c.drop) { state[c.name] = sets.filter(s => s.logged); sessionMods.skipped = [...new Set([...(sessionMods.skipped || []), c.name])]; return; }
@@ -5051,7 +5375,10 @@ function buildWorkoutSummary(exs, startMs, endMs) {
   const lifts = [];
   exs.forEach(ex => {
     const logged = (state[ex.name] || []).filter(s => s.logged && parseFloat(s.weight) > 0 && parseFloat(s.reps) > 0);
-    logged.forEach(s => { volume += parseFloat(s.weight) * parseFloat(s.reps); sets++; if (s.isPR) prs++; });
+    logged.forEach(s => {
+      volume += parseFloat(s.weight) * parseFloat(s.reps); sets++; if (s.isPR) prs++;
+      ((s.extra && s.extra.minis) || []).forEach(m => { if (m.w > 0 && m.r > 0) volume += m.w * m.r; });
+    });
     if (!logged.length) return;
     const today = Math.max(...logged.map(setE1rmAdj));
     const prev = prevByExercise[ex.name];
@@ -5179,7 +5506,13 @@ async function swapExerciseInDay(oldName, newName, newType) {
   const original = (cur && cur.swappedFrom) || oldName;
   const prog = getProgramDay(currentDay);
   if (original !== newName && (prog.exercises || []).some(ex => ex.name === newName)) return;
-  const updated = { ...prog, exercises: (prog.exercises || []).map(ex => ex.name === original ? { name: newName, type: newType } : ex) };
+  const ren = n => (n === original ? newName : n);
+  const pairs = {}; Object.entries(prog.pairs || {}).forEach(([a, b]) => { pairs[ren(a)] = ren(b); });
+  const techniques = {}; Object.entries(prog.techniques || {}).forEach(([a, k]) => { techniques[ren(a)] = k; });
+  const updated = { ...prog, exercises: (prog.exercises || []).map(ex => ex.name === original ? { name: newName, type: newType } : ex), pairs, techniques };
+  const renS = n => (n === oldName || n === original ? newName : n);
+  if (sessionMods.pairs) { const sp = {}; Object.entries(sessionMods.pairs).forEach(([a, b]) => { sp[renS(a)] = renS(b); }); sessionMods.pairs = sp; }
+  if (sessionMods.techniques) { const st = {}; Object.entries(sessionMods.techniques).forEach(([a, k]) => { st[renS(a)] = k; }); sessionMods.techniques = st; }
   await saveProgramOverride(currentDay, updated);
   if (sessionMods.swaps && sessionMods.swaps[original]) { const sw = { ...sessionMods.swaps }; delete sw[original]; sessionMods.swaps = sw; }
   if (sessionMods.order) sessionMods.order = sessionMods.order.map(n => (n === oldName || n === original) ? newName : n);
@@ -5199,6 +5532,9 @@ async function swapExerciseInDay(oldName, newName, newType) {
 function focusInputHTML(ex, sets, idx, id) {
   const s = sets[idx];
   const exName = ex.name;
+  const base = bwBase(exName);
+  const wShown = base ? bwInputFromLoad(exName, s.weight) : s.weight;
+  const wUnit = !base ? 'lb' : isAssisted(exName) ? 'assist lb' : 'added lb';
   const chase = prChaseText(exName, s.weight, s.reps);
   const rirOpts = ['', '4', '3', '2', '1', '0'].map(v => `<option value="${v}" ${String(s.rir) === v ? 'selected' : ''}>${v === '' ? '–' : v}</option>`).join('');
   const rirTxt = s.rir === '' || s.rir == null ? '' : (String(s.rir) === '0' ? 'Take it to failure' : `Stop with ${escHtml(s.rir)} rep${String(s.rir) === '1' ? '' : 's'} left`);
@@ -5206,8 +5542,8 @@ function focusInputHTML(ex, sets, idx, id) {
     ${intraSessionNoteByEx[exName] ? `<div class="run-note">${escHtml(intraSessionNoteByEx[exName])}</div>` : ''}
     <div class="big-row">
       <div class="big-field">
-        <input type="number" inputmode="decimal" placeholder="0" value="${escHtml(s.weight)}" id="wt-${id}" class="big-num ${String(s.weight).length >= 4 ? 'big-long' : ''}" aria-label="Weight in pounds">
-        <div class="big-meta"><button class="step" data-step="w-" aria-label="Less weight">−</button><span class="big-unit">lb</span><button class="step" data-step="w+" aria-label="More weight">+</button></div>
+        <input type="number" inputmode="decimal" placeholder="0" value="${escHtml(wShown)}" id="wt-${id}" class="big-num ${String(wShown).length >= 4 ? 'big-long' : ''}" aria-label="${base ? (isAssisted(exName) ? 'Assistance in pounds' : 'Added weight in pounds') : 'Weight in pounds'}">
+        <div class="big-meta"><button class="step" data-step="w-" aria-label="Less weight">−</button><span class="big-unit">${wUnit}</span><button class="step" data-step="w+" aria-label="More weight">+</button></div>
       </div>
       <div class="big-x">×</div>
       <div class="big-field">
@@ -5215,6 +5551,7 @@ function focusInputHTML(ex, sets, idx, id) {
         <div class="big-meta"><button class="step" data-step="r-" aria-label="Fewer reps">−</button><span class="big-unit">reps</span><button class="step" data-step="r+" aria-label="More reps">+</button></div>
       </div>
     </div>
+    ${base ? `<div class="bw-note">Body weight ${Math.round(bodyweightLb)} lb${BW_FRACTION[exName] < 1 ? ` · this move lifts ~${Math.round(BW_FRACTION[exName] * 100)}% of it` : ''} · total ${Math.round(parseFloat(s.weight) || base)} lb</div>` : ''}
     <div class="set-label">${rirTxt}</div>
     ${chase ? `<div class="pr-chase">${escHtml(chase)}</div>` : ''}
     <button class="log-btn big-log" id="logbtn-${id}">Log set ${idx + 1}</button>
@@ -5230,20 +5567,24 @@ function renderExerciseBody(ex, container, prevSlot) {
   const suggestion = computeSuggestion(exName, ex.type);
   const currentIndex = sets.findIndex(s => !s.logged);
 
-  prevSlot.innerHTML = prev ? `<div class="ex-prev">Last time (${prev.date}): ${prev.sets.map(s=>`${s.weight||'–'}×${s.reps||'–'}`).join(', ')}</div>` : `<div class="ex-prev">No previous log yet</div>`;
+  prevSlot.innerHTML = (prev ? `<div class="ex-prev">Last time (${prev.date}): ${prev.sets.map(s=>`${escHtml(fmtLoad(exName, s.weight))}×${escHtml(s.reps||'–')}`).join(', ')}</div>` : `<div class="ex-prev">No previous log yet</div>`)
+    + (isBodyweightLift(exName) && !bwBase(exName) ? `<div class="ex-prev" style="color:var(--rest-accent);">Log a weigh-in on the Body tab and this lift will count your body weight automatically.</div>` : '');
 
   let html = '';
   if (suggestion && currentIndex !== -1) {
     const meta = planMetaByEx[exName] || {};
     const sameW = suggestion.every(x => String(x.weight) === String(suggestion[0].weight));
-    const top = sameW ? `${suggestion[0].weight} lb × ${suggestion.map(x => x.reps).join(' / ')}` : suggestion.map(x => `${x.weight}×${x.reps}`).join(', ');
+    const L = w => (bwBase(exName) ? fmtLoad(exName, w) : `${w} lb`);
+    const top = sameW ? `${L(suggestion[0].weight)} × ${suggestion.map(x => x.reps).join(' / ')}` : suggestion.map(x => `${bwBase(exName) ? fmtLoad(exName, x.weight) : x.weight}×${x.reps}`).join(', ');
     const t = tierLabel(suggestion[0].tier);
     const m = meta.model;
     const why = m ? `Est. max ${Math.round(m.last.e1rm)} lb last time${m.weeklyPct != null ? ` · you're progressing ${m.weeklyPct >= 0 ? '+' : ''}${(m.weeklyPct * 100).toFixed(1)}%/week on this lift` : ''}` : '';
     const edited = sets.some(x => !x.logged && (x.wEdited || x.rEdited));
-    html += `<div class="ex-suggest"><div class="suggest-top"><span>Today's plan: ${top}</span>${edited ? `<button class="apply-btn" id="apply-${id}">Reset</button>` : ''}<button class="info-btn" id="infoProg-${id}">i</button></div><div class="suggest-detail"><span class="${t.cls}">${t.text}</span>${why ? ` · ${why}` : ''}</div>${meta.note ? `<div class="suggest-detail" style="margin-top:4px;">${escHtml(meta.note)}</div>` : ''}<div class="info-panel" id="infoProgPanel-${id}">Built from your own history on this lift. Each set you log gives an estimated max — adjusted for how many reps you had left (your 1–10 rating), so an easy set counts for more than a grind. The plan aims a little above your recent level at the rate you personally progress, keeps reps in the ${ex.type==='compound'?'5–8':'10–15'} range, and moves the weight up as soon as even your last set would still land in range. After every set it re-plans the rest from what you actually did, and your set-to-set rep drop is learned from your own logs too.</div>${plateauByExercise[exName] ? `<div class="ex-sleep-flag" style="margin-top:8px;">No new best on this lift in your last 2 sessions — usually a sign to check sleep and food, take an early deload on it, or swap it for a variation, rather than grinding the same weight.</div><button class="back-link" id="altBtn-${id}" style="padding:6px 0 0; color:var(--accent);">See alternatives</button><div id="altList-${id}"></div>` : ''}</div>`;
+    html += `<div class="ex-suggest"><div class="suggest-top"><span>Today's plan: ${top}</span>${edited ? `<button class="apply-btn" id="apply-${id}">Reset</button>` : ''}<button class="info-btn" id="infoProg-${id}">i</button></div><div class="suggest-detail"><span class="${t.cls}">${t.text}</span>${why ? ` · ${why}` : ''}</div>${meta.note ? `<div class="suggest-detail" style="margin-top:4px;">${escHtml(meta.note)}</div>` : ''}<div class="info-panel" id="infoProgPanel-${id}">Built from your own history on this lift. Each set you log gives an estimated max — adjusted for how many reps you had left (your check after each set, discounted if you weren't sure), so an easy set counts for more than a grind. The plan aims a little above your recent level at the rate you personally progress, keeps reps in the ${ex.type==='compound'?'5–8':'10–15'} range, and moves the weight up as soon as even your last set would still land in range. After every set it re-plans the rest from what you actually did, and your set-to-set rep drop is learned from your own logs too.</div>${plateauByExercise[exName] ? `<div class="ex-sleep-flag" style="margin-top:8px;">No new best on this lift in your last 2 sessions — usually a sign to check sleep and food, take an early deload on it, or swap it for a variation, rather than grinding the same weight.</div><button class="back-link" id="altBtn-${id}" style="padding:6px 0 0; color:var(--accent);">See alternatives</button><div id="altList-${id}"></div>` : ''}</div>`;
   } else if (currentIndex !== -1 && !prev) {
-    html += `<div class="ex-suggest"><div class="suggest-detail">First time logging this lift — pick a weight you could do for about ${ex.type==='compound'?'8':'12'} reps with 2 left in the tank. From the next session on, the plan is built from what you do today.</div></div>`;
+    const t0 = parseInt(sets[currentIndex].rir, 10);
+    const leftTxt = isNaN(t0) ? '2 left in the tank' : t0 === 0 ? 'nothing left (to failure)' : `${t0} left in the tank`;
+    html += `<div class="ex-suggest"><div class="suggest-detail">First time logging this lift — pick a weight you could do for about ${ex.type==='compound'?'8':'12'} reps with ${leftTxt}. From the next session on, the plan is built from what you do today.</div></div>`;
   }
   if (sleepDebt && ex.type === 'compound' && currentIndex !== -1) {
     html += `<div class="ex-sleep-flag">Sleep debt detected — RIR nudged up 1 on this compound lift today.</div>`;
@@ -5252,14 +5593,16 @@ function renderExerciseBody(ex, container, prevSlot) {
     // set chips: done (tap to edit), current, upcoming
     if (i === 0) html += `<div class="set-chips">`;
     const cls = s.logged ? 'set-chip is-done done-row' : (i === currentIndex ? 'set-chip is-current' : 'set-chip');
-    html += `<div class="${cls}" ${s.logged ? `data-i="${i}" title="Tap to edit"` : ''}><span class="chip-n">Set ${i + 1}${s.isPR ? '<b class="chip-pr">PR</b>' : ''}</span><span class="chip-v">${escHtml(s.weight || '–')} × ${escHtml(s.reps || '–')}</span></div>`;
+    html += `<div class="${cls}" ${s.logged ? `data-i="${i}" title="Tap to edit"` : ''}><span class="chip-n">Set ${i + 1}${s.isPR ? '<b class="chip-pr">PR</b>' : ''}</span><span class="chip-v">${escHtml(fmtLoad(exName, s.weight))} × ${escHtml(s.reps || '–')}</span></div>`;
     if (i === sets.length - 1) html += `</div>`;
   });
 
-  if (currentIndex === -1) {
+  if (ui.phase === 'tech' && ui.tech) {
+    html += techHTML(ex, id);
+  } else if (currentIndex === -1) {
     html += isSkipped(exName) ? `<div class="done-check">${sets.length ? 'Remaining sets skipped today' : 'Skipped today'} · <button class="back-link" id="unskip-${id}" style="padding:0; display:inline;">Undo</button></div>`
       : `<div class="done-check">All sets logged ✓</div>`;
-  } else if (!warmupDoneByEx[exName] && currentIndex === 0) {
+  } else if (!warmupDoneByEx[exName] && currentIndex === 0 && !bwBase(exName)) {
     const isFirstOfDay = getDayData(currentDay).exercises[0].name === exName && !Object.values(state).some(arr => (arr || []).some(x => x.logged));
     const rampSpec = isFirstOfDay
       ? [ {pct:40, reps:'8–10'}, {pct:60, reps:'5'}, {pct:80, reps:'3'} ]
@@ -5326,14 +5669,14 @@ function renderExerciseBody(ex, container, prevSlot) {
     const R = 96, C = 2 * Math.PI * R;
     html += `<div class="rest-ring-wrap ${remaining <= 10 ? 'ending' : ''}">
       <svg class="rest-ring" viewBox="0 0 220 220" aria-hidden="true"><circle class="ring-track" cx="110" cy="110" r="${R}"/><circle class="ring-fill" cx="110" cy="110" r="${R}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - pct / 100)).toFixed(1)}"/></svg>
-      <div class="ring-center"><div class="ring-label">Rest</div><div class="ring-time">${mm}:${ss}</div><div class="ring-next">Next ${escHtml(nx.weight || '–')} × ${escHtml(nx.reps || '–')}</div></div>
+      <div class="ring-center"><div class="ring-label">Rest</div><div class="ring-time">${mm}:${ss}</div><div class="ring-next">Next ${escHtml(fmtLoad(exName, nx.weight))} × ${escHtml(nx.reps || '–')}</div></div>
     </div>
     ${intraSessionNoteByEx[exName] ? `<div class="run-note" style="text-align:center;">${escHtml(intraSessionNoteByEx[exName])}</div>` : ''}
     <div class="ring-actions"><button class="text-btn" id="add30-${id}">+30 s</button><span class="run-tool-sep"></span><button class="text-btn" id="skip-${id}">Skip rest</button></div>`;
   } else if (ui.phase === 'confirm') {
     const s = sets[currentIndex];
     html += `<div class="rate-block">
-      <div class="rate-set">${escHtml(s.weight || '–')} <span>×</span> ${escHtml(s.reps || '–')}</div>
+      <div class="rate-set">${escHtml(fmtLoad(exName, s.weight))} <span>×</span> ${escHtml(s.reps || '–')}</div>
       ${(() => {
         // The set already had a target ("stop with 2 left"). This only checks whether that call landed.
         const t = clampNum(parseInt(s.rir, 10) || 0, 0, 4);
@@ -5351,8 +5694,9 @@ function renderExerciseBody(ex, container, prevSlot) {
     const s = sets[currentIndex];
     html += focusInputHTML(ex, sets, currentIndex, id);
   }
-  html += `<button class="add-set" id="add-${id}">+ Add set</button>`;
+  if (!(ui.phase === 'tech' && ui.tech)) html += `<button class="add-set" id="add-${id}">+ Add set</button>`;
   container.innerHTML = html;
+  if (ui.phase === 'tech' && ui.tech) { wireTech(ex, container, prevSlot); updateRunChrome(); return; }
   wireExerciseEvents(ex, container);
   updateRunChrome();
   ensureRestTicking(ex, container, prevSlot);
@@ -5579,7 +5923,7 @@ function wireExerciseEvents(ex, container) {
     });
   };
   container.querySelectorAll('.done-row').forEach(row => {
-    row.onclick = () => { const i = parseInt(row.dataset.i, 10); clearTimerFor(exName); sets[i].logged = false; uiState[exName].phase = 'input'; renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot')); };
+    row.onclick = () => { const i = parseInt(row.dataset.i, 10); clearTimerFor(exName); sets[i].logged = false; uiState[exName].phase = 'input'; if (i === sets.length - 1) { uiState[exName].techDone = false; delete sets[i].extra; } renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot')); };
   });
   const addBtn = container.querySelector(`#add-${id}`);
   if (addBtn) addBtn.onclick = () => { const arr = state[exName]; arr.push(makeSet(arr.length, arr.length + 1, weekInfo().deload)); applyPlanToExercise(ex, false); renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot')); };
@@ -5606,7 +5950,7 @@ function wireExerciseEvents(ex, container) {
     // re-predicted at the new weight. Reps you type apply to THIS set only — each later set keeps
     // its own prescribed reps instead of copying yours (that copying was the old bug).
     if (wt) wt.addEventListener('input', () => {
-      const predicted = onCurrentWeightEdited(ex, currentIndex, wt.value);
+      const predicted = onCurrentWeightEdited(ex, currentIndex, bwBase(exName) ? bwLoadFromInput(exName, wt.value) : wt.value);
       if (reps && predicted != null && document.activeElement !== reps) reps.value = predicted;
     });
     if (reps) reps.addEventListener('input', () => {
@@ -5622,8 +5966,14 @@ function wireExerciseEvents(ex, container) {
       const cur = sets[currentIndex];
       const step = LOAD_ROUND[ex.type] || 5;
       if (b.dataset.step === 'w+' || b.dataset.step === 'w-') {
-        const v = Math.max(0, (parseFloat(cur.weight) || 0) + (b.dataset.step === 'w+' ? step : -step));
-        onCurrentWeightEdited(ex, currentIndex, v);
+        if (bwBase(exName)) {
+          const now = parseFloat(bwInputFromLoad(exName, cur.weight)) || 0;
+          const nv = Math.max(isAssisted(exName) ? 0 : -1e9, now + (b.dataset.step === 'w+' ? 5 : -5));
+          onCurrentWeightEdited(ex, currentIndex, bwLoadFromInput(exName, nv));
+        } else {
+          const v = Math.max(0, (parseFloat(cur.weight) || 0) + (b.dataset.step === 'w+' ? step : -step));
+          onCurrentWeightEdited(ex, currentIndex, v);
+        }
       } else {
         cur.reps = Math.max(1, (parseInt(cur.reps, 10) || 0) + (b.dataset.step === 'r+' ? 1 : -1));
         cur.rEdited = true;
@@ -5642,6 +5992,9 @@ function wireExerciseEvents(ex, container) {
       if (rated) return; rated = true;
       const loggedSet = sets[currentIndex];
       loggedSet.logged = true;
+      if (bwBase(exName)) loggedSet.bwv = 1; // weight already holds the total load
+      const wasEdit = sets.slice(currentIndex + 1).some(x => x.logged);
+      uiState[exName].lastLoggedIdx = currentIndex; uiState[exName].lastWasEdit = wasEdit;
       replanRemaining(ex);
       const w = parseFloat(loggedSet.weight), r = parseInt(loggedSet.reps, 10);
       if (!isNaN(w) && !isNaN(r) && w > 0 && r > 0) {
@@ -5661,9 +6014,7 @@ function wireExerciseEvents(ex, container) {
       // If the app got closed, crashed, or you just moved on mid-exercise, that "logged" set was
       // gone — restoreTodaySession() reads from the very same doc this never got around to writing.
       autoSaveDay();
-      const hasMore = sets.some(s => !s.logged);
-      if (hasMore) { startRest(ex, container, prevSlot); }
-      else { uiState[exName].phase = 'input'; renderExerciseBody(ex, container, prevSlot); }
+      afterSetLogged(ex, container, prevSlot);
     };
     const shownAt = uiState[exName].rateShownAt || 0;
     const confRow = container.querySelector(`#conf-${id}`);
@@ -5715,6 +6066,125 @@ async function checkAndRecordPR(exName, weight, reps) {
   } catch (e) { return false; }
 }
 
+
+// What happens after a set is logged: a finisher (on the last set), the next exercise of a
+// superset/giant set (no rest), a rest before the next round, or a normal rest.
+let ssBanner = null; // { name, text } shown once on the exercise you were sent to
+function hasSetsLeft(n) { return (state[n] || []).some(s => !s.logged) && !isSkipped(n); }
+function afterSetLogged(ex, container, prevSlot) {
+  const exName = ex.name, sets = state[exName], ui = uiState[exName];
+  ssBanner = null;
+  const more = sets.some(s => !s.logged);
+  if (ui.lastWasEdit) { ui.lastWasEdit = false; ui.phase = 'input'; renderExerciseBody(ex, container, prevSlot); return; } // fixing an earlier set: no rest, no jumping
+  const k = techniqueFor(ex);
+  if (!more && k && !ui.techDone && sets.length && ui.lastLoggedIdx === sets.length - 1) {
+    ui.phase = 'tech'; ui.tech = { kind: k, minis: [], restUntil: k === 'restpause' || k === 'myo' ? Date.now() + 15000 : null };
+    renderExerciseBody(ex, container, prevSlot);
+    return;
+  }
+  const grp = groupNames(exName);
+  if (grp && grp.length > 1) {
+    const at = grp.indexOf(exName);
+    const nextInRound = grp.slice(at + 1).find(hasSetsLeft);
+    if (nextInRound) {
+      ui.phase = 'input';
+      ssBanner = { name: nextInRound, text: `${grp.length > 2 ? 'Giant set' : 'Superset'} — straight into this, no rest` };
+      jumpToExercise(nextInRound);
+      return;
+    }
+    const first = grp.find(hasSetsLeft);
+    if (first) {
+      ui.phase = 'input';
+      const exs = getDayData(currentDay).exercises;
+      const dur = Math.max(...grp.map(n => { const e = exs.find(x => x.name === n); return e && e.type === 'compound' ? REST_SECONDS_COMPOUND : REST_SECONDS_ISOLATION; }));
+      const u = uiState[first];
+      u.phase = 'rest'; u.restDuration = dur; u.restEndAt = Date.now() + dur * 1000;
+      ssBanner = { name: first, text: `Round done — rest, then back to ${grp.length > 2 ? 'the giant set' : 'the superset'}` };
+      jumpToExercise(first);
+      return;
+    }
+  }
+  if (more) startRest(ex, container, prevSlot);
+  else { ui.phase = 'input'; renderExerciseBody(ex, container, prevSlot); }
+}
+function jumpToExercise(name) {
+  const exs = getDayData(currentDay).exercises;
+  const i = exs.findIndex(e => e.name === name);
+  if (i === -1) return;
+  focusIdx = i;
+  renderMain();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+// ---------- finisher (technique) on the last set ----------
+let techTick = null;
+function techHTML(ex, id) {
+  const ui = uiState[ex.name], t = ui.tech, T = TECHNIQUES[t.kind];
+  const sets = state[ex.name], last = sets[sets.length - 1];
+  const lastW = parseFloat(last.weight) || 0;
+  const step = LOAD_ROUND[ex.type] || 5;
+  const minis = t.minis.map((m, i) => `<div class="tech-mini"><span>${t.kind === 'drop' ? `Drop ${i + 1}` : t.kind === 'partials' ? 'Partials' : `Mini ${i + 1}`}</span><span>${t.kind === 'partials' ? `${escHtml(m.r)} half reps` : `${escHtml(fmtLoad(ex.name, m.w))} × ${escHtml(m.r)}`}</span></div>`).join('');
+  const maxN = { drop: 2, restpause: 2, myo: 5, partials: 1 }[t.kind];
+  const lastMini = t.minis[t.minis.length - 1];
+  const finished = t.minis.length >= maxN || (t.kind === 'myo' && lastMini && parseInt(lastMini.r, 10) < 3);
+  let body = '';
+  if (finished) {
+    body = `<div class="tech-msg">${t.kind === 'myo' && lastMini && parseInt(lastMini.r, 10) < 3 ? 'Under 3 reps — that’s the end of the myo-reps.' : 'Finisher done.'}</div>`;
+  } else if (t.restUntil && Date.now() < t.restUntil) {
+    const left = Math.ceil((t.restUntil - Date.now()) / 1000);
+    body = `<div class="tech-count">${left}</div><div class="tech-msg">${t.kind === 'myo' ? '5 deep breaths' : 'Catch your breath'} — same weight</div>
+      <button class="text-btn" id="techGo-${id}" style="display:block; margin:6px auto 0;">Go now</button>`;
+  } else {
+    const prevW = lastMini ? parseFloat(lastMini.w) : lastW;
+    const bw = bwBase(ex.name);
+    const wTotal = t.kind === 'drop' ? (bw ? snapBwLoad(ex.name, prevW * 0.85) : Math.max(step, Math.round(prevW * 0.75 / step) * step)) : lastW;
+    const w = bw ? bwInputFromLoad(ex.name, wTotal) : wTotal;
+    const prevR = lastMini ? parseInt(lastMini.r, 10) : (parseInt(last.reps, 10) || 8);
+    const r = t.kind === 'myo' ? 4 : t.kind === 'partials' ? 6 : t.kind === 'restpause' ? Math.max(2, Math.round((parseInt(last.reps, 10) || 8) / 3)) : Math.max(4, Math.round(prevR * 0.75));
+    body = `<div class="tech-inputs">
+        ${t.kind === 'partials' ? '' : `<label>${bw ? (isAssisted(ex.name) ? 'Assist lb' : 'Added lb') : 'Weight'}<input type="number" inputmode="decimal" id="techW-${id}" value="${w}"></label>`}
+        <label>${t.kind === 'partials' ? 'Half reps' : 'Reps'}<input type="number" inputmode="numeric" id="techR-${id}" value="${r}"></label>
+      </div>
+      <button class="log-btn big-log" id="techLog-${id}">Log ${t.kind === 'drop' ? `drop ${t.minis.length + 1}` : t.kind === 'partials' ? 'partials' : `mini-set ${t.minis.length + 1}`}</button>`;
+  }
+  return `<div class="tech-block">
+    <div class="tech-k">Finisher</div><div class="tech-title">${escHtml(T.label)}</div>
+    <div class="tech-how">${escHtml(T.how)}</div>
+    ${minis ? `<div class="tech-minis">${minis}</div>` : ''}
+    ${body}
+    <button class="text-btn" id="techDone-${id}" style="display:block; margin:16px auto 0;">${finished || t.minis.length ? 'Done' : 'Skip the finisher today'}</button>
+  </div>`;
+}
+function wireTech(ex, container, prevSlot) {
+  const id = cssEsc(ex.name), ui = uiState[ex.name], t = ui.tech;
+  const sets = state[ex.name], last = sets[sets.length - 1];
+  const finish = () => {
+    if (techTick) { clearInterval(techTick); techTick = null; }
+    if (t.minis.length) last.extra = { kind: t.kind, minis: t.minis };
+    ui.techDone = true; ui.phase = 'input'; ui.tech = null;
+    autoSaveDay();
+    afterSetLogged(ex, container, prevSlot);
+  };
+  const done = container.querySelector(`#techDone-${id}`); if (done) done.onclick = finish;
+  const go = container.querySelector(`#techGo-${id}`); if (go) go.onclick = () => { t.restUntil = null; renderExerciseBody(ex, container, prevSlot); };
+  const log = container.querySelector(`#techLog-${id}`);
+  if (log) log.onclick = () => {
+    const wEl = container.querySelector(`#techW-${id}`), rEl = container.querySelector(`#techR-${id}`);
+    const r = parseInt(rEl.value, 10); if (!(r >= 0)) return;
+    const typed = wEl ? parseFloat(wEl.value) : NaN;
+    const wTot = wEl ? (bwBase(ex.name) ? bwLoadFromInput(ex.name, isNaN(typed) ? 0 : typed) : (typed || 0)) : (parseFloat(last.weight) || 0);
+    t.minis.push({ w: wTot, r });
+    if (t.kind === 'restpause' || t.kind === 'myo') t.restUntil = Date.now() + 15000;
+    renderExerciseBody(ex, container, prevSlot);
+  };
+  if (techTick) { clearInterval(techTick); techTick = null; }
+  if (t.restUntil && Date.now() < t.restUntil) {
+    techTick = setInterval(() => {
+      if (!container.isConnected || ui.phase !== 'tech') { clearInterval(techTick); techTick = null; return; }
+      if (Date.now() >= t.restUntil) { clearInterval(techTick); techTick = null; playRestChime(); }
+      renderExerciseBody(ex, container, prevSlot);
+    }, 1000);
+  }
+}
 function startRest(ex, container, prevSlot) {
   const exName = ex.name;
   const dur = ex.type === 'compound' ? REST_SECONDS_COMPOUND : REST_SECONDS_ISOLATION;
@@ -5806,6 +6276,7 @@ async function loadDay() {
   focusIdx = null;
   activeSessionDate = todayISO();
   await loadSessionMods(); // today's swaps / reorder / skips / start time, before sets are built
+  await loadBodyweight();
   await loadPrevious();
   await loadPrBests();
   initState();
@@ -5863,7 +6334,7 @@ function renderDayOverview() {
 
   const info = weekInfo();
   const totalSets = isRest ? 0 : dayData.exercises.reduce((sum, ex) => sum + setCountFor(ex, currentDay, info), 0);
-  const estMin = Math.round(totalSets * 2.5);
+  const estMin = estDayMinutes(dayData, info);
   // Earlier days this week show what you saved that day (read-only) instead of today's inputs.
   const isPastDay = isPastDayInBlock(currentDay);
 
@@ -6105,17 +6576,50 @@ function renderWorkoutPreview() {
   const wrap = document.getElementById('workoutPreview');
   const dayData = getDayData(currentDay);
   const info = weekInfo();
-  let html = `<button class="back-link" id="backFromPreviewBtn">‹ Back to overview</button>`;
-  dayData.exercises.forEach(ex => {
+  const exs = dayData.exercises;
+  let html = `<button class="back-link" id="backFromPreviewBtn">‹ Back to overview</button>
+    <div class="pv-help">Link two exercises to run them as a <b>superset</b> (link three or more for a <b>giant set</b>): one set of each back to back, then rest. Add a <b>finisher</b> to an exercise's last set. Both are saved to your program for this day.</div>`;
+  exs.forEach((ex, i) => {
     const n = setCountFor(ex, currentDay, info);
     const st = (state[ex.name] || []);
     const planTxt = st.length && st.every(x => x.weight !== '' && x.weight != null) && st.every(x => String(x.weight) === String(st[0].weight))
-      ? `${st[0].weight} lb × ${st.map(x => x.reps || '–').join(' / ')}` : `${ex.type} · ${n} sets`;
-    html += `<div class="preview-row"><span class="pname">${escHtml(ex.name)}</span><span class="ptype" style="text-transform:none;">${planTxt}</span></div>`;
+      ? `${bwBase(ex.name) ? fmtLoad(ex.name, st[0].weight) : st[0].weight + ' lb'} × ${st.map(x => x.reps || '–').join(' / ')}` : `${ex.type} · ${n} sets`;
+    const opts = Object.keys(TECHNIQUES).filter(k => techniqueAllowed(ex, k));
+    const progTech = (getProgramDay(currentDay).techniques || {})[ex.swappedFrom || ex.name] || '';
+    const cur = progTech;
+    const todayTech = !progTech && ex.technique ? ex.technique : '';
+    html += `<div class="pv-row ${ex.ss ? 'in-ss' : ''}">
+      ${ex.ss && ex.ss.pos === 0 ? `<div class="pv-ss-tag">${ex.ss.size > 2 ? 'Giant set' : 'Superset'} ${ex.ss.id}</div>` : ''}
+      <div class="preview-row" style="border:none; padding-bottom:4px;"><span class="pname">${escHtml(ex.name)}</span><span class="ptype" style="text-transform:none;">${escHtml(planTxt)}</span></div>
+      ${todayTech ? `<div class="pv-tech"><span>Today only: ${escHtml(TECHNIQUES[todayTech].label)}</span></div>` : ''}
+      ${opts.length ? `<div class="pv-tech"><span>Finisher</span><select class="tech-sel" data-ex="${escHtml(ex.swappedFrom || ex.name)}"><option value="">None</option>${opts.map(k => `<option value="${k}" ${cur === k ? 'selected' : ''}>${TECHNIQUES[k].label}</option>`).join('')}</select></div>` : ''}
+    </div>`;
+    if (i < exs.length - 1) {
+      const a = ex.swappedFrom || ex.name, b = exs[i + 1].swappedFrom || exs[i + 1].name;
+      const progPairs = getProgramDay(currentDay).pairs || {};
+      const linkedProg = progPairs[a] === b;
+      const linkedToday = !linkedProg && ex.ss && exs[i + 1].ss && ex.ss.id === exs[i + 1].ss.id;
+      html += linkedToday ? `<div class="pv-link on" style="cursor:default;">⛓ Superset today only (Short on time)</div>`
+        : `<button class="pv-link ${linkedProg ? 'on' : ''}" data-a="${escHtml(a)}" data-b="${escHtml(b)}">${linkedProg ? '⛓ Linked — tap to unlink' : '+ Superset with next'}</button>`;
+    }
   });
   html += `<div class="overview-actions"><button class="btn-primary" id="startFromPreviewBtn" style="flex:1;">Start Workout</button></div>`;
   wrap.innerHTML = html;
-  document.getElementById('backFromPreviewBtn').onclick = () => showMode('overview');
+  const saveStyle = async (mut) => {
+    if (db && !db.__local) { try { const snap = await db.doc(`program/${activePreset}_${currentDay}`).get(); if (snap.exists) programOverrides[currentDay] = snap.data(); } catch (e) {} }
+    const d = getProgramDay(currentDay);
+    const next = { ...d, pairs: { ...(d.pairs || {}) }, techniques: { ...(d.techniques || {}) } };
+    mut(next);
+    await saveProgramOverride(currentDay, next);
+    renderWorkoutPreview();
+  };
+  wrap.querySelectorAll('.pv-link').forEach(b => b.onclick = () => saveStyle(d => {
+    const a = b.dataset.a, nb = b.dataset.b;
+    if (d.pairs[a] === nb) delete d.pairs[a];
+    else { Object.keys(d.pairs).forEach(k => { if (d.pairs[k] === nb) delete d.pairs[k]; }); d.pairs[a] = nb; }
+  }));
+  wrap.querySelectorAll('.tech-sel').forEach(sel => sel.onchange = () => saveStyle(d => { if (sel.value) d.techniques[sel.dataset.ex] = sel.value; else delete d.techniques[sel.dataset.ex]; }));
+  document.getElementById('backFromPreviewBtn').onclick = () => { showMode('overview'); renderDayOverview(); };
   document.getElementById('startFromPreviewBtn').onclick = () => { startWorkoutClock(); showMode('active'); renderMain(); };
 }
 
@@ -6263,7 +6767,11 @@ function wireEditDayPanel() {
       type: row.querySelector('.edit-ex-type').value,
     })).filter(ex => ex.name);
     if (!exercises.length) return;
-    await saveProgramOverride(currentDay, { title, focus, exercises });
+    const old = getProgramDay(currentDay) || {};
+    const names = new Set(exercises.map(e => e.name));
+    const pairs = {}; Object.entries(old.pairs || {}).forEach(([a, b]) => { if (names.has(a) && names.has(b)) pairs[a] = b; });
+    const techniques = {}; Object.entries(old.techniques || {}).forEach(([a, k]) => { if (names.has(a)) techniques[a] = k; });
+    await saveProgramOverride(currentDay, { title, focus, exercises, pairs, techniques });
     panel.innerHTML = '';
     loadDay();
   };
@@ -6347,7 +6855,7 @@ async function renderHistory() {
     const exBlocks = Object.keys(sess.exercises).map(exName => {
       const sets = (sess.exercises[exName] || []).filter(s => s.logged);
       if (!sets.length) return '';
-      const setsTxt = sets.map(s => `${escHtml(s.weight || '–')}×${escHtml(s.reps || '–')}${s.isPR ? '<b class="chip-pr">PR</b>' : ''}`).join(', ');
+      const setsTxt = sets.map(s0 => { const s = normalizeBwSet(exName, s0); return `${escHtml(bwBase(exName) ? fmtLoad(exName, s.weight) : (s.weight || '–'))}×${escHtml(s.reps || '–')}${s.isPR ? '<b class="chip-pr">PR</b>' : ''}${s.extra && s.extra.minis && s.extra.minis.length ? ` <em class="hist-tech">+ ${escHtml((TECHNIQUES[s.extra.kind] || {}).short || 'finisher')}</em>` : ''}`; }).join(', ');
       return `<div class="preview-row"><span class="pname">${escHtml(exName)}</span><span class="ptype" style="text-transform:none; text-align:right;">${setsTxt}</span></div>`;
     }).join('');
     if (!exBlocks) return '';
@@ -7038,8 +7546,14 @@ setInterval(() => {
     renderWeightTab();
   }
 }, 60000);
+let lastPlanRefresh = 0;
 function resyncOnResume() {
   if (dayMode === 'active') { setScreenAwake(true); renderMain(); }
+  // Pick up plan changes made elsewhere (your coach, another device) when you come back to the app.
+  if (Date.now() - lastPlanRefresh > 60000 && db && !db.__local) {
+    lastPlanRefresh = Date.now();
+    (async () => { try { await loadNutritionConfig(); await loadAllProgramOverrides(); if (dayMode === 'overview') renderDayOverview(); } catch (e) {} })();
+  }
 }
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') resyncOnResume();
@@ -7116,8 +7630,24 @@ const PHASES = {
 // defaulting to Lean Bulk regardless of what they'd been running.
 let phaseBeforeCut = null;
 let reverseFromDelta = null; // where the reverse diet started (e.g. −500 from a cut)
+let nutritionServerSnap = null; // phase/maintenance as last read from the server
 async function persistNutritionConfig() {
   if (!db) return;
+  // If your coach changed the phase or maintenance since we last read it, and you didn't change
+  // those yourself just now, keep theirs instead of writing the stale copy back over it.
+  try {
+    if (!db.__local && nutritionServerSnap) {
+      const snap = await db.doc('nutrition/config').get();
+      const srv = snap.exists ? snap.data() : null;
+      const mineSame = nutritionPhase === nutritionServerSnap.phase && maintCals === nutritionServerSnap.maintCals;
+      if (srv && mineSame && (srv.phase !== nutritionServerSnap.phase || srv.maintCals !== nutritionServerSnap.maintCals)) {
+        nutritionPhase = srv.phase || nutritionPhase; weightPhase = nutritionPhase; maintCals = srv.maintCals || maintCals;
+        phaseStart = srv.phaseStart || phaseStart; plannedPhaseWeeks = srv.plannedPhaseWeeks || null;
+        reverseFromDelta = srv.reverseFromDelta != null ? srv.reverseFromDelta : reverseFromDelta; phaseBeforeCut = srv.phaseBeforeCut || phaseBeforeCut;
+      }
+    }
+  } catch (e) {}
+  nutritionServerSnap = { phase: nutritionPhase, maintCals };
   try { await db.doc('nutrition/config').set({ maintCals, phase: nutritionPhase, phaseStart, plannedPhaseWeeks, phaseAdvisorySnoozeUntil, phaseBeforeCut, maintAdjustedOn, carbCycle, reverseFromDelta }); } catch (e) {}
 }
 async function setNutritionPhase(newPhase, opts) {
@@ -7170,6 +7700,7 @@ async function loadNutritionConfig() {
       carbCycle = data.carbCycle !== false; // on unless you turned it off
       reverseFromDelta = data.reverseFromDelta != null ? data.reverseFromDelta : null;
       if (!PHASES[nutritionPhase]) nutritionPhase = 'maintain';
+      nutritionServerSnap = { phase: nutritionPhase, maintCals };
       // Migrate: a phase set before this feature existed has no recorded start date. Backfilling
       // to today isn't exactly right, but it's the honest "we don't actually know" default, and it
       // self-corrects going forward rather than breaking the weeks-in-phase math or guessing a
@@ -8200,13 +8731,13 @@ document.getElementById('menuConnectCoachBtn').addEventListener('click', async (
   if (!(supaClient && currentUserId)) { await uiAlert('Sign in first', 'Connecting to a coach needs an account, so your coach has something to see.'); return; }
   if (myCoaches.length) {
     const c = myCoaches[0];
-    if (!(await uiConfirm(`Coach: ${c.display_name}`, 'They can see everything you log in FOREVER (workouts, nutrition, weight, measurements, sleep, soreness, steps, your profile, your email and progress photos), read-only.', 'Disconnect', { danger: true }))) return;
+    if (!(await uiConfirm(`Coach: ${c.display_name}`, 'They can see everything you log in FOREVER (workouts, nutrition, weight, measurements, sleep, soreness, steps, your profile, your email and progress photos), and can adjust your program, diet phase and calories.', 'Disconnect', { danger: true }))) return;
     try { await supaClient.from('coach_links').delete().eq('client_id', currentUserId).eq('coach_id', c.coach_id); } catch (e) {}
     await loadCoachState();
     await uiAlert('Disconnected', 'Your coach can no longer see your data.');
     return;
   }
-  const code = await uiPrompt('Connect to a coach', "Enter your coach's code. They'll be able to see everything you log (workouts, nutrition, weight, measurements, sleep, soreness, steps, your profile, your email and progress photos). They can't change anything, and you can disconnect anytime.", { placeholder: 'FOREVER-AB12', caps: 'characters' }, 'Connect');
+  const code = await uiPrompt('Connect to a coach', "Enter your coach's code. They'll be able to see everything you log (workouts, nutrition, weight, measurements, sleep, soreness, steps, your profile, your email and progress photos). They can also adjust your program, diet phase and calories and send you notes, but never change what you've logged. You can disconnect anytime.", { placeholder: 'FOREVER-AB12', caps: 'characters' }, 'Connect');
   if (!code || !code.trim()) return;
   try {
     const { data, error } = await supaClient.rpc('connect_to_coach', { p_code: code.trim() });
@@ -8326,6 +8857,116 @@ async function renderCoachDashboard(useCache) {
   };
   body.querySelectorAll('.coach-card[data-i]').forEach(b => b.onclick = () => renderCoachClient(coachClients[parseInt(b.dataset.i, 10)]));
 }
+
+// ---------- Coach: edit a client's plan ----------
+// A connected coach can change a client's program, diet phase and maintenance calories, and send
+// notes. Database rules allow coaches to write ONLY those paths (program/*, nutrition/config,
+// weight/config, coachNotes/*), never a client's logs, body data or photos.
+async function coachWrite(clientId, path, data) {
+  const { error } = await supaClient.from('documents').upsert({ user_id: clientId, path, data, updated_at: new Date().toISOString() }, { onConflict: 'user_id,path' });
+  if (error) throw error;
+}
+function clientDoc(c, path) { const d = c.docs.find(x => x.path === path); return d ? d.data : null; }
+function clientProgram(c) {
+  const preset = (clientDoc(c, 'program/activePreset') || {}).value;
+  const pk = PRESET_PROGRAMS[preset] ? preset : 'custom';
+  const days = {};
+  DAY_ORDER.forEach(d => { days[d] = clientDoc(c, `program/${pk}_${d}`) || JSON.parse(JSON.stringify((PRESET_PROGRAMS[pk] || {})[d] || { title: 'Rest', exercises: [] })); });
+  return { preset: pk, days };
+}
+async function coachNote(c, text, changed) {
+  const ts = Date.now();
+  await coachWrite(c.client_id, `coachNotes/${ts}`, { text: text || '', changed: changed || '', from: (coachProfile && coachProfile.display_name) || 'Your coach', date: todayISO(), ts });
+}
+async function refreshClient(c) { try { c.docs = await fetchClientDocs(c.client_id); c.sum = clientSummary(c.docs, todayISO()); } catch (e) {} }
+function coachManageHTML(c) {
+  const cfg = clientDoc(c, 'nutrition/config') || {};
+  const prog = clientProgram(c);
+  const libNames = Object.values(EXERCISE_LIBRARY).flat().map(e => e.name).sort();
+  return `
+    <div class="cp-label" style="margin-top:22px;">Manage plan</div>
+    <div class="cm-row"><label>Diet phase<select id="cmPhase">${Object.keys(PHASES).map(k => `<option value="${k}" ${cfg.phase === k ? 'selected' : ''}>${escHtml(PHASES[k].label)}</option>`).join('')}</select></label>
+      <label>Maintenance kcal<input id="cmMaint" type="number" inputmode="numeric" value="${cfg.maintCals || ''}" placeholder="auto"></label></div>
+    <button class="btn-secondary" id="cmSaveDiet" style="width:100%; margin-top:10px;">Update nutrition</button>
+    <div class="cp-label" style="margin-top:20px;">Program</div>
+    <datalist id="cmLib">${libNames.map(n => `<option value="${escHtml(n)}">`).join('')}</datalist>
+    <div class="cm-days">${DAY_ORDER.map(d => `<button class="cm-day" data-d="${d}"><span>${d.slice(0, 3)}</span><b>${escHtml(prog.days[d].title || 'Rest')}</b><em>${(prog.days[d].exercises || []).length || ''}</em></button>`).join('')}</div>
+    <div id="cmDayEdit"></div>
+    <div class="cp-label" style="margin-top:20px;">Send a note</div>
+    <textarea id="cmNote" rows="3" placeholder="e.g. Great week. Push the last set on curls to failure."></textarea>
+    <button class="btn-primary" id="cmSendNote" style="width:100%; margin-top:10px;">Send note</button>
+    <div class="ex-prev" style="margin-top:6px;">They see it the next time they open the app.</div>`;
+}
+function wireCoachManage(c) {
+  const body = document.getElementById('coachBody');
+  const busy = async (btn, fn, okMsg) => { const t = btn.textContent; btn.disabled = true; btn.textContent = 'Saving…';
+    try { await fn(); btn.textContent = okMsg || 'Saved'; setTimeout(() => { btn.textContent = t; btn.disabled = false; }, 1400); }
+    catch (e) { btn.textContent = t; btn.disabled = false; await uiAlert("Couldn't save", (e && e.message) || 'Check your connection and try again.'); } };
+  document.getElementById('cmSaveDiet').onclick = (e) => busy(e.target, async () => {
+    const cfg = { ...(clientDoc(c, 'nutrition/config') || {}) };
+    const ph = document.getElementById('cmPhase').value, mt = parseFloat(document.getElementById('cmMaint').value);
+    const changes = [];
+    if (ph !== cfg.phase) {
+      const old = PHASES[cfg.phase] ? cfg.phase : 'maintain';
+      if (PHASES[old].group === 'bulk' && ['cut', 'recomp'].includes(PHASES[ph].group)) cfg.phaseBeforeCut = old;
+      if (ph === 'reverse') cfg.reverseFromDelta = Math.min(0, PHASES[old].calDelta || 0); // step up from the deficit they were in
+      cfg.phase = ph; cfg.phaseStart = todayISO(); cfg.plannedPhaseWeeks = null; cfg.phaseAdvisorySnoozeUntil = null;
+      changes.push(`diet phase → ${PHASES[ph].label}`);
+    }
+    if (mt > 0 && mt !== cfg.maintCals) { cfg.maintCals = Math.round(mt); changes.push(`maintenance → ${Math.round(mt).toLocaleString()} kcal`); }
+    if (!changes.length) return;
+    await coachWrite(c.client_id, 'nutrition/config', cfg);
+    const wc = { ...(clientDoc(c, 'weight/config') || {}), phase: cfg.phase };
+    await coachWrite(c.client_id, 'weight/config', wc);
+    await coachNote(c, '', changes.join(', '));
+    await refreshClient(c);
+  });
+  document.getElementById('cmSendNote').onclick = (e) => {
+    const v = document.getElementById('cmNote').value.trim();
+    if (!v) return;
+    busy(e.target, async () => { await coachNote(c, v.slice(0, 2000)); document.getElementById('cmNote').value = ''; }, 'Sent');
+  };
+  body.querySelectorAll('.cm-day').forEach(b => b.onclick = () => {
+    body.querySelectorAll('.cm-day').forEach(x => x.classList.toggle('selected', x === b));
+    renderCoachDayEdit(c, b.dataset.d);
+  });
+}
+function renderCoachDayEdit(c, day) {
+  const box = document.getElementById('cmDayEdit');
+  const prog = clientProgram(c);
+  const d = prog.days[day];
+  const row = (ex, i) => `<div class="cm-ex" data-i="${i}"><input class="cm-ex-n" list="cmLib" value="${escHtml(ex.name)}" placeholder="Exercise"><select class="cm-ex-t"><option value="compound" ${ex.type === 'compound' ? 'selected' : ''}>Compound</option><option value="isolation" ${ex.type !== 'compound' ? 'selected' : ''}>Isolation</option></select><button class="cm-x" aria-label="Remove">×</button></div>`;
+  box.innerHTML = `<div class="cm-edit">
+    <input id="cmTitle" value="${escHtml(d.title || '')}" placeholder="Day title (e.g. Arms) or Rest">
+    <div id="cmExList">${(d.exercises || []).map(row).join('')}</div>
+    <button class="back-link" id="cmAddEx" style="padding-left:0;">+ Add exercise</button>
+    <button class="btn-primary" id="cmSaveDay" style="width:100%; margin-top:8px;">Save ${day}</button></div>`;
+  const list = document.getElementById('cmExList');
+  const wireRows = () => list.querySelectorAll('.cm-x').forEach(x => x.onclick = () => { x.parentElement.remove(); });
+  wireRows();
+  document.getElementById('cmAddEx').onclick = () => { list.insertAdjacentHTML('beforeend', row({ name: '', type: 'isolation' }, list.children.length)); wireRows(); };
+  list.addEventListener('change', e => {
+    if (!e.target.classList.contains('cm-ex-n')) return;
+    const lib = libraryEntry(e.target.value.trim());
+    if (lib) e.target.parentElement.querySelector('.cm-ex-t').value = lib.type;
+  });
+  document.getElementById('cmSaveDay').onclick = async (ev) => {
+    const exercises = Array.from(list.querySelectorAll('.cm-ex')).map(r => ({ name: r.querySelector('.cm-ex-n').value.trim(), type: r.querySelector('.cm-ex-t').value })).filter(x => x.name);
+    const title = document.getElementById('cmTitle').value.trim() || (exercises.length ? day : 'Rest');
+    const names = new Set(exercises.map(x => x.name));
+    const pairs = {}; Object.entries(d.pairs || {}).forEach(([a, b]) => { if (names.has(a) && names.has(b)) pairs[a] = b; });
+    const techniques = {}; Object.entries(d.techniques || {}).forEach(([a, k]) => { if (names.has(a)) techniques[a] = k; });
+    const btn = ev.target; btn.disabled = true; btn.textContent = 'Saving…';
+    try {
+      await coachWrite(c.client_id, `program/${prog.preset}_${day}`, { title: exercises.length ? title : 'Rest', focus: '', exercises, pairs, techniques });
+      if (!clientDoc(c, 'program/activePreset')) await coachWrite(c.client_id, 'program/activePreset', { value: prog.preset });
+      await coachNote(c, "", `${day} workout`);
+      await refreshClient(c);
+      btn.textContent = 'Saved';
+      setTimeout(() => { if (btn.isConnected) { btn.textContent = `Save ${day}`; btn.disabled = false; } }, 1400);
+    } catch (e) { btn.disabled = false; btn.textContent = `Save ${day}`; await uiAlert("Couldn't save", (e && e.message) || 'Check your connection and try again.'); }
+  };
+}
 async function renderCoachClient(c) {
   const body = document.getElementById('coachBody');
   const s = c.sum, nm = (c.client_email || 'Client').split('@')[0];
@@ -8358,8 +8999,10 @@ async function renderCoachClient(c) {
     ${sessHTML || '<div class="ex-prev">No sessions yet.</div>'}
     <div class="cp-label" style="margin-top:18px;">Progress photos</div>
     <div id="coachPhotos" class="coach-photos"><div class="ex-prev">Loading…</div></div>
+    ${coachManageHTML(c)}
     <button class="btn-secondary" id="coachRemoveBtn" style="width:100%; margin-top:22px;">Remove client</button>`;
   document.getElementById('coachBackBtn').onclick = () => renderCoachDashboard(true);
+  wireCoachManage(c);
   document.getElementById('coachRemoveBtn').onclick = async () => {
     if (!(await uiConfirm(`Remove ${nm}?`, "You'll stop seeing their data. They can reconnect with your code.", 'Remove', { danger: true }))) return;
     try { await supaClient.from('coach_links').delete().eq('coach_id', currentUserId).eq('client_id', c.client_id); } catch (e) {}
@@ -8892,7 +9535,27 @@ async function startApp() {
   await loadFatigueSignal();
   await loadDay();
   await maybeShowOnboarding();
+  saveScheduleDoc();
   setTimeout(() => { maybeShowCarbCycleIntro(); }, 900);
+  setTimeout(() => { maybeShowCoachNote(); }, 1600);
+}
+// A note your coach sent (Coach → client → Send a note). Shown once, newest first.
+async function maybeShowCoachNote() {
+  if (!db || db.__local) return;
+  try {
+    const snap = await db.collection('coachNotes').get();
+    const notes = (snap.docs || []).map(d => d.data()).filter(n => n && (n.text || n.changed) && n.ts).sort((a, b) => b.ts - a.ts);
+    if (!notes.length) return;
+    let seen = 0;
+    try { const m = await db.doc('meta/coachNoteSeen').get(); if (m.exists) seen = m.data().ts || 0; } catch (e) {}
+    const fresh = notes.filter(n => n.ts > seen);
+    if (!fresh.length) return;
+    if (document.querySelector('#uiSheet.open, #introSheet.open, #choiceSheet.open, #remSheet.open') || (document.getElementById('onboardingOverlay') || {}).style && document.getElementById('onboardingOverlay').style.display === 'block') { setTimeout(maybeShowCoachNote, 4000); return; }
+    const n = fresh[0];
+    await uiDialog({ kicker: `From ${n.from || 'your coach'}`, title: fresh.length > 1 ? `${fresh.length} new notes` : 'A note from your coach',
+      text: fresh.slice(0, 4).map(x => `${x.date ? fmtHistoryDate(x.date) + ' — ' : ''}${x.text || ''}${x.text && x.changed ? ' ' : ''}${x.changed ? `Updated your ${x.changed}.` : ''}`).join('\n\n'), ok: 'Got it' });
+    await db.doc('meta/coachNoteSeen').set({ ts: n.ts });
+  } catch (e) {}
 }
 async function useLocalMode() {
   db = createLocalDb();
@@ -8908,6 +9571,8 @@ async function useSupabaseSession(session) {
   if (logoutBtn) logoutBtn.style.display = 'block';
   const reportBugBtn = document.getElementById('menuReportBugBtn');
   if (reportBugBtn) reportBugBtn.style.display = 'block';
+  const remBtn = document.getElementById('menuRemindersBtn');
+  if (remBtn) remBtn.style.display = 'block';
   const delBtn = document.getElementById('menuDeleteDataBtn');
   if (delBtn) delBtn.style.display = 'block';
   try {
@@ -8928,6 +9593,102 @@ async function useSupabaseSession(session) {
 // capture. This just wires the in-app "Report a bug" button to send a note alongside that same
 // error stream, tagged as manual feedback, viewable in the Sentry dashboard.
 let currentUserEmail = null;
+
+// ---------- Reminders (web push) ----------
+// The server checks hourly in your time zone and only nudges when something's still undone:
+// weigh-in, today's workout, Friday photos, the weekly check-in. On iPhone, web notifications only
+// work once FOREVER is added to the Home Screen (iOS 16.4+) and opened from there.
+const VAPID_PUBLIC = 'BI-DJ2C5NeLE-rxUAdRzLcWfC2j80bJDrHJk4GivCPXIxVw-X2DmULNDY7lPPbcJ9sPaLPKGCi06TgIiqAMbGUI';
+const REMINDER_DEFAULTS = { weigh: true, weighHour: 7, workout: true, workoutHour: 17, photos: true, photoHour: 9, checkin: true, checkinHour: 18 };
+function b64urlToBytes(s) { const p = '='.repeat((4 - s.length % 4) % 4); const b = atob((s + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(b, c => c.charCodeAt(0)); }
+function isIOS() { return /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
+function isStandalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
+function pushSupported() { return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
+async function currentPushSub() {
+  if (!pushSupported()) return null;
+  try { const reg = await navigator.serviceWorker.ready; return await reg.pushManager.getSubscription(); } catch (e) { return null; }
+}
+async function ownsPushSub(sub) {
+  if (!sub || !(supaClient && currentUserId)) return false;
+  try { const { data } = await supaClient.from('push_subs').select('endpoint').eq('endpoint', sub.endpoint).eq('user_id', currentUserId).limit(1); return !!(data && data.length); } catch (e) { return false; }
+}
+async function loadReminderPrefs() {
+  if (!(supaClient && currentUserId)) return { ...REMINDER_DEFAULTS };
+  try { const { data } = await supaClient.from('push_subs').select('prefs').eq('user_id', currentUserId).limit(1); if (data && data[0]) return { ...REMINDER_DEFAULTS, ...(data[0].prefs || {}) }; } catch (e) {}
+  return { ...REMINDER_DEFAULTS };
+}
+async function enableReminders(prefs) {
+  const perm = await Notification.requestPermission();
+  if (perm !== 'granted') throw new Error(perm === 'denied' ? 'Notifications are blocked for FOREVER. Turn them on in your phone’s Settings → Notifications → FOREVER, then try again.' : 'Notifications weren’t allowed.');
+  const reg = await navigator.serviceWorker.ready;
+  let sub = await reg.pushManager.getSubscription();
+  if (sub && !(await ownsPushSub(sub))) { try { await sub.unsubscribe(); } catch (e) {} sub = null; } // left over from another account on this phone
+  if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64urlToBytes(VAPID_PUBLIC) });
+  const j = sub.toJSON();
+  const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'America/Los_Angeles';
+  const { error } = await supaClient.from('push_subs').upsert({ endpoint: j.endpoint, user_id: currentUserId, p256dh: j.keys.p256dh, auth: j.keys.auth, tz, prefs }, { onConflict: 'endpoint' });
+  if (error) throw error;
+}
+async function saveReminderPrefs(prefs) {
+  if (!(supaClient && currentUserId)) return;
+  try { await supaClient.from('push_subs').update({ prefs, tz: Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Los_Angeles' }).eq('user_id', currentUserId); } catch (e) {}
+}
+async function disableReminders() {
+  const sub = await currentPushSub();
+  if (sub) { try { await supaClient.from('push_subs').delete().eq('endpoint', sub.endpoint); } catch (e) {} try { await sub.unsubscribe(); } catch (e) {} }
+}
+async function sendTestReminder() {
+  const { data } = await supaClient.auth.getSession();
+  const token = data && data.session && data.session.access_token;
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/send-reminders`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, apikey: SUPABASE_ANON_KEY }, body: JSON.stringify({ mode: 'test' }) });
+  const out = await res.json().catch(() => ({}));
+  return out.sent || 0;
+}
+const fmtHour = h => { const hh = h % 12 || 12; return `${hh}${h < 12 ? 'am' : 'pm'}`; };
+async function openReminders() {
+  document.getElementById('menuOverlay').classList.remove('open');
+  let el = document.getElementById('remSheet');
+  if (!el) { el = document.createElement('div'); el.id = 'remSheet'; el.className = 'rem-sheet'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); document.body.appendChild(el); }
+  const close = () => el.classList.remove('open');
+  el.innerHTML = `<div class="is-backdrop"></div><div class="is-panel"><div class="is-grab"></div><div class="is-kicker">Reminders</div><div class="is-title">Nudges, only when needed</div><div class="ex-prev">Loading…</div></div>`;
+  el.classList.add('open');
+  el.querySelector('.is-backdrop').onclick = close;
+  const panel = el.querySelector('.is-panel');
+  const head = `<div class="is-grab"></div><div class="is-kicker">Reminders</div><div class="is-title">Nudges, only when needed</div>`;
+  if (!(supaClient && currentUserId)) { panel.innerHTML = head + `<div class="rem-text">Reminders need an account so the server knows what you've already logged.</div><button class="btn-secondary" id="remClose" style="width:100%; margin-top:16px;">Close</button>`; panel.querySelector('#remClose').onclick = close; return; }
+  if (isIOS() && !isStandalone()) {
+    panel.innerHTML = head + `<div class="rem-text">On iPhone, notifications only work from the Home Screen app:</div>
+      <ol class="rem-steps"><li>In Safari, tap <b>Share</b> (the square with the arrow).</li><li>Tap <b>Add to Home Screen</b>.</li><li>Open FOREVER from your Home Screen, then come back to Menu → Reminders.</li></ol>
+      <div class="rem-text" style="margin-top:8px;">Needs iOS 16.4 or newer.</div><button class="btn-secondary" id="remClose" style="width:100%; margin-top:16px;">Got it</button>`;
+    panel.querySelector('#remClose').onclick = close; return;
+  }
+  if (!pushSupported()) { panel.innerHTML = head + `<div class="rem-text">This browser can't receive notifications. Try Chrome on Android, or the Home Screen app on iPhone.</div><button class="btn-secondary" id="remClose" style="width:100%; margin-top:16px;">Close</button>`; panel.querySelector('#remClose').onclick = close; return; }
+  const prefs = await loadReminderPrefs();
+  const sub = await currentPushSub();
+  const on = !!sub && Notification.permission === 'granted' && await ownsPushSub(sub);
+  const hours = (k, list) => `<select data-h="${k}">${list.map(h => `<option value="${h}" ${prefs[k] === h ? 'selected' : ''}>${fmtHour(h)}</option>`).join('')}</select>`;
+  const row = (k, label, sub2, hk, list) => `<div class="rem-row"><button class="rem-tog ${prefs[k] ? 'on' : ''}" data-k="${k}" aria-pressed="${prefs[k] ? 'true' : 'false'}"><span></span></button><div class="rem-l"><b>${label}</b><em>${sub2}</em></div>${hours(hk, list)}</div>`;
+  panel.innerHTML = head + `
+    <div class="rem-text">Each one only fires if it's still undone, and never more than once a day.</div>
+    ${row('weigh', 'Weigh-in', 'If you haven’t weighed in yet', 'weighHour', [5, 6, 7, 8, 9, 10])}
+    ${row('workout', 'Workout', 'On training days, if nothing’s logged', 'workoutHour', [6, 9, 12, 15, 16, 17, 18, 19])}
+    ${row('photos', 'Photo Friday', 'If no photo yet on Friday', 'photoHour', [7, 8, 9, 10, 12, 18])}
+    ${row('checkin', 'Weekly check-in', 'Once a week until it’s done', 'checkinHour', [9, 12, 17, 18, 19, 20])}
+    ${on ? `<button class="btn-secondary" id="remTest" style="width:100%; margin-top:16px;">Send a test</button>
+      <button class="text-btn" id="remOff" style="display:block; margin:12px auto 0;">Turn reminders off on this device</button>`
+      : `<button class="btn-primary" id="remOn" style="width:100%; margin-top:16px;">Turn on reminders</button>`}
+    <div class="ex-prev" id="remStatus" style="text-align:center; margin-top:10px;"></div>`;
+  const status = t => { const s2 = panel.querySelector('#remStatus'); if (s2) s2.textContent = t; };
+  panel.querySelectorAll('.rem-tog').forEach(b => b.onclick = () => { prefs[b.dataset.k] = !prefs[b.dataset.k]; b.classList.toggle('on', prefs[b.dataset.k]); b.setAttribute('aria-pressed', prefs[b.dataset.k] ? 'true' : 'false'); if (on) saveReminderPrefs(prefs); });
+  panel.querySelectorAll('select[data-h]').forEach(sel => sel.onchange = () => { prefs[sel.dataset.h] = parseInt(sel.value, 10); if (on) saveReminderPrefs(prefs); });
+  const onBtn = panel.querySelector('#remOn');
+  if (onBtn) onBtn.onclick = async () => { onBtn.disabled = true; onBtn.textContent = 'Turning on…'; try { await enableReminders(prefs); openReminders(); } catch (e) { onBtn.disabled = false; onBtn.textContent = 'Turn on reminders'; status((e && e.message) || 'Couldn’t turn on reminders.'); } };
+  const test = panel.querySelector('#remTest');
+  if (test) test.onclick = async () => { test.disabled = true; try { const n = await sendTestReminder(); status(n ? 'Sent — check your notifications.' : 'Couldn’t reach this device. Turn reminders off and on again.'); } catch (e) { status('Couldn’t send a test right now.'); } test.disabled = false; };
+  const off = panel.querySelector('#remOff');
+  if (off) off.onclick = async () => { await disableReminders(); openReminders(); };
+}
+document.getElementById('menuRemindersBtn').addEventListener('click', openReminders);
 document.getElementById('menuReportBugBtn').addEventListener('click', async () => {
   document.getElementById('menuOverlay').classList.remove('open');
   const desc = await uiPrompt('Report a bug', "What went wrong? It's sent with your account and device info so it can be fixed.", { placeholder: 'e.g. Rest timer froze after…' }, 'Send');
@@ -8945,6 +9706,7 @@ document.getElementById('menuReportBugBtn').addEventListener('click', async () =
 async function deleteAllMyData() {
   if (!(supaClient && currentUserId)) return { ok: false };
   if (db && db.clearOutbox) db.clearOutbox(); // unsent offline saves would otherwise re-create data
+  try { await disableReminders(); await supaClient.from('push_subs').delete().eq('user_id', currentUserId); } catch (e) {}
   let photos = 0, photoErr = false;
   try {
     const { data: files, error: listErr } = await supaClient.storage.from('photos').list(currentUserId, { limit: 1000 });
@@ -8989,6 +9751,7 @@ document.getElementById('menuLogoutBtn') && (document.getElementById('menuLogout
   // next person to use this phone can't see it. Unsent saves stay queued (per account) and go up
   // next time this account logs in here.
   if (db && db.flushOutbox) { try { await db.flushOutbox(); } catch (e) {} }
+  try { await disableReminders(); } catch (e) {} // this phone shouldn't keep getting this account's reminders
   if (db && db.clearLocalCache) { try { db.clearLocalCache(); } catch (e) {} }
   if (supaClient) { try { await supaClient.auth.signOut(); } catch (e) {} }
   location.reload();
