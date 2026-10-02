@@ -172,7 +172,7 @@
 
   nav.days { display: flex; overflow-x: auto; gap: 0; padding: 0 20px; margin-top: 4px; }
   nav.days button {
-    flex: 0 0 auto; padding: 12px 16px 10px; background: none; border: none; border-bottom: 2px solid transparent;
+    flex: 1 1 0; min-width: 0; text-align: center; padding: 12px 0 10px; background: none; border: none; border-bottom: 2px solid transparent;
     color: var(--text-dim); font-size: 12.5px; font-weight: 500; cursor: pointer; white-space: nowrap; font-family: inherit;
   }
   nav.days button.active { color: var(--accent); border-bottom-color: var(--accent); animation: navGlow 2.6s ease-in-out infinite; }
@@ -302,7 +302,7 @@
 
   /* Weight — glowing scale readout with an ambient pulsing scale icon */
   .scale-readout { position: relative; text-align: center; margin: 4px 0 22px; padding: 30px 0 4px; }
-  .scale-icon-pulse { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 96px; height: 96px; pointer-events: none; opacity: 0.5; }
+  .scale-icon-pulse { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -46%); width: 132px; height: 132px; pointer-events: none; opacity: 0.22; }
   .scale-icon-pulse svg { width: 100%; height: 100%; color: var(--rest-accent); animation: scaleBreathe 3.2s ease-in-out infinite; filter: drop-shadow(0 0 10px rgba(124,58,237,0.45)); }
   @keyframes scaleBreathe { 0%, 100% { transform: scale(0.94); opacity: 0.55; } 50% { transform: scale(1.05); opacity: 0.9; } }
   .scale-readout-label { font-size: 10px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; position: relative; }
@@ -310,6 +310,16 @@
   .scale-readout-num.pulse { animation: glowBreathe 3.5s ease-in-out infinite, scaleReadoutPulse 0.5s var(--ease); }
   @keyframes scaleReadoutPulse { 0% { transform: scale(1); } 30% { transform: scale(1.12); text-shadow: 0 0 28px rgba(255,255,255,0.7); } 100% { transform: scale(1); } }
   .scale-readout-unit { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; position: relative; }
+  /* Empty readouts (see setReadout): a quiet label in the body font instead of a glowing dash. */
+  .is-empty, .stat-num.is-empty, .cal-big.is-empty, .bmi-num.is-empty, .tdee-num.is-empty, .scale-readout-num.is-empty, .fuel-check-num.is-empty {
+    font-family: 'Outfit', sans-serif !important; font-size: 13px !important; font-weight: 400 !important;
+    letter-spacing: 0.4px !important; color: var(--text-dim) !important; text-shadow: none !important;
+    animation: none !important; filter: none !important; }
+  .scale-readout-num.is-empty { padding: 18px 0 6px; }
+  .cal-big.is-empty { margin-top: 22px; }
+  .bmi-num.is-empty { padding-top: 6px; text-transform: uppercase; letter-spacing: 2px !important; font-size: 10px !important; }
+  .tdee-num.is-empty { text-transform: uppercase; letter-spacing: 2px !important; font-size: 10px !important; padding-bottom: 4px; }
+  .header-row .week-num.is-empty, .week-num.is-empty { font-size: 11px !important; letter-spacing: 1.5px !important; text-transform: uppercase; }
 
   /* Mesos — a continuous journey track instead of boxed week tiles: one flowing pill-shaped
      bar colored by phase (base/overload/deload), with a glowing marker that travels along it
@@ -336,7 +346,21 @@
 
   /* Split picker — collapsed to one summary row by default instead of every preset laid out
      at once; "Change split" expands the full list, picking one (or collapsing) folds it back. */
-  .split-summary-row { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--hairline); }
+  .split-summary-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--hairline); }
+  .split-summary-row > div { flex: 1 1 auto; min-width: 0; }
+  .split-summary-row > .btn-secondary { flex: 0 0 auto; width: auto; padding: 10px 18px; }
+  /* Sideways-scrolling chip rows fade at the edge that has more to show, so it reads as
+     "swipe for more" instead of a word sliced in half. */
+  .phase-row.more-right { -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); }
+  .phase-row.more-left { -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%); mask-image: linear-gradient(90deg, transparent, #000 18%); }
+  .phase-row.more-left.more-right { -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); }
+  .sync-btn.is-waiting { opacity: 0.35; cursor: default; }
+  .day-type-line { text-align: center; margin-top: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .day-type-line:empty { display: none; }
+  .dtl-tag { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--rest-accent); }
+  .dtl-note { font-size: 12px; color: var(--text-dim); max-width: 34ch; line-height: 1.45; }
+  .day-type-line .tip-cta { font-size: 12px; margin-top: 2px; }
+  .tip-cta { display: inline-block; margin-top: 8px; background: none; border: none; padding: 0; color: var(--rest-accent); font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; }
   .split-summary-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
   .split-summary-name { font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin-top: 2px; letter-spacing: 0.5px; }
   .split-collapse-row { display: flex; justify-content: flex-end; margin: 14px 0 4px; }
@@ -551,6 +575,18 @@
   /* full-screen workout */
   body.is-running #tab-workout .control-panel, body.is-running #dayNav, body.is-running #fatigueSlot, body.is-running #checkinSlot,
   body.is-running #blockReviewSlot, body.is-running #missedWeekSlot { display: none; }
+  /* Rest-done flash: a purple wash from the edges plus a centred label. On an iPhone across the
+     gym floor (no vibration, sound possibly muted) this is the signal you'll actually catch. */
+  #restFlash { position: fixed; inset: 0; z-index: 900; pointer-events: none; opacity: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at center, rgba(124,58,237,0.10) 0%, rgba(124,58,237,0.55) 100%);
+    box-shadow: inset 0 0 0 3px var(--rest-accent); }
+  #restFlash span { font-family: 'Bebas Neue', 'Outfit', sans-serif; font-size: 44px; letter-spacing: 4px; color: #fff;
+    filter: drop-shadow(0 0 18px rgba(167,139,250,0.9)); }
+  #restFlash.on { animation: restFlashKf 1.6s var(--ease) forwards; }
+  @keyframes restFlashKf { 0% { opacity: 0; } 8% { opacity: 1; } 30% { opacity: 0.55; } 45% { opacity: 1; } 100% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { #restFlash.on { animation: restFlashCalm 1.6s linear forwards; } }
+  @keyframes restFlashCalm { 0%, 70% { opacity: 0.9; } 100% { opacity: 0; } }
   body.is-running #workoutRunner > div:first-child { margin: 14px 20px 0; }
   body.is-running #workoutRunner .back-link { padding: 4px 0; font-size: 12px; font-weight: 400; }
   .big-num.big-long { font-size: 64px !important; }
@@ -621,6 +657,186 @@
   .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 4px; }
   .photo-thumb { position: relative; aspect-ratio: 3/4; background-size: cover; background-position: center; border: 1px solid var(--border); cursor: pointer; padding: 0; }
   .photo-thumb-date { position: absolute; left: 0; right: 0; bottom: 0; padding: 3px 4px; font-size: 8.5px; font-weight: 600; color: #fff; background: linear-gradient(to top, rgba(0,0,0,0.75), transparent); text-align: left; }
+
+  /* ---- One finish across every tab (matches the workout screen) ----
+     Actions are pills, rating scales are a single hairline segmented control instead of five
+     separate boxes, and the bright glow on primary buttons is softened. */
+  .btn-primary, .btn-secondary, .checkin-submit, .food-add-btn, .sync-btn, .apply-btn { border-radius: 999px; }
+  .btn-primary { box-shadow: 0 8px 22px -10px rgba(255,255,255,0.45); }
+  .checkin-submit { padding: 13px; }
+  .scale-row { gap: 0; border: 1px solid var(--hairline); border-radius: 999px; overflow: hidden; }
+  .scale-row .scale-btn { border: none; border-left: 1px solid var(--hairline); border-radius: 0; padding: 10px 0; min-height: 40px; background: none; }
+  .scale-row .scale-btn:first-child { border-left: none; }
+  .scale-row .scale-btn.selected { background: var(--accent); color: var(--on-accent); }
+  .scale-row .scale-btn:active { transform: none; background: var(--accent-soft); }
+  /* With a real number on screen the scale watermark steps back so it never fights the digits. */
+  .scale-readout:has(.scale-readout-num:not(.is-empty)) .scale-icon-pulse { opacity: 0.07; }
+
+  /* One-time intro sheet (training/rest-day fuel) */
+  #introSheet { position: fixed; inset: 0; z-index: 950; display: none; }
+  #introSheet.open { display: block; }
+  #introSheet .is-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.62); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); animation: isFade .3s var(--ease); }
+  #introSheet .is-panel { position: absolute; left: 0; right: 0; bottom: 0; max-width: 560px; margin: 0 auto;
+    background: linear-gradient(180deg, #0e0c14, #060509); border-top: 1px solid rgba(167,139,250,0.35);
+    border-radius: 22px 22px 0 0; padding: 22px 22px calc(22px + env(safe-area-inset-bottom));
+    box-shadow: 0 -20px 60px -20px rgba(124,58,237,0.45); animation: isUp .42s var(--ease); }
+  #introSheet .is-grab { width: 36px; height: 4px; border-radius: 4px; background: var(--hairline); margin: -8px auto 14px; }
+  #introSheet .is-kicker { font-size: 10px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--rest-accent); }
+  #introSheet .is-title { font-family: 'Bebas Neue', 'Outfit', sans-serif; font-size: 34px; letter-spacing: 0.5px; line-height: 1; margin: 8px 0 16px; }
+  #introSheet .is-week { display: flex; align-items: flex-end; gap: 8px; margin: 4px 0 6px; }
+  #introSheet .is-dl { text-align: center; }
+  #introSheet .is-day { flex: 1; display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+  #introSheet .is-col { height: 72px; display: flex; align-items: flex-end; }
+  #introSheet .is-bar { width: 100%; border-radius: 6px 6px 2px 2px; background: rgba(255,255,255,0.14); transform-origin: bottom; animation: isGrow .7s var(--ease) both; }
+  #introSheet .is-bar.t { background: linear-gradient(180deg, var(--rest-accent), var(--rest-2)); box-shadow: 0 0 18px -4px rgba(167,139,250,0.7); }
+  #introSheet .is-dl { font-size: 10px; color: var(--text-dim); letter-spacing: 0.5px; }
+  #introSheet .is-legend { display: flex; gap: 16px; font-size: 11px; color: var(--text-dim); margin: 6px 0 16px; }
+  #introSheet .is-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; vertical-align: 0; }
+  #introSheet .is-points { list-style: none; padding: 0; margin: 0 0 18px; border-top: 1px solid var(--hairline); }
+  #introSheet .is-points li { padding: 11px 0; border-bottom: 1px solid var(--hairline); font-size: 13.5px; line-height: 1.45; color: var(--text); }
+  #introSheet .is-points li span { color: var(--text-dim); }
+  #introSheet .is-actions { display: flex; gap: 10px; }
+  #introSheet .is-foot { text-align: center; font-size: 11px; color: var(--text-dim); margin-top: 12px; }
+  @keyframes isUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  @keyframes isFade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes isGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @media (prefers-reduced-motion: reduce) { #introSheet .is-panel, #introSheet .is-backdrop, #introSheet .is-bar { animation: none; } }
+
+  /* Per-muscle feedback + focus */
+  .rec-ask { margin-top: 14px; padding: 12px 0 2px; border-top: 1px solid var(--hairline); }
+  .rec-q { font-size: 12.5px; color: var(--text-dim); margin-bottom: 8px; }
+  .rec-opts { display: flex; gap: 6px; }
+  .rec-opts button { flex: 1; background: none; border: 1px solid var(--hairline); color: var(--text); border-radius: 999px; padding: 9px 4px; font: inherit; font-size: 11.5px; cursor: pointer; }
+  .rec-opts button:active { background: var(--accent-soft); }
+  .muscle-check { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--hairline); }
+  .mc-row { display: grid; grid-template-columns: 88px 1fr; align-items: center; gap: 4px 10px; padding: 6px 0; }
+  .mc-name { font-size: 13px; }
+  .mc-seg .scale-btn { padding: 7px 0; min-height: 34px; font-size: 12px; }
+  .mc-out { grid-column: 1 / -1; font-size: 11.5px; color: var(--rest-accent); min-height: 0; }
+  .mc-out:empty { display: none; }
+  .vol-adj { color: var(--rest-accent); font-weight: 600; font-size: 10.5px; }
+  .vol-badge { font-weight: 500; font-size: 9.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--on-rest); background: var(--rest-accent); padding: 1px 6px; border-radius: 999px; margin-left: 2px; }
+  .vol-feed { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--hairline); }
+  .vol-feed-row { display: flex; justify-content: space-between; gap: 10px; font-size: 11.5px; padding: 4px 0; color: var(--text-dim); }
+  .vol-feed-row span:first-child { color: var(--text); white-space: nowrap; }
+  .prio-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .prio-chip { background: none; border: 1px solid var(--hairline); color: var(--text-dim); border-radius: 999px; padding: 8px 14px; font: inherit; font-size: 12.5px; cursor: pointer; }
+  .prio-chip.selected { background: var(--rest-accent); border-color: var(--rest-accent); color: var(--on-rest); font-weight: 600; }
+
+  /* Steps, cardio, body composition */
+  .steps-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 12.5px; color: var(--text-dim); margin-top: 12px; }
+  .steps-row b { color: var(--text); font-weight: 600; }
+  .steps-bar { height: 4px; background: var(--bg-input); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+  .steps-bar div { height: 100%; background: var(--rest-accent); border-radius: 4px; transition: width .5s var(--ease); }
+  .link-btn { background: none; border: none; padding: 0; color: var(--rest-accent); font: inherit; cursor: pointer; }
+  .cardio-form { display: grid; grid-template-columns: 1fr 80px; gap: 10px; margin-top: 8px; }
+  .cardio-form .cardio-int { grid-column: 1 / -1; }
+  .cardio-form .food-add-btn { grid-column: 1 / -1; padding: 11px; }
+  .bc-grid { display: flex; justify-content: space-around; text-align: center; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--hairline); }
+  .bc-num { font-family: 'Bebas Neue', 'Outfit', sans-serif; font-size: 32px; letter-spacing: 0.5px; }
+  .bc-num span { font-family: 'Outfit', sans-serif; font-size: 12px; color: var(--text-dim); margin-left: 2px; }
+  .bc-lbl { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); margin-top: 2px; }
+  .bc-change { font-size: 12.5px; margin-top: 14px; line-height: 1.5; }
+  .bc-change b { color: var(--rest-accent); font-weight: 600; }
+  .bc-note { font-size: 11.5px; color: var(--text-dim); margin-top: 10px; line-height: 1.5; }
+  .bc-note.warnish { color: #e6b3a8; }
+
+  /* Photo compare */
+  #photoCompareOverlay { overflow-y: auto; background: var(--bg) !important; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .cmp-wrap { max-width: 640px; margin: 0 auto; padding: calc(18px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom)); }
+  .cmp-modes { display: flex; gap: 0; border: 1px solid var(--hairline); border-radius: 999px; overflow: hidden; margin-bottom: 12px; }
+  .cmp-modes button { flex: 1; background: none; border: none; color: var(--text-dim); padding: 9px; font: inherit; font-size: 12px; cursor: pointer; }
+  .cmp-modes button.on { background: var(--accent); color: var(--on-accent); font-weight: 600; }
+  .cmp-side { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .cmp-pane { background: none; border: 1px solid transparent; border-radius: 14px; padding: 0; overflow: hidden; color: var(--text); cursor: pointer; text-align: left; }
+  .cmp-pane.active { border-color: var(--rest-accent); }
+  .cmp-img { width: 100%; aspect-ratio: 3 / 4; background: #0b0a0f center / cover no-repeat; }
+  .cmp-cap { font-size: 11px; color: var(--text-dim); padding: 7px 8px; }
+  .cmp-slide { position: relative; border-radius: 14px; overflow: hidden; }
+  .cmp-slide .cmp-top { position: absolute; inset: 0; height: 100%; }
+  .cmp-line { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; box-shadow: 0 0 12px rgba(167,139,250,0.9); transform: translateX(-1px); pointer-events: none; }
+  .cmp-slide input[type=range] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; border: none; padding: 0; }
+  .cmp-caps { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); margin-top: 8px; }
+  .cmp-diff { text-align: center; font-family: 'Bebas Neue', 'Outfit', sans-serif; font-size: 22px; letter-spacing: 0.5px; margin-top: 12px; color: var(--rest-accent); }
+  .cmp-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+  .cmp-thumb { flex: 0 0 64px; height: 84px; border-radius: 10px; border: 2px solid transparent; background: #0b0a0f center / cover no-repeat; position: relative; cursor: pointer; padding: 0; }
+  .cmp-thumb span { position: absolute; left: 0; right: 0; bottom: 0; font-size: 8.5px; background: rgba(0,0,0,0.6); color: #fff; padding: 2px; }
+  .cmp-thumb.is-a { border-color: rgba(255,255,255,0.7); }
+  .cmp-thumb.is-b { border-color: var(--rest-accent); }
+
+  /* Food search + barcode */
+  .food-search { display: flex; gap: 8px; margin-top: 14px; }
+  .food-search input { flex: 1; padding: 11px 14px; border-radius: 999px; border: 1px solid var(--hairline); background: var(--bg-input); font-size: 14px; }
+  .food-scan-btn { flex: 0 0 44px; height: 44px; border-radius: 50%; border: 1px solid var(--hairline); background: none; color: var(--text); display: grid; place-items: center; cursor: pointer; }
+  .food-scan-btn svg { width: 22px; height: 22px; }
+  .food-manual-label { margin-top: 16px; text-transform: none; letter-spacing: 0; font-size: 11.5px; color: var(--text-dim); }
+  .fs-status { font-size: 12px; color: var(--text-dim); padding: 12px 2px 4px; }
+  .fs-list { margin-top: 10px; border-top: 1px solid var(--hairline); max-height: 340px; overflow-y: auto; }
+  .fs-item { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; text-align: left; background: none; border: none; border-bottom: 1px solid var(--hairline); color: var(--text); padding: 11px 2px; font: inherit; cursor: pointer; }
+  .fs-name { font-size: 13px; line-height: 1.35; }
+  .fs-brand { display: block; font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .fs-kcal { font-family: 'Bebas Neue', 'Outfit', sans-serif; font-size: 18px; white-space: nowrap; }
+  .fs-kcal small { font-family: 'Outfit', sans-serif; font-size: 10px; color: var(--text-dim); margin-left: 2px; }
+  .fs-credit { font-size: 10px; color: var(--text-dim); text-align: right; margin-top: 6px; }
+  .fs-portion { margin-top: 12px; padding: 14px 0 4px; border-top: 1px solid var(--hairline); }
+  .fs-pname { font-size: 14px; font-weight: 500; }
+  .fs-amount { display: flex; gap: 10px; align-items: center; margin-top: 12px; }
+  .fs-amount input { width: 90px; padding: 10px 12px; font-size: 16px; border-radius: 12px; }
+  .fs-unit { flex: 1; }
+  .fs-serving { font-size: 11px; color: var(--text-dim); margin-top: 6px; }
+  .fs-macros { display: flex; gap: 14px; flex-wrap: wrap; align-items: baseline; margin-top: 14px; font-size: 12px; color: var(--text-dim); }
+  .fs-macros b { color: var(--text); font-size: 15px; font-weight: 600; }
+  .fs-g { margin-left: auto; }
+  .fs-actions { display: flex; gap: 10px; margin-top: 14px; }
+  #scanOverlay { position: fixed; inset: 0; z-index: 960; background: #000; display: flex; flex-direction: column; padding: calc(14px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom)); }
+  .scan-top { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+  .scan-view { position: relative; flex: 1; margin: 14px 0; border-radius: 18px; overflow: hidden; background: #0b0a0f; }
+  .scan-view video, #scanLibBox, #scanLibBox video { width: 100% !important; height: 100% !important; object-fit: cover; }
+  .scan-frame { position: absolute; left: 12%; right: 12%; top: 38%; height: 24%; border: 2px solid var(--rest-accent); border-radius: 12px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.35), 0 0 24px rgba(167,139,250,0.6); pointer-events: none; }
+  .scan-msg { text-align: center; font-size: 12.5px; color: var(--text-dim); min-height: 18px; }
+  .scan-manual { display: flex; gap: 8px; margin-top: 12px; }
+  .scan-manual input { flex: 1; padding: 11px 14px; border-radius: 999px; font-size: 15px; }
+
+  /* Coach view */
+  .coach-panel { left: 0; right: 0; width: auto; max-width: 640px; margin: 0 auto; border-left: none; }
+  .menu-coach { color: var(--rest-accent); }
+  .coach-code { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
+  .coach-code-v { font-family: 'Bebas Neue', 'Outfit', sans-serif; font-size: 28px; letter-spacing: 2px; color: var(--rest-accent); margin-top: 2px; }
+  .coach-card { display: block; width: 100%; text-align: left; background: none; border: none; border-bottom: 1px solid var(--hairline); color: var(--text); padding: 14px 0; font: inherit; cursor: pointer; }
+  .cc-top { display: flex; align-items: center; gap: 8px; }
+  .cc-dot { width: 8px; height: 8px; border-radius: 50%; background: #5bd39a; box-shadow: 0 0 8px rgba(91,211,154,0.6); }
+  .cc-dot.amber { background: #f0b25c; box-shadow: 0 0 8px rgba(240,178,92,0.6); }
+  .cc-dot.red { background: var(--warn); box-shadow: 0 0 8px rgba(209,72,58,0.6); }
+  .cc-name { font-size: 15px; font-weight: 500; }
+  .cc-phase { margin-left: auto; font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); }
+  .cc-stats { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--text-dim); margin-top: 8px; }
+  .cc-stats b { color: var(--text); font-weight: 600; }
+  .cc-stats em { font-style: normal; color: var(--rest-accent); }
+  .cc-flags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .cc-flag { font-size: 10.5px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--hairline); color: var(--text-dim); }
+  .cc-flag.l2 { border-color: rgba(209,72,58,0.6); color: #f0a296; }
+  .cc-flag.l1 { border-color: rgba(240,178,92,0.5); color: #f0cf9c; }
+  .cc-flag.ok { border-color: rgba(91,211,154,0.45); color: #9fe3c2; }
+  .coach-grid { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; padding: 14px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
+  .coach-spark { display: flex; align-items: center; gap: 10px; justify-content: center; margin-top: 10px; font-size: 10.5px; color: var(--text-dim); }
+  .coach-spark svg { width: 160px; height: 40px; }
+  .coach-food { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 8px; text-align: center; }
+  .coach-food div { display: flex; flex-direction: column; gap: 2px; font-size: 10px; color: var(--text-dim); }
+  .coach-food b { font-size: 11.5px; color: var(--text); font-weight: 600; }
+  .coach-food em { font-style: normal; font-size: 9.5px; }
+  .cs-sess { padding: 10px 0; border-bottom: 1px solid var(--hairline); }
+  .cs-head { font-size: 12.5px; font-weight: 500; margin-bottom: 4px; }
+  .cs-lift { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--text-dim); padding: 2px 0; }
+  .cs-lift span:last-child { color: var(--text); }
+  .cs-lift em { font-style: normal; color: var(--text-dim); font-size: 10.5px; }
+  .coach-photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
+  .coach-photos a { aspect-ratio: 3 / 4; border-radius: 10px; background: #0b0a0f center / cover no-repeat; position: relative; }
+  .coach-photos a span { position: absolute; left: 0; right: 0; bottom: 0; font-size: 9px; color: #fff; background: rgba(0,0,0,0.55); padding: 2px 4px; border-radius: 0 0 10px 10px; }
+
+  .auth-legal { font-size: 11px; color: var(--text-dim); text-align: center; line-height: 1.5; margin-top: 12px; }
+  .auth-legal a, a.menu-item { color: inherit; }
+  a.menu-item { display: block; text-decoration: none; }
+  .menu-danger { color: #f0a296 !important; }
 </style>
 </head>
 <body>
@@ -634,7 +850,7 @@
 <header>
   <div class="header-row">
     <h1 style="font-size: 18px;">FOREVER</h1>
-    <span class="week-num" id="weekPill">Week –</span>
+    <span class="week-num is-empty" id="weekPill">No block yet</span>
     <span class="week-num" id="streakPill" style="margin-left:2px;"></span>
     <button class="menu-btn" id="menuBtn" style="margin-left:auto;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
@@ -650,13 +866,20 @@
         <div><label>Length</label><select id="blockLen"><option value="4">4-wk</option><option value="6">6-wk</option><option value="8">8-wk</option><option value="10">10-wk</option><option value="12">12-wk</option></select></div>
       </div>
     </div>
+    <button class="menu-item menu-coach" id="menuCoachDashBtn" style="display:none;">Coach dashboard</button>
     <button class="menu-item" id="menuHistoryBtn">Workout History</button>
     <button class="menu-item" id="menuPhotosBtn">Progress Photos</button>
     <button class="menu-item" id="menuWarmupBtn">Warm-up &amp; Recovery library</button>
-    <button class="menu-item" id="menuExportBtn">Export all data (.csv)</button>
+    <button class="menu-item" id="menuExportBtn">Export workouts &amp; food (.csv)</button>
+    <button class="menu-item" id="menuBackupBtn">Download full backup</button>
+    <button class="menu-item" id="menuRestoreBtn">Restore from backup</button>
+    <input type="file" id="restoreFileInput" accept="application/json,.json" style="display:none;">
     <button class="menu-item" id="menuOnboardBtn">Run setup wizard again</button>
+    <button class="menu-item" id="menuConnectCoachBtn" style="display:none;">Connect to a coach</button>
     <button class="menu-item" id="menuReportBugBtn" style="display:none;">Report a bug</button>
     <button class="menu-item" id="menuLogoutBtn" style="display:none;">Log out</button>
+    <a class="menu-item" id="menuPrivacyLink" href="privacy.html" target="_blank" rel="noopener">Privacy policy</a>
+    <button class="menu-item menu-danger" id="menuDeleteDataBtn" style="display:none;">Delete all my data</button>
     <div id="menuWarmupPanel"></div>
   </div>
 </div>
@@ -697,6 +920,13 @@
       <button class="btn-secondary" id="photoViewerPrev">‹ Older</button>
       <button class="btn-secondary" id="photoViewerNext">Newer ›</button>
     </div>
+  </div>
+</div>
+
+<div id="coachOverlay" class="menu-overlay" style="z-index:85;">
+  <div class="menu-panel coach-panel">
+    <div class="menu-header"><span class="section-title" style="margin:0;" id="coachTitle">Coach dashboard</span><button class="menu-close" id="coachCloseBtn">×</button></div>
+    <div id="coachBody"></div>
   </div>
 </div>
 
@@ -751,7 +981,7 @@
     <div class="panel">
       <div class="section-title">Today's targets <button class="info-btn" id="infoMacroBtn">i</button></div>
       <div class="info-panel" id="infoMacroPanel">Cuts target a 0.5–1% bodyweight loss per week (~500 kcal/day deficit) to preserve muscle. Lean bulks target a 200–350 kcal/day surplus (~0.25–0.5 kg/week gain) — bigger surpluses mostly add fat past that point. Protein is set near 1g per pound of bodyweight. Fat sits at 25% of calories, carbs fill the remainder. Push weeks (4–5) nudge calories up; deload nudges down.</div>
-      <div class="cal-big" id="calBig">–</div>
+      <div class="cal-big is-empty" id="calBig">Not set yet</div>
       <div class="cal-sub" id="calSub"></div>
       <div class="fuel-gauge">
         <div class="fuel-track" id="fuelTrack">
@@ -775,7 +1005,15 @@
 
     <div class="panel">
       <div class="section-title">Log food</div>
+      <div class="food-search">
+        <input id="foodSearchInput" type="search" enterkeyhint="search" autocomplete="off" placeholder="Search foods — e.g. greek yogurt">
+        <button class="food-scan-btn" id="foodScanBtn" aria-label="Scan a barcode">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M10 8v8M13 8v8M16.5 8v8"/></svg>
+        </button>
+      </div>
+      <div id="foodSearchResults"></div>
       <div id="recentFoodsRow"></div>
+      <div class="cp-label food-manual-label">Or enter it yourself</div>
       <div class="food-entry-form">
         <input id="fName" placeholder="Food">
         <input id="fCals" type="number" placeholder="kcal" style="max-width:50px;">
@@ -825,16 +1063,16 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M5 7h14M5 7 2 13a3 3 0 0 0 6 0L5 7ZM19 7l-3 6a3 3 0 0 0 6 0l-3-6Z"/></svg>
         </div>
         <div class="scale-readout-label">Trend weight</div>
-        <div class="scale-readout-num" id="scaleReadoutNum">–</div>
+        <div class="scale-readout-num is-empty" id="scaleReadoutNum">No weigh-ins</div>
         <div class="scale-readout-unit">lb</div>
       </div>
       <div class="bmi-result">
-        <div class="bmi-num" id="bmiNum">–</div>
+        <div class="bmi-num is-empty" id="bmiNum">BMI</div>
         <div class="bmi-cat" id="bmiCat"></div>
         <div class="cal-sub" id="trendWeightNote" style="margin-top:6px;"></div>
       </div>
       <div class="tdee-box">
-        <div class="tdee-num" id="tdeeNum">–</div>
+        <div class="tdee-num is-empty" id="tdeeNum">Maintenance</div>
         <div class="tdee-sub" id="tdeeSub">Estimated maintenance calories (Mifflin-St Jeor)</div>
         <button class="sync-btn" id="syncNutritionBtn">Send to Nutrition tab</button>
       </div>
@@ -849,15 +1087,40 @@
     </div>
 
     <div class="panel">
+      <div class="section-title">Steps &amp; cardio <button class="info-btn" id="infoStepsBtn">i</button></div>
+      <div class="info-panel" id="infoStepsPanel">Daily movement outside the gym is the biggest swing factor in how many calories you burn, and it quietly drops when you diet — often why fat loss stalls. Keeping steps steady matters more than hitting a big number. Cardio calories aren't added back to your food: your weekly calorie check already learns your real burn from the scale, so adding them would double count. Hard cardio can eat into leg recovery, so keep it easy or away from leg days.</div>
+      <div class="food-entry-form" style="margin-top:12px;">
+        <input id="stepsInput" type="number" inputmode="numeric" placeholder="Steps today">
+        <button class="food-add-btn" id="logStepsBtn">Log</button>
+      </div>
+      <div id="stepsSummary"></div>
+      <div class="cp-label" style="margin-top:18px;">Add cardio</div>
+      <div class="cardio-form">
+        <select id="cardioType">
+          <option value="Incline walk">Incline walk</option><option value="Walk">Walk</option><option value="Bike">Bike</option>
+          <option value="Stairmaster">Stairmaster</option><option value="Elliptical">Elliptical</option><option value="Rower">Rower</option>
+          <option value="Run">Run</option><option value="Sport">Sport / other</option>
+        </select>
+        <input id="cardioMin" type="number" inputmode="numeric" placeholder="Min">
+        <div class="scale-row cardio-int" id="cardioIntRow"><button class="scale-btn selected" data-v="easy">Easy</button><button class="scale-btn" data-v="moderate">Moderate</button><button class="scale-btn" data-v="hard">Hard</button></div>
+        <button class="food-add-btn" id="addCardioBtn" style="width:100%;">Add cardio</button>
+      </div>
+      <div id="cardioSummary"></div>
+    </div>
+
+    <div class="panel">
       <div class="section-title">Measurements <button class="info-btn" id="infoMeasureBtn">i</button></div>
-      <div class="info-panel" id="infoMeasurePanel">Scale weight alone can't tell muscle gain from fat gain during a lean bulk, or muscle loss from fat loss during a cut. A couple of tape measurements alongside weight — waist especially — give a second signal: a bulk where waist barely moves while weight climbs is a good sign; a cut where waist shrinks much slower than weight is a warning sign. All fields are optional — log whichever you have a tape for today.</div>
+      <div class="info-panel" id="infoMeasurePanel">Scale weight alone can't tell muscle gain from fat gain during a lean bulk, or muscle loss from fat loss during a cut. A couple of tape measurements alongside weight — waist especially — give a second signal: a bulk where waist barely moves while weight climbs is a good sign; a cut where waist shrinks much slower than weight is a warning sign. All fields are optional — log whichever you have a tape for today. Waist and neck (plus hips for women), with your height, also give a body fat estimate using the U.S. Navy tape method — typically within about 3–4% of a lab scan for one reading, but much better at showing which way you're trending. Measure waist at the navel, neck just below the Adam's apple, hips at the widest point, same time of day.</div>
       <div class="field-row">
         <div><label>Waist (in)</label><input type="number" id="mWaist" style="width:60px;"></div>
         <div><label>Chest (in)</label><input type="number" id="mChest" style="width:60px;"></div>
         <div><label>Arm (in)</label><input type="number" id="mArm" style="width:60px;"></div>
         <div><label>Thigh (in)</label><input type="number" id="mThigh" style="width:60px;"></div>
+        <div><label>Neck (in)</label><input type="number" id="mNeck" style="width:60px;"></div>
+        <div><label>Hips (in)</label><input type="number" id="mHips" style="width:60px;"></div>
       </div>
       <button class="food-add-btn" id="logMeasureBtn" style="margin-top:12px; width:100%;">Log measurements</button>
+      <div id="bodyCompBox"></div>
       <div class="weight-log-list" id="measureLogList"></div>
     </div>
 
@@ -895,8 +1158,13 @@
     </div>
     <div class="panel">
       <div class="section-title">This week's volume <button class="info-btn" id="infoVolumeBtn">i</button></div>
-      <div class="info-panel" id="infoVolumePanel">Hard sets per muscle per week across your whole schedule. An exercise counts as 1 set for the muscle it targets and ½ a set for muscles it clearly helps with (rows → biceps, presses → triceps and front delts, squats → glutes), the way volume research counts it. The status is judged on your block's average week — base weeks are lighter and overload weeks heavier by design. The shaded band on each bar is the rough sweet spot (from Renaissance Periodization's volume landmarks and dose-response research); "×/wk" is how many days hit that muscle directly. These are population ranges, not hard rules.</div>
+      <div class="info-panel" id="infoVolumePanel">Hard sets per muscle per week across your whole schedule. An exercise counts as 1 set for the muscle it targets and ½ a set for muscles it clearly helps with (rows → biceps, presses → triceps and front delts, squats → glutes), the way volume research counts it. The status is judged on your block's average week — base weeks are lighter and overload weeks heavier by design. Ranges come from Renaissance Periodization's volume landmarks and dose-response research — population averages, not hard rules. That's why your own feedback moves each muscle: a purple +1/−1 means sets were added or removed because of how that muscle recovered, pumped and performed. "Focus" marks a muscle you chose to bring up.</div>
       <div id="volumePanelBody" style="margin-top:10px;"></div>
+    </div>
+    <div class="panel">
+      <div class="section-title">Bring up a muscle <button class="info-btn" id="infoPriorityBtn">i</button></div>
+      <div class="info-panel" id="infoPriorityPanel">A specialization phase: pick up to two lagging muscles. They get 2 extra sets a week and are trained first in each session, while you're freshest. To keep recovery in check, your other big muscles drop 1 set a week — never below the minimum that maintains them. Run it for a block or two, then rotate to the next weak point.</div>
+      <div id="priorityBody" style="margin-top:10px;"></div>
     </div>
     <div class="panel">
       <div class="section-title">Your lifts <button class="info-btn" id="infoLiftsBtn">i</button></div>
@@ -946,6 +1214,7 @@
     <div class="field-row"><div style="flex:1;"><label>Email</label><input type="email" id="authEmail" autocomplete="email" placeholder="you@example.com" style="width:100%;"></div></div>
     <div class="field-row" style="margin-top:10px;"><div style="flex:1;"><label>Password</label><input type="password" id="authPassword" autocomplete="current-password" placeholder="••••••••" style="width:100%;"></div></div>
     <button class="btn-primary" id="authSubmitBtn" style="width:100%; margin-top:18px;">Log In</button>
+    <div class="auth-legal">By creating an account you agree to the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. FOREVER gives general training and nutrition guidance, not medical advice.</div>
     <div style="text-align:center; margin-top:16px;">
       <button class="back-link" id="authToggleModeBtn" style="padding:0;">Need an account? Sign up</button>
     </div>
@@ -964,7 +1233,7 @@ function wireInfo(btnId, panelId) {
   const btn = document.getElementById(btnId), panel = document.getElementById(panelId);
   if (btn && panel) btn.onclick = () => panel.classList.toggle('open');
 }
-['Week','Sleep','Macro','Bmi','MealTiming','ShowPrep','Builder','Adaptive','Measure','Volume','PhaseHealth','Lifts'].forEach(k => wireInfo(`info${k}Btn`, `info${k}Panel`));
+['Week','Sleep','Macro','Bmi','MealTiming','ShowPrep','Builder','Adaptive','Measure','Volume','PhaseHealth','Lifts','Priority','Steps'].forEach(k => wireInfo(`info${k}Btn`, `info${k}Panel`));
 
 function renderMesoTimeline() {
   const track = document.getElementById('mesoTrack');
@@ -978,7 +1247,7 @@ function renderMesoTimeline() {
     if (marker) marker.style.display = 'none';
     if (ring) ring.style.display = 'none';
     if (ticks) ticks.innerHTML = '';
-    if (caption) caption.textContent = 'Start a training block on the Workout tab to see your progress here.';
+    if (caption) caption.textContent = 'No block running yet. Start one to track your base, overload and deload weeks.';
     return;
   }
   const len = blockConfig.length;
@@ -1018,6 +1287,7 @@ let splitPickerOpen = false;
 // are kept — only the week counter (base → overload → deload) starts over.
 async function restartBlock() {
   blockConfig.start = todayISO();
+  volumeState = { blockKey: null, hist: {} }; // each block learns your volume fresh
   blockConfig.lastAckedWeek = null;
   blockConfig.forceDeload = false;
   blockConfig.reviewSnoozeUntil = null;
@@ -1025,6 +1295,7 @@ async function restartBlock() {
   blockConfig.missedAck = null;
   const bs = document.getElementById('blockStart'); if (bs) bs.value = blockConfig.start;
   await saveBlockConfig();
+  await saveVolumeState();
   renderMesoTimeline();
   renderWeeklyVolumePanel();
   wireRestartBlock();
@@ -1052,8 +1323,36 @@ async function renderMesos() {
   renderGymPickerMesos();
   wireRestartBlock();
   renderWeeklyVolumePanel();
+  renderPriorityPanel();
   renderLiftTrendsPanel();
   renderSplitPicker();
+}
+function renderPriorityPanel() {
+  const box = document.getElementById('priorityBody');
+  if (!box) return;
+  const opts = VOLUME_MUSCLES.filter(m => m !== 'Abs');
+  box.innerHTML = `
+    <div class="prio-chips">${opts.map(m => `<button class="prio-chip ${priorityMuscles.includes(m) ? 'selected' : ''}" data-m="${m}">${m}</button>`).join('')}</div>
+    <div class="ex-prev" style="margin-top:10px;" id="priorityNote">${priorityMuscles.length
+      ? `Focusing on ${priorityMuscles.join(' and ')}: +2 sets a week, trained first. Other big muscles hold at slightly less.`
+      : 'Pick up to two. Nothing changes until you do.'}</div>`;
+  if (priorityMuscles.length) computeWeeklyVolumeByMuscle().then(v => {
+    const full = priorityMuscles.filter(m => (v.avgTotals[m] || 0) >= VOLUME_LANDMARKS[m].mrv - 0.5);
+    const none = priorityMuscles.filter(m => !DAY_ORDER.some(d => ((getProgramDay(d) || {}).exercises || []).some(ex => primaryMusclesOf(ex).includes(m))));
+    const n = document.getElementById('priorityNote');
+    if (!n) return;
+    if (none.length) n.textContent += ` Your split has no direct ${none.join(' or ')} exercise yet, so add one on the Workout tab for the extra sets to land.`;
+    else if (full.length) n.textContent += ` ${full.join(' and ')} ${full.length > 1 ? 'are' : 'is'} already at the most you can recover from, so being trained first is the main change.`;
+  }).catch(() => {});
+  box.querySelectorAll('.prio-chip').forEach(b => b.onclick = async () => {
+    const m = b.dataset.m;
+    let next = priorityMuscles.includes(m) ? priorityMuscles.filter(x => x !== m) : [...priorityMuscles, m];
+    if (next.length > 2) next = next.slice(-2);
+    await setPriorityMuscles(next);
+    renderPriorityPanel();
+    renderWeeklyVolumePanel();
+    if (dayMode === 'overview') { try { renderDayOverview(); } catch (e) {} }
+  });
 }
 function renderSplitPicker() {
   const list = document.getElementById('presetList');
@@ -1405,7 +1704,7 @@ function analyzeProgramVolume(program, setsFor) {
     (d.exercises || []).forEach(ex => {
       const c = muscleContributions(ex.name, ex.type);
       if (!c) { unmapped.add(ex.name); return; }
-      const n = setsFor(ex.type);
+      const n = setsFor(ex.type, ex, day);
       Object.keys(c).forEach(m => { totals[m] = (totals[m] || 0) + c[m] * n; if (c[m] >= 1) direct.add(m); });
     });
     direct.forEach(m => { freq[m] = (freq[m] || 0) + 1; });
@@ -1436,8 +1735,10 @@ async function loadFullProgram() {
 async function computeWeeklyVolumeByMuscle() {
   const info = weekInfo();
   const program = await loadFullProgram();
-  const now = analyzeProgramVolume(program, t => defaultSetCount(t, info));
-  const avg = analyzeProgramVolume(program, t => avgSetsPerWeek(t, blockConfig.length));
+  const now = analyzeProgramVolume(program, (t, ex, day) => setCountFor(ex, day, info));
+  const nonDeload = { ...info, deload: false };
+  const bonus = volumeBonusMap(nonDeload);
+  const avg = analyzeProgramVolume(program, (t, ex, day) => Math.max(1, avgSetsPerWeek(t, blockConfig.length) + (bonus[`${day}|${ex.name}`] || 0)));
   return { totals: now.totals, avgTotals: avg.totals, freq: avg.freq, unmapped: now.unmapped, info, program };
 }
 const fmtSets = v => (Math.round(v * 10) / 10).toString();
@@ -1799,21 +2100,27 @@ async function renderWeeklyVolumePanel() {
   const wrap = document.getElementById('volumePanelBody');
   if (!wrap) return;
   const { totals, avgTotals, freq, unmapped, info } = await computeWeeklyVolumeByMuscle();
+  const adjNow = currentMuscleAdj();
+  const feedLog = [];
+  Object.keys(volumeState.hist || {}).forEach(m => appliedMuscleDates(volumeState.hist[m]).forEach(d => { const h = volumeState.hist[m][d]; feedLog.push({ m, d, ...h, pending: d > todayISO() }); }));
+  feedLog.sort((a, b) => b.d.localeCompare(a.d));
+  // Compact one-line rows (name · status · bar · sets). Judged on the block's average week.
   const rows = VOLUME_MUSCLES.map(muscle => {
-    const now = totals[muscle] || 0, avg = avgTotals[muscle] || 0;
+    const avg = avgTotals[muscle] || 0;
     const lm = VOLUME_LANDMARKS[muscle];
     const tier = volumeTier(muscle, avg);
     const pct = Math.min(100, Math.round((avg / lm.mrv) * 100));
-    const mevPct = Math.min(100, Math.round((lm.mev / lm.mrv) * 100)), mavPct = Math.min(100, Math.round((lm.mav / lm.mrv) * 100));
-    const fq = freq[muscle] || 0;
-    return `<div class="vol-row">
-      <div class="vol-top"><span class="pname">${muscle}</span><span class="ptype ${tier.cls}" style="text-transform:none;">${tier.label}</span><span class="vol-num">${fmtSets(avg)} <span>avg · ${fmtSets(now)} this wk · ${fq}×/wk</span></span></div>
-      <div class="vol-bar"><div class="vol-zone" style="left:${mevPct}%; width:${Math.max(0, mavPct - mevPct)}%"></div><div class="vol-fill" style="width:${pct}%"></div></div>
+    return `<div class="preview-row" style="align-items:center; flex-wrap:wrap;">
+      <span class="pname" style="min-width:96px;">${muscle}</span>
+      <span class="ptype" style="text-transform:none; margin-right:8px;">${tier.label}${priorityMuscles.includes(muscle) ? ' <b class="vol-badge">Focus</b>' : ''}${adjNow[muscle] ? ` <b class="vol-adj">${adjNow[muscle] > 0 ? '+' : ''}${adjNow[muscle]}</b>` : ''}</span>
+      <div style="flex:1; min-width:80px; height:4px; background:var(--bg-input); overflow:hidden;"><div style="height:100%; width:${pct}%; background:var(--accent);"></div></div>
+      <span class="ptype" style="text-align:right; min-width:70px;">${tier.label === 'Under' ? Math.floor(avg) : Math.round(avg)} sets/wk</span>
     </div>`;
   }).join('');
   wrap.innerHTML = `
     ${info.week ? '' : '<div class="ex-prev" style="margin-bottom:10px;">Set a block start date to see this week\'s periodized volume.</div>'}
     ${rows}
+    ${feedLog.length ? `<div class="vol-feed"><div class="cp-label" style="margin-bottom:6px;">From your feedback this block</div>${feedLog.slice(0, 5).map(f => `<div class="vol-feed-row"><span>${escHtml(f.m)} <b class="vol-adj">${f.delta > 0 ? '+' : ''}${f.delta}</b></span><span>${escHtml(f.why)} · ${f.pending ? 'starts ' : ''}${escHtml(fmtHistoryDate(f.d))}</span></div>`).join('')}</div>` : ''}
     ${unmapped.length ? `<div class="ex-prev" style="margin-top:10px; font-size:10.5px;">Not counted (not in the exercise library yet): ${unmapped.map(escHtml).join(', ')}</div>` : ''}
     <button class="btn-primary" id="optimizeSplitBtn" style="width:100%; margin-top:16px;">Optimize my split</button>
     <div id="optimizerBox"></div>`;
@@ -2120,6 +2427,13 @@ async function loadProgramOverride(day) {
     else delete programOverrides[day];
   } catch (e) {}
 }
+// Every day's custom program, not just the day on screen — the weekly set plan, training-day
+// count (calories) and focus muscles all need the whole week to be right from the first render.
+async function loadAllProgramOverrides() {
+  if (!db) return;
+  await Promise.all(DAY_ORDER.map(d => loadProgramOverride(d)));
+  volumeBonusCache.key = null;
+}
 async function saveProgramOverride(day, data) {
   programOverrides[day] = data;
   if (db) { try { await db.doc(`program/${activePreset}_${day}`).set(data); } catch (e) {} }
@@ -2139,6 +2453,7 @@ async function saveActivePreset(preset) {
   activePreset = preset;
   programOverrides = {};
   if (db) { try { await db.doc('program/activePreset').set({ value: preset }); } catch (e) {} }
+  await loadAllProgramOverrides();
 }
 let blockConfig = { start: null, length: 6, lastAckedWeek: null, forceDeload: false, reviewSnoozeUntil: null, shiftDays: 0, missedAck: null };
 let sleepGoal = 8;
@@ -2156,6 +2471,7 @@ let warmupRestEndByEx = {};
 let warmupTimerByEx = {};
 let nutritionPhase = 'maintain';
 let maintCals = null;
+let carbCycle = true; // training days eat more, rest days less, same weekly total
 let weightPhase = 'maintain';
 let phaseStart = null;
 let plannedPhaseWeeks = null;
@@ -2267,17 +2583,93 @@ function escHtml(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 function phaseGroupOf(phase) { return PHASES[phase] ? PHASES[phase].group : phase; }
+// ---------- Reverse diet ----------
+// Starts at the cut's deficit and adds a fixed step every 7 days until the deficit is gone, so
+// it lands on maintenance in about 3–6 weeks. Bigger deficits take bigger steps. Pure math so it
+// can be tested; the weekly scale check still runs on top, so maintenance itself stays accurate.
+function reverseStepFor(startDelta) {
+  const gap = Math.abs(Math.min(0, startDelta || 0));
+  return Math.max(75, Math.round(gap / 5 / 25) * 25);
+}
+function reversePlan(startDelta, startISO, todayIso) {
+  const start = Math.min(0, startDelta || 0);
+  const step = reverseStepFor(start);
+  const weeksTotal = start === 0 ? 0 : Math.ceil(Math.abs(start) / step);
+  const weeksIn = startISO ? Math.max(0, Math.floor(daysBetweenISO(startISO, todayIso) / 7)) : 0;
+  const delta = Math.min(0, start + step * weeksIn);
+  return { start, step, weeksTotal, week: Math.min(weeksIn + 1, Math.max(1, weeksTotal)), delta, done: delta >= 0 };
+}
+function phaseCalDelta() {
+  if (nutritionPhase === 'reverse') return reversePlan(reverseFromDelta, phaseStart, todayISO()).delta;
+  return PHASES[nutritionPhase] ? PHASES[nutritionPhase].calDelta : 0;
+}
+function phaseSubtitle() {
+  if (nutritionPhase === 'reverse') {
+    const r = reversePlan(reverseFromDelta, phaseStart, todayISO());
+    if (r.weeksTotal === 0) return 'Reverse Diet · you weren\'t in a deficit, so this is just maintenance';
+    if (r.done) return 'Reverse Diet · done, you\'re back at maintenance. Pick Maintain or a bulk next';
+    return `Reverse Diet · week ${r.week} of ${r.weeksTotal} · +${r.step} kcal each week until maintenance`;
+  }
+  const ph = PHASES[nutritionPhase];
+  return ph ? `${ph.label} · ${ph.note}` : '';
+}
 // One place for "what should I eat today" so the Nutrition tab, the Workout tab's fuel check and
 // the block review can never disagree. Overload weeks get a little more, deload weeks a little less.
 function calorieTargetFor(info) {
   if (!maintCals) return null;
-  let t = maintCals + (PHASES[nutritionPhase] ? PHASES[nutritionPhase].calDelta : 0);
+  let t = maintCals + phaseCalDelta();
   if (info && info.week) {
     if (info.deload) t -= 100;
     else if (info.overload) t += 125;
   }
   return Math.round(t);
 }
+// ---------- Training-day / rest-day calories ----------
+// The weekly total is what drives fat loss or gain, so this never changes it: rest days give up
+// some calories (almost all carbs) and training days get exactly that amount back, spread across
+// them. Protein and fat grams stay the same every day. It's personal on four inputs: your
+// maintenance, your phase, how many days your split trains, and your bodyweight (protein and the
+// rest-day carb floor scale with it). Pure function so it can be tested without the app.
+const CARB_CYCLE_PCT = { cutAggressive: 0.12, cut: 0.12, recomp: 0.12, maintain: 0.10, bulk: 0.08, bulkStandard: 0.06 };
+function dayCalorieTargets({ avg, trainDays, phase, bw, proteinG }) {
+  if (!avg) return null;
+  const T = Math.max(0, Math.min(7, trainDays || 0)), R = 7 - T;
+  const fatG = Math.round(avg * 0.25 / 9);
+  const prot = proteinG || Math.round(avg * 0.30 / 4);
+  const flat = { train: Math.round(avg), rest: Math.round(avg), avg: Math.round(avg), fatG, proteinG: prot, shifted: false, trainDays: T };
+  if (T === 0 || R === 0) return flat;
+  const pct = CARB_CYCLE_PCT[phase] != null ? CARB_CYCLE_PCT[phase] : 0.10;
+  let restDrop = avg * pct;
+  let trainAdd = restDrop * R / T;
+  if (trainAdd > avg * 0.15) { trainAdd = avg * 0.15; restDrop = trainAdd * T / R; } // 1–2 day splits
+  let rest = avg - restDrop;
+  // Rest-day floor: full protein, full fat, and at least 50 g (or 0.4 g per lb) of carbs.
+  const carbFloor = Math.max(50, bw ? 0.4 * bw : 0);
+  const restMin = prot * 4 + fatG * 9 + carbFloor * 4;
+  if (rest < restMin) rest = restMin;
+  if (rest >= avg) return flat; // target too low to move anything safely
+  const train = (7 * avg - R * rest) / T;
+  return { train: Math.round(train), rest: Math.round(rest), avg: Math.round(avg), fatG, proteinG: prot, shifted: true, trainDays: T };
+}
+function programTrainingDays() {
+  try { return DAY_ORDER.filter(d => ((getProgramDay(d) || {}).exercises || []).length > 0).length; } catch (e) { return 0; }
+}
+function isTrainingDayName(day) {
+  try { return ((getProgramDay(day) || {}).exercises || []).length > 0; } catch (e) { return false; }
+}
+// Today's (or any weekday's) calorie target, plus everything the screens need to explain it.
+function dayTargetInfo(info, day, bw) {
+  const avg = calorieTargetFor(info);
+  if (!avg) return { target: null };
+  const proteinG = proteinTargetFor(bw, avg);
+  const plan = dayCalorieTargets({ avg, trainDays: programTrainingDays(), phase: nutritionPhase, bw, proteinG });
+  const training = isTrainingDayName(day);
+  const on = carbCycle && plan && plan.shifted;
+  const target = on ? (training ? plan.train : plan.rest) : avg;
+  const carbG = Math.max(0, Math.round((target - plan.proteinG * 4 - plan.fatG * 9) / 4));
+  return { target, avg, training, cycling: on, plan, proteinG: plan.proteinG, fatG: plan.fatG, carbG };
+}
+
 function proteinTargetFor(bw, target) {
   if (bw) return Math.round(bw * 1.0);
   return target ? Math.round(target * 0.30 / 4) : null;
@@ -2285,7 +2677,7 @@ function proteinTargetFor(bw, target) {
 function addDaysISO(iso, n) { const d = new Date(iso + 'T00:00:00'); d.setDate(d.getDate() + n); return localISO(d); }
 function daysBetweenISO(a, b) { return Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 86400000); }
 function sumEntries(entries) {
-  return (entries || []).reduce((a, f) => ({ cals: a.cals + (Number(f.cals) || 0), prot: a.prot + (Number(f.prot) || 0) }), { cals: 0, prot: 0 });
+  return (entries || []).reduce((a, f) => ({ cals: a.cals + ((f && Number(f.cals)) || 0), prot: a.prot + ((f && Number(f.prot)) || 0) }), { cals: 0, prot: 0 });
 }
 
 // ---------- End-of-block review: pure math (no DOM, no db) so it can be unit-tested ----------
@@ -2636,10 +3028,11 @@ async function renderBlockReviewIfNeeded() {
 // ---------- Fuel check (Workout tab) ----------
 async function computeFuelStatus() {
   const info = weekInfo();
-  const target = calorieTargetFor(info);
+  const bw = db ? await getTrendWeightLb() : null;
+  const dt = dayTargetInfo(info, todayName(), bw);
+  const target = dt.target;
   if (!db) return { target };
-  const bw = await getTrendWeightLb();
-  const proteinTarget = proteinTargetFor(bw, target);
+  const proteinTarget = target ? dt.proteinG : null;
   let todayEntries = [];
   try { const snap = await db.doc(`nutrition/${todayISO()}`).get(); if (snap.exists) todayEntries = snap.data().entries || []; } catch (e) {}
   const today = sumEntries(todayEntries);
@@ -2652,15 +3045,17 @@ async function computeFuelStatus() {
     } catch (e) {}
   }
   const recentAvg = recent.length >= 2 ? recent.reduce((a, v) => a + v, 0) / recent.length : null;
-  return { target, proteinTarget, todayCals: today.cals, todayProt: today.prot, loggedToday: todayEntries.length > 0, recentAvg, recentDays: recent.length };
+  return { target, avgTarget: dt.avg, cycling: dt.cycling, training: dt.training, proteinTarget, todayCals: today.cals, todayProt: today.prot, loggedToday: todayEntries.length > 0, recentAvg, recentDays: recent.length };
 }
 function fuelMessage(f, hour, isRest) {
   if (!f.target) return { tone: 'dim', text: 'Set your maintenance calories on the Nutrition tab to see how fueled you are before training.' };
-  const baseTarget = f.target;
+  const baseTarget = f.avgTarget || f.target;
   if (f.recentAvg != null && f.recentAvg < baseTarget * 0.8) {
     return { tone: 'warn', text: `You've averaged ${Math.round(f.recentAvg).toLocaleString()} kcal over your last ${f.recentDays} logged days — well under your ${baseTarget.toLocaleString()} target. Expect lower numbers today; hold loads rather than chasing PRs, and get some carbs and protein in before you train.` };
   }
-  if (isRest) return { tone: 'ok', text: 'Rest day — hitting your calories and protein today is what turns yesterday\'s session into muscle.' };
+  if (isRest) return { tone: 'ok', text: f.cycling
+    ? 'Rest day: fewer carbs, same protein. Hitting your protein today is what turns yesterday\'s session into muscle.'
+    : 'Rest day — hitting your calories and protein today is what turns yesterday\'s session into muscle.' };
   if (!f.loggedToday && hour >= 10) return { tone: 'warn', text: 'Nothing logged yet today. Aim for a meal with 30–40 g protein and some carbs 1–3 hours before you train.' };
   if (f.proteinTarget && f.todayProt < f.proteinTarget * 0.25 && hour >= 14) return { tone: 'dim', text: `Only ${Math.round(f.todayProt)} g protein so far — a protein-heavy meal before or after training closes the gap.` };
   return { tone: 'ok', text: 'On track. A meal with protein and carbs a few hours before training is all you need.' };
@@ -2677,8 +3072,8 @@ async function renderFuelCheck() {
   slot.innerHTML = `
     <div class="fuel-check fuel-${msg.tone}" id="fuelCheckCard" role="button" tabindex="0">
       <div class="fuel-check-head">
-        <span class="cp-label">Fuel today</span>
-        <span class="fuel-check-num">${f.target ? `${Math.round(f.todayCals || 0).toLocaleString()} <span>/ ${f.target.toLocaleString()} kcal</span>` : '—'}</span>
+        <span class="cp-label">Fuel today${f.target && f.cycling ? ` · ${f.training ? 'Training day' : 'Rest day'}` : ''}</span>
+        <span class="fuel-check-num ${f.target ? '' : 'is-empty'}">${f.target ? `${Math.round(f.todayCals || 0).toLocaleString()} <span>/ ${f.target.toLocaleString()} kcal</span>` : 'Not set'}</span>
       </div>
       ${f.target ? `<div class="fuel-check-bar"><div style="width:${pct}%"></div></div>` : ''}
       ${f.proteinTarget ? `<div class="fuel-check-sub">Protein ${Math.round(f.todayProt || 0)} / ${f.proteinTarget} g</div>` : ''}
@@ -2763,25 +3158,243 @@ function defaultSetCount(type, info) {
   if (info.overload) return compound ? 3 : 4;
   return compound ? 2 : 3;
 }
+// ---------- Per-muscle volume: feedback + weak-point focus ----------
+// Every muscle starts from the block template (2/3 base sets, 3/4 in overload weeks). Two things
+// then move each muscle's weekly sets up or down:
+//  1) Feedback, the way Renaissance Periodization runs it: before a muscle's first exercise you
+//     say whether it recovered from last time; after the session, how the pump was; performance
+//     comes from your logged sets. Recovered early → +1 set next week; still sore or getting
+//     weaker → −1. At most one change per muscle every 6 days, reset when a new block starts.
+//  2) Weak-point focus: up to two muscles get +2 sets and are trained first in the session;
+//     other big muscles drop 1 set (never below the minimum that maintains them).
+// Totals always stay between that muscle's minimum effective and maximum recoverable volume.
+const VOL_ADJ_MIN = -3, VOL_ADJ_MAX = 4;
+const BIG_MUSCLES = new Set(['Chest', 'Back', 'Quads', 'Hamstrings', 'Glutes', 'Shoulders']);
+let volumeState = { blockKey: null, hist: {} };   // hist[muscle] = { 'YYYY-MM-DD': {delta, why} }
+let priorityMuscles = [];
+function primaryMusclesOf(ex) {
+  const c = ex ? muscleContributions(ex.name, ex.type) : null;
+  return c ? Object.keys(c).filter(m => c[m] >= 1) : [];
+}
+// Pure: one session's signals → set change for next week.
+function decideMuscleDelta({ recovery, pump, perf }) {
+  if (recovery === 'sore') return { delta: -1, why: 'still sore from last session' };
+  if (perf === 'down') return { delta: -1, why: 'performance dropped' };
+  if (recovery === 'early') return { delta: 1, why: pump === 3 ? 'recovered early' : 'recovered early, room for more' };
+  if (recovery === 'ontime' && pump === 1 && perf === 'up') return { delta: 1, why: 'low pump but recovering and getting stronger' };
+  return { delta: 0, why: recovery ? 'right amount of work' : 'holding' };
+}
+// Pure: a muscle's history → its current adjustment (one change per 6 days, clamped).
+// Which history entries actually count (one change per 6 days). Entries dated in the future
+// (a change recorded today takes effect a week out) don't count yet.
+function appliedMuscleDates(h, asOf) {
+  const used = []; let lastDate = null;
+  Object.keys(h || {}).sort().forEach(d => {
+    const delta = (h[d] && h[d].delta) || 0;
+    if (!delta) return;
+    if (lastDate && daysBetweenISO(lastDate, d) < 6) return;
+    used.push(d); lastDate = d;
+  });
+  return asOf ? used.filter(d => d <= asOf) : used;
+}
+function muscleAdjFromHist(h, asOf) {
+  let adj = 0;
+  appliedMuscleDates(h, asOf).forEach(d => { adj = Math.max(VOL_ADJ_MIN, Math.min(VOL_ADJ_MAX, adj + h[d].delta)); });
+  return adj;
+}
+function currentMuscleAdj() {
+  const out = {};
+  if (volumeState.blockKey && blockConfig.start && volumeState.blockKey !== blockKey()) return out; // new block: fresh start
+  Object.keys(volumeState.hist || {}).forEach(m => { out[m] = muscleAdjFromHist(volumeState.hist[m], todayISO()); });
+  return out;
+}
+// Pure: program + adjustments → extra sets per exercise ("Day|Exercise" → +/- sets).
+function computeVolumeBonus(program, info, adjByMuscle, priorities) {
+  const bonus = {};
+  if (info && info.deload) return bonus;
+  // Judge room to add/remove against the block's average week (same numbers the volume panel shows).
+  const base = analyzeProgramVolume(program, t => avgSetsPerWeek(t, (typeof blockConfig !== 'undefined' && blockConfig.length) || 6)).totals;
+  const pr = priorities || [];
+  VOLUME_MUSCLES.forEach(m => {
+    let want = (adjByMuscle[m] || 0) + (pr.includes(m) ? 2 : (pr.length && BIG_MUSCLES.has(m) ? -1 : 0));
+    if (!want) return;
+    const lm = VOLUME_LANDMARKS[m], cur = base[m] || 0;
+    const maxUp = Math.max(0, Math.floor(lm.mrv - cur)), maxDown = Math.min(0, -Math.floor(Math.max(0, cur - lm.mev)));
+    want = Math.max(maxDown, Math.min(maxUp, want));
+    if (!want) return;
+    const cands = [];
+    DAY_ORDER.forEach(day => ((program[day] || {}).exercises || []).forEach((ex, idx) => {
+      if (primaryMusclesOf(ex).includes(m)) cands.push({ key: `${day}|${ex.name}`, iso: ex.type !== 'compound', base: defaultSetCount(ex.type, info || {}) });
+    }));
+    if (!cands.length) return;
+    cands.sort((a, b) => (b.iso - a.iso)); // add to (or take from) isolation work first — least fatigue
+    let k = Math.abs(want), guard = 0;
+    const dir = want > 0 ? 1 : -1;
+    while (k > 0 && guard++ < 50) {
+      let moved = false;
+      for (const c of cands) {
+        if (k <= 0) break;
+        const cur2 = bonus[c.key] || 0;
+        if (dir > 0 && cur2 >= 2) continue;
+        if (dir < 0 && c.base + cur2 - 1 < 1) continue;
+        bonus[c.key] = cur2 + dir; k--; moved = true;
+      }
+      if (!moved) break;
+    }
+  });
+  return bonus;
+}
+let volumeBonusCache = { key: null, map: {} };
+function volumeBonusMap(info) {
+  const program = {};
+  DAY_ORDER.forEach(d => { program[d] = getProgramDay(d) || { exercises: [] }; });
+  const adj = currentMuscleAdj();
+  const key = [info && info.deload ? 'D' : info && info.overload ? 'O' : 'B', activePreset,
+    DAY_ORDER.map(d => (program[d].exercises || []).map(e => e.name + ':' + e.type).join(',')).join('|'),
+    JSON.stringify(adj), priorityMuscles.join(','), blockConfig.length].join('#');
+  if (volumeBonusCache.key !== key) volumeBonusCache = { key, map: computeVolumeBonus(program, info, adj, priorityMuscles) };
+  return volumeBonusCache.map;
+}
+function setCountFor(ex, day, info) {
+  info = info || weekInfo();
+  const base = defaultSetCount(ex.type, info);
+  if (info.deload) return base;
+  let b = 0;
+  try { const map = volumeBonusMap(info); b = map[`${day}|${ex.swappedFrom || ex.name}`] || map[`${day}|${ex.name}`] || 0; } catch (e) {}
+  return Math.max(1, base + b);
+}
+async function loadVolumeState() {
+  volumeState = { blockKey: null, hist: {} }; priorityMuscles = [];
+  if (!db) return;
+  try { const s1 = await db.doc('meta/volumeAdj').get(); if (s1.exists) volumeState = { blockKey: null, hist: {}, ...s1.data() }; } catch (e) {}
+  try { const s2 = await db.doc('meta/priorities').get(); if (s2.exists) priorityMuscles = (s2.data().muscles || []).filter(m => VOLUME_LANDMARKS[m]).slice(0, 2); } catch (e) {}
+  if (blockConfig.start && volumeState.blockKey && volumeState.blockKey !== blockKey()) volumeState = { blockKey: blockKey(), hist: {} };
+}
+async function saveVolumeState() {
+  if (!blockConfig.start) return;
+  if (volumeState.blockKey && volumeState.blockKey !== blockKey()) {
+    // History from an earlier block: keep only entries recorded since this block began.
+    const start = blockConfig.start;
+    Object.keys(volumeState.hist || {}).forEach(m => {
+      const h = {}; Object.keys(volumeState.hist[m] || {}).forEach(d => { const e = volumeState.hist[m][d]; if ((e && e.from ? e.from : d) >= start) h[d] = e; });
+      volumeState.hist[m] = h;
+    });
+  }
+  volumeState.blockKey = blockKey();
+  volumeBonusCache.key = null;
+  if (db) { try { await db.doc('meta/volumeAdj').set(volumeState); } catch (e) {} }
+}
+// Record (or re-record — tapping again just overwrites) one muscle's verdict for a session date.
+// Keyed by the date the change takes effect: a week after the session, i.e. next week's same day.
+async function recordMuscleFeedback(muscle, sessionIso, signals) {
+  const d = decideMuscleDelta(signals);
+  const eff = addDaysISO(sessionIso, 7);
+  volumeState.hist = volumeState.hist || {};
+  const h = { ...(volumeState.hist[muscle] || {}) };
+  delete h[eff];
+  const applies = d.delta !== 0 && appliedMuscleDates({ ...h, [eff]: { delta: d.delta } }).includes(eff);
+  h[eff] = { delta: d.delta, why: d.why, from: sessionIso };
+  volumeState.hist[muscle] = h;
+  await saveVolumeState();
+  return { ...d, applies };
+}
+// How each muscle's lifts did today vs last time (e1RM), for the performance signal.
+function musclePerformanceToday(exs) {
+  const by = {};
+  exs.forEach(ex => {
+    const logged = (state[ex.name] || []).filter(s => s.logged && parseFloat(s.weight) > 0 && parseFloat(s.reps) > 0);
+    const prev = prevByExercise[ex.name];
+    if (!logged.length || !prev || !prev.sets || !prev.sets.length) return;
+    const now = Math.max(...logged.map(setE1rmAdj));
+    const before = Math.max(0, ...prev.sets.map(setE1rmAdj));
+    if (!before) return;
+    primaryMusclesOf(ex).forEach(m => { (by[m] = by[m] || []).push((now - before) / before * 100); });
+  });
+  const out = {};
+  Object.keys(by).forEach(m => { const v = by[m].reduce((a, b) => a + b, 0) / by[m].length; out[m] = v >= 0.5 ? 'up' : v <= -2.5 ? 'down' : 'hold'; });
+  return out;
+}
+// After focus or feedback changes the weekly plan, bring today's not-yet-started exercises in line
+// so the overview, the runner and the saved session all agree. Logged sets are never touched.
+function resyncTodaySetCounts() {
+  if (!state) return;
+  // Once a session is under way (anything logged, trimmed or started), leave today's sets alone —
+  // the change applies from the next session instead of rewriting what you're in the middle of.
+  if (dayMode === 'active' || sessionMods.timeCapMin || Object.values(state).some(sets => (sets || []).some(s => s.logged))) return;
+  const info = weekInfo();
+  (getDayData(currentDay).exercises || []).forEach(ex => {
+    const sets = state[ex.name];
+    if (!sets || sets.some(s => s.logged) || isSkipped(ex.name)) return;
+    const n = setCountFor(ex, currentDay, info);
+    if (n === sets.length) return;
+    state[ex.name] = Array.from({ length: n }, (_, i) => makeSet(i, n, info.deload));
+    try { applyPlanToExercise(ex, false); } catch (e) {}
+  });
+}
+async function setPriorityMuscles(list) {
+  priorityMuscles = (list || []).filter(m => VOLUME_LANDMARKS[m]).slice(0, 2);
+  volumeBonusCache.key = null;
+  resyncTodaySetCounts();
+  if (db) { try { await db.doc('meta/priorities').set({ muscles: priorityMuscles, date: todayISO() }); } catch (e) {} }
+}
+
 function defaultRirForSet(i, n, isDeload) {
   if (isDeload) return '3';
   return String(Math.max(0, Math.min(3, n - 1 - i)));
 }
 function weekTipText(info) {
-  if (!info.week) return "Set your block start date to see weekly targets and set counts.";
+  if (!info.week) return "No training block running yet. Start one to get weekly targets and set counts.";
   if (info.deload) return "Deload week — 1 set compound, 2 isolation, light loads, RIR 3. Active recovery.";
   if (info.overload) return `Overload week — 3 sets compound / 4 isolation.`;
   return `Base sets (2 compound / 3 isolation), RIR descending to 0 on the last set.`;
 }
+// Big glowing numbers with nothing to show used to render a lone glowing "—", which reads as a
+// glitch. Empty readouts now show a short, quiet label in the body font instead.
+function setReadout(el, value, emptyText) {
+  if (!el) return;
+  const empty = value == null || value === '' || value === false;
+  el.textContent = empty ? emptyText : value;
+  el.classList.toggle('is-empty', empty);
+}
+function markScrollFades() {
+  document.querySelectorAll('.phase-row').forEach(el => {
+    const max = el.scrollWidth - el.clientWidth;
+    el.classList.toggle('more-right', max > 2 && el.scrollLeft < max - 2);
+    el.classList.toggle('more-left', max > 2 && el.scrollLeft > 2);
+  });
+}
+document.addEventListener('scroll', (e) => {
+  if (e.target && e.target.classList && e.target.classList.contains('phase-row')) markScrollFades();
+}, true);
+window.addEventListener('resize', markScrollFades);
+(() => {
+  if (typeof MutationObserver === 'undefined') return;
+  let queued = false;
+  new MutationObserver(() => {
+    if (queued) return; queued = true;
+    requestAnimationFrame(() => { queued = false; markScrollFades(); });
+  }).observe(document.documentElement, { childList: true, subtree: true });
+})();
+
 function renderWeekPill() {
   const info = weekInfo();
   const pill = document.getElementById('weekPill');
-  if (!info.week) { pill.textContent = "Week –"; pill.classList.remove('deload'); }
+  if (!info.week) { pill.textContent = 'No block yet'; pill.classList.remove('deload'); pill.classList.add('is-empty'); }
   else {
+    pill.classList.remove('is-empty');
     pill.textContent = info.deload ? `Week ${info.week} · Deload` : `Week ${info.week}`;
     pill.classList.toggle('deload', info.deload);
   }
-  document.getElementById('weekTip').textContent = weekTipText(info);
+  const tipEl = document.getElementById('weekTip');
+  tipEl.textContent = weekTipText(info);
+  if (!info.week && !blockConfig.start) {
+    // First run: give the one action that unlocks weekly targets right here, not two tabs away.
+    const cta = document.createElement('button');
+    cta.className = 'tip-cta'; cta.id = 'tipStartBlockBtn'; cta.textContent = 'Start week 1 today →';
+    cta.onclick = async () => { await restartBlock(); try { renderWeekPill(); await loadDay(); } catch (e) {} };
+    tipEl.appendChild(document.createElement('br'));
+    tipEl.appendChild(cta);
+  }
   renderStreak();
 }
 // A day counts toward the streak once it has at least one logged set — a day you only opened
@@ -2832,7 +3445,7 @@ function renderStatsRow() {
   const dayData = getDayData(currentDay);
   if (!dayData.exercises.length) { row.innerHTML = ''; return; }
   const info = weekInfo();
-  const totalSets = dayData.exercises.reduce((sum, ex) => sum + defaultSetCount(ex.type, info), 0);
+  const totalSets = dayData.exercises.reduce((sum, ex) => sum + setCountFor(ex, currentDay, info), 0);
   const estMin = Math.round(totalSets * 2.5);
   row.innerHTML = `
     <div class="stat-col"><div class="stat-num">${dayData.exercises.length}</div><div class="stat-lbl">Exercises</div></div>
@@ -2996,7 +3609,7 @@ function plannedRirs(n, type, deload) {
 }
 function computeSuggestion(exName, type) {
   const info = weekInfo();
-  const n = (state[exName] && state[exName].length) || defaultSetCount(type, info);
+  const n = (state[exName] && state[exName].length) || setCountFor({ name: exName, type }, currentDay, info);
   if (!(exName in liftModelCache)) liftModelCache[exName] = buildLiftModel(exerciseHistory[exName], type);
   const model = liftModelCache[exName];
   const sore = parseInt(sorenessToday, 10);
@@ -3252,13 +3865,20 @@ function startWorkoutClock() {
 let activeSessionDate = null;
 function sessionDate() { return activeSessionDate || todayISO(); }
 let sessionFinishMeta = null; // finishedAt / summary for today's session, kept so later autosaves don't wipe it
-function freshSessionMods() { return { order: null, swaps: {}, skipped: [], startedAt: null, timeCapMin: null }; }
+function freshSessionMods() { return { order: null, swaps: {}, skipped: [], startedAt: null, timeCapMin: null, recovery: {}, pump: {} }; }
 // The saved program for a day, without today's one-off changes. Use this for anything that EDITS
 // the program, so a "swap for today" or a reorder never gets baked into your split.
 function getProgramDay(day) { return programOverrides[day] || PRESET_PROGRAMS[activePreset][day]; }
 // What you're actually doing on a day: the program, plus today's swaps and reordering (today only).
+function prioritySorted(dayObj) {
+  if (!priorityMuscles.length || !dayObj || !(dayObj.exercises || []).length) return dayObj;
+  const hits = ex => primaryMusclesOf(ex).some(m => priorityMuscles.includes(m)) ? 0 : 1;
+  const sorted = dayObj.exercises.map((e, i) => ({ e, i })).sort((a, b) => (hits(a.e) - hits(b.e)) || (a.i - b.i)).map(x => x.e);
+  if (sorted.every((e, i) => e === dayObj.exercises[i])) return dayObj;
+  return { ...dayObj, exercises: sorted };
+}
 function getDayData(day) {
-  const base = getProgramDay(day);
+  const base = prioritySorted(getProgramDay(day));
   if (day !== currentDay || !sessionMods || (!sessionMods.order && !Object.keys(sessionMods.swaps || {}).length)) return base;
   let exercises = (base.exercises || []).map(ex => (sessionMods.swaps && sessionMods.swaps[ex.name]) ? { ...sessionMods.swaps[ex.name], swappedFrom: ex.name } : ex);
   if (sessionMods.order && sessionMods.order.length) {
@@ -3351,12 +3971,14 @@ function renderMain() {
     <div class="focus-card swipe" id="focusCard">
       <div class="focus-kicker">${focusIdx + 1} of ${exs.length}<span class="kick-type">${ex.type === 'compound' ? 'Compound' : 'Isolation'}</span>${ex.swappedFrom ? `<span class="kick-type">In for ${escHtml(ex.swappedFrom)} today</span>` : ''}</div>
       <div class="focus-name">${escHtml(ex.name)}</div>
+      <div id="recAskSlot">${recoveryAskHTML(ex)}</div>
       <div class="ex-prev-slot"></div>
       <div class="ex-body"></div>
     </div>
     <div class="run-nav" id="runNav"></div>
     <div class="run-finish"><button class="back-link" id="finishEarlyBtn">Finish workout</button></div>`;
   const card = document.getElementById('focusCard');
+  wireRecoveryAsk(ex);
   renderExerciseBody(ex, card.querySelector('.ex-body'), card.querySelector('.ex-prev-slot'));
   document.getElementById('busyBtn').onclick = () => renderBusySheet(ex);
   document.getElementById('shortBtn').onclick = () => renderShortSheet();
@@ -3379,6 +4001,29 @@ function renderMain() {
     el.textContent = st ? fmtClock(Date.now() - st) : '0:00';
   }, 1000);
   const st = sessionStartMs(); const tEl = document.getElementById('runTimer'); if (tEl && st) tEl.textContent = fmtClock(Date.now() - st);
+}
+// Before a muscle's first set of the day: did it recover from last time? (one tap, skippable)
+function recoveryAskHTML(ex) {
+  if (weekInfo().deload || !blockConfig.start) return '';
+  if ((state[ex.name] || []).some(s => s.logged)) return '';
+  const answered = sessionMods.recovery || {};
+  const m = primaryMusclesOf(ex).find(x => !answered[x]);
+  if (!m) return '';
+  return `<div class="rec-ask" data-m="${escHtml(m)}">
+    <div class="rec-q">${escHtml(m)} since last time?</div>
+    <div class="rec-opts">
+      <button data-rec="sore">Still sore</button><button data-rec="ontime">Just healed</button><button data-rec="early">Healed early</button>
+    </div></div>`;
+}
+function wireRecoveryAsk(ex) {
+  const box = document.querySelector('#recAskSlot .rec-ask');
+  if (!box) return;
+  box.querySelectorAll('[data-rec]').forEach(b => b.onclick = () => {
+    sessionMods.recovery = { ...(sessionMods.recovery || {}), [box.dataset.m]: b.dataset.rec };
+    saveSessionMods();
+    const slot = document.getElementById('recAskSlot');
+    if (slot) { slot.innerHTML = recoveryAskHTML(ex); wireRecoveryAsk(ex); }
+  });
 }
 function goToExercise(i) {
   const exs = getDayData(currentDay).exercises;
@@ -3496,7 +4141,7 @@ function swapForToday(oldEx, newName, newType) {
   if (sessionMods.order) sessionMods.order = sessionMods.order.map(n => n === oldEx.name ? newName : n);
   clearTimerFor(oldEx.name);
   delete state[oldEx.name]; delete uiState[oldEx.name];
-  const info = weekInfo(), n = defaultSetCount(newType, info);
+  const info = weekInfo(), n = setCountFor({ name: original, type: newType }, currentDay, info);
   state[newName] = Array.from({ length: n }, (_, i) => makeSet(i, n, info.deload));
   uiState[newName] = { phase: 'input', restEndAt: null, restDuration: newType === 'compound' ? REST_SECONDS_COMPOUND : REST_SECONDS_ISOLATION, timerId: null };
   applyPlanToExercise({ name: newName, type: newType }, false);
@@ -3635,10 +4280,51 @@ async function finishWorkoutInner() {
       </div>
       ${sum.lifts.length ? `<div class="review-lifts">${sum.lifts.map(l => `<div class="review-lift"><span>${escHtml(l.name)}${l.pr ? '<b class="chip-pr">PR</b>' : ''}</span><span class="review-lift-v">${Math.round(l.e1)} lb est. max ${l.pct != null ? `<em>${f(l.pct)}</em>` : '<em>first log</em>'}</span></div>`).join('')}</div>` : ''}
       ${sum.overallPct != null ? `<div class="review-rec"><div class="review-rec-head">${sum.overallPct >= 0.5 ? 'Stronger than last time' : sum.overallPct > -1.5 ? 'Held your strength' : 'Off day — it happens'}</div><div class="review-reason">${sum.overallPct >= 0.5 ? `Your lifts moved ${f(sum.overallPct)} vs the last time you did them. Next session's plan already accounts for it.` : sum.overallPct > -1.5 ? 'Within normal day-to-day variation. Next session plans from today.' : 'Sleep, food and stress all show up here. The plan adjusts — one session doesn\'t change the trend.'}</div></div>` : ''}` : `<div class="ex-prev" style="margin-top:8px;">Log at least one set and it'll be saved here.</div>`}
+      ${sum.sets ? muscleCheckHTML(exs) : ''}
       <button class="btn-primary" id="summaryDoneBtn" style="width:100%; margin-top:20px;">Done</button>
     </div>`;
   document.body.appendChild(el);
+  wireMuscleCheck(el, exs);
   el.querySelector('#summaryDoneBtn').onclick = () => { el.remove(); showMode('overview'); renderDayOverview(); };
+}
+
+// After the session: pump per muscle trained → next week's sets for that muscle.
+function musclesTrainedToday(exs) {
+  const set = [];
+  exs.forEach(ex => { if ((state[ex.name] || []).some(s => s.logged)) primaryMusclesOf(ex).forEach(m => { if (!set.includes(m)) set.push(m); }); });
+  return set;
+}
+function muscleCheckHTML(exs) {
+  if (weekInfo().deload || !blockConfig.start) return '';
+  const ms = musclesTrainedToday(exs);
+  if (!ms.length) return '';
+  const pump = sessionMods.pump || {};
+  return `<div class="muscle-check">
+    <div class="review-rec-head">How was the pump?</div>
+    <div class="review-reason" style="margin-bottom:8px;">Sets up next week's volume for each muscle, together with how it recovered and how your lifts went.</div>
+    ${ms.map(m => `<div class="mc-row" data-m="${escHtml(m)}">
+      <span class="mc-name">${escHtml(m)}</span>
+      <div class="scale-row mc-seg">${[[1, 'Low'], [2, 'Good'], [3, 'Great']].map(([v, l]) => `<button class="scale-btn ${pump[m] === v ? 'selected' : ''}" data-v="${v}">${l}</button>`).join('')}</div>
+      <div class="mc-out" id="mcOut-${cssEsc(m)}"></div>
+    </div>`).join('')}
+  </div>`;
+}
+function wireMuscleCheck(root, exs) {
+  const perf = musclePerformanceToday(exs);
+  root.querySelectorAll('.mc-row').forEach(row => {
+    const m = row.dataset.m;
+    row.querySelectorAll('[data-v]').forEach(b => b.onclick = async () => {
+      row.querySelectorAll('[data-v]').forEach(x => x.classList.remove('selected')); b.classList.add('selected');
+      sessionMods.pump = { ...(sessionMods.pump || {}), [m]: parseInt(b.dataset.v, 10) };
+      const d = await recordMuscleFeedback(m, sessionDate(), { recovery: (sessionMods.recovery || {})[m], pump: sessionMods.pump[m], perf: perf[m] });
+      autoSaveDay();
+      const out = row.querySelector('.mc-out');
+      if (!out) return;
+      if (d.delta === 0) out.textContent = `Next week: same sets (${d.why})`;
+      else if (!d.applies) out.textContent = `Noted — ${m} already changed this week, so next week stays as planned (${d.why}).`;
+      else out.textContent = `Next week: ${d.delta > 0 ? '+' : ''}${d.delta} set (${d.why})`;
+    });
+  });
 }
 
 // Clears one exercise's logged sets and warm-up state back to fresh, without touching the rest of the day.
@@ -3646,7 +4332,7 @@ async function finishWorkoutInner() {
 function resetExerciseSets(ex, container, prevSlot) {
   const exName = ex.name;
   const info = weekInfo();
-  const n = defaultSetCount(ex.type, info);
+  const n = setCountFor(ex, currentDay, info);
   clearTimerFor(exName);
   state[exName] = Array.from({ length: n }, (_, i) => makeSet(i, n, info.deload));
   uiState[exName] = { phase: 'input', restEndAt: null, restDuration: ex.type === 'compound' ? REST_SECONDS_COMPOUND : REST_SECONDS_ISOLATION, timerId: null };
@@ -3688,7 +4374,7 @@ async function swapExerciseInDay(oldName, newName, newType) {
   delete state[oldName]; delete uiState[oldName];
   delete plateauByExercise[oldName]; delete prevByExercise[oldName];
   const info = weekInfo();
-  const n = defaultSetCount(newType, info);
+  const n = setCountFor({ name: newName, type: newType }, currentDay, info);
   state[newName] = Array.from({ length: n }, (_, i) => makeSet(i, n, info.deload));
   uiState[newName] = { phase: 'input', restEndAt: null, restDuration: newType === 'compound' ? REST_SECONDS_COMPOUND : REST_SECONDS_ISOLATION, timerId: null };
   await loadPrevious();
@@ -3878,9 +4564,51 @@ function armConfirm(btn, confirmLabel, onConfirm) {
 // every competing app (Strong, Hevy, JEFIT) vibrates and/or beeps on completion. Web Audio +
 // the Vibration API both fail silently (try/catch) on browsers or contexts that don't support
 // them (desktop Safari has no vibrate; some sandboxes block AudioContext), so this never throws.
+// iPhone notes: Safari ignores navigator.vibrate entirely, and an AudioContext created outside a
+// tap (the rest timer fires from setInterval) starts suspended and never makes a sound. So the
+// context is created and "unlocked" on the lifter's own taps (logging a set is always a tap), and
+// the audio session is marked 'transient' so the chime ducks their music briefly instead of
+// stopping it. The full-screen flash is the part that works everywhere, sound on or off.
 let sharedAudioCtx = null;
+function unlockRestAudio() {
+  try {
+    if (navigator.audioSession && navigator.audioSession.type !== 'transient') navigator.audioSession.type = 'transient';
+  } catch (e) {}
+  try {
+    if (!sharedAudioCtx) sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (sharedAudioCtx.state === 'suspended') sharedAudioCtx.resume();
+    if (!sharedAudioCtx._primed) {
+      const b = sharedAudioCtx.createBuffer(1, 1, 22050);
+      const s = sharedAudioCtx.createBufferSource();
+      s.buffer = b; s.connect(sharedAudioCtx.destination); s.start(0);
+      sharedAudioCtx._primed = true;
+    }
+  } catch (e) {}
+}
+document.addEventListener('pointerdown', unlockRestAudio, { capture: true, passive: true });
+document.addEventListener('touchend', unlockRestAudio, { capture: true, passive: true });
+
+function flashRestDone() {
+  try {
+    let el = document.getElementById('restFlash');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'restFlash';
+      el.setAttribute('aria-hidden', 'true');
+      el.innerHTML = '<span>Rest done</span>';
+      document.body.appendChild(el);
+    }
+    el.classList.remove('on');
+    void el.offsetWidth; // restart the animation if two rests end back to back
+    el.classList.add('on');
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.classList.remove('on'), 1700);
+  } catch (e) {}
+}
+
 function playRestChime() {
   try { if (navigator.vibrate) navigator.vibrate([120, 60, 120]); } catch (e) {}
+  if (document.visibilityState !== 'hidden') flashRestDone();
   try {
     if (!sharedAudioCtx) sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const ctx = sharedAudioCtx;
@@ -3891,7 +4619,7 @@ function playRestChime() {
       osc.type = 'sine';
       osc.frequency.value = i === 0 ? 880 : 1046.5;
       gain.gain.setValueAtTime(0.0001, ctx.currentTime + delay);
-      gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + delay + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.35, ctx.currentTime + delay + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + delay + 0.22);
       osc.connect(gain); gain.connect(ctx.destination);
       osc.start(ctx.currentTime + delay);
@@ -4039,7 +4767,7 @@ function wireExerciseEvents(ex, container) {
   const unskip = container.querySelector(`#unskip-${id}`);
   if (unskip) unskip.onclick = () => {
     sessionMods.skipped = (sessionMods.skipped || []).filter(n => n !== exName);
-    const info = weekInfo(), n = defaultSetCount(ex.type, info);
+    const info = weekInfo(), n = setCountFor(ex, currentDay, info);
     const logged = state[exName].filter(s => s.logged);
     state[exName] = [...logged, ...Array.from({ length: Math.max(0, n - logged.length) }, (_, i) => makeSet(logged.length + i, n, info.deload))];
     applyPlanToExercise(ex, false);
@@ -4177,7 +4905,7 @@ function initState() {
   warmupTimerByEx = {};
   const info = weekInfo();
   getDayData(currentDay).exercises.forEach(ex => {
-    const n = defaultSetCount(ex.type, info);
+    const n = setCountFor(ex, currentDay, info);
     state[ex.name] = Array.from({ length: n }, (_, i) => makeSet(i, n, info.deload));
     uiState[ex.name] = { phase: 'input', restEndAt: null, restDuration: ex.type === 'compound' ? REST_SECONDS_COMPOUND : REST_SECONDS_ISOLATION, timerId: null };
   });
@@ -4266,8 +4994,28 @@ async function loadDay() {
   renderDayOverview();
 }
 
+// Keep the screen on while a workout is running. Without it the phone auto-locks during a 2–3
+// minute rest, JavaScript pauses, and the rest alert never fires. The OS drops the lock whenever
+// the app is backgrounded, so it's re-requested on every return (resyncOnResume).
+let screenWakeLock = null;
+async function setScreenAwake(on) {
+  try {
+    if (!('wakeLock' in navigator)) return;
+    if (on) {
+      if (screenWakeLock && !screenWakeLock.released) return;
+      if (document.visibilityState !== 'visible') return;
+      screenWakeLock = await navigator.wakeLock.request('screen');
+      screenWakeLock.addEventListener('release', () => { screenWakeLock = null; });
+    } else if (screenWakeLock) {
+      const l = screenWakeLock; screenWakeLock = null;
+      await l.release();
+    }
+  } catch (e) { screenWakeLock = null; }
+}
+
 function showMode(mode) {
   dayMode = mode;
+  setScreenAwake(mode === 'active');
   const sr = document.getElementById('statsRow'); if (sr) sr.style.display = mode === 'active' ? 'none' : '';
   document.body.classList.toggle('is-running', mode === 'active'); // full-screen workout: hide week note, day tabs, cards
   document.getElementById('dayOverview').style.display = mode === 'overview' ? 'block' : 'none';
@@ -4288,7 +5036,7 @@ function renderDayOverview() {
   const isRest = dayData.exercises.length === 0;
 
   const info = weekInfo();
-  const totalSets = isRest ? 0 : dayData.exercises.reduce((sum, ex) => sum + defaultSetCount(ex.type, info), 0);
+  const totalSets = isRest ? 0 : dayData.exercises.reduce((sum, ex) => sum + setCountFor(ex, currentDay, info), 0);
   const estMin = Math.round(totalSets * 2.5);
   // Earlier days this week show what you saved that day (read-only) instead of today's inputs.
   const isPastDay = dateForWeekday(currentDay) < todayISO();
@@ -4475,12 +5223,46 @@ async function getPhotoLog(limitN) {
   } catch (e) { return []; }
 }
 
+// The old app kept one photo per weekday as a base64 blob inside the database row (~200 KB each),
+// which bloats every sync. This moves each one into the private photos bucket, adds it to the
+// photo timeline with its original save date, and only then deletes the old row. Runs once per
+// account in the background; a failure leaves the old row untouched so nothing is ever lost.
+const WEEKDAYS_ALL = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+async function migrateLegacyPhotos() {
+  if (!(supaClient && currentUserId && db && !db.__local)) return false;
+  let moved = 0;
+  for (const day of WEEKDAYS_ALL) {
+    try {
+      const snap = await db.doc(`photos/${day}`).get();
+      if (!snap.exists) continue;
+      const d = snap.data() || {};
+      if (!d.url || !String(d.url).startsWith('data:image/')) continue;
+      const blob = await (await fetch(d.url)).blob();
+      const ext = (blob.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg').replace(/[^a-z0-9]/g, '') || 'jpg';
+      const savedAt = Number(d.savedAt) || Date.now();
+      const path = `${currentUserId}/legacy-${day}-${savedAt}.${ext}`;
+      const { error } = await supaClient.storage.from('photos').upload(path, blob, { contentType: blob.type || 'image/jpeg' });
+      // "Already exists" means a previous run uploaded it but stopped before cleanup — carry on.
+      if (error && !/exist|duplicate|409/i.test(String(error.message || error.statusCode || error))) throw error;
+      const date = localISO(new Date(savedAt));
+      await db.doc(`photoLog/${date}_${savedAt}`).set({ url: null, storagePath: path, day, date, createdAt: savedAt, migrated: true });
+      await db.doc(`photos/${day}`).delete();
+      moved++;
+    } catch (e) { console.warn('photo migration skipped', day, e); }
+  }
+  return moved > 0;
+}
+
 async function loadHeroPhoto() {
   let url = DEFAULT_HERO_PHOTOS[currentDay] || null;
   if (db) {
     try {
-      const log = await getPhotoLog(1);
-      if (log.length) url = log[0].url;
+      // Prefer the newest photo taken for this training day (Monday's banner stays Monday's),
+      // then the newest photo overall.
+      const log = await getPhotoLog(60);
+      const mine = log.find(p => p.day === currentDay);
+      if (mine) url = mine.url;
+      else if (log.length) url = log[0].url;
       else {
         // Fall back to a photo saved under the old day-of-week key, from before this fix, so an
         // existing photo doesn't just disappear — it just won't grow into a timeline until a new
@@ -4505,7 +5287,7 @@ function renderWorkoutPreview() {
   const info = weekInfo();
   let html = `<button class="back-link" id="backFromPreviewBtn">‹ Back to overview</button>`;
   dayData.exercises.forEach(ex => {
-    const n = defaultSetCount(ex.type, info);
+    const n = setCountFor(ex, currentDay, info);
     const st = (state[ex.name] || []);
     const planTxt = st.length && st.every(x => x.weight !== '' && x.weight != null) && st.every(x => String(x.weight) === String(st[0].weight))
       ? `${st[0].weight} lb × ${st.map(x => x.reps || '–').join(' / ')}` : `${ex.type} · ${n} sets`;
@@ -4776,8 +5558,64 @@ async function renderPhotoGallery() {
     list.innerHTML = '<div class="ex-prev" style="padding:20px 0;">No progress photos yet — add one from the "+ Add photo" button on any training day\'s overview.</div>';
     return;
   }
-  list.innerHTML = `<div class="photo-grid">${log.map((p, i) => `<button class="photo-thumb" data-i="${i}" style="background-image:url('${p.url}');"><span class="photo-thumb-date">${fmtHistoryDate(p.date)}</span></button>`).join('')}</div>`;
+  list.innerHTML = (log.length >= 2 ? `<button class="btn-primary" id="photoCompareBtn" style="width:100%; margin-bottom:14px;">Compare two photos</button>` : '') + `<div class="photo-grid">${log.map((p, i) => `<button class="photo-thumb" data-i="${i}" style="background-image:url('${p.url}');"><span class="photo-thumb-date">${fmtHistoryDate(p.date)}</span></button>`).join('')}</div>`;
   list.querySelectorAll('.photo-thumb').forEach(btn => { btn.onclick = () => openPhotoViewer(parseInt(btn.dataset.i, 10)); });
+  const cb = document.getElementById('photoCompareBtn');
+  if (cb) cb.onclick = () => openPhotoCompare(log.length - 1, 0);
+}
+
+// ---------- Before / after compare ----------
+// Oldest vs newest by default; tap a side, then a thumbnail, to change it. Side-by-side or a
+// drag slider over the same frame, with the date and the weight around that day under each.
+let cmp = { a: 0, b: 0, active: 'a', mode: 'side' };
+function openPhotoCompare(aIdx, bIdx) {
+  cmp = { a: aIdx, b: bIdx, active: 'a', mode: cmp.mode || 'side' };
+  let el = document.getElementById('photoCompareOverlay');
+  if (!el) { el = document.createElement('div'); el.id = 'photoCompareOverlay'; el.className = 'menu-overlay'; el.style.zIndex = '95'; document.body.appendChild(el); }
+  el.classList.add('open');
+  renderPhotoCompare();
+}
+let cmpSeq = 0;
+const cmpWeightCache = {};
+async function cmpWeight(d) { if (!(d in cmpWeightCache)) cmpWeightCache[d] = await weightNear(d); return cmpWeightCache[d]; }
+async function renderPhotoCompare() {
+  const el = document.getElementById('photoCompareOverlay');
+  const log = photoViewerLog;
+  const A = log[cmp.a], B = log[cmp.b];
+  if (!el || !A || !B) return;
+  const seq = ++cmpSeq;
+  const [wa, wb] = await Promise.all([cmpWeight(A.date), cmpWeight(B.date)]);
+  if (seq !== cmpSeq) return; // a newer pick already re-rendered
+  const lbl = (p, w) => `${escHtml(fmtHistoryDate(p.date))}${w ? ` · ${w.toFixed(1)} lb` : ''}`;
+  const gapWk = Math.max(1, Math.round(Math.abs(daysBetweenISO(A.date, B.date)) / 7));
+  const diff = wa && wb && A.date !== B.date ? `${wb - wa >= 0 ? '+' : ''}${(wb - wa).toFixed(1)} lb ${A.date < B.date ? 'over' : 'from the later photo, across'} ${gapWk} wk` : '';
+  el.innerHTML = `
+    <div class="cmp-wrap">
+      <div class="menu-header" style="margin-bottom:10px;"><span class="section-title" style="margin:0;">Compare</span><button class="menu-close" id="cmpClose">×</button></div>
+      <div class="cmp-modes"><button class="${cmp.mode === 'side' ? 'on' : ''}" data-mode="side">Side by side</button><button class="${cmp.mode === 'slide' ? 'on' : ''}" data-mode="slide">Slider</button></div>
+      ${cmp.mode === 'side' ? `
+        <div class="cmp-side">
+          <button class="cmp-pane ${cmp.active === 'a' ? 'active' : ''}" data-side="a"><div class="cmp-img" style="background-image:url('${A.url}')"></div><div class="cmp-cap">Before · ${lbl(A, wa)}</div></button>
+          <button class="cmp-pane ${cmp.active === 'b' ? 'active' : ''}" data-side="b"><div class="cmp-img" style="background-image:url('${B.url}')"></div><div class="cmp-cap">After · ${lbl(B, wb)}</div></button>
+        </div>` : `
+        <div class="cmp-slide" id="cmpSlide">
+          <div class="cmp-img" style="background-image:url('${A.url}')"></div>
+          <div class="cmp-img cmp-top" id="cmpTop" style="background-image:url('${B.url}'); clip-path: inset(0 0 0 50%);"></div>
+          <div class="cmp-line" id="cmpLine" style="left:50%"></div>
+          <input type="range" min="0" max="100" value="50" id="cmpRange" aria-label="Before and after slider">
+        </div>
+        <div class="cmp-caps"><span>Before · ${lbl(A, wa)}</span><span>After · ${lbl(B, wb)}</span></div>`}
+      ${diff ? `<div class="cmp-diff">${diff}</div>` : ''}
+      <div class="cp-label" style="margin:14px 0 8px;">${cmp.mode === 'side' ? `Tap a side, then pick a photo for it` : 'Pick photos'} · changing <b>${cmp.active === 'a' ? 'Before' : 'After'}</b></div>
+      <div class="cmp-strip">${log.map((p, i) => `<button class="cmp-thumb ${i === cmp.a ? 'is-a' : ''} ${i === cmp.b ? 'is-b' : ''}" data-i="${i}" style="background-image:url('${p.url}')"><span>${escHtml(fmtHistoryDate(p.date))}</span></button>`).join('')}</div>
+      ${cmp.mode === 'slide' ? `<div class="cmp-modes" style="margin-top:10px;"><button class="${cmp.active === 'a' ? 'on' : ''}" data-side="a">Change Before</button><button class="${cmp.active === 'b' ? 'on' : ''}" data-side="b">Change After</button></div>` : ''}
+    </div>`;
+  el.querySelector('#cmpClose').onclick = () => el.classList.remove('open');
+  el.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { cmp.mode = b.dataset.mode; renderPhotoCompare(); });
+  el.querySelectorAll('[data-side]').forEach(b => b.onclick = () => { cmp.active = b.dataset.side; renderPhotoCompare(); });
+  el.querySelectorAll('.cmp-thumb').forEach(b => b.onclick = () => { cmp[cmp.active] = parseInt(b.dataset.i, 10); cmp.active = cmp.active === 'a' ? 'b' : 'a'; renderPhotoCompare(); });
+  const r = el.querySelector('#cmpRange');
+  if (r) r.oninput = () => { const v = r.value; el.querySelector('#cmpTop').style.clipPath = `inset(0 0 0 ${v}%)`; el.querySelector('#cmpLine').style.left = v + '%'; };
 }
 function openPhotoViewer(i) {
   photoViewerIndex = i;
@@ -4985,6 +5823,58 @@ async function completeOnboarding() {
   if (db) { try { await db.doc('meta/onboarded').set({ done: true }); } catch (e) {} }
   document.getElementById('onboardingOverlay').style.display = 'none';
   renderNutrition();
+  setTimeout(() => { maybeShowCarbCycleIntro(); }, 450);
+}
+
+// One-time intro to training/rest-day calories: shown right after setup for new accounts, and
+// once to existing accounts the first time they open this version. Saved per account.
+async function maybeShowCarbCycleIntro() {
+  if (!db || dayMode === 'active') return;
+  const ob = document.getElementById('onboardingOverlay');
+  if (ob && ob.style.display === 'block') return;
+  try { const snap = await db.doc('meta/introCarbCycle').get(); if (snap.exists && snap.data().seen) return; } catch (e) { return; }
+  showCarbCycleIntro();
+}
+async function showCarbCycleIntro() {
+  let el = document.getElementById('introSheet');
+  if (!el) { el = document.createElement('div'); el.id = 'introSheet'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-labelledby', 'introSheetTitle'); document.body.appendChild(el); }
+  const days = DAY_ORDER.map(d => ({ d, t: isTrainingDayName(d) }));
+  const T = days.filter(x => x.t).length;
+  let plan = null;
+  try { const bw = await getTrendWeightLb(); const dt = dayTargetInfo(weekInfo(), todayName(), bw); plan = dt.plan || null; } catch (e) {}
+  const hT = 100, hR = (plan && plan.shifted) ? Math.round(plan.rest / plan.train * 100) : 78;
+  const bars = days.map((x, i) => `<div class="is-day"><div class="is-col"><div class="is-bar ${x.t ? 't' : ''}" style="height:${x.t ? hT : hR}%; animation-delay:${i * 60}ms"></div></div><div class="is-dl">${x.d.slice(0, 1)}</div></div>`).join('');
+  const nums = plan && plan.shifted ? ` <span>Right now that's about ${plan.train.toLocaleString()} on training days and ${plan.rest.toLocaleString()} on rest days.</span>` : '';
+  el.innerHTML = `
+    <div class="is-backdrop"></div>
+    <div class="is-panel">
+      <div class="is-grab"></div>
+      <div class="is-kicker">How your calories work</div>
+      <div class="is-title" id="introSheetTitle">Fuel follows your training</div>
+      ${T > 0 && T < 7 ? `<div class="is-week">${bars}</div>
+      <div class="is-legend"><span><i style="background:var(--rest-accent)"></i>Training day</span><span><i style="background:rgba(255,255,255,0.2)"></i>Rest day</span></div>` : ''}
+      <ul class="is-points">
+        <li>Training days get more carbs, rest days a little less.${nums}</li>
+        <li>Your weekly total stays the same. <span>Protein and fat don't change from day to day.</span></li>
+        <li>It's a preference, not a must. <span>Muscle comes from your training, protein and weekly calories. This just puts more food where you train.</span></li>
+      </ul>
+      <div class="is-actions">
+        <button class="btn-secondary" id="introSameBtn">Same every day</button>
+        <button class="btn-primary" id="introKeepBtn">Keep it on</button>
+      </div>
+      <div class="is-foot">You can switch anytime on the Nutrition tab.</div>
+    </div>`;
+  el.classList.add('open');
+  const close = async (keepOn) => {
+    if (carbCycle !== keepOn) { carbCycle = keepOn; await persistNutritionConfig(); }
+    if (db) { try { await db.doc('meta/introCarbCycle').set({ seen: true, choice: keepOn ? 'cycle' : 'flat', date: todayISO() }); } catch (e) {} }
+    el.classList.remove('open');
+    try { renderNutrition(); renderFuelCheck(); } catch (e) {}
+  };
+  document.getElementById('introKeepBtn').onclick = () => close(true);
+  document.getElementById('introSameBtn').onclick = () => close(false);
+  el.querySelector('.is-backdrop').onclick = () => close(carbCycle);
+  setTimeout(() => { const b = document.getElementById('introKeepBtn'); if (b) b.focus({ preventScroll: true }); }, 50);
 }
 async function onboardHandleNext() {
   const key = ONBOARD_STEPS[onboardStep];
@@ -5142,6 +6032,100 @@ async function exportAllData() {
   setTimeout(() => { btn.textContent = original; }, 1800);
 }
 
+// --- Full backup / restore. The CSV above is for reading in a spreadsheet; this is the complete
+// copy of the account (program, settings, blocks, measurements, every log) as one JSON file, and
+// the only backup there is: the database plan doesn't keep automatic ones. Photos are separate
+// files in storage and aren't inside it.
+async function collectAllDocs() {
+  const out = [];
+  if (db && db.__local) {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith('foreverdb:')) continue;
+      try { out.push({ path: key.slice('foreverdb:'.length), data: JSON.parse(localStorage.getItem(key)) }); } catch (e) {}
+    }
+    return out;
+  }
+  if (!(supaClient && currentUserId)) throw new Error('not signed in');
+  if (db && db.flushOutbox) { try { await db.flushOutbox(); } catch (e) {} }
+  const PAGE = 500;
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await supaClient.from('documents').select('path,data,updated_at')
+      .eq('user_id', currentUserId).order('path').range(from, from + PAGE - 1);
+    if (error) throw error;
+    (data || []).forEach(r => out.push({ path: r.path, data: r.data, updatedAt: r.updated_at }));
+    if (!data || data.length < PAGE) break;
+  }
+  return out;
+}
+async function saveFileToDevice(filename, text, mime) {
+  const blob = new Blob([text], { type: mime });
+  // iPhone home-screen apps can't do a normal download; the share sheet ("Save to Files") can.
+  try {
+    const file = new File([blob], filename, { type: mime });
+    if (navigator.canShare && navigator.canShare({ files: [file] }) && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
+      await navigator.share({ files: [file], title: filename });
+      return;
+    }
+  } catch (e) { if (e && e.name === 'AbortError') return; }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+async function downloadFullBackup() {
+  const btn = document.getElementById('menuBackupBtn');
+  const original = btn.textContent;
+  btn.textContent = 'Preparing backup…';
+  try {
+    const docs = await collectAllDocs();
+    const payload = { app: 'FOREVER', kind: 'full-backup', version: 1, exportedAt: new Date().toISOString(),
+      account: currentUserEmail || (db && db.__local ? 'this device' : null), count: docs.length, docs };
+    await saveFileToDevice(`forever-backup-${todayISO()}.json`, JSON.stringify(payload), 'application/json');
+    btn.textContent = `Backed up ${docs.length} items ✓`;
+  } catch (e) {
+    console.error('backup failed', e);
+    btn.textContent = 'Backup failed — try again online';
+  }
+  setTimeout(() => { btn.textContent = original; }, 2400);
+}
+async function restoreFromBackupFile(file) {
+  const btn = document.getElementById('menuRestoreBtn');
+  const original = btn.textContent;
+  try {
+    const parsed = JSON.parse(await file.text());
+    if (!parsed || parsed.app !== 'FOREVER' || parsed.kind !== 'full-backup' || !Array.isArray(parsed.docs)) {
+      alert('That file isn\'t a FOREVER backup.');
+      return;
+    }
+    const docs = parsed.docs.filter(d => d && typeof d.path === 'string' && d.path && !d.path.includes('..') && d.data && typeof d.data === 'object');
+    const when = parsed.exportedAt ? new Date(parsed.exportedAt).toLocaleString() : 'an unknown date';
+    if (!confirm(`Restore ${docs.length} items from the backup made ${when}?\n\nAnything in the backup replaces the current version. Things you've added since then stay.`)) return;
+    btn.textContent = 'Restoring…';
+    let done = 0;
+    for (const d of docs) {
+      try { await db.doc(d.path).set(d.data); done++; } catch (e) {}
+      if (done % 20 === 0) btn.textContent = `Restoring… ${done}/${docs.length}`;
+    }
+    if (db && db.flushOutbox) { try { await db.flushOutbox(); } catch (e) {} }
+    alert(`Restored ${done} of ${docs.length} items. The app will reload.`);
+    location.reload();
+  } catch (e) {
+    console.error('restore failed', e);
+    alert('Couldn\'t read that backup file.');
+  } finally {
+    btn.textContent = original;
+  }
+}
+document.getElementById('menuBackupBtn').addEventListener('click', downloadFullBackup);
+document.getElementById('menuRestoreBtn').addEventListener('click', () => document.getElementById('restoreFileInput').click());
+document.getElementById('restoreFileInput').addEventListener('change', (e) => {
+  const f = e.target.files && e.target.files[0];
+  e.target.value = '';
+  if (f) restoreFromBackupFile(f);
+});
+
 async function loadSleep() {
   if (!db) return;
   try {
@@ -5217,7 +6201,7 @@ setInterval(() => {
   }
 }, 60000);
 function resyncOnResume() {
-  if (dayMode === 'active') renderMain();
+  if (dayMode === 'active') { setScreenAwake(true); renderMain(); }
 }
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') resyncOnResume();
@@ -5272,6 +6256,9 @@ const PHASES = {
   maintain:      { label: 'Maintain',       calDelta: 0,    note: 'holding steady', group: 'maintain' },
   bulk:          { label: 'Lean Bulk',      calDelta: 275,  note: '0.25–0.5 kg gain/week target', group: 'bulk' },
   bulkStandard:  { label: 'Standard Bulk',  calDelta: 450,  note: '0.5–0.75 kg gain/week target — faster gain, more of it will be fat', group: 'bulk' },
+  // Reverse diet: after a cut, steps calories back up each week until you're at maintenance.
+  // calDelta here is only the fallback; the real number comes from phaseCalDelta() below.
+  reverse:       { label: 'Reverse Diet',   calDelta: 0,    note: 'stepping calories back up each week after a cut', group: 'maintain' },
 };
 // The single place phase changes actually happen. nutritionPhase (drives calorie targets) and
 // weightPhase (drives the Weight tab's pace math) used to be set independently in three different
@@ -5283,9 +6270,10 @@ const PHASES = {
 // diversion, so "Resume bulk" puts someone back where they actually were instead of always
 // defaulting to Lean Bulk regardless of what they'd been running.
 let phaseBeforeCut = null;
+let reverseFromDelta = null; // where the reverse diet started (e.g. −500 from a cut)
 async function persistNutritionConfig() {
   if (!db) return;
-  try { await db.doc('nutrition/config').set({ maintCals, phase: nutritionPhase, phaseStart, plannedPhaseWeeks, phaseAdvisorySnoozeUntil, phaseBeforeCut, maintAdjustedOn }); } catch (e) {}
+  try { await db.doc('nutrition/config').set({ maintCals, phase: nutritionPhase, phaseStart, plannedPhaseWeeks, phaseAdvisorySnoozeUntil, phaseBeforeCut, maintAdjustedOn, carbCycle, reverseFromDelta }); } catch (e) {}
 }
 async function setNutritionPhase(newPhase, opts) {
   opts = opts || {};
@@ -5294,6 +6282,10 @@ async function setNutritionPhase(newPhase, opts) {
   const newGroup = PHASES[newPhase] ? PHASES[newPhase].group : newPhase;
   if (changed && prevGroup === 'bulk' && (newGroup === 'cut' || newGroup === 'recomp')) {
     phaseBeforeCut = nutritionPhase;
+  }
+  if (changed && newPhase === 'reverse') {
+    // Start from whatever deficit you're coming off (the cut you were on), never from a surplus.
+    reverseFromDelta = Math.min(0, phaseCalDelta());
   }
   nutritionPhase = newPhase;
   weightPhase = newPhase;
@@ -5330,6 +6322,9 @@ async function loadNutritionConfig() {
       phaseAdvisorySnoozeUntil = data.phaseAdvisorySnoozeUntil || null;
       phaseBeforeCut = data.phaseBeforeCut || null;
       maintAdjustedOn = data.maintAdjustedOn || null;
+      carbCycle = data.carbCycle !== false; // on unless you turned it off
+      reverseFromDelta = data.reverseFromDelta != null ? data.reverseFromDelta : null;
+      if (!PHASES[nutritionPhase]) nutritionPhase = 'maintain';
       // Migrate: a phase set before this feature existed has no recorded start date. Backfilling
       // to today isn't exactly right, but it's the honest "we don't actually know" default, and it
       // self-corrects going forward rather than breaking the weeks-in-phase math or guessing a
@@ -5599,6 +6594,11 @@ async function renderPhaseHealthCard() {
     text.textContent = `${Math.round(r.weeksIn)} week(s) into this ${PHASES[nutritionPhase].label.toLowerCase()}. Once there's a bit more weigh-in and waist-measurement history, this will start comparing your fat-gain trend against how the phase started.`;
     return;
   }
+  if (r.status === 'on_track' && r.weightGain == null) {
+    // Cuts report "on track" with just the week count (no waist-ratio analysis on a cut).
+    text.textContent = `${Math.round(r.weeksIn)} week(s) into this ${PHASES[nutritionPhase].label.toLowerCase()}. Nothing to change yet — the weekly calorie check keeps the pace right, and this card speaks up if the cut runs long.`;
+    return;
+  }
   if (r.status === 'on_track') {
     text.textContent = `${Math.round(r.weeksIn)} week(s) into this ${PHASES[nutritionPhase].label.toLowerCase()}, ${r.weightGain >= 0 ? '+' : ''}${r.weightGain.toFixed(1)} lb so far. Your waist-to-weight-gain ratio hasn't drifted from how the phase started — no reason to change course yet.`;
     return;
@@ -5641,6 +6641,7 @@ async function renderPhaseHealthCard() {
     text.textContent = `${Math.round(r.weeksIn)} weeks into this cut with no planned end date. Sustained deficits this long raise muscle-loss risk and diet fatigue — a maintenance break or a defined end date is worth considering.`;
     actions.style.display = 'flex';
     setPhaseBtn('Hold at maintenance', 'maintain', { reason: 'phase-engine: long cut' }, 'btn-primary');
+    setPhaseBtn('Reverse diet back up', 'reverse', { reason: 'phase-engine: long cut' });
     setPhaseBtn('Keep cutting (remind in 1 wk)', 'cut', { snoozeWeeks: 1, reason: 'dismissed' });
   }
 }
@@ -5652,16 +6653,20 @@ async function renderNutrition() {
   document.getElementById('maintCals').value = maintCals || '';
   renderPhaseRow();
   const info = weekInfo();
-  const target = calorieTargetFor(info);
   const bw = await getTrendWeightLb();
-  const proteinG = proteinTargetFor(bw, target);
-  const fatG = target ? Math.round((target * 0.25) / 9) : null;
-  const carbG = target && proteinG && fatG ? Math.round((target - proteinG*4 - fatG*9) / 4) : null;
+  const dt = dayTargetInfo(info, todayName(), bw);
+  const target = dt.target;
+  const proteinG = target ? dt.proteinG : null;
+  const fatG = target ? dt.fatG : null;
+  const carbG = target ? dt.carbG : null;
 
-  document.getElementById('calBig').textContent = target ? `${Math.round(target)} kcal` : '—';
-  document.getElementById('calSub').textContent = target ? `${PHASES[nutritionPhase].label} · ${PHASES[nutritionPhase].note}${info.deload ? ' · deload week −100' : info.overload ? ' · overload week +125' : ''}` : 'Enter maintenance calories to set targets';
+  setReadout(document.getElementById('calBig'), target ? `${Math.round(target)} kcal` : null, 'Not set yet');
+  document.getElementById('calSub').textContent = target ? `${phaseSubtitle()}${info.deload ? ' · deload week −100' : info.overload ? ' · overload week +125' : ''}` : 'Enter maintenance calories to set targets';
+  renderDayTypeLine(dt);
 
   const entries = await getFoodEntries();
+  // Nothing to measure yet: hide the empty macro bar and its row of zeros until there is.
+  { const g = document.querySelector('#tab-nutrition .fuel-gauge') || document.querySelector('.fuel-gauge'); if (g) g.style.display = (target || (entries && entries.length)) ? '' : 'none'; }
   const sums = entries.reduce((a,f) => ({cals:a.cals+(f.cals||0), p:a.p+(f.prot||0), c:a.c+(f.carb||0), f:a.f+(f.fat||0)}), {cals:0,p:0,c:0,f:0});
 
   document.getElementById('pNum').textContent = proteinG ? `${sums.p}/${proteinG}` : `${sums.p}`;
@@ -5692,6 +6697,37 @@ async function renderNutrition() {
 
   renderFoodList(entries);
   renderRecentFoodsRow(await getRecentFoods());
+}
+function renderDayTypeLine(dt) {
+  let el = document.getElementById('dayTypeLine');
+  if (!el) {
+    const sub = document.getElementById('calSub');
+    if (!sub) return;
+    el = document.createElement('div');
+    el.id = 'dayTypeLine'; el.className = 'day-type-line';
+    sub.insertAdjacentElement('afterend', el);
+  }
+  if (!dt || !dt.target) { el.innerHTML = ''; return; }
+  const p = dt.plan;
+  if (!p || !p.shifted) {
+    el.innerHTML = p && (p.trainDays === 0 || p.trainDays === 7)
+      ? '<span class="dtl-note">Same target every day — your split has no rest days to shift from.</span>' : '';
+    return;
+  }
+  const fmt = n => n.toLocaleString();
+  el.innerHTML = carbCycle
+    ? `<span class="dtl-tag">${dt.training ? 'Training day' : 'Rest day'}</span>
+       <span class="dtl-note">Training ${fmt(p.train)} · Rest ${fmt(p.rest)} · weekly average ${fmt(p.avg)}. Carbs move, protein and fat stay put.</span>
+       <button class="tip-cta" id="carbCycleToggle">Eat the same every day instead</button>`
+    : `<span class="dtl-note">Same ${fmt(p.avg)} kcal every day.</span>
+       <button class="tip-cta" id="carbCycleToggle">Eat more on training days, less on rest days</button>`;
+  const btn = document.getElementById('carbCycleToggle');
+  if (btn) btn.onclick = async () => {
+    carbCycle = !carbCycle;
+    await persistNutritionConfig();
+    renderNutrition();
+    try { renderFuelCheck(); } catch (e) {}
+  };
 }
 async function getFoodEntries() {
   if (!db) return [];
@@ -5755,6 +6791,190 @@ function renderRecentFoodsRow(items) {
     };
   });
 }
+// ---------- Food search + barcode (Open Food Facts, free and open) ----------
+// Lookups go straight from your phone to Open Food Facts; nothing about you is sent with them.
+const OFF_FIELDS = 'code,product_name,product_name_en,brands,nutriments,serving_size,serving_quantity';
+function offToFood(p) {
+  if (!p) return null;
+  const n = p.nutriments || {};
+  const num = v => { const x = parseFloat(v); return isFinite(x) ? x : null; };
+  let kcal = num(n['energy-kcal_100g']);
+  if (kcal == null && num(n.energy_100g) != null) kcal = num(n.energy_100g) / 4.184; // kJ → kcal
+  const per100 = { kcal, p: num(n.proteins_100g), c: num(n.carbohydrates_100g), f: num(n.fat_100g) };
+  if (per100.kcal == null) {
+    // No energy listed (common on supplements): estimate it from the macros, or skip the product.
+    if (per100.p == null && per100.c == null && per100.f == null) return null;
+    per100.kcal = 4 * (per100.p || 0) + 4 * (per100.c || 0) + 9 * (per100.f || 0);
+  }
+  const sq = num(p.serving_quantity);
+  const name = (p.product_name_en || p.product_name || '').trim();
+  if (!name) return null;
+  return { code: p.code || null, name, brand: (p.brands || '').split(',')[0].trim(), per100,
+           serving: sq && sq > 0 ? { g: sq, label: (p.serving_size || `${sq} g`).trim() } : null };
+}
+function portionMacros(food, amount, unit) {
+  const grams = unit === 'serving' && food.serving ? food.serving.g * amount : amount;
+  const k = grams / 100, r = v => v == null ? 0 : Math.round(v * k);
+  return { grams: Math.round(grams), cals: r(food.per100.kcal), prot: r(food.per100.p), carb: r(food.per100.c), fat: r(food.per100.f) };
+}
+async function offSearch(q) {
+  const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=20&fields=${OFF_FIELDS}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('search ' + res.status);
+  const j = await res.json();
+  return (j.products || []).map(offToFood).filter(Boolean);
+}
+async function offBarcode(code) {
+  const res = await fetch(`https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(code)}.json?fields=${OFF_FIELDS}`);
+  if (!res.ok) return null;
+  const j = await res.json();
+  return j && j.status === 1 ? offToFood({ ...j.product, code }) : null;
+}
+let foodResults = [];
+let foodSearchSeq = 0;
+async function runFoodSearch(q) {
+  const box = document.getElementById('foodSearchResults');
+  q = (q || '').trim();
+  if (q.length < 2) { box.innerHTML = ''; foodResults = []; return; }
+  const seq = ++foodSearchSeq;
+  box.innerHTML = '<div class="fs-status">Searching…</div>';
+  try {
+    const list = await offSearch(q);
+    if (seq !== foodSearchSeq) return;
+    foodResults = list;
+    box.innerHTML = list.length ? `<div class="fs-list">${list.slice(0, 12).map((f, i) => `
+      <button class="fs-item" data-i="${i}"><span class="fs-name">${escHtml(f.name)}${f.brand ? `<span class="fs-brand">${escHtml(f.brand)}</span>` : ''}</span>
+      <span class="fs-kcal">${f.per100.kcal != null ? Math.round(f.per100.kcal) : '—'}<small> kcal/100g</small></span></button>`).join('')}</div>
+      <div class="fs-credit">Food data from Open Food Facts</div>`
+      : `<div class="fs-status">No matches. Try fewer words, or enter it yourself below.</div>`;
+    box.querySelectorAll('.fs-item').forEach(b => b.onclick = () => showPortionPicker(foodResults[parseInt(b.dataset.i, 10)]));
+  } catch (e) {
+    if (seq !== foodSearchSeq) return;
+    box.innerHTML = `<div class="fs-status">Couldn't reach the food database${navigator.onLine === false ? ' — you\'re offline' : ''}. Enter it yourself below for now.</div>`;
+  }
+}
+function showPortionPicker(food) {
+  const box = document.getElementById('foodSearchResults');
+  if (!food) return;
+  let unit = food.serving ? 'serving' : 'g', amount = food.serving ? 1 : 100;
+  const draw = () => {
+    const m = portionMacros(food, amount, unit);
+    box.innerHTML = `<div class="fs-portion">
+      <div class="fs-pname">${escHtml(food.name)}${food.brand ? `<span class="fs-brand">${escHtml(food.brand)}</span>` : ''}</div>
+      <div class="fs-amount">
+        <input id="fsAmount" type="number" inputmode="decimal" step="any" value="${amount}">
+        <div class="scale-row fs-unit">${food.serving ? `<button class="scale-btn ${unit === 'serving' ? 'selected' : ''}" data-u="serving">Servings</button>` : ''}<button class="scale-btn ${unit === 'g' ? 'selected' : ''}" data-u="g">Grams</button></div>
+      </div>
+      ${food.serving && unit === 'serving' ? `<div class="fs-serving">1 serving = ${escHtml(food.serving.label)}</div>` : ''}
+      <div class="fs-macros"><span><b>${m.cals}</b> kcal</span><span>P <b>${m.prot}</b></span><span>C <b>${m.carb}</b></span><span>F <b>${m.fat}</b></span><span class="fs-g">${m.grams} g</span></div>
+      <div class="fs-actions"><button class="btn-secondary" id="fsBack">Back</button><button class="btn-primary" id="fsAdd">Add to today</button></div>
+    </div>`;
+    const inp = document.getElementById('fsAmount');
+    inp.oninput = () => { const v = parseFloat(inp.value); if (v > 0) { amount = v; const mm = portionMacros(food, amount, unit); box.querySelector('.fs-macros').innerHTML = `<span><b>${mm.cals}</b> kcal</span><span>P <b>${mm.prot}</b></span><span>C <b>${mm.carb}</b></span><span>F <b>${mm.fat}</b></span><span class="fs-g">${mm.grams} g</span>`; } };
+    box.querySelectorAll('[data-u]').forEach(b => b.onclick = () => {
+      if (b.dataset.u === unit) return;
+      const grams = portionMacros(food, amount, unit).grams;
+      unit = b.dataset.u;
+      amount = unit === 'g' ? grams : Math.round(grams / food.serving.g * 100) / 100;
+      draw();
+    });
+    document.getElementById('fsBack').onclick = () => { if (foodResults.length) runFoodSearch(document.getElementById('foodSearchInput').value); else box.innerHTML = ''; };
+    document.getElementById('fsAdd').onclick = async () => {
+      const mm = portionMacros(food, amount, unit);
+      const label = unit === 'serving' ? `${amount} serving${amount === 1 ? '' : 's'}` : `${mm.grams} g`;
+      box.innerHTML = '';
+      document.getElementById('foodSearchInput').value = '';
+      foodResults = [];
+      await logFoodEntry({ name: `${food.name} (${label})`, cals: mm.cals, prot: mm.prot, carb: mm.carb, fat: mm.fat, src: 'off', code: food.code || undefined });
+    };
+  };
+  draw();
+}
+(() => {
+  const inp = document.getElementById('foodSearchInput');
+  let t = null;
+  inp.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => runFoodSearch(inp.value), 900); });
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); clearTimeout(t); runFoodSearch(inp.value); inp.blur(); } });
+  document.getElementById('foodScanBtn').onclick = () => openBarcodeScanner();
+})();
+
+// Barcode scanning: the phone's built-in detector where it exists (Android Chrome), otherwise a
+// small open-source scanner loaded on first use (iPhone). Typing the number always works too.
+let scanStream = null, scanLoop = null, scanLib = null, scanSession = 0, scanHandled = false;
+function loadScript(src) {
+  return new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = src; sc.async = true; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc); });
+}
+async function stopBarcodeScanner() {
+  scanSession++; // any start still waiting on the camera sees this and shuts itself down
+  if (scanLoop) { cancelAnimationFrame(scanLoop); scanLoop = null; }
+  if (scanLib) { try { await scanLib.stop(); } catch (e) {} try { scanLib.clear(); } catch (e) {} scanLib = null; }
+  if (scanStream) { scanStream.getTracks().forEach(t => t.stop()); scanStream = null; }
+  const el = document.getElementById('scanOverlay'); if (el) el.remove();
+}
+async function handleScannedCode(code, fromCamera) {
+  code = String(code || '').replace(/\D/g, '');
+  if (code.length < 6) return false;
+  if (fromCamera && scanHandled) return true;
+  scanHandled = true;
+  foodSearchSeq++; // cancel any name search still in flight so it can't replace this result
+  await stopBarcodeScanner();
+  const box = document.getElementById('foodSearchResults');
+  box.innerHTML = '<div class="fs-status">Looking up that barcode…</div>';
+  try {
+    const food = await offBarcode(code);
+    if (food) showPortionPicker(food);
+    else box.innerHTML = `<div class="fs-status">Barcode ${escHtml(code)} isn't in the database yet. Search by name or enter it yourself below.</div>`;
+  } catch (e) {
+    box.innerHTML = `<div class="fs-status">Couldn't reach the food database. Enter it yourself below for now.</div>`;
+  }
+}
+async function openBarcodeScanner() {
+  await stopBarcodeScanner();
+  const my = ++scanSession;
+  scanHandled = false;
+  const stale = () => my !== scanSession || !document.getElementById('scanOverlay');
+  const el = document.createElement('div');
+  el.id = 'scanOverlay';
+  el.innerHTML = `<div class="scan-top"><span>Point at the barcode</span><button class="menu-close" id="scanClose">×</button></div>
+    <div class="scan-view" id="scanView"><video id="scanVideo" playsinline muted></video><div id="scanLibBox"></div><div class="scan-frame"></div></div>
+    <div class="scan-msg" id="scanMsg">Starting camera…</div>
+    <div class="scan-manual"><input id="scanManual" type="text" inputmode="numeric" placeholder="Or type the barcode number"><button class="food-add-btn" id="scanManualGo">Look up</button></div>`;
+  document.body.appendChild(el);
+  document.getElementById('scanClose').onclick = () => stopBarcodeScanner();
+  document.getElementById('scanManualGo').onclick = () => handleScannedCode(document.getElementById('scanManual').value);
+  const msg = t => { const m = document.getElementById('scanMsg'); if (m) m.textContent = t; };
+  const formats = ['ean_13', 'ean_8', 'upc_a', 'upc_e'];
+  try {
+    if ('BarcodeDetector' in window && (await window.BarcodeDetector.getSupportedFormats()).some(f => formats.includes(f))) {
+      const det = new window.BarcodeDetector({ formats });
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+      if (stale()) { stream.getTracks().forEach(t => t.stop()); return; } // closed while asking for the camera
+      scanStream = stream;
+      const v = document.getElementById('scanVideo'); v.srcObject = scanStream; await v.play();
+      msg('Hold steady over the barcode');
+      const tick = async () => {
+        if (stale()) return;
+        try { const r = await det.detect(v); if (r && r[0] && r[0].rawValue && await handleScannedCode(r[0].rawValue, true)) return; } catch (e) {}
+        if (!stale()) scanLoop = requestAnimationFrame(tick);
+      };
+      tick();
+      return;
+    }
+    if (!window.Html5Qrcode) await loadScript('https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js');
+    if (stale()) return;
+    document.getElementById('scanVideo').style.display = 'none';
+    const F = window.Html5QrcodeSupportedFormats;
+    const lib = new window.Html5Qrcode('scanLibBox', F ? { formatsToSupport: [F.EAN_13, F.EAN_8, F.UPC_A, F.UPC_E], verbose: false } : undefined);
+    scanLib = lib;
+    await lib.start({ facingMode: 'environment' }, { fps: 12, qrbox: { width: 260, height: 150 } }, code => { if (!stale()) handleScannedCode(code, true); }, () => {});
+    if (stale()) { try { await lib.stop(); } catch (e) {} try { lib.clear(); } catch (e) {} return; }
+    msg('Hold steady over the barcode');
+  } catch (e) {
+    if (stale()) return;
+    msg(e && e.name === 'NotAllowedError' ? 'Camera permission was blocked — allow it in Settings, or type the number below.' : 'Camera scanning isn\'t available here — type the barcode number below.');
+  }
+}
+
 async function logFoodEntry(entry) {
   const entries = await getFoodEntries();
   const updated = [...entries, { ...entry, t: Date.now() }]; // time-stamped so the app knows what you ate before training
@@ -5852,7 +7072,9 @@ async function renderWeightTab() {
   const totalIn = ft*12 + inch;
 
   const scaleNum = document.getElementById('scaleReadoutNum');
-  if (scaleNum) scaleNum.textContent = trend ? trend.toFixed(1) : (latest ? latest.lb : '–');
+  setReadout(scaleNum, trend ? trend.toFixed(1) : (latest ? latest.lb : null), 'No weigh-ins');
+  const scaleUnit = scaleNum && scaleNum.parentElement && scaleNum.parentElement.querySelector('.scale-readout-unit');
+  if (scaleUnit) scaleUnit.style.visibility = (trend || latest) ? '' : 'hidden';
 
   const trendNote = document.getElementById('trendWeightNote');
   if (trend && log.length > 1) {
@@ -5867,17 +7089,19 @@ async function renderWeightTab() {
 
   if (trend && totalIn) {
     const bmi = 703 * trend / (totalIn * totalIn);
-    document.getElementById('bmiNum').textContent = bmi.toFixed(1);
+    setReadout(document.getElementById('bmiNum'), bmi.toFixed(1), '');
     let cat = 'Normal', color = 'var(--accent)';
     if (bmi < 18.5) { cat = 'Underweight'; color = 'var(--warn)'; }
     else if (bmi < 25) { cat = 'Normal'; color = 'var(--accent)'; }
     else if (bmi < 30) { cat = 'Overweight'; color = 'var(--warn)'; }
     else { cat = 'Obese'; color = 'var(--warn)'; }
     const catEl = document.getElementById('bmiCat');
-    catEl.textContent = cat; catEl.style.color = color;
+    catEl.textContent = cat; catEl.style.color = color; catEl.style.fontWeight = '';
   } else {
-    document.getElementById('bmiNum').textContent = '–';
-    document.getElementById('bmiCat').textContent = 'Enter height + a weigh-in';
+    setReadout(document.getElementById('bmiNum'), null, 'BMI');
+    const catEl = document.getElementById('bmiCat');
+    catEl.textContent = trend ? 'Add your height to see it' : 'Add your height and a weigh-in';
+    catEl.style.color = 'var(--text-dim)'; catEl.style.fontWeight = '400';
   }
 
   const age = parseFloat(document.getElementById('ageYears').value);
@@ -5890,8 +7114,11 @@ async function renderWeightTab() {
     const bmr = sex === 'male' ? (10*kg + 6.25*cm - 5*age + 5) : (10*kg + 6.25*cm - 5*age - 161);
     tdee = Math.round(bmr * activity);
   }
-  document.getElementById('tdeeNum').textContent = tdee ? `${tdee} kcal` : '–';
+  setReadout(document.getElementById('tdeeNum'), tdee ? `${tdee} kcal` : null, 'Maintenance');
   document.getElementById('tdeeSub').textContent = tdee ? 'Estimated maintenance (Mifflin-St Jeor)' : 'Enter height, age, sex, activity and a weigh-in to calculate';
+  const syncBtn = document.getElementById('syncNutritionBtn');
+  syncBtn.disabled = !tdee;
+  syncBtn.classList.toggle('is-waiting', !tdee);
   document.getElementById('syncNutritionBtn').onclick = async () => {
     if (!tdee) return;
     maintCals = tdee;
@@ -5924,10 +7151,11 @@ async function renderWeightTab() {
   renderWeightChart(log);
   renderShowPrep(trend ? { lb: trend } : null);
   renderMeasurements();
+  renderActivityPanel();
 }
 
 document.getElementById('logMeasureBtn').onclick = async () => {
-  const fields = { waist: 'mWaist', chest: 'mChest', arm: 'mArm', thigh: 'mThigh' };
+  const fields = { waist: 'mWaist', chest: 'mChest', arm: 'mArm', thigh: 'mThigh', neck: 'mNeck', hips: 'mHips' };
   const rec = { date: todayISO() };
   let any = false;
   Object.keys(fields).forEach(k => {
@@ -5940,6 +7168,372 @@ document.getElementById('logMeasureBtn').onclick = async () => {
   Object.values(fields).forEach(id => document.getElementById(id).value = '');
   renderMeasurements();
 };
+// ---------- Body fat estimate (U.S. Navy tape method) ----------
+function navyBodyFat({ sex, heightIn, waist, neck, hips }) {
+  if (!heightIn || !waist || !neck) return null;
+  let bf;
+  if (sex === 'female') {
+    if (!hips || waist + hips - neck <= 0) return null;
+    bf = 163.205 * Math.log10(waist + hips - neck) - 97.684 * Math.log10(heightIn) - 78.387;
+  } else {
+    if (waist - neck <= 0) return null;
+    bf = 86.010 * Math.log10(waist - neck) - 70.041 * Math.log10(heightIn) + 36.76;
+  }
+  return bf > 2 && bf < 60 ? Math.round(bf * 10) / 10 : null;
+}
+// Pure: (earlier reading, later reading) → how much of the weight change was lean vs fat.
+function bodyCompChange(a, b) {
+  if (!a || !b || a.bf == null || b.bf == null || !a.lb || !b.lb) return null;
+  const fatA = a.lb * a.bf / 100, fatB = b.lb * b.bf / 100;
+  return { weight: b.lb - a.lb, fat: fatB - fatA, lean: (b.lb - fatB) - (a.lb - fatA), days: daysBetweenISO(a.date, b.date) };
+}
+async function weightNear(dateIso) {
+  if (!db) return null;
+  try {
+    const snap = await db.collection('weight').where('lb', '>', 0).orderBy('date', 'desc').limit(200).get();
+    const near = (snap.docs || []).map(d => d.data()).filter(w => w && w.date && Math.abs(daysBetweenISO(w.date, dateIso)) <= 3);
+    return near.length ? near.reduce((a, w) => a + w.lb, 0) / near.length : null;
+  } catch (e) { return null; }
+}
+let bodyCompSeq = 0;
+async function renderBodyComp(log) {
+  const box = document.getElementById('bodyCompBox');
+  if (!box) return;
+  const seq = ++bodyCompSeq;
+  const ft = parseInt(document.getElementById('heightFt').value, 10) || 0;
+  const inch = parseInt(document.getElementById('heightInPart').value, 10) || 0;
+  const heightIn = ft * 12 + inch;
+  const sex = document.getElementById('sexSel').value;
+  const usable = (log || []).filter(r => r.waist && r.neck && (sex !== 'female' || r.hips));
+  if (!heightIn || !sex) { box.innerHTML = usable.length ? '<div class="bc-note">Add your height and sex above to see a body fat estimate.</div>' : ''; return; }
+  if (!usable.length) { box.innerHTML = '<div class="bc-note">Log waist and neck' + (sex === 'female' ? ' and hips' : '') + ' to see a body fat estimate.</div>'; return; }
+  const latest = usable[0];
+  const lbNow = await weightNear(latest.date);
+  const bfNow = navyBodyFat({ sex, heightIn, waist: latest.waist, neck: latest.neck, hips: latest.hips });
+  if (bfNow == null) { box.innerHTML = '<div class="bc-note">Those measurements don\'t give a sensible estimate — double-check waist and neck.</div>'; return; }
+  let html = `<div class="bc-grid">
+    <div><div class="bc-num">${bfNow.toFixed(1)}<span>%</span></div><div class="bc-lbl">Body fat (est.)</div></div>
+    ${lbNow ? `<div><div class="bc-num">${Math.round(lbNow * (1 - bfNow / 100))}<span> lb</span></div><div class="bc-lbl">Lean mass</div></div>
+    <div><div class="bc-num">${Math.round(lbNow * bfNow / 100)}<span> lb</span></div><div class="bc-lbl">Fat mass</div></div>` : ''}
+  </div>`;
+  // Compare with a reading from at least 3 weeks earlier (the oldest one we have in this window).
+  const older = usable.filter(r => daysBetweenISO(r.date, latest.date) >= 21);
+  if (older.length && lbNow) {
+    const first = older[older.length - 1];
+    const lbThen = await weightNear(first.date);
+    const bfThen = navyBodyFat({ sex, heightIn, waist: first.waist, neck: first.neck, hips: first.hips });
+    const ch = bodyCompChange({ date: first.date, lb: lbThen, bf: bfThen }, { date: latest.date, lb: lbNow, bf: bfNow });
+    if (!ch) html += `<div class="bc-note">No weigh-in within a few days of your ${escHtml(fmtHistoryDate(first.date))} measurements, so the lean vs fat change can't be worked out yet.</div>`;
+    if (ch) {
+      const f = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)} lb`;
+      html += `<div class="bc-change">Since ${escHtml(fmtHistoryDate(first.date))}: ${f(ch.weight)} total — about <b>${f(ch.lean)} lean</b> and <b>${f(ch.fat)} fat</b>.</div>`;
+    }
+  } else if (lbNow) {
+    html += '<div class="bc-note">Keep logging every week or two — after 3 weeks this shows how much of your weight change is lean vs fat.</div>';
+  } else {
+    html += '<div class="bc-note">Log a weigh-in around the same day to see lean and fat mass.</div>';
+  }
+  html += '<div class="bc-note">Tape estimates are rough for one reading (±3–4%); the trend over weeks is what to watch.</div>';
+  if (seq !== bodyCompSeq) return;
+  box.innerHTML = html;
+}
+
+// ---------- Steps & cardio ----------
+const STEP_GOAL_BY_GROUP = { cut: 10000, recomp: 9000, maintain: 8000, bulk: 7000 };
+let stepGoalOverride = null;
+function stepGoal() { return stepGoalOverride || STEP_GOAL_BY_GROUP[phaseGroupOf(nutritionPhase)] || 8000; }
+async function getActivity(dateIso) {
+  if (!db) return {};
+  try { const s = await db.doc(`activity/${dateIso}`).get(); return s.exists ? (s.data() || {}) : {}; } catch (e) { return {}; }
+}
+async function saveActivity(dateIso, patch) {
+  if (!db) return;
+  const prev = await getActivity(dateIso);
+  try { await db.doc(`activity/${dateIso}`).set({ ...prev, ...patch, date: dateIso }); } catch (e) {}
+}
+async function getActivityRange(days) {
+  const byDate = {};
+  if (db) {
+    try {
+      const snap = await db.collection('activity').orderBy('date', 'desc').limit(days + 5).get();
+      (snap.docs || []).forEach(d => { const v = d.data(); if (v && v.date) byDate[v.date] = v; });
+    } catch (e) {}
+  }
+  const out = [];
+  for (let i = 0; i < days; i++) { const d = isoOffset(i); out.push({ ...(byDate[d] || {}), date: d }); }
+  return out; // newest first, one row per calendar day
+}
+// Pure: 14 days of activity (newest first) → what the panel says.
+function activityInsights(rows, goal, group, legDays) {
+  const avg = arr => { const v = arr.filter(r => r.steps > 0).map(r => r.steps); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : null; };
+  const wk = rows.slice(0, 7), prior = rows.slice(7, 14);
+  const a7 = avg(wk), a14 = avg(prior);
+  const cardio = wk.flatMap(r => (r.cardio || []).map(c => ({ ...c, date: r.date })));
+  const minutes = cardio.reduce((a, c) => a + (Number(c.min) || 0), 0);
+  const hard = cardio.filter(c => c.intensity === 'hard');
+  const notes = [];
+  if (a7 != null && a14 != null && a7 < a14 * 0.85) notes.push(group === 'cut'
+    ? `Steps are down ${Math.round((1 - a7 / a14) * 100)}% from the week before. That's a common reason fat loss stalls on a cut — try to get them back before cutting more food.`
+    : `Steps are down ${Math.round((1 - a7 / a14) * 100)}% from the week before.`);
+  if (group === 'bulk' && a7 != null && a7 > 12000) notes.push('High step counts mean you need more food to keep gaining — the weekly calorie check will catch it, but expect it.');
+  if (hard.length >= 3) notes.push(`${hard.length} hard cardio sessions this week. Past two or three, hard cardio starts cutting into leg recovery — swap some for easy sessions.`);
+  const legClash = hard.find(c => { const d = new Date(c.date + 'T12:00:00'); d.setDate(d.getDate() + 1); return (legDays || []).includes(DAY_ORDER[(d.getDay() + 6) % 7]); });
+  if (legClash) notes.push('You did hard cardio the day before a leg day — keep that slot easy so your legs show up fresh.');
+  return { a7, a14, goal, minutes, sessions: cardio.length, hardCount: hard.length, notes, todaySteps: rows[0] && rows[0].steps };
+}
+function legDayNames() {
+  return DAY_ORDER.filter(d => ((getProgramDay(d) || {}).exercises || []).some(ex => primaryMusclesOf(ex).some(m => ['Quads', 'Hamstrings', 'Glutes'].includes(m))));
+}
+let cardioIntensity = 'easy';
+async function renderActivityPanel() {
+  const sumBox = document.getElementById('stepsSummary'), cBox = document.getElementById('cardioSummary');
+  if (!sumBox || !cBox) return;
+  try { const c = await db.doc('activity/config').get(); stepGoalOverride = c.exists ? (c.data().stepGoal || null) : null; } catch (e) {}
+  const rows = await getActivityRange(14);
+  const ins = activityInsights(rows, stepGoal(), phaseGroupOf(nutritionPhase), legDayNames());
+  const pct = ins.a7 ? Math.min(100, Math.round(ins.a7 / ins.goal * 100)) : 0;
+  sumBox.innerHTML = `
+    <div class="steps-row"><span>${ins.todaySteps != null ? `<b>${Number(ins.todaySteps).toLocaleString()}</b> today` : 'Not logged today'}</span>
+      <span>7-day avg <b>${ins.a7 ? ins.a7.toLocaleString() : '—'}</b> / <button class="link-btn" id="stepGoalBtn">${ins.goal.toLocaleString()} goal</button></span></div>
+    <div class="steps-bar"><div style="width:${pct}%"></div></div>
+    ${ins.notes.filter(n => /Steps|step counts/.test(n)).map(n => `<div class="bc-note warnish">${escHtml(n)}</div>`).join('')}`;
+  const today = rows[0].cardio || [];
+  cBox.innerHTML = `
+    <div class="steps-row" style="margin-top:12px;"><span>This week</span><span><b>${ins.minutes}</b> min · ${ins.sessions} session${ins.sessions === 1 ? '' : 's'}${ins.hardCount ? ` · ${ins.hardCount} hard` : ''}</span></div>
+    ${today.map((c, i) => `<div class="weight-log-row"><span>${escHtml(c.type)} · ${escHtml(c.intensity)}</span><span class="wv">${Number(c.min) || 0} min <button class="frm" data-ci="${i}">×</button></span></div>`).join('')}
+    ${ins.notes.filter(n => !/Steps|step counts/.test(n)).map(n => `<div class="bc-note warnish">${escHtml(n)}</div>`).join('')}`;
+  cBox.querySelectorAll('[data-ci]').forEach(b => b.onclick = async () => {
+    const list = (rows[0].cardio || []).filter((_, i) => i !== parseInt(b.dataset.ci, 10));
+    await saveActivity(todayISO(), { cardio: list });
+    renderActivityPanel();
+  });
+  const gb = document.getElementById('stepGoalBtn');
+  if (gb) gb.onclick = async () => {
+    const v = prompt('Daily step goal (leave blank for the default for your phase):', stepGoalOverride || '');
+    if (v === null) return;
+    const n = parseInt(String(v).replace(/[^0-9]/g, ''), 10);
+    stepGoalOverride = n > 0 ? n : null;
+    if (db) { try { await db.doc('activity/config').set({ stepGoal: stepGoalOverride }); } catch (e) {} }
+    renderActivityPanel();
+  };
+}
+document.getElementById('logStepsBtn').onclick = async () => {
+  const v = parseInt(String(document.getElementById('stepsInput').value).replace(/[^0-9]/g, ''), 10);
+  if (!(v >= 0)) return;
+  await saveActivity(todayISO(), { steps: v });
+  document.getElementById('stepsInput').value = '';
+  renderActivityPanel();
+};
+document.querySelectorAll('#cardioIntRow [data-v]').forEach(b => b.onclick = () => {
+  cardioIntensity = b.dataset.v;
+  document.querySelectorAll('#cardioIntRow [data-v]').forEach(x => x.classList.toggle('selected', x === b));
+});
+document.getElementById('addCardioBtn').onclick = async () => {
+  const min = parseInt(document.getElementById('cardioMin').value, 10);
+  if (!(min > 0)) return;
+  const cur = await getActivity(todayISO());
+  await saveActivity(todayISO(), { cardio: [...(cur.cardio || []), { type: document.getElementById('cardioType').value, min, intensity: cardioIntensity, at: Date.now() }] });
+  document.getElementById('cardioMin').value = '';
+  renderActivityPanel();
+};
+
+// ---------- Coach view ----------
+// A coach shares a code; a client enters it to connect. The coach then sees that client's data
+// read-only (enforced by the database, not just the app). Either side can disconnect.
+let coachProfile = null;   // { code, display_name } when this account is a coach
+let myCoaches = [];        // coaches this account is connected to
+async function loadCoachState() {
+  coachProfile = null; myCoaches = [];
+  if (!(supaClient && currentUserId)) return;
+  try { const { data } = await supaClient.from('coaches').select('code, display_name').eq('user_id', currentUserId).maybeSingle(); if (data) coachProfile = data; } catch (e) {}
+  try { const { data } = await supaClient.rpc('my_coaches'); myCoaches = data || []; } catch (e) {}
+  const dash = document.getElementById('menuCoachDashBtn'); if (dash) dash.style.display = coachProfile ? 'block' : 'none';
+  const con = document.getElementById('menuConnectCoachBtn');
+  if (con) { con.style.display = 'block'; con.textContent = myCoaches.length ? `Coach: ${myCoaches[0].display_name}` : 'Connect to a coach'; }
+}
+document.getElementById('menuConnectCoachBtn').addEventListener('click', async () => {
+  if (!(supaClient && currentUserId)) { alert('Sign in to an account to connect with a coach.'); return; }
+  if (myCoaches.length) {
+    const c = myCoaches[0];
+    if (!confirm(`You're connected to ${c.display_name}. They can see everything you log in FOREVER — workouts, nutrition, weight, measurements, sleep, soreness, steps, your profile (age, sex, height), your email and progress photos — read-only.\n\nDisconnect from ${c.display_name}?`)) return;
+    try { await supaClient.from('coach_links').delete().eq('client_id', currentUserId).eq('coach_id', c.coach_id); } catch (e) {}
+    await loadCoachState();
+    alert('Disconnected. Your coach can no longer see your data.');
+    return;
+  }
+  const code = prompt('Enter your coach\'s code (e.g. FOREVER-AB12).\n\nYour coach will be able to see everything you log — workouts, nutrition, weight, measurements, sleep, soreness, steps, your profile (age, sex, height), your email and progress photos. They can\'t change anything, and you can disconnect anytime.');
+  if (!code || !code.trim()) return;
+  try {
+    const { data, error } = await supaClient.rpc('connect_to_coach', { p_code: code.trim() });
+    if (error) throw error;
+    await loadCoachState();
+    alert(`Connected to ${data}. They can now see your progress.`);
+  } catch (e) {
+    alert((e && e.message) ? e.message.replace(/^.*?: /, '') : 'Couldn\'t connect — check the code and try again.');
+  }
+});
+
+// Pure: one client's documents → everything the dashboard shows about them.
+function clientSummary(docs, today) {
+  const by = pfx => docs.filter(d => d && typeof d.path === 'string' && d.path.startsWith(pfx)).map(d => ({ path: d.path, ...(d.data || {}) }));
+  const N = v => { const x = Number(v); return isFinite(x) ? x : 0; };
+  const within = (d, n) => d && daysBetweenISO(d, today) >= 0 && daysBetweenISO(d, today) < n;
+  const sessions = by('sessions/').filter(s => s.exercises && typeof s.exercises === 'object' && Object.values(s.exercises).some(sets => Array.isArray(sets) && sets.some(x => x && x.logged)))
+    .map(s => ({ ...s, date: s.date || s.path.slice(9, 19) })).sort((a, b) => b.date.localeCompare(a.date));
+  const weights = by('weight/').map(w => ({ ...w, lb: N(w.lb), date: String(w.date || '') })).filter(w => w.lb > 0 && /^\d{4}-\d{2}-\d{2}$/.test(w.date)).sort((a, b) => b.date.localeCompare(a.date));
+  const food = by('nutrition/').filter(n => /^nutrition\/\d{4}-\d{2}-\d{2}$/.test(n.path) && Array.isArray(n.entries) && n.entries.length).map(n => ({ date: n.path.slice(10), ...sumEntries(n.entries) }));
+  const cfg = (docs.find(d => d.path === 'nutrition/config') || {}).data || {};
+  const block = (docs.find(d => d.path === 'block/config') || {}).data || {};
+  const act = by('activity/').map(a => ({ ...a, steps: N(a.steps) })).filter(a => a.date && a.steps > 0);
+  const checks = by('weekcheckins/').sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : null;
+  const w7 = weights.filter(w => within(w.date, 7)).map(w => w.lb), w14 = weights.filter(w => !within(w.date, 7) && within(w.date, 14)).map(w => w.lb);
+  const rate = w7.length && w14.length ? avg(w7) - avg(w14) : null;
+  const f7 = food.filter(f => within(f.date, 7));
+  const phase = cfg.phase && PHASES[cfg.phase] ? cfg.phase : 'maintain';
+  const delta = phase === 'reverse' ? reversePlan(cfg.reverseFromDelta, cfg.phaseStart, today).delta : PHASES[phase].calDelta;
+  const target = N(cfg.maintCals) > 0 ? Math.round(N(cfg.maintCals) + delta) : null;
+  const out = {
+    lastWorkout: sessions[0] ? sessions[0].date : null,
+    daysSince: sessions[0] ? daysBetweenISO(sessions[0].date, today) : null,
+    workouts7: sessions.filter(s => within(s.date, 7)).length,
+    weightNow: w7.length ? avg(w7) : (weights[0] ? weights[0].lb : null),
+    rate, phase, phaseLabel: PHASES[phase].label, target,
+    foodDays7: f7.length, kcal7: f7.length ? Math.round(avg(f7.map(f => f.cals))) : null, prot7: f7.length ? Math.round(avg(f7.map(f => f.prot))) : null,
+    steps7: act.filter(a => within(a.date, 7)).length ? Math.round(avg(act.filter(a => within(a.date, 7)).map(a => a.steps))) : null,
+    lastCheck: checks[0] || null, blockStart: block.start || null,
+    sessions, weights, food, flags: [],
+  };
+  if (out.daysSince == null) out.flags.push({ lvl: 2, t: 'No workouts logged yet' });
+  else if (out.daysSince >= 5) out.flags.push({ lvl: 2, t: `No workout in ${out.daysSince} days` });
+  if (out.foodDays7 < 4) out.flags.push({ lvl: out.foodDays7 <= 1 ? 2 : 1, t: `Food logged ${out.foodDays7}/7 days` });
+  else if (target && out.kcal7 && Math.abs(out.kcal7 - target) / target > 0.15) out.flags.push({ lvl: 1, t: `Eating ${out.kcal7.toLocaleString()} vs ${target.toLocaleString()} target` });
+  if (out.rate != null && out.weightNow) {
+    const [lo, hi] = expectedWeeklyRangeLb(phase, out.weightNow);
+    const a = Math.min(lo, hi) - 0.2, b = Math.max(lo, hi) + 0.2;
+    if (out.rate < a || out.rate > b) out.flags.push({ lvl: 1, t: `Weight ${out.rate >= 0 ? '+' : ''}${out.rate.toFixed(1)} lb/wk — outside the ${PHASES[phase].label.toLowerCase()} range` });
+  }
+  if (out.lastCheck && within(out.lastCheck.date, 10) && parseInt(out.lastCheck.recovery, 10) <= 2) out.flags.push({ lvl: 1, t: 'Reported poor recovery this week' });
+  if (weights.length === 0) out.flags.push({ lvl: 1, t: 'No weigh-ins yet' });
+  out.status = out.flags.some(f => f.lvl === 2) ? 'red' : out.flags.length ? 'amber' : 'green';
+  return out;
+}
+async function fetchClientDocs(clientId) {
+  const all = [];
+  for (let from = 0; from < 5000; from += 1000) {
+    const { data, error } = await supaClient.from('documents').select('path,data').eq('user_id', clientId)
+      .not('path', 'like', 'photos/%').range(from, from + 999);
+    if (error) throw error;
+    all.push(...(data || []));
+    if (!data || data.length < 1000) break;
+  }
+  return all;
+}
+let coachClients = [];
+let coachLoadedAt = 0;
+async function renderCoachDashboard(useCache) {
+  const body = document.getElementById('coachBody');
+  document.getElementById('coachTitle').textContent = 'Coach dashboard';
+  const today = todayISO();
+  if (!(useCache && coachLoadedAt && Date.now() - coachLoadedAt < 5 * 60000)) {
+  body.innerHTML = '<div class="fs-status">Loading clients…</div>';
+  let links = [];
+  try { const { data } = await supaClient.from('coach_links').select('client_id, client_email, created_at').eq('coach_id', currentUserId); links = data || []; } catch (e) {}
+  coachLoadedAt = Date.now();
+  coachClients = await Promise.all(links.map(async l => {
+    try { const docs = await fetchClientDocs(l.client_id); let sum = null; try { sum = clientSummary(docs, today); } catch (e) {} return { ...l, docs, sum }; }
+    catch (e) { return { ...l, docs: [], sum: null, err: true }; }
+  }));
+  const rank = c => !c.sum ? 3 : c.sum.status === 'red' ? 0 : c.sum.status === 'amber' ? 1 : 2;
+  coachClients.sort((a, b) => rank(a) - rank(b));
+  }
+  const nm = e => escHtml((e || 'Client').split('@')[0]);
+  body.innerHTML = `
+    <div class="coach-code">
+      <div><div class="cp-label">Your coach code</div><div class="coach-code-v">${escHtml(coachProfile.code)}</div></div>
+      <button class="btn-secondary" id="coachShareBtn" style="flex:0 0 auto; padding:10px 16px;">Share</button>
+    </div>
+    <div class="ex-prev" style="margin:8px 0 4px;">Clients enter this under Menu → Connect to a coach. Shown to them as <button class="link-btn" id="coachNameBtn">${escHtml(coachProfile.display_name || 'Your coach')}</button>.</div>
+    ${coachClients.length ? coachClients.map((c, i) => { try {
+      const s = c.sum;
+      if (!s) return `<div class="coach-card"><div class="cc-name">${nm(c.client_email)}</div><div class="ex-prev">Couldn't load this client's data.</div></div>`;
+      return `<button class="coach-card" data-i="${i}">
+        <div class="cc-top"><span class="cc-dot ${s.status}"></span><span class="cc-name">${nm(c.client_email)}</span><span class="cc-phase">${escHtml(s.phaseLabel)}</span></div>
+        <div class="cc-stats">
+          <span><b>${s.workouts7}</b> workouts/7d</span>
+          <span><b>${s.weightNow ? s.weightNow.toFixed(1) : '—'}</b> lb${s.rate != null ? ` <em>${s.rate >= 0 ? '+' : ''}${s.rate.toFixed(1)}/wk</em>` : ''}</span>
+          <span><b>${s.kcal7 != null ? s.kcal7.toLocaleString() : '—'}</b> kcal avg</span>
+        </div>
+        ${s.flags.length ? `<div class="cc-flags">${s.flags.map(f => `<span class="cc-flag l${f.lvl}">${escHtml(f.t)}</span>`).join('')}</div>` : '<div class="cc-flags"><span class="cc-flag ok">On track</span></div>'}
+      </button>`;
+    } catch (e) { return `<div class="coach-card"><div class="cc-name">${nm(c.client_email)}</div><div class="ex-prev">Some of this client's data couldn't be read.</div></div>`; }
+    }).join('') : `<div class="ex-prev" style="padding:20px 0;">No clients yet. Share your code and they'll show up here once they connect.</div>`}`;
+  document.getElementById('coachShareBtn').onclick = async () => {
+    const text = `Join my coaching on FOREVER. Open ${location.origin}${location.pathname}, create an account, then Menu → Connect to a coach → ${coachProfile.code}`;
+    try { if (navigator.share) { await navigator.share({ text }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+    try { await navigator.clipboard.writeText(text); alert('Invite copied — paste it to your client.'); } catch (e) { prompt('Copy this invite:', text); }
+  };
+  document.getElementById('coachNameBtn').onclick = async () => {
+    const v = prompt('Name your clients see:', coachProfile.display_name || '');
+    if (!v || !v.trim()) return;
+    try { await supaClient.from('coaches').update({ display_name: v.trim().slice(0, 60) }).eq('user_id', currentUserId); coachProfile.display_name = v.trim().slice(0, 60); } catch (e) {}
+    renderCoachDashboard(true);
+  };
+  body.querySelectorAll('.coach-card[data-i]').forEach(b => b.onclick = () => renderCoachClient(coachClients[parseInt(b.dataset.i, 10)]));
+}
+async function renderCoachClient(c) {
+  const body = document.getElementById('coachBody');
+  const s = c.sum, nm = (c.client_email || 'Client').split('@')[0];
+  document.getElementById('coachTitle').textContent = nm;
+  const f = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}`;
+  const days = Array.from({ length: 7 }, (_, i) => isoOffset(6 - i)); // oldest → today
+  const foodBy = Object.fromEntries(s.food.map(x => [x.date, x]));
+  const wSpark = s.weights.slice(0, 20).map(w => w.lb).reverse();
+  const sessHTML = s.sessions.slice(0, 6).map(ss => {
+    const lifts = Object.keys(ss.exercises).map(n => {
+      const sets = (Array.isArray(ss.exercises[n]) ? ss.exercises[n] : []).filter(x => x && x.logged && parseFloat(x.weight) > 0);
+      if (!sets.length) return '';
+      const top = sets.reduce((a, b) => (setE1rmAdj(b) > setE1rmAdj(a) ? b : a));
+      return `<div class="cs-lift"><span>${escHtml(n)}</span><span>${escHtml(top.weight)}×${escHtml(top.reps)}${sets.length > 1 ? ` <em>${sets.length} sets</em>` : ''}</span></div>`;
+    }).join('');
+    return `<div class="cs-sess"><div class="cs-head">${escHtml(fmtHistoryDate(ss.date))}${ss.day ? ` · ${escHtml(ss.day)}` : ''}${ss.durationSec ? ` · ${Math.round(ss.durationSec / 60)} min` : ''}</div>${lifts}</div>`;
+  }).join('');
+  body.innerHTML = `
+    <button class="back-link" id="coachBackBtn" style="padding:0 0 10px;">‹ All clients</button>
+    <div class="cc-flags" style="margin-bottom:12px;">${s.flags.length ? s.flags.map(fl => `<span class="cc-flag l${fl.lvl}">${escHtml(fl.t)}</span>`).join('') : '<span class="cc-flag ok">On track</span>'}</div>
+    <div class="coach-grid">
+      <div><div class="bc-num">${s.weightNow ? s.weightNow.toFixed(1) : '—'}</div><div class="bc-lbl">lb${s.rate != null ? ` · ${f(s.rate)}/wk` : ''}</div></div>
+      <div><div class="bc-num">${s.workouts7}</div><div class="bc-lbl">workouts / 7d</div></div>
+      <div><div class="bc-num">${s.steps7 ? (s.steps7 / 1000).toFixed(1) + 'k' : '—'}</div><div class="bc-lbl">steps avg</div></div>
+    </div>
+    ${wSpark.length >= 2 ? `<div class="coach-spark">${sparklineSVG(wSpark)}<span>Weigh-ins</span></div>` : ''}
+    <div class="cp-label" style="margin-top:18px;">Nutrition · ${escHtml(s.phaseLabel)}${s.target ? ` · ${s.target.toLocaleString()} kcal avg target` : ''}</div>
+    <div class="coach-food">${days.map(d => { const x = foodBy[d]; return `<div><span>${escHtml(fmtHistoryDate(d).split(',')[0])}</span><b>${x ? Math.round(x.cals).toLocaleString() : '—'}</b><em>${x ? Math.round(x.prot) + 'g P' : ''}</em></div>`; }).join('')}</div>
+    <div class="cp-label" style="margin-top:18px;">Recent sessions</div>
+    ${sessHTML || '<div class="ex-prev">No sessions yet.</div>'}
+    <div class="cp-label" style="margin-top:18px;">Progress photos</div>
+    <div id="coachPhotos" class="coach-photos"><div class="ex-prev">Loading…</div></div>
+    <button class="btn-secondary" id="coachRemoveBtn" style="width:100%; margin-top:22px;">Remove client</button>`;
+  document.getElementById('coachBackBtn').onclick = () => renderCoachDashboard(true);
+  document.getElementById('coachRemoveBtn').onclick = async () => {
+    if (!confirm(`Remove ${nm}? You'll stop seeing their data. They can reconnect with your code.`)) return;
+    try { await supaClient.from('coach_links').delete().eq('coach_id', currentUserId).eq('client_id', c.client_id); } catch (e) {}
+    renderCoachDashboard();
+  };
+  const photos = c.docs.filter(d => d.path.startsWith('photoLog/') && d.data && d.data.storagePath).map(d => d.data).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 9);
+  const pBox = document.getElementById('coachPhotos');
+  if (!photos.length) { pBox.innerHTML = '<div class="ex-prev">No photos yet.</div>'; return; }
+  const signed = await signPhotoPaths(photos.map(p => p.storagePath));
+  if (!document.getElementById('coachPhotos')) return;
+  pBox.innerHTML = photos.map(p => signed[p.storagePath] ? `<a href="${signed[p.storagePath]}" target="_blank" rel="noopener" style="background-image:url('${signed[p.storagePath]}')"><span>${escHtml(fmtHistoryDate(p.date))}</span></a>` : '').join('');
+}
+document.getElementById('menuCoachDashBtn').addEventListener('click', async () => {
+  document.getElementById('menuOverlay').classList.remove('open');
+  document.getElementById('coachOverlay').classList.add('open');
+  await renderCoachDashboard();
+});
+document.getElementById('coachCloseBtn').addEventListener('click', () => document.getElementById('coachOverlay').classList.remove('open'));
+
 async function getMeasurementLog() {
   if (!db) return [];
   try {
@@ -5948,7 +7542,7 @@ async function getMeasurementLog() {
   } catch (e) { return []; }
 }
 function fmtMeasureRow(rec) {
-  const parts = ['waist','chest','arm','thigh']
+  const parts = ['waist','chest','arm','thigh','neck','hips']
     .filter(k => rec[k] != null)
     .map(k => `${k.charAt(0).toUpperCase()}${k.slice(1)} ${rec[k]}"`);
   return parts.join(' · ') || '—';
@@ -5957,6 +7551,7 @@ async function renderMeasurements() {
   const list = document.getElementById('measureLogList');
   if (!list) return;
   const log = await getMeasurementLog();
+  renderBodyComp(log);
   list.innerHTML = log.length ? log.map(r => `<div class="weight-log-row"><span>${r.date}</span><span class="wv">${fmtMeasureRow(r)}</span></div>`).join('') : '<div style="color:var(--text-dim);font-size:11.5px;font-weight:300;padding-top:10px;">No measurements logged yet.</div>';
 }
 
@@ -6315,7 +7910,12 @@ function createSupabaseDb(client, userId) {
     for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(CACHE_PREFIX)) keys.push(k); }
     keys.forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
   }
-  return { doc: docRef, collection: collectionRef, __local: false, flushOutbox, clearLocalCache,
+  // Throw away unsent saves (used right before "Delete all my data" so nothing comes back).
+  function clearOutbox() {
+    if (flushTimer) { clearTimeout(flushTimer); flushTimer = null; }
+    try { localStorage.removeItem(OUTBOX_KEY); } catch (e) {}
+  }
+  return { doc: docRef, collection: collectionRef, __local: false, flushOutbox, clearLocalCache, clearOutbox,
            pendingCount: () => Object.keys(loadOutbox()).length };
 }
 
@@ -6393,14 +7993,17 @@ document.getElementById('authGuestBtn').onclick = async () => { await useLocalMo
 
 async function startApp() {
   await loadActivePreset();
+  await loadAllProgramOverrides();
   await loadGymTier();
   await loadBlockConfig();
+  await loadVolumeState();
   await loadSleep();
   await loadNutritionConfig();
   await loadWeightConfig();
   await loadFatigueSignal();
   await loadDay();
   await maybeShowOnboarding();
+  setTimeout(() => { maybeShowCarbCycleIntro(); }, 900);
 }
 async function useLocalMode() {
   db = createLocalDb();
@@ -6416,6 +8019,8 @@ async function useSupabaseSession(session) {
   if (logoutBtn) logoutBtn.style.display = 'block';
   const reportBugBtn = document.getElementById('menuReportBugBtn');
   if (reportBugBtn) reportBugBtn.style.display = 'block';
+  const delBtn = document.getElementById('menuDeleteDataBtn');
+  if (delBtn) delBtn.style.display = 'block';
   try {
     if (window.Sentry) {
       // Tags every error/report with which tester it came from — this is the whole point during
@@ -6425,6 +8030,8 @@ async function useSupabaseSession(session) {
   } catch (e) {}
   await maybeImportLocalData(session.user.id);
   await startApp();
+  loadCoachState().catch(() => {});
+  migrateLegacyPhotos().then(changed => { if (changed) loadHeroPhoto(); }).catch(() => {});
 }
 
 // --- Bug/crash reporting, via Sentry. Sentry's browser SDK auto-instruments window.onerror and
@@ -6442,6 +8049,50 @@ document.getElementById('menuReportBugBtn').addEventListener('click', () => {
   } catch (e) {}
   alert('Thanks — logged it.');
 });
+// Wipes everything this account has stored: every log and setting, every progress photo, and any
+// coach connection. Uses the same permissions the app already has (each person can only delete
+// their own rows and files), so it can't touch anyone else's data.
+async function deleteAllMyData() {
+  if (!(supaClient && currentUserId)) return { ok: false };
+  if (db && db.clearOutbox) db.clearOutbox(); // unsent offline saves would otherwise re-create data
+  let photos = 0, photoErr = false;
+  try {
+    const { data: files, error: listErr } = await supaClient.storage.from('photos').list(currentUserId, { limit: 1000 });
+    if (listErr) photoErr = true;
+    const paths = (files || []).filter(f => f && f.name).map(f => `${currentUserId}/${f.name}`);
+    if (paths.length) {
+      const { error: rmErr } = await supaClient.storage.from('photos').remove(paths);
+      if (rmErr) photoErr = true; else photos = paths.length;
+    }
+  } catch (e) { photoErr = true; }
+  try { await supaClient.from('coach_links').delete().eq('client_id', currentUserId); } catch (e) {}
+  try { await supaClient.from('coach_links').delete().eq('coach_id', currentUserId); } catch (e) {}
+  const { error } = await supaClient.from('documents').delete().eq('user_id', currentUserId);
+  if (error) return { ok: false, error };
+  // Old "this device only" data would otherwise be offered for import into the emptied account.
+  try { Object.keys(localStorage).filter(k => k.startsWith('foreverdb:')).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+  return { ok: !photoErr, photos, photoErr };
+}
+document.getElementById('menuDeleteDataBtn').addEventListener('click', async () => {
+  if (!confirm('Delete ALL your FOREVER data?\n\nThis permanently erases your workouts, nutrition, weight, measurements, progress photos, settings and any coach connection. It can\'t be undone.\n\nTip: download a full backup first if you might want it later.')) return;
+  const typed = prompt('Type DELETE to confirm.');
+  if (!typed || typed.trim().toUpperCase() !== 'DELETE') return;
+  const r = await deleteAllMyData();
+  if (!r.ok && !r.photoErr) { alert('Something went wrong and nothing was deleted. Check your connection and try again.'); return; }
+  // Logs are gone at this point — always reset the app so nothing in memory gets saved back.
+  if (db && db.clearOutbox) db.clearOutbox();
+  if (db && db.clearLocalCache) { try { db.clearLocalCache(); } catch (e) {} }
+  if (r.photoErr) {
+    alert('Your logs and settings were deleted, but some progress photos couldn\'t be removed. Log back in and tap Delete all my data again to finish.');
+    if (supaClient) { try { await supaClient.auth.signOut(); } catch (e) {} }
+    location.reload();
+    return;
+  }
+  alert(`Done — all your data${r.photos ? ` and ${r.photos} photo${r.photos === 1 ? '' : 's'}` : ''} were deleted. Your login still exists with nothing in it. To have the login removed too, email the address in the Privacy Policy.`);
+  if (supaClient) { try { await supaClient.auth.signOut(); } catch (e) {} }
+  location.reload();
+});
+
 document.getElementById('menuLogoutBtn') && (document.getElementById('menuLogoutBtn').onclick = async () => {
   // Push any saves still waiting from being offline, then wipe this account's cached copy so the
   // next person to use this phone can't see it. Unsent saves stay queued (per account) and go up
