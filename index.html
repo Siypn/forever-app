@@ -1144,6 +1144,13 @@
   div.acct-row { cursor: default; }
   .acct-del { display: block; margin: 16px auto 0; color: #e07a6f !important; font-size: 12px; }
   .tier-chip.founder { background: linear-gradient(135deg, rgba(167,139,250,0.45), rgba(124,58,237,0.25)); border-color: #c4b5fd; box-shadow: 0 0 18px -2px rgba(167,139,250,0.95); }
+
+  .acct-rm { display: block; margin: 8px auto 0; font-size: 11.5px; color: var(--text-dim); }
+  .acct-handle { display: block; margin: 12px auto 6px; background: none; border: none; font: inherit; font-size: 22px; font-weight: 600; color: #fff; cursor: pointer; text-shadow: 0 0 16px rgba(167,139,250,0.4); }
+  .cc-email { font-size: 11px; color: var(--text-dim); margin: 2px 0 0 18px; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cc-who { display: flex; flex-direction: column; gap: 2px; margin-bottom: 12px; }
+  .cc-who b { font-size: 18px; font-weight: 600; }
+  .cc-who a { font-size: 12.5px; color: var(--rest-accent); text-decoration: none; }
 </style>
 </head>
 <body>
@@ -1564,7 +1571,8 @@
     <div class="ex-prev" style="text-align:center; margin-bottom:28px;" id="authSubtitle">Sign in to sync your training across devices.</div>
     <div id="authError" style="display:none; color:#d9534f; font-size:12.5px; margin-bottom:14px; text-align:center;"></div>
     <div id="authInfo" style="display:none; color:var(--accent); font-size:12.5px; margin-bottom:14px; text-align:center;"></div>
-    <div class="field-row"><div style="flex:1;"><label>Email</label><input type="email" id="authEmail" autocomplete="email" placeholder="you@example.com" style="width:100%;"></div></div>
+    <div class="field-row" id="authUserRow" style="display:none;"><div style="flex:1;"><label>Username</label><input type="text" id="authUsername" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="20" placeholder="e.g. simpyn" style="width:100%;"></div></div>
+    <div class="field-row" id="authEmailRow"><div style="flex:1;"><label>Email</label><input type="email" id="authEmail" autocomplete="email" placeholder="you@example.com" style="width:100%;"></div></div>
     <div class="field-row" style="margin-top:10px;"><div style="flex:1;"><label>Password</label><input type="password" id="authPassword" autocomplete="current-password" placeholder="••••••••" style="width:100%;"></div></div>
     <button class="btn-primary" id="authSubmitBtn" style="width:100%; margin-top:18px;">Log In</button>
     <div style="text-align:center; margin-top:12px;"><button class="back-link" id="authForgotBtn" style="padding:0; font-size:12.5px;">Forgot password?</button></div>
@@ -8881,6 +8889,9 @@ async function renderCoachDashboard(useCache) {
   let links = [];
   try { const { data } = await supaClient.from('coach_links').select('client_id, client_email, created_at').eq('coach_id', currentUserId); links = data || []; } catch (e) {}
   coachLoadedAt = Date.now();
+  let unames = {};
+  try { const { data } = await supaClient.from('usernames').select('user_id, username').in('user_id', links.map(l => l.client_id)); (data || []).forEach(r => { unames[r.user_id] = r.username; }); } catch (e) {}
+  links = links.map(l => ({ ...l, username: unames[l.client_id] || null }));
   coachClients = await Promise.all(links.map(async l => {
     try { const docs = await fetchClientDocs(l.client_id); let sum = null; try { sum = clientSummary(docs, today); } catch (e) {} return { ...l, docs, sum }; }
     catch (e) { return { ...l, docs: [], sum: null, err: true }; }
@@ -8900,6 +8911,7 @@ async function renderCoachDashboard(useCache) {
       if (!s) return `<div class="coach-card"><div class="cc-name">${escHtml(clientDisplayName(c))}</div><div class="ex-prev">Couldn't load this client's data.</div></div>`;
       return `<button class="coach-card" data-i="${i}">
         <div class="cc-top"><span class="cc-dot ${s.status}"></span><span class="cc-name">${escHtml(clientDisplayName(c))}</span><span class="cc-phase">${escHtml(s.phaseLabel)}</span></div>
+        <div class="cc-email">${escHtml(c.client_email || '')}</div>
         <div class="cc-stats">
           <span><b>${s.workouts7}</b> workouts/7d</span>
           <span><b>${s.weightNow ? s.weightNow.toFixed(1) : '—'}</b> lb${s.rate != null ? ` <em>${s.rate >= 0 ? '+' : ''}${s.rate.toFixed(1)}/wk</em>` : ''}</span>
@@ -8933,7 +8945,8 @@ async function coachWrite(clientId, path, data) {
 }
 function clientDisplayName(c) {
   const p = ((c.docs || []).find(d => d.path === 'profile/account') || {}).data || {};
-  return (p.name && String(p.name).trim()) || (c.client_email || 'Client').split('@')[0];
+  const u = c.username || p.username;
+  return u ? `@${u}` : ((p.name && String(p.name).trim()) || (c.client_email || 'Client').split('@')[0]);
 }
 function clientDoc(c, path) { const d = c.docs.find(x => x.path === path); return d ? d.data : null; }
 function clientProgram(c) {
@@ -9055,6 +9068,7 @@ async function renderCoachClient(c) {
   }).join('');
   body.innerHTML = `
     <button class="back-link" id="coachBackBtn" style="padding:0 0 10px;">‹ All clients</button>
+    <div class="cc-who"><b>${escHtml(clientDisplayName(c))}</b><a href="mailto:${escHtml(c.client_email || '')}">${escHtml(c.client_email || '')}</a></div>
     <div class="cc-flags" style="margin-bottom:12px;">${s.flags.length ? s.flags.map(fl => `<span class="cc-flag l${fl.lvl}">${escHtml(fl.t)}</span>`).join('') : '<span class="cc-flag ok">On track</span>'}</div>
     <div class="coach-grid">
       <div><div class="bc-num">${s.weightNow ? s.weightNow.toFixed(1) : '—'}</div><div class="bc-lbl">lb${s.rate != null ? ` · ${f(s.rate)}/wk` : ''}</div></div>
@@ -9565,6 +9579,7 @@ function renderAuthMode() {
   document.getElementById('authToggleModeBtn').textContent = authMode === 'login' ? 'Need an account? Sign up' : 'Already have an account? Log in';
   document.getElementById('authSubtitle').textContent = authMode === 'login' ? 'Sign in to sync your training across devices.' : 'Create an account to sync your training across devices.';
   const fg = document.getElementById('authForgotBtn'); if (fg) fg.parentElement.style.display = authMode === 'login' ? '' : 'none';
+  const ur = document.getElementById('authUserRow'); if (ur) ur.style.display = authMode === 'signup' ? '' : 'none';
 }
 // Forgot password: email a reset link that brings you back here to choose a new one.
 document.getElementById('authForgotBtn').onclick = async () => {
@@ -9605,8 +9620,13 @@ document.getElementById('authSubmitBtn').onclick = async () => {
       if (error) { showAuthError(error.message); return; }
       await useSupabaseSession(data.session);
     } else {
+      const uname = (document.getElementById('authUsername').value || '').trim().replace(/^@/, '');
+      const bad = usernameProblem(uname);
+      if (bad) { showAuthError(bad); return; }
+      try { const { data: free } = await supaClient.rpc('username_available', { p_username: uname }); if (free === false) { showAuthError(`@${uname} is taken — try another.`); return; } } catch (e) {}
       const { data, error } = await supaClient.auth.signUp({ email, password });
       if (error) { showAuthError(error.message); return; }
+      try { localStorage.setItem('forever_pending_username', JSON.stringify({ email: email.toLowerCase(), username: uname })); } catch (e) {}
       if (data.session) { await useSupabaseSession(data.session); }
       else { showAuthInfo('Check your email to confirm your account, then log in.'); authMode = 'login'; renderAuthMode(); }
     }
@@ -9679,6 +9699,7 @@ async function useSupabaseSession(session) {
   await maybeImportLocalData(session.user.id);
   await startApp();
   loadCoachState().catch(() => {});
+  setTimeout(() => { ensureUsername().catch(() => {}); }, 2400);
   migrateLegacyPhotos().then(changed => { if (changed) loadHeroPhoto(); }).catch(() => {});
 }
 
@@ -9795,7 +9816,7 @@ function membershipTier() {
   return { label: 'Founding member', note: 'Free during beta' };
 }
 function initialsOf(name, email) {
-  const src = (name || (email || '').split('@')[0] || '?').trim();
+  const src = (accountProfile.username || name || (email || '').split('@')[0] || '?').trim();
   const parts = src.split(/[\s._-]+/).filter(Boolean);
   return ((parts[0] || '?')[0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
 }
@@ -9809,6 +9830,47 @@ async function paintAvatar(el) {
   const src = await avatarSrc();
   el.innerHTML = src ? `<img src="${escHtml(src)}" alt="">` : `<span>${escHtml(initialsOf(accountProfile.name, currentUserEmail))}</span>`;
 }
+// ---------- Usernames ----------
+// Everyone goes by a unique @username (picked at sign-up; existing accounts are asked once).
+function usernameProblem(u) {
+  if (!u) return 'Pick a username.';
+  if (u.length < 3) return 'Usernames need at least 3 characters.';
+  if (u.length > 20) return 'Usernames can be up to 20 characters.';
+  if (!/^[A-Za-z0-9._]+$/.test(u)) return 'Use letters, numbers, dots or underscores only.';
+  return '';
+}
+async function setUsername(u) {
+  u = (u || '').trim().replace(/^@/, '');
+  const bad = usernameProblem(u); if (bad) throw new Error(bad);
+  const { error } = await supaClient.from('usernames').upsert({ user_id: currentUserId, username: u }, { onConflict: 'user_id' });
+  if (error) throw new Error(/duplicate|unique/i.test(error.message || '') ? `@${u} is taken — try another.` : error.message);
+  await saveAccountProfile({ username: u });
+}
+let usernameAsked = false;
+async function ensureUsername() {
+  if (!(supaClient && currentUserId) || usernameAsked) return;
+  usernameAsked = true;
+  let have = null;
+  try { const { data } = await supaClient.from('usernames').select('username').eq('user_id', currentUserId).maybeSingle(); have = data && data.username; } catch (e) { return; }
+  if (have) { if (accountProfile.username !== have) await saveAccountProfile({ username: have }); return; }
+  // Picked at sign-up but the account needed email confirmation first.
+  let pending = null;
+  try { pending = JSON.parse(localStorage.getItem('forever_pending_username') || 'null'); } catch (e) {}
+  if (pending && pending.username && (!pending.email || pending.email === (currentUserEmail || '').toLowerCase())) {
+    try { await setUsername(pending.username); localStorage.removeItem('forever_pending_username'); return; } catch (e) {}
+  }
+  if (document.querySelector('#uiSheet.open, #introSheet.open') || (document.getElementById('onboardingOverlay') || {}).style && document.getElementById('onboardingOverlay').style.display === 'block') { usernameAsked = false; setTimeout(() => ensureUsername().catch(() => {}), 5000); return; }
+  await chooseUsername(true);
+}
+async function chooseUsername(first) {
+  const suggestion = accountProfile.username || (currentUserEmail || '').split('@')[0].replace(/[^A-Za-z0-9._]/g, '').slice(0, 20);
+  for (let tries = 0; tries < 4; tries++) {
+    const v = await uiPrompt(first ? 'Pick your username' : 'Change username', first ? 'This is what you go by in FOREVER (and what your coach sees). Letters, numbers, dots and underscores.' : 'Letters, numbers, dots and underscores, 3–20 characters.', { placeholder: 'username', value: suggestion, caps: 'none' }, 'Save');
+    if (v == null) return false;
+    try { await setUsername(v); return true; } catch (e) { await uiAlert("That one won't work", e.message); }
+  }
+  return false;
+}
 async function loadAccountProfile() {
   if (db) { try { const snap = await db.doc('profile/account').get(); if (snap.exists) accountProfile = { ...accountProfile, ...snap.data() }; } catch (e) {} }
   if (supaClient && currentUserId) { try { const { data } = await supaClient.auth.getUser(); if (data && data.user) accountMeta.createdAt = data.user.created_at; } catch (e) {} }
@@ -9818,13 +9880,13 @@ function renderMenuProfile() {
   const signed = !!(supaClient && currentUserId);
   const n = document.getElementById('menuName'), sub = document.getElementById('menuSub');
   if (!n) return;
-  n.textContent = accountProfile.name || (signed ? (currentUserEmail || '').split('@')[0] : 'Guest');
+  n.textContent = accountProfile.username ? `@${accountProfile.username}` : (accountProfile.name || (signed ? (currentUserEmail || '').split('@')[0] : 'Guest'));
   sub.textContent = signed ? `${membershipTier().label} · ${currentUserEmail || ''}` : 'This device only · Tap to sign in';
   paintAvatar(document.getElementById('menuAvatar'));
 }
 async function saveAccountProfile(patch) {
   accountProfile = { ...accountProfile, ...patch };
-  if (db) { try { await db.doc('profile/account').set({ name: accountProfile.name || '', avatarPath: accountProfile.avatarPath || null, avatarUrl: accountProfile.avatarUrl || null }); } catch (e) {} }
+  if (db) { try { await db.doc('profile/account').set({ name: accountProfile.name || '', username: accountProfile.username || '', avatarPath: accountProfile.avatarPath || null, avatarUrl: accountProfile.avatarUrl || null }); } catch (e) {} }
   renderMenuProfile();
 }
 // Square-crop and shrink a photo before upload (a profile picture never needs to be big).
@@ -9857,6 +9919,11 @@ async function uploadAvatar(file) {
     await saveAccountProfile({ avatarUrl: dataUrl, avatarPath: null });
   }
 }
+async function removeAvatar() {
+  const old = accountProfile.avatarPath;
+  await saveAccountProfile({ avatarPath: null, avatarUrl: null });
+  if (old && supaClient) { try { await supaClient.storage.from('photos').remove([old]); } catch (e) {} }
+}
 async function openAccount() {
   document.getElementById('menuOverlay').classList.remove('open');
   const signed = !!(supaClient && currentUserId);
@@ -9871,9 +9938,11 @@ async function openAccount() {
   el.innerHTML = `<div class="menu-panel acct-panel">
     <div class="menu-header"><span class="section-title" style="margin:0;">Account</span><button class="menu-close" id="acctCloseBtn">×</button></div>
     <label class="acct-av" id="acctAv"><span class="acct-av-in" id="acctAvIn"></span><span class="acct-av-edit">Edit</span><input type="file" accept="image/*" id="acctAvInput"></label>
-    <input class="acct-name" id="acctName" value="${escHtml(accountProfile.name || '')}" placeholder="Your name" maxlength="40" autocomplete="name">
+    ${accountProfile.avatarPath || accountProfile.avatarUrl ? `<button class="text-btn acct-rm" id="acctAvRm">Remove photo</button>` : ''}
+    <button class="acct-handle" id="acctHandle">${accountProfile.username ? `@${escHtml(accountProfile.username)}` : 'Pick a username'}</button>
     <div class="acct-tier"><span class="tier-chip${tier.label === 'Founder' ? ' founder' : ''}">${escHtml(tier.label)}</span><span>${escHtml(tier.note)}</span></div>
     <div class="acct-rows">
+      <button class="acct-row" id="acctUser"><span>Username</span><b>${accountProfile.username ? '@' + escHtml(accountProfile.username) : 'Not set'}</b><i>›</i></button>
       <div class="acct-row"><span>Member since</span><b>${escHtml(since)}</b></div>
       <button class="acct-row" id="acctEmail"><span>Email</span><b>${escHtml(currentUserEmail || '')}</b><i>›</i></button>
       <button class="acct-row" id="acctPw"><span>Password</span><b>••••••••</b><i>›</i></button>
@@ -9888,12 +9957,15 @@ async function openAccount() {
   const close = () => el.classList.remove('open');
   el.querySelector('#acctCloseBtn').onclick = close;
   el.onclick = e => { if (e.target === el) close(); };
-  const nameEl = el.querySelector('#acctName');
-  nameEl.onchange = () => saveAccountProfile({ name: nameEl.value.trim().slice(0, 40) }).then(() => paintAvatar(el.querySelector('#acctAvIn')));
+  const pickUser = async () => { if (await chooseUsername(!accountProfile.username)) openAccount(); };
+  el.querySelector('#acctHandle').onclick = pickUser;
+  el.querySelector('#acctUser').onclick = pickUser;
+  const rm = el.querySelector('#acctAvRm');
+  if (rm) rm.onclick = async () => { if (!(await uiConfirm('Remove profile photo?', 'Your initials show instead. You can add a new one anytime.', 'Remove'))) return; await removeAvatar(); openAccount(); };
   el.querySelector('#acctAvInput').onchange = async (e) => {
     const f = e.target.files && e.target.files[0]; if (!f) return;
     const box = el.querySelector('#acctAvIn'); box.classList.add('busy');
-    try { await uploadAvatar(f); await paintAvatar(box); } catch (err) { await uiAlert("That photo didn't upload", (err && err.message) || 'Check your connection and try again.'); }
+    try { await uploadAvatar(f); openAccount(); return; } catch (err) { await uiAlert("That photo didn't upload", (err && err.message) || 'Check your connection and try again.'); }
     box.classList.remove('busy');
   };
   el.querySelector('#acctEmail').onclick = async () => {
@@ -9928,6 +10000,7 @@ async function deleteAllMyData() {
   if (!(supaClient && currentUserId)) return { ok: false };
   if (db && db.clearOutbox) db.clearOutbox(); // unsent offline saves would otherwise re-create data
   try { await disableReminders(); await supaClient.from('push_subs').delete().eq('user_id', currentUserId); } catch (e) {}
+  try { await supaClient.from('usernames').delete().eq('user_id', currentUserId); } catch (e) {}
   let photos = 0, photoErr = false;
   try {
     const { data: files, error: listErr } = await supaClient.storage.from('photos').list(currentUserId, { limit: 1000 });
