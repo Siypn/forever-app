@@ -637,9 +637,17 @@
   .hero-title { font-family: 'Cinzel', serif; font-weight: 600; font-size: 30px; margin-top: 2px; }
   .hero-tags { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
   .hero-photo-btn {
-    position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.55); border: 1px solid var(--border);
-    color: var(--text-dim); font-size: 10px; padding: 5px 10px; cursor: pointer; font-family: inherit;
+    position: absolute; top: 12px; right: 12px; display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(10,8,16,0.42); -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; color: rgba(255,255,255,0.86);
+    font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; padding: 7px 13px; cursor: pointer; font-family: inherit;
+    transition: border-color .25s var(--ease), color .25s var(--ease);
   }
+  .hero-photo-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+  .hero-photo-btn:active { border-color: var(--rest-accent); color: #fff; }
+  .ob-opt { width: 100%; display: block; margin-bottom: 8px; }
+  .ob-opt.selected span { color: #fff; }
+  .ob-opt .ob-badge { display: inline-block; margin-left: 8px; font-size: 9px; letter-spacing: 1.4px; color: var(--rest-accent); border: 1px solid rgba(167,139,250,0.45); border-radius: 999px; padding: 2px 7px; vertical-align: 2px; font-weight: 600; }
   .hero-photo-btn input { display: none; }
   .overview-stats { display: flex; margin: 0 20px; border-bottom: 1px solid var(--hairline); max-width: 600px; }
   .overview-checkin { margin: 0 20px; padding: 16px 0; border-bottom: 1px solid var(--hairline); }
@@ -899,6 +907,118 @@
   #choiceSheet .is-grab { width: 36px; height: 4px; border-radius: 4px; background: var(--hairline); margin: -8px auto 14px; }
   #choiceSheet .is-kicker { font-size: 10px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--rest-accent); }
   #choiceSheet .is-title { font-family: 'Bebas Neue', 'Outfit', sans-serif; font-size: 30px; letter-spacing: 0.5px; line-height: 1.05; margin: 8px 0 10px; }
+
+  /* Rating scales: five dots on a hairline (replaces the boxed segmented buttons). */
+  .scale-row.dot-scale { border: none; border-radius: 0; overflow: visible; position: relative; gap: 0; padding-top: 2px; }
+  .scale-row.dot-scale::before { content: ''; position: absolute; left: 10%; right: 10%; top: 10px; height: 1px; pointer-events: none;
+    background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.18) 50%, rgba(255,255,255,0.05)); }
+  .scale-row.dot-scale .scale-btn { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    border: none !important; background: none !important; padding: 0 0 2px; min-height: 0; color: var(--text-dim); font-size: 12px; font-weight: 500; letter-spacing: 0.3px; }
+  .scale-row.dot-scale .scale-btn::before { content: ''; width: 16px; height: 16px; border-radius: 50%; background: #050407; border: 1px solid rgba(255,255,255,0.3);
+    transition: background-color .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease); }
+  .scale-row.dot-scale .scale-btn:active { transform: none; opacity: 1; }
+  .scale-row.dot-scale .scale-btn:active::before { transform: scale(0.85); }
+  .scale-row.dot-scale .scale-btn.selected { color: var(--text); font-weight: 600; }
+  .scale-row.dot-scale .scale-btn.selected::before { background: var(--rest-accent); border-color: #ddd6fe; transform: scale(1.15);
+    box-shadow: 0 0 0 5px rgba(167,139,250,0.14), 0 0 18px rgba(167,139,250,0.85); }
+  .dot-ends { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); opacity: 0.7; margin-top: 6px; padding: 0 2%; }
+  .ci-kicker { font-size: 10px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--rest-accent); }
+  .ci-title { font-family: 'Bebas Neue', 'Outfit', sans-serif; font-size: 26px; letter-spacing: 0.5px; margin: 6px 0 18px; }
+  .ci-q { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+  .ci-q span { font-size: 13px; font-weight: 500; }
+  .ci-q em { font-style: normal; font-size: 12px; color: var(--rest-accent); }
+  .checkin-card .checkin-row { margin-bottom: 24px; }
+  .checkin-card .checkin-submit { background: none; color: var(--text-dim); border: 1px solid var(--hairline); border-radius: 999px; padding: 13px; margin-top: 4px; transition: all .3s var(--ease); }
+  .checkin-card .checkin-submit.ready { color: var(--on-accent); background: var(--accent); border-color: var(--accent); box-shadow: 0 8px 22px -10px rgba(255,255,255,0.45); }
+  .checkin-card .checkin-submit:disabled { cursor: default; }
+  .mc-seg.dot-scale .scale-btn { font-size: 11px; }
+  .checkin-card { padding-bottom: 26px !important; border-bottom: 1px solid var(--hairline) !important; margin-bottom: 8px !important; }
+
+  #uiSheet { position: fixed; inset: 0; z-index: 990; display: none; }
+  #uiSheet.open { display: block; }
+  #uiSheet .is-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.62); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); animation: isFade .3s var(--ease); }
+  #uiSheet .is-panel { position: absolute; left: 0; right: 0; bottom: 0; max-width: 560px; margin: 0 auto; background: linear-gradient(180deg, #0e0c14, #060509);
+    border-top: 1px solid rgba(167,139,250,0.35); border-radius: 22px 22px 0 0; padding: 22px 22px calc(22px + env(safe-area-inset-bottom)); box-shadow: 0 -20px 60px -20px rgba(124,58,237,0.45); animation: isUp .38s var(--ease); }
+  #uiSheet .is-grab { width: 36px; height: 4px; border-radius: 4px; background: var(--hairline); margin: -8px auto 14px; }
+  #uiSheet .is-kicker { font-size: 10px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--rest-accent); }
+  #uiSheet .is-title { font-family: 'Bebas Neue', 'Outfit', sans-serif; font-size: 28px; letter-spacing: 0.5px; line-height: 1.05; margin: 6px 0 8px; }
+  #uiSheet .ui-text p { font-size: 13.5px; line-height: 1.55; color: var(--text-dim); margin: 0 0 10px; }
+  #uiSheet .ui-input { width: 100%; margin-top: 8px; padding: 13px 16px; border-radius: 14px; border: 1px solid var(--hairline); background: var(--bg-input); font-size: 16px; }
+  #uiSheet .ui-input:focus { border-color: var(--rest-accent); }
+  .ui-danger { background: #d1483a !important; border-color: #d1483a !important; color: #fff !important; box-shadow: 0 8px 22px -10px rgba(209,72,58,0.6) !important; }
+
+  /* ---- Workout runner: same glow language as the rest of the app ---- */
+  .focus-card { position: relative; isolation: isolate; }
+  .focus-card::before { content: ''; position: absolute; z-index: -1; left: -20px; right: -20px; top: -40px; height: 420px; pointer-events: none;
+    background: radial-gradient(ellipse 70% 55% at 50% 0%, rgba(124,58,237,0.16), transparent 70%); }
+  .focus-name { text-shadow: 0 0 22px rgba(255,255,255,0.28), 0 0 44px rgba(167,139,250,0.22); }
+  .focus-input { position: relative; }
+  .focus-input::before { content: ''; position: absolute; z-index: -1; left: -20px; right: -20px; top: -30px; height: 240px; pointer-events: none;
+    background: radial-gradient(ellipse 45% 50% at 50% 50%, rgba(124,58,237,0.20), rgba(124,58,237,0.06) 55%, transparent 75%); }
+  /* Inputs clip text-shadow to their box, so the glow is a filter (it paints outside the box). */
+  .big-num { filter: drop-shadow(0 0 12px rgba(255,255,255,0.38)) drop-shadow(0 0 26px rgba(167,139,250,0.55)); }
+  .big-num:focus { filter: drop-shadow(0 0 14px rgba(255,255,255,0.5)) drop-shadow(0 0 32px rgba(167,139,250,0.8)); }
+  .big-x { color: var(--rest-accent); opacity: 0.85; text-shadow: 0 0 12px rgba(167,139,250,0.7); }
+  .step { color: rgba(196,181,253,0.75); }
+  .step:active { color: #fff; background: rgba(167,139,250,0.16); }
+  .big-unit { letter-spacing: 1.2px; text-transform: uppercase; font-size: 10px; }
+  .big-log { box-shadow: 0 0 0 1px rgba(255,255,255,0.10), 0 12px 34px -10px rgba(167,139,250,0.65), 0 0 28px -6px rgba(255,255,255,0.35); }
+  .set-label { color: rgba(196,181,253,0.85); }
+  .set-chip .chip-n { letter-spacing: 0.4px; }
+  .set-chip.is-current .chip-v { text-shadow: 0 0 10px rgba(255,255,255,0.45); }
+  .set-chip.is-done::after { box-shadow: 0 0 10px rgba(167,139,250,0.75); }
+  .set-chip.is-done .chip-v { text-shadow: 0 0 10px rgba(167,139,250,0.4); }
+  .run-dot.done::after { box-shadow: 0 0 8px rgba(167,139,250,0.75); }
+  .run-dot.current::after { background: linear-gradient(90deg, #fff, var(--rest-accent)); }
+  .run-timer { text-shadow: 0 0 14px rgba(255,255,255,0.3); }
+  .rate-set { filter: none; text-shadow: 0 0 18px rgba(255,255,255,0.45), 0 0 44px rgba(167,139,250,0.4); }
+  .rate-set span { color: var(--rest-accent); opacity: 0.85; }
+  .rate-row { grid-template-columns: repeat(6, 1fr); }
+  .rate-btn:first-child { font-family: 'Bebas Neue', sans-serif; font-size: 30px; font-weight: 400; }
+  .rate-btn:nth-child(1) { color: rgba(255,255,255,0.55); }
+  .rate-btn:nth-child(2) { color: rgba(255,255,255,0.72); }
+  .rate-btn:nth-child(3) { color: rgba(255,255,255,0.88); }
+  .rate-btn:nth-child(4) { color: #ece6ff; text-shadow: 0 0 10px rgba(167,139,250,0.25); }
+  .rate-btn:nth-child(5) { color: #d4c6ff; text-shadow: 0 0 12px rgba(167,139,250,0.45); }
+  .rate-btn:nth-child(6) { color: #c4b5fd; text-shadow: 0 0 16px rgba(167,139,250,0.7); }
+  .rate-scale { height: 2px; box-shadow: 0 0 12px rgba(167,139,250,0.55); }
+  .run-note { text-shadow: 0 0 14px rgba(167,139,250,0.35); }
+  .pr-chase { text-shadow: 0 0 14px rgba(167,139,250,0.6); }
+  .run-next-n { text-shadow: 0 0 12px rgba(255,255,255,0.12); }
+  /* Recovery question: underline segments, not pills */
+  .rec-opts { gap: 0; border-bottom: 1px solid var(--hairline); }
+  .rec-opts button { border: none; border-radius: 0; padding: 10px 4px 11px; font-size: 12.5px; color: var(--text-dim); position: relative; transition: color .2s var(--ease); }
+  .rec-opts button + button { border-left: 1px solid var(--hairline); }
+  .rec-opts button::after { content: ''; position: absolute; left: 18%; right: 18%; bottom: -1px; height: 2px; border-radius: 2px; background: transparent; transition: background .25s var(--ease), box-shadow .25s var(--ease); }
+  .rec-opts button:active, .rec-opts button.selected { color: #fff; background: none; }
+  .rec-opts button:active::after, .rec-opts button.selected::after { background: var(--rest-accent); box-shadow: 0 0 10px rgba(167,139,250,0.8); }
+
+  .bld-q-row { display: flex; justify-content: space-between; align-items: center; }
+  .bld-q-row .text-btn { font-size: 11px; letter-spacing: 0; text-transform: none; padding: 0; color: var(--rest-accent); }
+  .bld-q-row .text-btn#prioResetBtn { color: var(--text-dim); }
+  .bld-prio { display: flex; flex-wrap: wrap; gap: 8px; }
+  .bld-prio .prio-chip { transition: color .2s var(--ease), border-color .2s var(--ease), background-color .2s var(--ease), opacity .2s var(--ease); }
+  .prio-chip .pm { font-style: normal; margin-right: 5px; font-weight: 600; }
+  .prio-chip.prio-more { border-color: var(--rest-accent); color: #fff; background: rgba(124,58,237,0.16); box-shadow: 0 0 14px -4px rgba(167,139,250,0.6); }
+  .prio-chip.prio-more .pm { color: var(--rest-accent); }
+  .prio-chip.prio-less { opacity: 0.45; border-style: dashed; }
+  .bld-prio-key { display: flex; gap: 14px; flex-wrap: wrap; font-size: 10.5px; color: var(--text-dim); margin-top: 10px; }
+  .bld-prio-key .pm { color: var(--rest-accent); }
+  .bld-prio-key .k-tap { margin-left: auto; opacity: 0.7; }
+
+  .rir-row { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
+  .rir-opt { font-family: inherit !important; font-size: 14px !important; padding: 16px 6px 14px !important; border-radius: 0 !important; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text) !important; text-shadow: none !important; }
+  .rir-opt + .rir-opt { border-left: 1px solid var(--hairline); }
+  .rir-opt span { font-weight: 500; line-height: 1.2; }
+  .rir-opt em { font-style: normal; font-size: 10.5px; color: var(--text-dim); letter-spacing: 0.3px; }
+  .rir-opt.is-target span { color: #fff; text-shadow: 0 0 14px rgba(167,139,250,0.75) !important; }
+  .rir-opt.is-target em { color: var(--rest-accent); }
+  .rir-opt:active { background: rgba(167,139,250,0.14) !important; }
+  .conf-row { display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 16px; font-size: 12px; }
+  .conf-k { color: var(--text-dim); margin-right: 8px; }
+  .conf-opt { background: none; border: none; font: inherit; font-size: 12px; color: var(--text-dim); padding: 6px 10px; cursor: pointer; position: relative; }
+  .conf-opt.selected { color: #fff; }
+  .conf-opt.selected::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: 1px; height: 2px; border-radius: 2px; background: var(--rest-accent); box-shadow: 0 0 8px rgba(167,139,250,0.8); }
 </style>
 </head>
 <body>
@@ -1640,20 +1760,32 @@ const EXERCISE_LIBRARY = {
     { name: "Pike Push-Up", type: "compound", equip: "bodyweight", tier: "home" },
     { name: "Shoulder Fly", type: "isolation", equip: "dumbbell", tier: "home" },
     { name: "Lean-Away Lateral Raise", type: "isolation", equip: "dumbbell", tier: "home" },
-    { name: "Rear Delt", type: "isolation", equip: "dumbbell", tier: "home" },
     { name: "Band Lateral Raise", type: "isolation", equip: "band", tier: "home" },
-    { name: "Band Face Pull", type: "isolation", equip: "band", tier: "home" },
     { name: "Overhead Press", type: "compound", equip: "barbell", tier: "gym" },
     { name: "Smith Overhead Press", type: "compound", equip: "smith", tier: "gym" },
     { name: "Machine Shoulder Press", type: "compound", equip: "machine", tier: "gym" },
     { name: "Cable Lateral Raise", type: "isolation", equip: "cable", tier: "gym" },
     { name: "Cable Y-Raise", type: "isolation", equip: "cable", tier: "gym" },
-    { name: "Cable Rear Delt Fly", type: "isolation", equip: "cable", tier: "gym" },
-    { name: "Reverse Pec Deck", type: "isolation", equip: "machine", tier: "gym" },
-    { name: "Face Pull", type: "isolation", equip: "cable", tier: "gym" },
     { name: "Upright Row", type: "isolation", equip: "barbell", tier: "gym" },
     { name: "Plate-Loaded Shoulder Press", type: "compound", equip: "plate", tier: "pro" },
     { name: "Lateral Raise Machine", type: "isolation", equip: "machine", tier: "pro" },
+  ],
+  'Rear Delts': [
+    { name: "Rear Delt", type: "isolation", equip: "dumbbell", tier: "home" },
+    { name: "Chest-Supported Rear Delt Raise", type: "isolation", equip: "dumbbell", tier: "home" },
+    { name: "Band Face Pull", type: "isolation", equip: "band", tier: "home" },
+    { name: "Band Pull-Apart", type: "isolation", equip: "band", tier: "home" },
+    { name: "Cable Rear Delt Fly", type: "isolation", equip: "cable", tier: "gym" },
+    { name: "Reverse Pec Deck", type: "isolation", equip: "machine", tier: "gym" },
+    { name: "Face Pull", type: "isolation", equip: "cable", tier: "gym" },
+    { name: "Rear Delt Row", type: "isolation", equip: "cable", tier: "gym" },
+  ],
+  Traps: [
+    { name: "Dumbbell Shrug", type: "isolation", equip: "dumbbell", tier: "home" },
+    { name: "Barbell Shrug", type: "isolation", equip: "barbell", tier: "gym" },
+    { name: "Smith Shrug", type: "isolation", equip: "smith", tier: "gym" },
+    { name: "Cable Shrug", type: "isolation", equip: "cable", tier: "gym" },
+    { name: "Shrug Machine", type: "isolation", equip: "machine", tier: "pro" },
   ],
   Legs: [
     { name: "Goblet Squat", type: "compound", equip: "dumbbell", tier: "home" },
@@ -1733,6 +1865,15 @@ const EXERCISE_LIBRARY = {
     { name: "Seated Dip Machine", type: "compound", equip: "machine", tier: "pro" },
     { name: "Plate-Loaded Tricep Press", type: "compound", equip: "plate", tier: "pro" },
   ],
+  Forearms: [
+    { name: "Dumbbell Wrist Curl", type: "isolation", equip: "dumbbell", tier: "home" },
+    { name: "Dumbbell Reverse Wrist Curl", type: "isolation", equip: "dumbbell", tier: "home" },
+    { name: "Reverse Dumbbell Curl", type: "isolation", equip: "dumbbell", tier: "home" },
+    { name: "Farmer's Carry", type: "isolation", equip: "dumbbell", tier: "home" },
+    { name: "Reverse EZ-Bar Curl", type: "isolation", equip: "barbell", tier: "gym" },
+    { name: "Behind-the-Back Wrist Curl", type: "isolation", equip: "barbell", tier: "gym" },
+    { name: "Cable Wrist Curl", type: "isolation", equip: "cable", tier: "gym" },
+  ],
   Abs: [
     { name: "Plank", type: "isolation", equip: "bodyweight", tier: "home" },
     { name: "Crunch", type: "isolation", equip: "bodyweight", tier: "home" },
@@ -1759,9 +1900,19 @@ Object.keys(EXERCISE_LIBRARY).forEach(m => EXERCISE_LIBRARY[m].forEach(e => { EX
 // squats → glutes). Legs are split into quads / hamstrings / glutes / calves. Volume is judged on
 // the block's average week (base + overload), not just whichever week you happen to be in.
 // ============================================================================================
-const VOLUME_MUSCLES = ['Chest', 'Back', 'Shoulders', 'Quads', 'Hamstrings', 'Glutes', 'Calves', 'Biceps', 'Triceps', 'Abs'];
-const OPTIONAL_MUSCLES = new Set(['Abs', 'Glutes']); // get plenty from compounds; direct work is optional
-const UPPER_MUSCLES = new Set(['Chest', 'Back', 'Shoulders', 'Biceps', 'Triceps', 'Abs']);
+const VOLUME_MUSCLES = ['Chest', 'Back', 'Shoulders', 'Rear Delts', 'Traps', 'Quads', 'Hamstrings', 'Glutes', 'Calves', 'Biceps', 'Triceps', 'Forearms', 'Abs'];
+// Get plenty from compounds (forearms: every row, pull and curl is a grip set); direct work is optional.
+const OPTIONAL_MUSCLES = new Set(['Abs', 'Glutes', 'Forearms', 'Traps']);
+const UPPER_MUSCLES = new Set(['Chest', 'Back', 'Shoulders', 'Rear Delts', 'Traps', 'Biceps', 'Triceps', 'Forearms', 'Abs']);
+const ARM_MUSCLES = new Set(['Biceps', 'Triceps', 'Forearms']);
+// An "Arms" day (Arms, Shoulders & Arms, Arms & Delts…) only takes arm and shoulder work —
+// the optimizer and builder never park a chest press or calf raise on it.
+function isArmDay(d) { return !!d && /\barms?\b/i.test(d.title || ''); }
+function dayAccepts(d, muscle) {
+  if (!isArmDay(d)) return true;
+  // Arms + delts is a classic pairing (small muscles, no overlap with chest/back days).
+  return ARM_MUSCLES.has(muscle) || ['Abs', 'Shoulders', 'Rear Delts', 'Traps'].includes(muscle);
+}
 const LEG_PARTS = {
   'Back Squat': { Quads: 1, Glutes: 0.5 }, 'Smith Squat': { Quads: 1, Glutes: 0.5 }, 'Leg Press': { Quads: 1, Glutes: 0.5 },
   'Pendulum Squat': { Quads: 1, Glutes: 0.5 }, 'Hack Squat': { Quads: 1, Glutes: 0.5 }, 'Belt Squat': { Quads: 1, Glutes: 0.5 },
@@ -1778,15 +1929,19 @@ const LEG_PARTS = {
   'Single-Leg Calf Raise': { Calves: 1 }, 'Leg Press Calf Raise': { Calves: 1 }, 'Donkey Calf Raise Machine': { Calves: 1 },
 };
 const SPECIAL_CONTRIB = {
-  'Trap Bar Deadlift': { Back: 0.5, Quads: 0.5, Hamstrings: 0.5, Glutes: 0.5 },
-  'Conventional Deadlift': { Back: 0.5, Hamstrings: 0.5, Glutes: 0.5 },
+  'Trap Bar Deadlift': { Back: 0.5, Quads: 0.5, Hamstrings: 0.5, Glutes: 0.5, Traps: 0.5 },
+  'Conventional Deadlift': { Back: 0.5, Hamstrings: 0.5, Glutes: 0.5, Traps: 0.5 },
   'Reverse Hyperextension': { Glutes: 1, Hamstrings: 0.5 },
   'Straight-Arm Pulldown': { Back: 1 },
-  'Face Pull': { Shoulders: 1 }, 'Upright Row': { Shoulders: 1 },
+  'Face Pull': { 'Rear Delts': 1, Traps: 0.5 }, 'Upright Row': { Shoulders: 1, Traps: 0.5 },
   'Dips': { Chest: 1, Triceps: 0.5, Shoulders: 0.5 },
-  'Rack Pull': { Back: 1, Glutes: 0.5, Hamstrings: 0.5 },
+  'Rack Pull': { Back: 1, Glutes: 0.5, Hamstrings: 0.5, Traps: 0.5 },
   'Dumbbell Pullover': { Back: 1 }, 'Pullover Machine': { Back: 1 },
-  'Band Face Pull': { Shoulders: 1 },
+  'Band Face Pull': { 'Rear Delts': 1, Traps: 0.5 },
+  // Neutral / overhand curls hit brachialis + brachioradialis hard, so they also count toward forearms.
+  'Hammer Curl': { Biceps: 1, Forearms: 0.5 }, 'Pronated Cable Bar Curl': { Biceps: 1, Forearms: 0.5 },
+  'Cross-Body Hammer Curl': { Biceps: 1, Forearms: 0.5 }, 'Rope Hammer Curl': { Biceps: 1, Forearms: 0.5 },
+  'Reverse EZ-Bar Curl': { Forearms: 1, Biceps: 0.5 }, 'Reverse Dumbbell Curl': { Forearms: 1, Biceps: 0.5 },
 };
 function muscleContributions(exName, type) {
   if (SPECIAL_CONTRIB[exName]) return SPECIAL_CONTRIB[exName];
@@ -1797,7 +1952,7 @@ function muscleContributions(exName, type) {
   const out = { [m]: 1 };
   if (type === 'compound') {
     if (m === 'Chest') { out.Triceps = 0.5; out.Shoulders = 0.5; }
-    else if (m === 'Back') out.Biceps = 0.5;
+    else if (m === 'Back') { out.Biceps = 0.5; if (/Row/.test(exName)) out['Rear Delts'] = 0.5; } // rows pull the elbows back → rear delts
     else if (m === 'Shoulders') out.Triceps = 0.5;
     else if (m === 'Triceps') out.Chest = 0.5;
   }
@@ -1807,12 +1962,15 @@ const VOLUME_LANDMARKS = {
   Chest: { mev: 8, mav: 14, mrv: 22 },
   Back: { mev: 10, mav: 16, mrv: 25 },
   Shoulders: { mev: 8, mav: 16, mrv: 24 },
+  'Rear Delts': { mev: 6, mav: 12, mrv: 20 },
+  Traps: { mev: 0, mav: 8, mrv: 16 },
   Quads: { mev: 8, mav: 14, mrv: 20 },
   Hamstrings: { mev: 6, mav: 12, mrv: 20 },
   Glutes: { mev: 0, mav: 8, mrv: 16 },
   Calves: { mev: 8, mav: 12, mrv: 20 },
   Biceps: { mev: 8, mav: 14, mrv: 22 },
   Triceps: { mev: 6, mav: 12, mrv: 18 },
+  Forearms: { mev: 0, mav: 8, mrv: 16 },
   Abs: { mev: 0, mav: 10, mrv: 20 },
 };
 function avgSetsPerWeek(type, len) {
@@ -1937,8 +2095,12 @@ function optimizeSplit(program, opts) {
       const tot = current().totals[muscle];
       if (!(tot > lm.mav + 4 || tot > lm.mrv)) break;
       // remove the direct isolation exercise for this muscle from the busiest day
+      // Trim from a day where this muscle is a side dish first. An Arms day keeps at least 2 moves
+      // for each arm muscle — cutting curls off arm day while keeping them on chest day is backwards.
+      const directCount = day => (prog[day].exercises || []).filter(e => ((muscleContributions(e.name, e.type) || {})[muscle] || 0) >= 1).length;
       const opt = trainingDays.map(day => ({ day, idx: (prog[day].exercises || []).findIndex(e => e.type === 'isolation' && ((muscleContributions(e.name, e.type) || {})[muscle] || 0) >= 1) }))
-        .filter(x => x.idx !== -1).sort((a, b) => dayLoad(b.day) - dayLoad(a.day))[0];
+        .filter(x => x.idx !== -1 && !(isArmDay(prog[x.day]) && ARM_MUSCLES.has(muscle) && directCount(x.day) <= 2))
+        .sort((a, b) => (isArmDay(prog[a.day]) - isArmDay(prog[b.day])) || dayLoad(b.day) - dayLoad(a.day))[0];
       if (!opt) break;
       const ex = prog[opt.day].exercises[opt.idx];
       if (tot - setsFor(ex.type) < (lm.mev + lm.mav) / 2) break; // don't overshoot below the sweet spot
@@ -1967,7 +2129,7 @@ function optimizeSplit(program, opts) {
   const addedFor = {}; // muscle → days we've already added an exercise for it this run
   const chooseDay = (muscle, mode) => {
     const region = UPPER_MUSCLES.has(muscle) ? 'upper' : 'lower';
-    const ok = trainingDays.filter(d => (prog[d].exercises || []).length < 8 && dayLoad(d) < 22 && (addsPerDay[d] || 0) < 2 && !(addedFor[muscle] || []).includes(d));
+    const ok = trainingDays.filter(d => dayAccepts(prog[d], muscle) && (prog[d].exercises || []).length < 8 && dayLoad(d) < 22 && (addsPerDay[d] || 0) < 2 && !(addedFor[muscle] || []).includes(d));
     // Calves are the one lower-body muscle that sits fine on an upper day (light, quick, recovers fast).
     if (mode === 'volume' && muscle === 'Calves' && !ok.some(d => dayRegion(d) === region)) {
       const anyDay = ok.filter(d => !directOnDay(d, muscle));
@@ -1975,6 +2137,11 @@ function optimizeSplit(program, opts) {
     }
     const same = ok.filter(d => dayRegion(d) === region);
     const fresh = arr => arr.filter(d => !directOnDay(d, muscle));
+    // Body-part splits: more chest goes on Chest day, not onto Back day.
+    if (mode === 'volume') {
+      const named = same.filter(d => new RegExp('\\b' + muscle + '\\b', 'i').test(prog[d].title || ''));
+      if (named.length) return named.sort((a, b) => dayLoad(a) - dayLoad(b))[0];
+    }
     let pool;
     if (mode === 'frequency') pool = fresh(same);
     else pool = fresh(same).length ? fresh(same) : same.length ? same : (DAY_ORDER.some(d => (prog[d].exercises || []).length && dayRegion(d) === region) ? [] : fresh(ok));
@@ -1986,7 +2153,11 @@ function optimizeSplit(program, opts) {
     let guard = 0;
     while (guard++ < 2) {
       const cur = current();
-      const tot = cur.totals[muscle], fq = cur.freq[muscle];
+      const tot = cur.totals[muscle];
+      // A day counts as training a muscle if a compound there works it (close-grip bench → chest,
+      // chin-ups → biceps), not only when it's the main target. Otherwise "chest is only trained once"
+      // when close-grip bench already hits it on arm day, and a bench press gets bolted onto arm day.
+      const fq = trainingDays.filter(d => (prog[d].exercises || []).some(e => ((muscleContributions(e.name, e.type) || {})[muscle] || 0) >= 0.5)).length;
       // Half a set short is rounding, not a gap — not worth a whole new exercise.
       const under = tot < lm.mev - 0.5;
       const lowFreq = MAJOR.includes(muscle) && fq < 2 && tot < lm.mav && UPPER_MUSCLES.has(muscle);
@@ -2034,13 +2205,13 @@ const BUILDER_PATTERNS = {
 const BUILDER_DAYS = {
   FULL_A: { title: 'Full Body A', slots: ['Quads:c:Squat', 'Chest:c', 'Back:c:Row', 'Hamstrings:c:Hinge', 'Shoulders:i:Lateral', 'Biceps:i', 'Triceps:i', 'Calves:i', 'Abs:i'] },
   FULL_B: { title: 'Full Body B', slots: ['Hamstrings:c:Hinge', 'Chest:c:Incline', 'Back:c:Pull', 'Quads:c:Lunge', 'Shoulders:c', 'Shoulders:i:Lateral', 'Hamstrings:i:Curl', 'Triceps:i', 'Biceps:i', 'Abs:i'] },
-  FULL_C: { title: 'Full Body C', slots: ['Quads:c:Squat', 'Chest:c:Incline', 'Back:c:Row', 'Quads:i', 'Hamstrings:i:Curl', 'Shoulders:i:Rear', 'Biceps:i', 'Calves:i'] },
+  FULL_C: { title: 'Full Body C', slots: ['Quads:c:Squat', 'Chest:c:Incline', 'Back:c:Row', 'Quads:i', 'Hamstrings:i:Curl', 'Rear Delts:i', 'Biceps:i', 'Calves:i'] },
   UPPER_A: { title: 'Upper A', slots: ['Chest:c', 'Back:c:Row', 'Shoulders:c', 'Back:c:Pull', 'Shoulders:i:Lateral', 'Chest:i', 'Triceps:i', 'Biceps:i'] },
-  UPPER_B: { title: 'Upper B', slots: ['Back:c:Pull', 'Chest:c:Incline', 'Back:c:Row', 'Shoulders:i:Lateral', 'Chest:i', 'Shoulders:i:Rear', 'Biceps:i', 'Triceps:i'] },
+  UPPER_B: { title: 'Upper B', slots: ['Back:c:Pull', 'Chest:c:Incline', 'Back:c:Row', 'Shoulders:i:Lateral', 'Chest:i', 'Rear Delts:i', 'Biceps:i', 'Triceps:i'] },
   LOWER_A: { title: 'Lower A', slots: ['Quads:c:Squat', 'Hamstrings:c:Hinge', 'Quads:i', 'Hamstrings:i:Curl', 'Glutes:c:Thrust', 'Calves:i', 'Abs:i'] },
   LOWER_B: { title: 'Lower B', slots: ['Hamstrings:c:Hinge', 'Quads:c:Squat', 'Quads:c:Lunge', 'Hamstrings:i:Curl', 'Calves:i', 'Abs:i'] },
   PUSH: { title: 'Push', slots: ['Chest:c', 'Shoulders:c', 'Chest:c:Incline', 'Shoulders:i:Lateral', 'Chest:i', 'Triceps:i', 'Triceps:i', 'Shoulders:i:Lateral'] },
-  PULL: { title: 'Pull', slots: ['Back:c:Pull', 'Back:c:Row', 'Back:c:Row', 'Shoulders:i:Rear', 'Biceps:i', 'Biceps:i', 'Back:i'] },
+  PULL: { title: 'Pull', slots: ['Back:c:Pull', 'Back:c:Row', 'Back:c:Row', 'Rear Delts:i', 'Biceps:i', 'Biceps:i', 'Back:i', 'Traps:i'] },
   LEGS: { title: 'Legs', slots: ['Quads:c:Squat', 'Hamstrings:c:Hinge', 'Quads:c:Lunge', 'Quads:i', 'Hamstrings:i:Curl', 'Calves:i', 'Abs:i'] },
   GLUTE_HAM: { title: 'Glutes & Hamstrings', slots: ['Glutes:c:Thrust', 'Hamstrings:c:Hinge', 'Glutes:i', 'Hamstrings:i:Curl', 'GluteMed', 'Calves:i', 'Abs:i'] },
   GLUTE_QUAD: { title: 'Glutes & Quads', slots: ['Quads:c:Squat', 'Glutes:c:Thrust', 'Quads:c:Lunge', 'GluteMed', 'Quads:i', 'Glutes:i', 'Calves:i'] },
@@ -2048,15 +2219,15 @@ const BUILDER_DAYS = {
   FULL_GA: { title: 'Lower Focus + Upper', slots: ['Glutes:c:Thrust', 'Quads:c:Squat', 'Back:c:Pull', 'GluteMed', 'Chest:c', 'Hamstrings:i:Curl', 'Shoulders:i:Lateral'] },
   FULL_GB: { title: 'Glutes & Hams + Upper', slots: ['Hamstrings:c:Hinge', 'Glutes:c:Thrust', 'Back:c:Row', 'Quads:c:Lunge', 'Shoulders:c', 'Glutes:i', 'Abs:i'] },
   UPPER_LITE: { title: 'Upper Body', slots: ['Back:c:Pull', 'Chest:c', 'Shoulders:c', 'Back:c:Row', 'Shoulders:i:Lateral', 'Triceps:i', 'Biceps:i'] },
-  UPPER_DELTS: { title: 'Shoulders & Back', slots: ['Shoulders:c', 'Back:c:Pull', 'Shoulders:i:Lateral', 'Chest:c:Incline', 'Shoulders:i:Rear', 'Back:c:Row', 'Biceps:i', 'Triceps:i'] },
-  ARMS_DELTS: { title: 'Arms & Delts', slots: ['Shoulders:i:Lateral', 'Biceps:i', 'Triceps:i', 'Shoulders:i:Rear', 'Biceps:i', 'Triceps:i', 'Chest:i'] },
+  UPPER_DELTS: { title: 'Shoulders & Back', slots: ['Shoulders:c', 'Back:c:Pull', 'Shoulders:i:Lateral', 'Chest:c:Incline', 'Rear Delts:i', 'Back:c:Row', 'Biceps:i', 'Triceps:i'] },
+  ARMS_DELTS: { title: 'Arms & Delts', slots: ['Shoulders:i:Lateral', 'Biceps:i', 'Triceps:i', 'Rear Delts:i', 'Biceps:i', 'Triceps:i', 'Forearms:i', 'Traps:i'] },
   // '!' marks an accessory the day must keep (an arm day without two curls isn't an arm day).
-  ARMS: { title: 'Arms', slots: ['Triceps:c', 'Biceps:i!', 'Triceps:i!', 'Biceps:i:Curl!', 'Triceps:i', 'Shoulders:i:Lateral', 'Shoulders:i:Rear'] },
+  ARMS: { title: 'Arms', slots: ['Triceps:c', 'Biceps:i!', 'Triceps:i!', 'Biceps:i:Curl!', 'Triceps:i', 'Shoulders:i:Lateral', 'Forearms:i', 'Rear Delts:i', 'Biceps:i'] },
   ARNOLD_CB: { title: 'Chest & Back', slots: ['Chest:c', 'Back:c:Row', 'Chest:c:Incline', 'Back:c:Pull', 'Chest:i', 'Back:i', 'Abs:i'] },
-  ARNOLD_SA: { title: 'Shoulders & Arms', slots: ['Shoulders:c', 'Shoulders:i:Lateral', 'Biceps:i', 'Triceps:i', 'Shoulders:i:Rear', 'Biceps:i', 'Triceps:i'] },
+  ARNOLD_SA: { title: 'Shoulders & Arms', slots: ['Shoulders:c', 'Shoulders:i:Lateral', 'Biceps:i', 'Triceps:i', 'Rear Delts:i', 'Biceps:i', 'Triceps:i'] },
   BRO_CHEST: { title: 'Chest', slots: ['Chest:c', 'Chest:c:Incline', 'Chest:c', 'Chest:i', 'Chest:i', 'Triceps:i'] },
-  BRO_BACK: { title: 'Back', slots: ['Back:c:Pull', 'Back:c:Row', 'Back:c:Row', 'Back:c:Pull', 'Back:i', 'Biceps:i'] },
-  BRO_SHOULDERS: { title: 'Shoulders', slots: ['Shoulders:c', 'Shoulders:i:Lateral', 'Shoulders:i:Rear', 'Shoulders:i:Lateral', 'Abs:i', 'Calves:i'] },
+  BRO_BACK: { title: 'Back', slots: ['Back:c:Pull', 'Back:c:Row', 'Back:c:Row', 'Back:c:Pull', 'Back:i', 'Biceps:i', 'Traps:i'] },
+  BRO_SHOULDERS: { title: 'Shoulders', slots: ['Shoulders:c', 'Shoulders:i:Lateral', 'Rear Delts:i', 'Shoulders:i:Lateral', 'Traps:i', 'Abs:i', 'Calves:i'] },
 };
 // Split styles the user can pick (glute focus keeps its own lower-body-heavy structure).
 const BUILDER_STYLES = {
@@ -2107,22 +2278,34 @@ const BUILDER_EQUIP_RANK = {
   gym: { machine: 0, cable: 0, smith: 1, barbell: 1, dumbbell: 1, bodyweight: 3, band: 4 },
   pro: { plate: 0, machine: 0, cable: 1, smith: 2, barbell: 2, dumbbell: 2, bodyweight: 3, band: 4 },
 };
-function builderTargets(experience, focus) {
+// Per-muscle priority: 'more' (bring it up), 'normal', or 'less' (keep it minimal).
+// The goal picks sensible defaults; the user can change any muscle.
+function builderDefaultPrio(focus) {
+  const p = {}; VOLUME_MUSCLES.forEach(m => { p[m] = 'normal'; });
+  if (focus === 'glutes') {
+    ['Glutes', 'Hamstrings'].forEach(m => { p[m] = 'more'; });
+    ['Chest', 'Back', 'Shoulders', 'Rear Delts', 'Biceps', 'Triceps', 'Forearms', 'Traps'].forEach(m => { p[m] = 'less'; });
+  } else if (focus === 'upper') {
+    ['Shoulders', 'Back', 'Rear Delts'].forEach(m => { p[m] = 'more'; });
+    ['Quads', 'Hamstrings', 'Calves', 'Glutes'].forEach(m => { p[m] = 'less'; });
+  }
+  return p;
+}
+function builderTargets(experience, focus, prio) {
+  const P = { ...builderDefaultPrio(focus), ...(prio || {}) };
   const t = {};
   VOLUME_MUSCLES.forEach(m => {
     const lm = VOLUME_LANDMARKS[m];
+    const small = ['Abs', 'Forearms', 'Traps'].includes(m);
     let v = experience === 'beginner' ? lm.mev : experience === 'advanced' ? lm.mav : (lm.mev + lm.mav) / 2;
-    if (focus === 'glutes') {
-      if (m === 'Glutes') v = lm.mav + (experience === 'beginner' ? 2 : 6);
-      else if (m === 'Hamstrings') v = Math.max(v, lm.mav);
-      else if (m === 'Quads') v = Math.max(v, (lm.mev + lm.mav) / 2);
-      else if (UPPER_MUSCLES.has(m) && m !== 'Abs') v = Math.min(v, lm.mev + 2);
-    } else if (focus === 'upper') {
-      if (['Shoulders', 'Back'].includes(m)) v = Math.max(v, lm.mav);
-      else if (['Chest', 'Biceps', 'Triceps'].includes(m)) v = Math.max(v, (lm.mev + lm.mav) / 2);
-      else if (['Quads', 'Hamstrings', 'Calves', 'Glutes'].includes(m)) v = Math.min(v, lm.mev);
+    if (small) v = Math.min(v, m === 'Abs' ? 6 : 4); // a few direct sets on top of what compounds already give
+    if (P[m] === 'more') {
+      v = Math.max(v, lm.mav);
+      if (m === 'Glutes' && focus === 'glutes') v = lm.mav + (experience === 'beginner' ? 2 : 6);
+    } else if (P[m] === 'less') {
+      // Big muscles keep the minimum that still grows them; optional ones get no direct work.
+      v = OPTIONAL_MUSCLES.has(m) ? 0 : Math.min(v, lm.mev);
     }
-    if (m === 'Abs') v = Math.min(v, 6);
     t[m] = v;
   });
   return t;
@@ -2161,7 +2344,8 @@ function buildProgram(opts) {
     return { name: best.name, type: best.type };
   };
   const setsFor = t => avgSetsPerWeek(t, 6);
-  const targets = builderTargets(experience, focus);
+  const prio = { ...builderDefaultPrio(focus), ...(opts.prio || {}) };
+  const targets = builderTargets(experience, focus, prio);
   const vol = () => analyzeProgramVolume(prog, setsFor).totals;
   // Pass 1: each day's compound lifts, in priority order, leaving room for at least two accessories.
   const pendingIso = {};
@@ -2180,7 +2364,7 @@ function buildProgram(opts) {
   // one whose muscle is furthest below its weekly target (so arms aren't the first thing cut).
   const minPerDay = Math.min(4, maxEx);
   // Calves and abs matter, but they never outrank a big muscle that's short of work.
-  const gapOf = (slot, v) => { const m = slot.split(':')[0] === 'GluteMed' ? 'Glutes' : slot.split(':')[0]; return (targets[m] - (v[m] || 0)) / Math.max(4, targets[m]) * (m === 'Calves' || m === 'Abs' ? 0.6 : 1); };
+  const gapOf = (slot, v) => { const m = slot.split(':')[0] === 'GluteMed' ? 'Glutes' : slot.split(':')[0]; return (targets[m] - (v[m] || 0)) / Math.max(4, targets[m]) * (['Calves', 'Abs', 'Forearms', 'Traps'].includes(m) ? 0.6 : 1); };
   weekdays.forEach(d => { // first, no day ends up with fewer than 4 exercises
     for (let g = 0; g < 10 && prog[d].exercises.length < minPerDay && (pendingIso[d] || []).length; g++) {
       const v = vol();
@@ -2208,7 +2392,7 @@ function buildProgram(opts) {
   const dayRegion = d => { let up = 0, low = 0; prog[d].exercises.forEach(e => primaryMusclesOf(e).forEach(m => (UPPER_MUSCLES.has(m) ? up++ : low++))); return low > up ? 'lower' : 'upper'; };
   const notes = [];
   const fullBodyDay = d => /^FULL/.test(prog[d].key || '');
-  const canHost = (d, m) => m === 'Abs' || fullBodyDay(d) || dayRegion(d) === regionOf(m);
+  const canHost = (d, m) => dayAccepts(prog[d], m) && (m === 'Abs' || fullBodyDay(d) || dayRegion(d) === regionOf(m));
   // 1) Trim anything past what you can recover from (isolation work first, from the busiest day).
   const stuck = new Set();
   for (let guard = 0; guard < 30; guard++) {
@@ -2217,7 +2401,10 @@ function buildProgram(opts) {
     if (!over) break;
     const lastIdx = (d, pred) => prog[d].exercises.map((e, i) => ({ e, i })).filter(x => x.i > 0 && pred(x.e) && primaryMusclesOf(x.e).includes(over)).map(x => x.i).pop();
     const minPerDay = Math.min(4, maxEx);
-    const roomy = d => prog[d].exercises.length > minPerDay; // never strip a day below 4 exercises
+    // Never strip a day below 4 exercises — unless the muscle is past what you can recover from at
+    // all, where a 3-exercise day beats overtraining (short sessions with glute work on every day).
+    const floorN = v[over] > VOLUME_LANDMARKS[over].mrv ? 3 : minPerDay;
+    const roomy = d => prog[d].exercises.length > floorN;
     let cand = weekdays.filter(roomy).map(d => ({ d, i: lastIdx(d, e => e.type === 'isolation') })).filter(x => x.i != null).sort((a, b) => prog[b.d].exercises.length - prog[a.d].exercises.length)[0];
     if (!cand) cand = weekdays.filter(roomy).map(d => ({ d, i: lastIdx(d, () => true) })).filter(x => x.i != null).sort((a, b) => prog[b.d].exercises.length - prog[a.d].exercises.length)[0];
     if (!cand) { stuck.add(over); continue; }
@@ -2234,7 +2421,7 @@ function buildProgram(opts) {
     if (!under) break;
     if (v[under] + setsFor('isolation') > VOLUME_LANDMARKS[under].mrv) { gaveUp.add(under); continue; }
     let hosts = weekdays.filter(d => prog[d].exercises.length < maxEx && canHost(d, under));
-    if (!hosts.length && under === 'Calves') hosts = weekdays.filter(d => prog[d].exercises.length < maxEx); // calves can sit on an upper day if legs days are full
+    if (!hosts.length && under === 'Calves') hosts = weekdays.filter(d => prog[d].exercises.length < maxEx && dayAccepts(prog[d], under)); // calves can sit on an upper day if legs days are full
     const pool = hosts
       .sort((a, b) => prog[a].exercises.filter(e => primaryMusclesOf(e).includes(under)).length - prog[b].exercises.filter(e => primaryMusclesOf(e).includes(under)).length
         || prog[a].exercises.length - prog[b].exercises.length);
@@ -2243,6 +2430,9 @@ function buildProgram(opts) {
     const e = pick(`${under}:i`, prog[d].exercises, weekdays.indexOf(d)) || pick(`${under}:c`, prog[d].exercises, weekdays.indexOf(d));
     if (!e) { gaveUp.add(under); continue; }
     prog[d].exercises.push(e);
+    // A lunge for quads also works glutes: don't let a fill push some other muscle past its max.
+    const v2 = vol();
+    if (VOLUME_MUSCLES.some(m => v2[m] > VOLUME_LANDMARKS[m].mrv && !(v[m] > VOLUME_LANDMARKS[m].mrv))) { prog[d].exercises.pop(); useCount[e.name] = Math.max(0, (useCount[e.name] || 1) - 1); gaveUp.add(under); }
   }
   // Keep compounds first within each day, then label each day by what it trains.
   weekdays.forEach(d => {
@@ -2256,12 +2446,12 @@ function buildProgram(opts) {
   const totals = vol();
   const estMin = d => Math.round(prog[d].exercises.reduce((a, e) => a + setsFor(e.type) * SET_MINUTES[e.type], 0) + 8);
   return {
-    program: prog, weekdays, totals, targets: builderTargets(experience, focus), estMin: Object.fromEntries(weekdays.map(d => [d, estMin(d)])),
-    meta: { days, minutes, tier, experience, focus, style,
+    program: prog, weekdays, totals, targets, estMin: Object.fromEntries(weekdays.map(d => [d, estMin(d)])),
+    meta: { days, minutes, tier, experience, focus, style, prio,
       split: style !== 'auto' ? BUILDER_STYLES[style].label + (focus === 'upper' ? ' · Upper body focus' : '') : focus === 'balanced' ? BUILDER_SPLIT_NAMES[days] : `${BUILDER_FOCUS[focus].label} focus`,
       oncePerWeek: builderOncePerWeek(style, days), legsOnce: builderLegsOnce(style, days) },
     // Only flag real gaps: under the minimum that keeps a muscle growing (not just under a stretch target).
-    shortfalls: VOLUME_MUSCLES.filter(m => !OPTIONAL_MUSCLES.has(m) && totals[m] < VOLUME_LANDMARKS[m].mev - 0.5),
+    shortfalls: VOLUME_MUSCLES.filter(m => !OPTIONAL_MUSCLES.has(m) && totals[m] < Math.min(VOLUME_LANDMARKS[m].mev, targets[m]) - 0.5),
   };
 }
 async function applyBuiltProgram(built) {
@@ -2287,6 +2477,36 @@ async function undoBuiltProgram() {
 }
 
 
+
+// ---------- In-app dialogs (replace the phone's plain system alert/confirm/prompt boxes) ----------
+function uiDialog(o) {
+  o = o || {};
+  return new Promise(resolve => {
+    let el = document.getElementById('uiSheet');
+    if (!el) { el = document.createElement('div'); el.id = 'uiSheet'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); document.body.appendChild(el); }
+    const para = t => escHtml(t || '').split(/\n\n+/).map(x => `<p>${x.replace(/\n/g, '<br>')}</p>`).join('');
+    el.innerHTML = `<div class="is-backdrop"></div><div class="is-panel">
+      <div class="is-grab"></div>
+      ${o.kicker ? `<div class="is-kicker">${escHtml(o.kicker)}</div>` : ''}
+      ${o.title ? `<div class="is-title">${escHtml(o.title)}</div>` : ''}
+      ${o.text ? `<div class="ui-text">${para(o.text)}</div>` : ''}
+      ${o.input ? `<input id="uiInput" class="ui-input" ${o.input.inputmode ? `inputmode="${o.input.inputmode}"` : ''} placeholder="${escHtml(o.input.placeholder || '')}" value="${escHtml(o.input.value != null ? String(o.input.value) : '')}" ${o.input.readonly ? 'readonly' : ''} autocomplete="off" autocapitalize="${o.input.caps || 'sentences'}">` : ''}
+      <button class="${o.danger ? 'btn-primary ui-danger' : 'btn-primary'}" id="uiOk" style="width:100%; margin-top:18px;">${escHtml(o.ok || 'OK')}</button>
+      ${o.cancel ? `<button class="btn-secondary" id="uiCancel" style="width:100%; margin-top:10px;">${escHtml(o.cancel)}</button>` : ''}
+    </div>`;
+    el.classList.add('open');
+    const inp = el.querySelector('#uiInput');
+    const finish = ok => { el.classList.remove('open'); resolve({ ok, value: inp ? inp.value : null }); };
+    el.querySelector('#uiOk').onclick = () => finish(true);
+    const c = el.querySelector('#uiCancel'); if (c) c.onclick = () => finish(false);
+    el.querySelector('.is-backdrop').onclick = () => finish(!o.cancel); // tap outside = cancel (or dismiss a notice)
+    if (inp) { setTimeout(() => { inp.focus(); if (o.input.readonly) inp.select(); }, 60); inp.onkeydown = e => { if (e.key === 'Enter') finish(true); }; }
+  });
+}
+const uiAlert = (title, text, o) => uiDialog({ title, text, ok: 'Got it', ...(o || {}) }).then(() => {});
+const uiConfirm = (title, text, okLabel, o) => uiDialog({ title, text, ok: okLabel || 'Continue', cancel: 'Cancel', ...(o || {}) }).then(r => r.ok);
+const uiPrompt = (title, text, input, okLabel) => uiDialog({ title, text, input: input || {}, ok: okLabel || 'Save', cancel: 'Cancel' }).then(r => (r.ok ? r.value : null));
+
 // ---------- Program builder UI ----------
 let builderInputs = { days: 4, minutes: 60, tier: null, experience: 'intermediate', focus: 'balanced', style: 'auto' };
 let builderResult = null;
@@ -2302,9 +2522,14 @@ function renderBuilderForm() {
   const body = document.getElementById('builderBody');
   document.getElementById('builderTitle').textContent = 'Build my program';
   const bi = builderInputs; if (!bi.tier) bi.tier = gymTier;
+  if (!bi.prio) bi.prio = builderDefaultPrio(bi.focus);
+  const prioMark = { more: '<i class="pm">↑</i>', less: '<i class="pm">–</i>', normal: '' };
   body.innerHTML = `
     <div class="bld-q">Goal</div>
     <div class="bld-focus">${Object.keys(BUILDER_FOCUS).map(k => `<button class="bld-focus-opt ${bi.focus === k ? 'selected' : ''}" data-focus="${k}"><span>${BUILDER_FOCUS[k].label}</span><em>${BUILDER_FOCUS[k].desc}</em></button>`).join('')}</div>
+    <div class="bld-q bld-q-row"><span>Muscles</span><span><button class="text-btn" id="prioAllBtn">Bring up everything</button><span class="run-tool-sep" style="margin:0 10px;"></span><button class="text-btn" id="prioResetBtn">Reset</button></span></div>
+    <div class="bld-prio">${VOLUME_MUSCLES.map(m => `<button class="prio-chip prio-${bi.prio[m] || 'normal'}" data-pm="${escHtml(m)}">${prioMark[bi.prio[m] || 'normal']}${escHtml(m)}</button>`).join('')}</div>
+    <div class="bld-prio-key"><span><i class="pm">↑</i> Bring up</span><span>Normal</span><span><i class="pm">–</i> Keep minimal</span><span class="k-tap">Tap to change</span></div>
     ${bi.focus === 'glutes' ? '' : `<div class="bld-q">Split style</div>${chipRow('style', Object.keys(BUILDER_STYLES).map(k => [k, BUILDER_STYLES[k].label]), bi.style || 'auto')}`}
     <div class="bld-q">Days per week</div>${chipRow('days', [[2, '2'], [3, '3'], [4, '4'], [5, '5'], [6, '6']], bi.days)}
     ${bi.focus !== 'glutes' && bi.style && bi.style !== 'auto' ? `<div class="bc-note" style="margin-top:8px;">${escHtml(BUILDER_STYLES[bi.style].label)} runs on ${BUILDER_STYLES[bi.style].days.join(' or ')} days a week.</div>` : ''}
@@ -2329,7 +2554,14 @@ function renderBuilderForm() {
     }
     row.querySelectorAll('[data-v]').forEach(x => x.classList.toggle('selected', x === b));
   }));
-  body.querySelectorAll('[data-focus]').forEach(b => b.onclick = () => { builderInputs.focus = b.dataset.focus; renderBuilderForm(); });
+  body.querySelectorAll('[data-focus]').forEach(b => b.onclick = () => { builderInputs.focus = b.dataset.focus; builderInputs.prio = builderDefaultPrio(b.dataset.focus); renderBuilderForm(); });
+  const NEXT_PRIO = { normal: 'more', more: 'less', less: 'normal' };
+  body.querySelectorAll('[data-pm]').forEach(b => b.onclick = () => {
+    const m = b.dataset.pm; bi.prio[m] = NEXT_PRIO[bi.prio[m] || 'normal'];
+    b.className = `prio-chip prio-${bi.prio[m]}`; b.innerHTML = prioMark[bi.prio[m]] + escHtml(m);
+  });
+  document.getElementById('prioAllBtn').onclick = () => { VOLUME_MUSCLES.forEach(m => { bi.prio[m] = 'more'; }); renderBuilderForm(); };
+  document.getElementById('prioResetBtn').onclick = () => { bi.prio = builderDefaultPrio(bi.focus); renderBuilderForm(); };
   document.getElementById('builderGoBtn').onclick = () => { builderResult = buildProgram(builderInputs); renderBuilderPreview(builderContext); };
 }
 function renderBuilderPreview(opts) {
@@ -2339,13 +2571,14 @@ function renderBuilderPreview(opts) {
   document.getElementById('builderTitle').textContent = 'Your program';
   const m = r.meta;
   const expL = { beginner: 'Under 1 year', intermediate: '1–3 years', advanced: '3+ years' }[m.experience];
-  const volRows = VOLUME_MUSCLES.filter(x => x !== 'Abs' || r.totals[x] > 0).map(mu => {
+  const P = m.prio || builderDefaultPrio(m.focus);
+  const volRows = VOLUME_MUSCLES.filter(x => !(OPTIONAL_MUSCLES.has(x) && x !== 'Glutes' && r.totals[x] < 0.5 && P[x] !== 'more')).map(mu => {
     const tot = r.totals[mu] || 0, lm = VOLUME_LANDMARKS[mu];
-    const isFocus = (m.focus === 'glutes' && ['Glutes', 'Hamstrings'].includes(mu)) || (m.focus === 'upper' && ['Shoulders', 'Back'].includes(mu));
-    const tier = isFocus && tot >= lm.mev ? { label: 'Focus' } : volumeTier(mu, tot);
+    const isFocus = P[mu] === 'more';
+    const tier = isFocus && tot >= Math.max(1, Math.min(lm.mev, r.targets[mu] - 2)) ? { label: 'Focus' } : isFocus ? { label: 'Short' } : volumeTier(mu, tot);
     const pct = Math.min(100, Math.round(tot / lm.mrv * 100));
     return `<div class="preview-row" style="align-items:center;"><span class="pname" style="min-width:96px;">${mu}</span><span class="ptype" style="text-transform:none; margin-right:8px; min-width:52px;">${tier ? tier.label : ''}</span>
-      <div style="flex:1; height:4px; background:var(--bg-input); overflow:hidden;"><div style="height:100%; width:${pct}%; background:${m.focus === 'glutes' && ['Glutes', 'Hamstrings'].includes(mu) || m.focus === 'upper' && ['Shoulders', 'Back'].includes(mu) ? 'var(--rest-accent)' : 'var(--accent)'};"></div></div>
+      <div style="flex:1; height:4px; background:var(--bg-input); overflow:hidden;"><div style="height:100%; width:${pct}%; background:${isFocus ? 'var(--rest-accent)' : 'var(--accent)'};"></div></div>
       <span class="ptype" style="text-align:right; min-width:64px;">${Math.round(tot)} sets/wk</span></div>`;
   }).join('');
   body.innerHTML = `
@@ -2357,6 +2590,9 @@ function renderBuilderPreview(opts) {
       </div>`).join('')}
     <div class="cp-label" style="margin:22px 0 6px;">Weekly sets per muscle (block average)</div>
     ${volRows}
+    ${(() => { const behind = VOLUME_MUSCLES.filter(x => P[x] === 'more' && (r.totals[x] || 0) < r.targets[x] - 2); return !behind.length ? '' : behind.length > 4
+      ? `<div class="bc-note">Bringing up ${behind.length} muscles at once needs more training time than ${m.days} days × ${m.minutes} min. Add a day or longer sessions, or pick the 2–4 muscles that matter most right now. That's how bodybuilders specialize: a few muscles get extra work for a block while the rest keep growing at normal volume, then you rotate.</div>`
+      : `<div class="bc-note">Marked to bring up but still short of that target: ${escHtml(behind.join(', '))}. ${m.days} days × ${m.minutes} min only fits so much. More time, another day, or bringing up fewer muscles at once gets them there.</div>`; })()}
     ${m.legsOnce ? `<div class="bc-note">Legs get one day a week on this split, so that day carries all your leg work. The 5-day version adds a second lower day.</div>` : ''}
     ${m.oncePerWeek ? `<div class="bc-note" style="color:#e6b3a8;">This split trains most muscles once a week. Twice a week usually grows a bit more for the same total sets — but the best split is the one you'll actually run, so it's yours if you like it.</div>` : ''}
     <div class="bc-note">Sets per exercise follow your block: lighter base weeks, heavier overload weeks, then a deload. Your feedback after each workout keeps adjusting each muscle from here.${r.shortfalls.length ? ` ${escHtml(r.shortfalls.join(', '))} ${r.shortfalls.length > 1 ? 'are' : 'is'} a little light at ${m.days} days × ${m.minutes} min — more time or another day fixes that.` : ''}</div>
@@ -4032,7 +4268,14 @@ function medianOf(arr) { if (!arr.length) return null; const a = [...arr].sort((
 // The 1–10 "how hard was that set" rating is read as RPE: 10 = nothing left, 8 = ~2 reps left.
 function setRirActual(s) {
   const d = parseInt(s.difficulty, 10);
-  if (!isNaN(d) && d >= 1 && d <= 10) return clampNum(10 - d, 0, 5);
+  if (!isNaN(d) && d >= 1 && d <= 10) {
+    const rir = clampNum(10 - d, 0, 5);
+    // Unsure / guessing: don't let a generous "reps left" call inflate your estimated strength.
+    // Guessing counts as at most 1 left, unsure as at most 2; the reps you actually did always count.
+    if (s.confidence === 'Fuzzy') return Math.min(rir, 1);
+    if (s.confidence === 'Somewhat') return Math.min(rir, 2);
+    return rir;
+  }
   const r = parseInt(s.rir, 10);
   return isNaN(r) ? 2 : clampNum(r, 0, 5);
 }
@@ -4143,6 +4386,10 @@ function planLift(model, type, o) {
     while (w - step >= floorW && Math.min(...reps) < range.lo) { w -= step; reps = repsFor(w); }
     if (tier === 'progress') tier = 'hold';
   }
+  // Session to session, at the same (or heavier) weight: at most 2 reps over your best set last time.
+  // Real progress is ~1 rep a week; anything bigger usually means a "reps left" guess was off.
+  const bestAt = Math.max(0, ...last.sets.filter(s => parseFloat(s.weight) >= w - 1e-9).map(s => parseInt(s.reps, 10) || 0));
+  if (bestAt > 0) reps = reps.map(r => (r == null ? r : Math.min(r, bestAt + 2)));
   return { sets: rirs.map((r, i) => ({ weight: w, reps: reps[i], rir: String(r) })), tier, note: notes.join(' '), targetE: target };
 }
 
@@ -4217,23 +4464,36 @@ function replanRemaining(ex, opts) {
   const rirOf = j => { const r = parseInt(sets[j].rir, 10); return isNaN(r) ? 1 : r; };
   const repsAtW = (j, w) => repsAt(E * Math.pow(f, j - k), w, rirOf(j));
   const nextJ = remaining[0];
-  let w = sets[nextJ].wEdited ? parseFloat(sets[nextJ].weight) : loggedW;
+  const handW = j => sets[j].wEdited && !sets[j].wCarried; // typed on this set itself
+  let w = handW(nextJ) ? parseFloat(sets[nextJ].weight) : loggedW;
   let direction = 0;
-  if (!sets[nextJ].wEdited && w > 0) {
+  if (!handW(nextJ) && w > 0) {
     const lastJ = remaining[remaining.length - 1];
     const floorW = loggedW * 0.85, capW = loggedW * 1.1;
     if (repsAtW(lastJ, w) < range.lo - 1) {
       while (w - step >= floorW && repsAtW(lastJ, w) < range.lo) w -= step;
       direction = -1;
-    } else if (repsAtW(nextJ, w) > range.hi + 3) {
+    } else if (repsAtW(nextJ, w) > range.hi + 2) {
+      // Way too light (e.g. rated Easy): add weight rather than piling on reps, so the work stays
+      // in the rep range this lift is programmed for and next session's start point is right.
       while (w + step <= capW && repsAtW(lastJ, w + step) >= range.lo && repsAtW(nextJ, w) > range.hi) w += step;
       direction = w > loggedW ? 1 : 0;
     }
   }
+  // "Reps left" is a guess, and a set rarely beats the one before it by much once fatigue builds.
+  // So at the same weight, never ask for more than 2 reps over what you just did.
+  const loggedR = parseInt(sets[k].reps, 10) || 0;
+  const guessed = sets[k].confidence === 'Fuzzy';
+  if (guessed) direction = Math.min(direction, 0), w = Math.min(w, loggedW);
   remaining.forEach(j => {
-    if (!sets[j].wEdited && w > 0) sets[j].weight = w;
+    if (!handW(j) && w > 0) sets[j].weight = w;
     const wj = parseFloat(sets[j].weight);
-    if (!sets[j].rEdited && wj > 0) sets[j].reps = repsAtW(j, wj);
+    if (!sets[j].rEdited && wj > 0) {
+      let r = repsAtW(j, wj);
+      if (wj >= loggedW && loggedR > 0) r = Math.min(r, loggedR + 2);
+      if (guessed && sets[j].reps) r = Math.min(r, parseInt(sets[j].reps, 10) || r); // only ever eases off
+      sets[j].reps = r;
+    }
   });
   if (opts.quiet) return;
   const after = remaining.map(j => `${sets[j].weight}×${sets[j].reps}`).join(',');
@@ -4241,16 +4501,18 @@ function replanRemaining(ex, opts) {
   if (after === before) { delete intraSessionNoteByEx[ex.name]; return; }
   const nxt = sets[nextJ];
   const how = direction < 0 ? 'harder than planned — dropped the weight so your next sets stay in range'
-    : direction > 0 ? 'easier than planned — bumped the weight'
-    : (!isNaN(d) ? `rated ${d}/10 — adjusted the reps to match` : 'adjusted the reps to match');
+    : direction > 0 ? (!isNaN(d) && d <= 5 ? 'felt easy — added weight instead of piling on reps' : 'easier than planned — bumped the weight')
+    : (!isNaN(d) ? `had ${d <= 5 ? '5+' : 10 - d} rep${10 - d === 1 ? '' : 's'} left${guessed ? ' (a guess, so only eased off)' : ''} — adjusted the reps to match` : 'adjusted the reps to match');
   intraSessionNoteByEx[ex.name] = `Set ${k + 1} ${how}: next set ${nxt.weight || '–'} × ${nxt.reps || '–'}. Edit if you'd rather push as planned.`;
 }
 
 // Hand-typed weight on the current set: carry the weight forward and re-predict reps at it.
 function onCurrentWeightEdited(ex, idx, value) {
   const sets = state[ex.name];
-  sets[idx].weight = value; sets[idx].wEdited = true;
-  for (let i = idx + 1; i < sets.length; i++) if (!sets[i].logged) { sets[i].weight = value; sets[i].wEdited = true; }
+  sets[idx].weight = value; sets[idx].wEdited = true; sets[idx].wCarried = false;
+  // Later sets inherit the weight, but only as a starting point: if the set you log shows it was
+  // too light, the replan can still raise it (wCarried). Typing on that set itself locks it.
+  for (let i = idx + 1; i < sets.length; i++) if (!sets[i].logged) { sets[i].weight = value; sets[i].wEdited = true; sets[i].wCarried = true; }
   const w = parseFloat(value);
   if (!(w > 0)) return null;
   if (sets.some(s => s.logged)) { replanRemaining(ex, { quiet: true }); }
@@ -4855,7 +5117,7 @@ function muscleCheckHTML(exs) {
     <div class="review-reason" style="margin-bottom:8px;">Sets up next week's volume for each muscle, together with how it recovered and how your lifts went.</div>
     ${ms.map(m => `<div class="mc-row" data-m="${escHtml(m)}">
       <span class="mc-name">${escHtml(m)}</span>
-      <div class="scale-row mc-seg">${[[1, 'Low'], [2, 'Good'], [3, 'Great']].map(([v, l]) => `<button class="scale-btn ${pump[m] === v ? 'selected' : ''}" data-v="${v}">${l}</button>`).join('')}</div>
+      <div class="scale-row dot-scale mc-seg">${[[1, 'Low'], [2, 'Good'], [3, 'Great']].map(([v, l]) => `<button class="scale-btn ${pump[m] === v ? 'selected' : ''}" data-v="${v}">${l}</button>`).join('')}</div>
       <div class="mc-out" id="mcOut-${cssEsc(m)}"></div>
     </div>`).join('')}
   </div>`;
@@ -5072,10 +5334,17 @@ function renderExerciseBody(ex, container, prevSlot) {
     const s = sets[currentIndex];
     html += `<div class="rate-block">
       <div class="rate-set">${escHtml(s.weight || '–')} <span>×</span> ${escHtml(s.reps || '–')}</div>
-      <div class="rate-q">How hard was that set?</div>
-      <div class="rate-row" id="diff-${id}">${[['5','Easy'],['6','6'],['7','7'],['8','8'],['9','9'],['10','10']].map(([v, l]) => `<button class="rate-btn" data-v="${v}">${l}</button>`).join('')}</div>
-      <div class="rate-scale"></div>
-      <div class="rate-hint"><span>Plenty left</span><span>2 left</span><span>Nothing left</span></div>
+      ${(() => {
+        // The set already had a target ("stop with 2 left"). This only checks whether that call landed.
+        const t = clampNum(parseInt(s.rir, 10) || 0, 0, 4);
+        const opts = t === 0
+          ? [[8, 'Had 2+ left', 'weight was light'], [9, 'Had 1 left', 'close'], [10, 'Hit failure', 'on target']]
+          : [[10 - Math.min(5, t + 2), `More than ${t} left`, 'weight was light'], [10 - t, `About ${t} left`, 'on target'], [10 - Math.max(0, t - 1), t === 1 ? 'Hit failure' : `${t - 1} or fewer left`, 'harder than planned']];
+        const conf = s.confidence || 'Solid';
+        return `<div class="rate-q">Target was ${t === 0 ? 'failure' : `${t} rep${t === 1 ? '' : 's'} left`}. Did that land?</div>
+        <div class="rir-row" id="diff-${id}">${opts.map(([v, l, sub]) => `<button class="rate-btn rir-opt${sub === 'on target' ? ' is-target' : ''}" data-v="${v}"><span>${l}</span><em>${sub}</em></button>`).join('')}</div>
+        <div class="conf-row" id="conf-${id}"><span class="conf-k">How sure?</span>${[['Solid', 'Sure'], ['Somewhat', 'Unsure'], ['Fuzzy', 'Guessing']].map(([v, l]) => `<button class="conf-opt${conf === v ? ' selected' : ''}" data-c="${v}">${l}</button>`).join('')}</div>`;
+      })()}
       <button class="text-btn" id="rateBack-${id}" style="display:block; margin:16px auto 0;">Edit set</button>
     </div>`;
   } else {
@@ -5397,7 +5666,13 @@ function wireExerciseEvents(ex, container) {
       else { uiState[exName].phase = 'input'; renderExerciseBody(ex, container, prevSlot); }
     };
     const shownAt = uiState[exName].rateShownAt || 0;
-    if (diffRow) diffRow.querySelectorAll('.rate-btn').forEach(btn => { btn.onclick = () => { if (Date.now() - shownAt < 400) return; /* the 2nd tap of a double-tap on Log */ sets[currentIndex].difficulty = btn.dataset.v; sets[currentIndex].confidence = ''; confirmSet(); }; });
+    const confRow = container.querySelector(`#conf-${id}`);
+    if (!sets[currentIndex].confidence) sets[currentIndex].confidence = 'Solid';
+    if (confRow) confRow.querySelectorAll('[data-c]').forEach(b => { b.onclick = () => {
+      sets[currentIndex].confidence = b.dataset.c;
+      confRow.querySelectorAll('[data-c]').forEach(x => x.classList.toggle('selected', x === b));
+    }; });
+    if (diffRow) diffRow.querySelectorAll('.rate-btn').forEach(btn => { btn.onclick = () => { if (Date.now() - shownAt < 400) return; /* the 2nd tap of a double-tap on Log */ sets[currentIndex].difficulty = btn.dataset.v; confirmSet(); }; });
   }
   if (ui.phase === 'rest') {
     const prevSlot = container.parentElement.querySelector('.ex-prev-slot');
@@ -5612,7 +5887,7 @@ function renderDayOverview() {
 
   wrap.innerHTML = `
     <div class="hero hero-noPhoto" id="heroBanner">
-      ${isRest ? `<div class="hero-pulse"><span class="pulse-dot"></span>Recovering</div><div class="breathe-rings"><span></span><span></span><span></span></div>` : `<label class="hero-photo-btn">+ Add photo<input type="file" accept="image/*" id="heroPhotoInput"></label>`}
+      ${isRest ? `<div class="hero-pulse"><span class="pulse-dot"></span>Recovering</div><div class="breathe-rings"><span></span><span></span><span></span></div>` : `<label class="hero-photo-btn"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Add photo<input type="file" accept="image/*" id="heroPhotoInput"></label>`}
       <div class="hero-overlay">
         <div class="hero-daylabel">${heroLabelForDay()}</div>
         <div class="hero-title">${escHtml(dayData.title)}</div>
@@ -5634,7 +5909,7 @@ function renderDayOverview() {
       <div class="info-panel" id="infoSleepPanel">A single rough night has little measurable effect on strength output. Consecutive short nights are different — research shows they specifically reduce force output in compound, multi-joint lifts while raising perceived effort. That's why the RIR nudge only reacts to a 2-night rolling average, and only on compound lifts.</div>
       <div class="cp-row">
         <span class="cp-label">Soreness today</span>
-        <div class="scale-row" id="sorenessRow" style="flex:1;">${[1,2,3,4,5].map(n=>`<button class="scale-btn" data-v="${n}">${n}</button>`).join('')}</div>
+        <div class="scale-row dot-scale" id="sorenessRow" style="flex:1;">${[1,2,3,4,5].map(n=>`<button class="scale-btn" data-v="${n}">${n}</button>`).join('')}</div>
       </div>
       <div class="ex-prev" id="sorenessEffect" style="margin-top:8px;">${escHtml(sorenessEffectText(sorenessToday))}</div>
     </div>`}
@@ -6100,7 +6375,7 @@ async function renderPhotoGallery() {
   const log = await getPhotoLog();
   photoViewerLog = log;
   if (!log.length) {
-    list.innerHTML = '<div class="ex-prev" style="padding:20px 0;">No progress photos yet — add one from the "+ Add photo" button on any training day\'s overview.</div>';
+    list.innerHTML = '<div class="ex-prev" style="padding:20px 0;">No progress photos yet — add one from the "Add photo" button on any training day\'s overview.</div>';
     return;
   }
   list.innerHTML = (log.length >= 2 ? `<button class="btn-primary" id="photoCompareBtn" style="width:100%; margin-bottom:14px;">Compare two photos</button>` : '') + `<div class="photo-grid">${log.map((p, i) => `<button class="photo-thumb" data-i="${i}" style="background-image:url('${p.url}');"><span class="photo-thumb-date">${fmtHistoryDate(p.date)}</span></button>`).join('')}</div>`;
@@ -6259,7 +6534,7 @@ function onboardGoalHTML() {
     <div class="section-title">Your goal</div>
     <div class="ex-prev" style="margin-top:6px;">Sets your calorie target and the pace we'll check your progress against. Tap one to continue — change it anytime on the Nutrition or Weight tab.</div>
     <div style="margin-top:14px;">
-      ${Object.keys(PHASES).map(k => `<button class="btn-secondary onboard-goal-btn" data-p="${k}" style="width:100%; display:block; text-align:left; margin-bottom:8px; ${nutritionPhase===k?'border-color:var(--accent); color:var(--accent);':''}">${PHASES[k].label} <span style="color:var(--text-dim); font-weight:400;">— ${PHASES[k].note}</span></button>`).join('')}
+      ${Object.keys(PHASES).map(k => `<button class="bld-focus-opt ob-opt onboard-goal-btn${nutritionPhase===k?' selected':''}" data-p="${k}"><span>${PHASES[k].label}</span><em>${PHASES[k].note}</em></button>`).join('')}
     </div>`;
 }
 function onboardExperienceHTML() {
@@ -6291,8 +6566,8 @@ function onboardSplitHTML() {
     let tierHeader = '';
     if (meta.tier !== lastTier) { tierHeader = `<div class="menu-label" style="margin:${lastTier===null?'0':'14px'} 0 6px;">${meta.tier}</div>`; lastTier = meta.tier; }
     const isRec = obRecommendedPreset === k;
-    const badge = isRec ? ` <span style="color:var(--accent); font-weight:600; font-size:10px;">RECOMMENDED</span>` : '';
-    return `${tierHeader}<button class="btn-secondary onboard-split-btn" data-preset="${k}" style="width:100%; display:block; text-align:left; margin-bottom:8px; ${isRec || activePreset===k?'border-color:var(--accent); color:var(--accent);':''}">${meta.label}${badge}</button>`;
+    const badge = isRec ? `<span class="ob-badge">RECOMMENDED</span>` : '';
+    return `${tierHeader}<button class="bld-focus-opt ob-opt onboard-split-btn${isRec || activePreset===k?' selected':''}" data-preset="${k}"><span>${meta.label}${badge}</span></button>`;
   }).join('');
   const bi = builderInputs;
   const build = `<button class="bld-focus-opt selected" id="obBuildBtn" style="width:100%; margin-top:14px;"><span>Build my program for me <b style="color:var(--rest-accent); font-size:10px; letter-spacing:1px;">RECOMMENDED</b></span><em>${bi.days} days · ${bi.minutes} min · ${escHtml(BUILDER_FOCUS[bi.focus] ? BUILDER_FOCUS[bi.focus].label : 'Balanced')} · ${escHtml(GYM_TIERS[gymTier].label)}. Built around your answers — you'll see the week first.</em></button>`;
@@ -6659,12 +6934,12 @@ async function restoreFromBackupFile(file) {
   try {
     const parsed = JSON.parse(await file.text());
     if (!parsed || parsed.app !== 'FOREVER' || parsed.kind !== 'full-backup' || !Array.isArray(parsed.docs)) {
-      alert('That file isn\'t a FOREVER backup.');
+      await uiAlert('Not a FOREVER backup', 'Pick the .json file you saved with "Download full backup".');
       return;
     }
     const docs = parsed.docs.filter(d => d && typeof d.path === 'string' && d.path && !d.path.includes('..') && d.data && typeof d.data === 'object');
     const when = parsed.exportedAt ? new Date(parsed.exportedAt).toLocaleString() : 'an unknown date';
-    if (!confirm(`Restore ${docs.length} items from the backup made ${when}?\n\nAnything in the backup replaces the current version. Things you've added since then stay.`)) return;
+    if (!(await uiConfirm('Restore this backup?', `${docs.length} items from the backup made ${when}.\n\nAnything in the backup replaces the current version. Things you've added since then stay.`, 'Restore'))) return;
     btn.textContent = 'Restoring…';
     let done = 0;
     for (const d of docs) {
@@ -6672,11 +6947,11 @@ async function restoreFromBackupFile(file) {
       if (done % 20 === 0) btn.textContent = `Restoring… ${done}/${docs.length}`;
     }
     if (db && db.flushOutbox) { try { await db.flushOutbox(); } catch (e) {} }
-    alert(`Restored ${done} of ${docs.length} items. The app will reload.`);
+    await uiAlert('Backup restored', `Restored ${done} of ${docs.length} items. The app will reload.`, { ok: 'Reload' });
     location.reload();
   } catch (e) {
     console.error('restore failed', e);
-    alert('Couldn\'t read that backup file.');
+    await uiAlert('Couldn\'t read that file', 'It may be damaged, or not a FOREVER backup.');
   } finally {
     btn.textContent = original;
   }
@@ -6783,19 +7058,26 @@ function renderCheckinIfNeeded() {
   const card = document.createElement('div');
   card.className = 'checkin-card swipe';
   card.innerHTML = `
-    <div class="checkin-title">Week ${info.week} check-in</div>
-    <div class="checkin-row"><label>Soreness right now (1 = none, 5 = very sore)</label>
-      <div class="scale-row" id="soreRow">${[1,2,3,4,5].map(n=>`<button class="scale-btn" data-v="${n}">${n}</button>`).join('')}</div>
+    <div class="ci-kicker">Week ${info.week} · Check-in</div>
+    <div class="ci-title">How's your body feeling?</div>
+    <div class="checkin-row">
+      <div class="ci-q"><span>Soreness</span><em id="soreWord">Tap one</em></div>
+      <div class="scale-row dot-scale" id="soreRow">${[1,2,3,4,5].map(n=>`<button class="scale-btn" data-v="${n}" aria-label="Soreness ${n} of 5">${n}</button>`).join('')}</div>
+      <div class="dot-ends"><span>None</span><span>Very sore</span></div>
     </div>
-    <div class="checkin-row"><label>Recovery feel (1 = beat up, 5 = fully recovered)</label>
-      <div class="scale-row" id="recRow">${[1,2,3,4,5].map(n=>`<button class="scale-btn" data-v="${n}">${n}</button>`).join('')}</div>
+    <div class="checkin-row">
+      <div class="ci-q"><span>Recovery</span><em id="recWord">Tap one</em></div>
+      <div class="scale-row dot-scale" id="recRow">${[1,2,3,4,5].map(n=>`<button class="scale-btn" data-v="${n}" aria-label="Recovery ${n} of 5">${n}</button>`).join('')}</div>
+      <div class="dot-ends"><span>Beat up</span><span>Fully recovered</span></div>
     </div>
-    <button class="checkin-submit" id="checkinSubmit">Save & continue</button>
+    <button class="checkin-submit" id="checkinSubmit" disabled>Save check-in</button>
   `;
   slot.appendChild(card);
   let sore = null, rec = null;
-  card.querySelectorAll('#soreRow .scale-btn').forEach(b => b.onclick = () => { sore = b.dataset.v; card.querySelectorAll('#soreRow .scale-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); });
-  card.querySelectorAll('#recRow .scale-btn').forEach(b => b.onclick = () => { rec = b.dataset.v; card.querySelectorAll('#recRow .scale-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); });
+  const SORE_W = ['None', 'Mild', 'Moderate', 'Sore', 'Very sore'], REC_W = ['Beat up', 'Tired', 'Okay', 'Good', 'Fully recovered'];
+  const ready = () => { const b = card.querySelector('#checkinSubmit'); b.disabled = !(sore && rec); b.classList.toggle('ready', !!(sore && rec)); };
+  card.querySelectorAll('#soreRow .scale-btn').forEach(b => b.onclick = () => { sore = b.dataset.v; card.querySelectorAll('#soreRow .scale-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); card.querySelector('#soreWord').textContent = SORE_W[sore - 1]; ready(); });
+  card.querySelectorAll('#recRow .scale-btn').forEach(b => b.onclick = () => { rec = b.dataset.v; card.querySelectorAll('#recRow .scale-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); card.querySelector('#recWord').textContent = REC_W[rec - 1]; ready(); });
   card.querySelector('#checkinSubmit').onclick = async () => {
     if (db) { try { await db.doc(`weekcheckins/${blockKey()}_w${info.week}`).set({ soreness: sore, recovery: rec, date: todayISO() }); } catch (e) {} }
     blockConfig.lastAckedWeek = info.week;
@@ -7872,7 +8154,7 @@ async function renderActivityPanel() {
   });
   const gb = document.getElementById('stepGoalBtn');
   if (gb) gb.onclick = async () => {
-    const v = prompt('Daily step goal (leave blank for the default for your phase):', stepGoalOverride || '');
+    const v = await uiPrompt('Daily step goal', `Leave it blank to use the default for your phase (${(STEP_GOAL_BY_GROUP[phaseGroupOf(nutritionPhase)] || 8000).toLocaleString()}).`, { value: stepGoalOverride || '', placeholder: 'e.g. 10000', inputmode: 'numeric' });
     if (v === null) return;
     const n = parseInt(String(v).replace(/[^0-9]/g, ''), 10);
     stepGoalOverride = n > 0 ? n : null;
@@ -7915,24 +8197,24 @@ async function loadCoachState() {
   if (con) { con.style.display = 'block'; con.textContent = myCoaches.length ? `Coach: ${myCoaches[0].display_name}` : 'Connect to a coach'; }
 }
 document.getElementById('menuConnectCoachBtn').addEventListener('click', async () => {
-  if (!(supaClient && currentUserId)) { alert('Sign in to an account to connect with a coach.'); return; }
+  if (!(supaClient && currentUserId)) { await uiAlert('Sign in first', 'Connecting to a coach needs an account, so your coach has something to see.'); return; }
   if (myCoaches.length) {
     const c = myCoaches[0];
-    if (!confirm(`You're connected to ${c.display_name}. They can see everything you log in FOREVER — workouts, nutrition, weight, measurements, sleep, soreness, steps, your profile (age, sex, height), your email and progress photos — read-only.\n\nDisconnect from ${c.display_name}?`)) return;
+    if (!(await uiConfirm(`Coach: ${c.display_name}`, 'They can see everything you log in FOREVER (workouts, nutrition, weight, measurements, sleep, soreness, steps, your profile, your email and progress photos), read-only.', 'Disconnect', { danger: true }))) return;
     try { await supaClient.from('coach_links').delete().eq('client_id', currentUserId).eq('coach_id', c.coach_id); } catch (e) {}
     await loadCoachState();
-    alert('Disconnected. Your coach can no longer see your data.');
+    await uiAlert('Disconnected', 'Your coach can no longer see your data.');
     return;
   }
-  const code = prompt('Enter your coach\'s code (e.g. FOREVER-AB12).\n\nYour coach will be able to see everything you log — workouts, nutrition, weight, measurements, sleep, soreness, steps, your profile (age, sex, height), your email and progress photos. They can\'t change anything, and you can disconnect anytime.');
+  const code = await uiPrompt('Connect to a coach', "Enter your coach's code. They'll be able to see everything you log (workouts, nutrition, weight, measurements, sleep, soreness, steps, your profile, your email and progress photos). They can't change anything, and you can disconnect anytime.", { placeholder: 'FOREVER-AB12', caps: 'characters' }, 'Connect');
   if (!code || !code.trim()) return;
   try {
     const { data, error } = await supaClient.rpc('connect_to_coach', { p_code: code.trim() });
     if (error) throw error;
     await loadCoachState();
-    alert(`Connected to ${data}. They can now see your progress.`);
+    await uiAlert(`Connected to ${data}`, 'They can now see your progress.');
   } catch (e) {
-    alert((e && e.message) ? e.message.replace(/^.*?: /, '') : 'Couldn\'t connect — check the code and try again.');
+    await uiAlert("Couldn't connect", (e && e.message) ? e.message.replace(/^.*?: /, '') : 'Check the code and try again.');
   }
 });
 
@@ -8034,10 +8316,10 @@ async function renderCoachDashboard(useCache) {
   document.getElementById('coachShareBtn').onclick = async () => {
     const text = `Join my coaching on FOREVER. Open ${location.origin}${location.pathname}, create an account, then Menu → Connect to a coach → ${coachProfile.code}`;
     try { if (navigator.share) { await navigator.share({ text }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
-    try { await navigator.clipboard.writeText(text); alert('Invite copied — paste it to your client.'); } catch (e) { prompt('Copy this invite:', text); }
+    try { await navigator.clipboard.writeText(text); await uiAlert('Invite copied', 'Paste it to your client.'); } catch (e) { await uiDialog({ title: 'Copy this invite', input: { value: text, readonly: true }, ok: 'Done' }); }
   };
   document.getElementById('coachNameBtn').onclick = async () => {
-    const v = prompt('Name your clients see:', coachProfile.display_name || '');
+    const v = await uiPrompt('Your coaching name', 'This is the name your clients see.', { value: coachProfile.display_name || '', placeholder: 'e.g. FOREVER Coaching' });
     if (!v || !v.trim()) return;
     try { await supaClient.from('coaches').update({ display_name: v.trim().slice(0, 60) }).eq('user_id', currentUserId); coachProfile.display_name = v.trim().slice(0, 60); } catch (e) {}
     renderCoachDashboard(true);
@@ -8079,7 +8361,7 @@ async function renderCoachClient(c) {
     <button class="btn-secondary" id="coachRemoveBtn" style="width:100%; margin-top:22px;">Remove client</button>`;
   document.getElementById('coachBackBtn').onclick = () => renderCoachDashboard(true);
   document.getElementById('coachRemoveBtn').onclick = async () => {
-    if (!confirm(`Remove ${nm}? You'll stop seeing their data. They can reconnect with your code.`)) return;
+    if (!(await uiConfirm(`Remove ${nm}?`, "You'll stop seeing their data. They can reconnect with your code.", 'Remove', { danger: true }))) return;
     try { await supaClient.from('coach_links').delete().eq('coach_id', currentUserId).eq('client_id', c.client_id); } catch (e) {}
     renderCoachDashboard();
   };
@@ -8137,7 +8419,7 @@ document.getElementById('shapePhotoInput').addEventListener('change', async (e) 
   if (box) box.insertAdjacentHTML('afterbegin', '<div class="fs-status" id="shapeUploading">Uploading…</div>');
   const url = await uploadProgressPhoto(file, todayName());
   const up = document.getElementById('shapeUploading'); if (up) up.remove();
-  if (!url) { alert('That photo didn\'t upload — check your connection and try again.'); return; }
+  if (!url) { await uiAlert("That photo didn't upload", 'Check your connection and try again.'); return; }
   renderShapePhotos();
 });
 
@@ -8544,7 +8826,7 @@ async function maybeImportLocalData(userId) {
     if (count && count > 0) return; // account already has data — never overwrite it silently
   } catch (e) { return; }
   let doImport = true;
-  try { doImport = confirm(`Found ${localKeys.length} item(s) of training data on this device from before you signed in. Import them into your account now?`); } catch (e) {}
+  try { doImport = await uiConfirm('Bring your data over?', `Found ${localKeys.length} item(s) of training data on this device from before you signed in. Import them into your account now?`, 'Import'); } catch (e) {}
   if (!doImport) return;
   for (const key of localKeys) {
     const path = key.slice('foreverdb:'.length);
@@ -8646,15 +8928,16 @@ async function useSupabaseSession(session) {
 // capture. This just wires the in-app "Report a bug" button to send a note alongside that same
 // error stream, tagged as manual feedback, viewable in the Sentry dashboard.
 let currentUserEmail = null;
-document.getElementById('menuReportBugBtn').addEventListener('click', () => {
-  const desc = prompt('What went wrong? (This gets logged with your account + device info so it can be fixed.)');
+document.getElementById('menuReportBugBtn').addEventListener('click', async () => {
+  document.getElementById('menuOverlay').classList.remove('open');
+  const desc = await uiPrompt('Report a bug', "What went wrong? It's sent with your account and device info so it can be fixed.", { placeholder: 'e.g. Rest timer froze after…' }, 'Send');
   if (!desc) return;
   try {
     if (window.Sentry) {
       window.Sentry.captureMessage(desc, { level: 'info', tags: { source: 'manual-feedback' } });
     }
   } catch (e) {}
-  alert('Thanks — logged it.');
+  await uiAlert('Thanks — logged it', "It's on the list to fix.");
 });
 // Wipes everything this account has stored: every log and setting, every progress photo, and any
 // coach connection. Uses the same permissions the app already has (each person can only delete
@@ -8681,21 +8964,22 @@ async function deleteAllMyData() {
   return { ok: !photoErr, photos, photoErr };
 }
 document.getElementById('menuDeleteDataBtn').addEventListener('click', async () => {
-  if (!confirm('Delete ALL your FOREVER data?\n\nThis permanently erases your workouts, nutrition, weight, measurements, progress photos, settings and any coach connection. It can\'t be undone.\n\nTip: download a full backup first if you might want it later.')) return;
-  const typed = prompt('Type DELETE to confirm.');
+  document.getElementById('menuOverlay').classList.remove('open');
+  if (!(await uiConfirm('Delete all your data?', "This permanently erases your workouts, nutrition, weight, measurements, progress photos, settings and any coach connection. It can't be undone.\n\nTip: download a full backup first if you might want it later.", 'Continue', { danger: true }))) return;
+  const typed = await uiPrompt('Type DELETE to confirm', '', { placeholder: 'DELETE', caps: 'characters' }, 'Delete everything');
   if (!typed || typed.trim().toUpperCase() !== 'DELETE') return;
   const r = await deleteAllMyData();
-  if (!r.ok && !r.photoErr) { alert('Something went wrong and nothing was deleted. Check your connection and try again.'); return; }
+  if (!r.ok && !r.photoErr) { await uiAlert('Nothing was deleted', 'Something went wrong. Check your connection and try again.'); return; }
   // Logs are gone at this point — always reset the app so nothing in memory gets saved back.
   if (db && db.clearOutbox) db.clearOutbox();
   if (db && db.clearLocalCache) { try { db.clearLocalCache(); } catch (e) {} }
   if (r.photoErr) {
-    alert('Your logs and settings were deleted, but some progress photos couldn\'t be removed. Log back in and tap Delete all my data again to finish.');
+    await uiAlert('Almost done', "Your logs and settings were deleted, but some progress photos couldn't be removed. Log back in and tap Delete all my data again to finish.");
     if (supaClient) { try { await supaClient.auth.signOut(); } catch (e) {} }
     location.reload();
     return;
   }
-  alert(`Done — all your data${r.photos ? ` and ${r.photos} photo${r.photos === 1 ? '' : 's'}` : ''} were deleted. Your login still exists with nothing in it. To have the login removed too, email the address in the Privacy Policy.`);
+  await uiAlert('Your data is deleted', `All your data${r.photos ? ` and ${r.photos} photo${r.photos === 1 ? '' : 's'}` : ''} were deleted. Your login still exists with nothing in it. To have the login removed too, email the address in the Privacy Policy.`);
   if (supaClient) { try { await supaClient.auth.signOut(); } catch (e) {} }
   location.reload();
 });

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'forever-app-v4';
+const CACHE_NAME = 'forever-app-v8';
 // Fonts live in their own cache so an app update never throws them away.
 const FONT_CACHE = 'forever-fonts-v1';
 const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png',
