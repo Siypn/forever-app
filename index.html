@@ -880,7 +880,7 @@
   /* Program builder */
   .bld-q { font-size: 10.5px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin: 22px 0 10px; }
   .bld-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .bld-focus { display: grid; gap: 8px; }
+  .bld-focus { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .bld-focus-opt { text-align: left; background: none; border: 1px solid var(--hairline); border-radius: 16px; padding: 13px 16px; color: var(--text); font: inherit; cursor: pointer; transition: border-color .25s var(--ease), background-color .25s var(--ease); }
   .bld-focus-opt span { display: block; font-size: 14px; font-weight: 600; }
   .bld-focus-opt em { display: block; font-style: normal; font-size: 11.5px; color: var(--text-dim); margin-top: 3px; line-height: 1.45; }
@@ -2125,10 +2125,10 @@ Object.keys(EXERCISE_LIBRARY).forEach(m => EXERCISE_LIBRARY[m].forEach(e => { EX
 // squats → glutes). Legs are split into quads / hamstrings / glutes / calves. Volume is judged on
 // the block's average week (base + overload), not just whichever week you happen to be in.
 // ============================================================================================
-const VOLUME_MUSCLES = ['Chest', 'Back', 'Shoulders', 'Rear Delts', 'Traps', 'Quads', 'Hamstrings', 'Glutes', 'Calves', 'Biceps', 'Triceps', 'Forearms', 'Abs'];
+const VOLUME_MUSCLES = ['Chest', 'Back', 'Lats', 'Shoulders', 'Rear Delts', 'Traps', 'Quads', 'Hamstrings', 'Glutes', 'Calves', 'Biceps', 'Triceps', 'Forearms', 'Abs'];
 // Get plenty from compounds (forearms: every row, pull and curl is a grip set); direct work is optional.
 const OPTIONAL_MUSCLES = new Set(['Abs', 'Glutes', 'Forearms', 'Traps']);
-const UPPER_MUSCLES = new Set(['Chest', 'Back', 'Shoulders', 'Rear Delts', 'Traps', 'Biceps', 'Triceps', 'Forearms', 'Abs']);
+const UPPER_MUSCLES = new Set(['Chest', 'Back', 'Lats', 'Shoulders', 'Rear Delts', 'Traps', 'Biceps', 'Triceps', 'Forearms', 'Abs']);
 const ARM_MUSCLES = new Set(['Biceps', 'Triceps', 'Forearms']);
 // An "Arms" day (Arms, Shoulders & Arms, Arms & Delts…) only takes arm and shoulder work —
 // the optimizer and builder never park a chest press or calf raise on it.
@@ -2157,17 +2157,19 @@ const SPECIAL_CONTRIB = {
   'Trap Bar Deadlift': { Back: 0.5, Quads: 0.5, Hamstrings: 0.5, Glutes: 0.5, Traps: 0.5 },
   'Conventional Deadlift': { Back: 0.5, Hamstrings: 0.5, Glutes: 0.5, Traps: 0.5 },
   'Reverse Hyperextension': { Glutes: 1, Hamstrings: 0.5 },
-  'Straight-Arm Pulldown': { Back: 1 },
+  'Straight-Arm Pulldown': { Lats: 1 },
   'Face Pull': { 'Rear Delts': 1, Traps: 0.5 }, 'Upright Row': { Shoulders: 1, Traps: 0.5 },
   'Dips': { Chest: 1, Triceps: 0.5, Shoulders: 0.5 },
   'Rack Pull': { Back: 1, Glutes: 0.5, Hamstrings: 0.5, Traps: 0.5 },
-  'Dumbbell Pullover': { Back: 1 }, 'Pullover Machine': { Back: 1 },
+  'Dumbbell Pullover': { Lats: 1 }, 'Pullover Machine': { Lats: 1 },
   'Band Face Pull': { 'Rear Delts': 1, Traps: 0.5 },
   // Neutral / overhand curls hit brachialis + brachioradialis hard, so they also count toward forearms.
   'Hammer Curl': { Biceps: 1, Forearms: 0.5 }, 'Pronated Cable Bar Curl': { Biceps: 1, Forearms: 0.5 },
   'Cross-Body Hammer Curl': { Biceps: 1, Forearms: 0.5 }, 'Rope Hammer Curl': { Biceps: 1, Forearms: 0.5 },
   'Reverse EZ-Bar Curl': { Forearms: 1, Biceps: 0.5 }, 'Reverse Dumbbell Curl': { Forearms: 1, Biceps: 0.5 },
 };
+const LAT_PULLS = new Set(['Pull-Up', 'Chin-Up', 'Band Pulldown', 'Pulldown', 'Close-Grip Pulldown', 'Assisted Pull-Up Machine',
+  'Plate-Loaded Pulldown', 'Dumbbell Row', 'Single-Arm Cable Row', 'Plate-Loaded Low Row']);
 function muscleContributions(exName, type) {
   if (SPECIAL_CONTRIB[exName]) return SPECIAL_CONTRIB[exName];
   if (LEG_PARTS[exName]) return LEG_PARTS[exName];
@@ -2177,7 +2179,14 @@ function muscleContributions(exName, type) {
   const out = { [m]: 1 };
   if (type === 'compound') {
     if (m === 'Chest') { out.Triceps = 0.5; out.Shoulders = 0.5; }
-    else if (m === 'Back') { out.Biceps = 0.5; if (/Row/.test(exName)) out['Rear Delts'] = 0.5; } // rows pull the elbows back → rear delts
+    else if (m === 'Back') {
+      // Back is split in two: lats (width: vertical pulls and lat-biased single-arm/low rows) and
+      // upper back (thickness: the other rows). Each still gives the other half a set.
+      if (LAT_PULLS.has(exName)) { delete out.Back; out.Lats = 1; out.Back = 0.5; }
+      else out.Lats = 0.5;
+      out.Biceps = 0.5;
+      if (/Row/.test(exName)) out['Rear Delts'] = 0.5; // rows pull the elbows back → rear delts
+    }
     else if (m === 'Shoulders') out.Triceps = 0.5;
     else if (m === 'Triceps') out.Chest = 0.5;
   }
@@ -2185,7 +2194,8 @@ function muscleContributions(exName, type) {
 }
 const VOLUME_LANDMARKS = {
   Chest: { mev: 8, mav: 14, mrv: 22 },
-  Back: { mev: 10, mav: 16, mrv: 25 },
+  Back: { mev: 6, mav: 12, mrv: 20 },
+  Lats: { mev: 6, mav: 12, mrv: 20 },
   Shoulders: { mev: 8, mav: 16, mrv: 24 },
   'Rear Delts': { mev: 6, mav: 12, mrv: 20 },
   Traps: { mev: 0, mav: 8, mrv: 16 },
@@ -2266,7 +2276,40 @@ function libraryCandidates(muscle) {
   if (['Quads', 'Hamstrings', 'Glutes', 'Calves'].includes(muscle)) {
     return EXERCISE_LIBRARY.Legs.filter(e => (LEG_PARTS[e.name] || {})[muscle] >= 1 && availableAtMyGym(e.name));
   }
-  return (EXERCISE_LIBRARY[muscle] || []).filter(e => { const c = muscleContributions(e.name, e.type); return c && c[muscle] >= 1 && availableAtMyGym(e.name); });
+  return (EXERCISE_LIBRARY[muscle] || (muscle === 'Lats' ? EXERCISE_LIBRARY.Back : [])).filter(e => { const c = muscleContributions(e.name, e.type); return c && c[muscle] >= 1 && availableAtMyGym(e.name); });
+}
+// What a complete arm day needs, the way a coach would write it. Returns what to add, in order.
+//  · biceps and triceps balanced (if one side gets 3 moves, the other gets 3 too), at least 2 each
+//  · a hammer / reverse curl: brachialis + forearms, the part a straight curl misses
+//  · an overhead triceps move (or skull crusher) for the long head, the biggest part of the triceps
+//  · side delts (a lateral raise): arms + delts is the classic pairing and it's what makes arms look wide
+const ARM_DAY_MAX = 8;
+function armDayNeeds(day) {
+  const ex = day.exercises || [];
+  const c = e => muscleContributions(e.name, e.type) || {};
+  const n = m => ex.filter(e => (c(e)[m] || 0) >= 1).length;
+  const has = re => ex.some(e => re.test(e.name));
+  const needs = [];
+  const room = () => ex.length + needs.length < ARM_DAY_MAX;
+  let bi = n('Biceps'), tri = n('Triceps');
+  // Specific movements first, then balance the two sides (so adding one never leaves it lopsided).
+  if (!has(/Hammer|Reverse .*Curl|Pronated/) && room()) {
+    needs.push({ muscle: 'Biceps', re: /Hammer|Pronated|Reverse/, why: 'No hammer or reverse curl. Those train the brachialis and forearms, the part of the arm a straight curl misses.' }); bi++;
+  }
+  if (!has(/Overhead|Skull|French|JM Press/) && room()) {
+    needs.push({ muscle: 'Triceps', re: /Overhead/, why: 'Nothing trains the triceps long head in a stretch. It is the biggest part of the triceps and grows best from overhead work.' }); tri++;
+  }
+  const want = Math.max(2, bi, tri);
+  while (bi < want && room()) {
+    needs.push({ muscle: 'Biceps', re: /Incline|Bayesian|Preacher|Spider|Concentration/, why: `Arms day has ${tri} triceps moves but only ${bi} for biceps. Matching them keeps the arm balanced.` }); bi++;
+  }
+  while (tri < want && room()) {
+    needs.push({ muscle: 'Triceps', re: /Overhead|Skull|Pushdown/, why: `Arms day has ${bi} biceps moves but only ${tri} for triceps. Matching them keeps the arm balanced.` }); tri++;
+  }
+  if (!ex.some(e => (c(e).Shoulders || 0) >= 1 && e.type === 'isolation') && room()) {
+    needs.push({ muscle: 'Shoulders', re: /Lateral|Shoulder Fly|Y-Raise/, why: 'Side delts pair naturally with arms (small muscles, nothing overlapping) and they are what make the arms look wide from the front.' });
+  }
+  return needs;
 }
 function optimizeSplit(program, opts) {
   opts = opts || {};
@@ -2312,6 +2355,24 @@ function optimizeSplit(program, opts) {
   }));
   DAY_ORDER.forEach(day => { prog[day].exercises = (prog[day].exercises || []).filter(Boolean); });
 
+  const armAdds = [];
+  // 1a) Complete every Arms day first, so the trim below sees the real week (balanced biceps/triceps, a hammer curl, overhead triceps, side delts).
+  trainingDays.filter(d => isArmDay(prog[d])).forEach(d => {
+    armDayNeeds(prog[d]).forEach(nd => {
+      const sameDay = new Set(prog[d].exercises.map(e => e.name));
+      const elsewhere = usedNames();
+      const cands = libraryCandidates(nd.muscle).filter(e => !sameDay.has(e.name) && e.equip !== 'bodyweight' && e.equip !== 'band');
+      const score = e => (nd.re.test(e.name) ? 0 : 6) + (e.type === 'isolation' ? 0 : 4) + (elsewhere.has(e.name) ? 2 : 0) + Math.max(0, equipRank.indexOf(e.equip));
+      const pick = cands.sort((a, b) => score(a) - score(b))[0];
+      if (!pick) return;
+      const item = { name: pick.name, type: pick.type };
+      prog[d].exercises.push(item);
+      addsPerDay[d] = (addsPerDay[d] || 0) + 1;
+      const ch = { kind: 'add', day: d, exercise: { name: pick.name, type: pick.type }, muscle: nd.muscle, reason: nd.why };
+      changes.push(ch); armAdds.push({ d, item, ch });
+    });
+  });
+
   // 1) Trim muscles well past their productive range (biggest offenders first).
   VOLUME_MUSCLES.forEach(muscle => {
     const lm = VOLUME_LANDMARKS[muscle];
@@ -2334,6 +2395,17 @@ function optimizeSplit(program, opts) {
         reason: `${muscle} is at ~${fmtSets(tot)} sets/week (sweet spot ${lm.mev}–${lm.mav}). Past that, extra sets mostly add fatigue, not growth.` });
     }
   });
+
+  // 1c) The trim above moves extra arm work off chest/back days. If a muscle is still past what it
+  // can recover from, take back the arm-day additions that pushed it there (newest first).
+  for (let k = armAdds.length - 1; k >= 0; k--) {
+    const a = armAdds[k]; const t = current().totals;
+    const c = muscleContributions(a.item.name, a.item.type) || {};
+    if (!Object.keys(c).some(m => c[m] > 0 && t[m] > VOLUME_LANDMARKS[m].mrv)) continue;
+    const idx = prog[a.d].exercises.indexOf(a.item); if (idx === -1) continue;
+    prog[a.d].exercises.splice(idx, 1);
+    const ci = changes.indexOf(a.ch); if (ci !== -1) changes.splice(ci, 1);
+  }
 
   // 2) Fill muscles under their minimum, and spread big muscles across 2 days.
   const pickExercise = (muscle, crossRegion, newDayForMajor) => {
@@ -2372,7 +2444,7 @@ function optimizeSplit(program, opts) {
     else pool = fresh(same).length ? fresh(same) : same.length ? same : (DAY_ORDER.some(d => (prog[d].exercises || []).length && dayRegion(d) === region) ? [] : fresh(ok));
     return pool.sort((a, b) => dayLoad(a) - dayLoad(b))[0] || null;
   };
-  const MAJOR = ['Chest', 'Back', 'Shoulders', 'Quads', 'Hamstrings'];
+  const MAJOR = ['Chest', 'Back', 'Lats', 'Shoulders', 'Quads', 'Hamstrings'];
   VOLUME_MUSCLES.filter(m => !OPTIONAL_MUSCLES.has(m)).forEach(muscle => {
     const lm = VOLUME_LANDMARKS[muscle];
     let guard = 0;
@@ -2429,29 +2501,29 @@ const BUILDER_PATTERNS = {
 // slot = 'Muscle:c|i[:Pattern]'
 const BUILDER_DAYS = {
   FULL_A: { title: 'Full Body A', slots: ['Quads:c:Squat', 'Chest:c', 'Back:c:Row', 'Hamstrings:c:Hinge', 'Shoulders:i:Lateral', 'Biceps:i', 'Triceps:i', 'Calves:i', 'Abs:i'] },
-  FULL_B: { title: 'Full Body B', slots: ['Hamstrings:c:Hinge', 'Chest:c:Incline', 'Back:c:Pull', 'Quads:c:Lunge', 'Shoulders:c', 'Shoulders:i:Lateral', 'Hamstrings:i:Curl', 'Triceps:i', 'Biceps:i', 'Abs:i'] },
+  FULL_B: { title: 'Full Body B', slots: ['Hamstrings:c:Hinge', 'Chest:c:Incline', 'Lats:c:Pull', 'Quads:c:Lunge', 'Shoulders:c', 'Shoulders:i:Lateral', 'Hamstrings:i:Curl', 'Triceps:i', 'Biceps:i', 'Abs:i'] },
   FULL_C: { title: 'Full Body C', slots: ['Quads:c:Squat', 'Chest:c:Incline', 'Back:c:Row', 'Quads:i', 'Hamstrings:i:Curl', 'Rear Delts:i', 'Biceps:i', 'Calves:i'] },
-  UPPER_A: { title: 'Upper A', slots: ['Chest:c', 'Back:c:Row', 'Shoulders:c', 'Back:c:Pull', 'Shoulders:i:Lateral', 'Chest:i', 'Triceps:i', 'Biceps:i'] },
-  UPPER_B: { title: 'Upper B', slots: ['Back:c:Pull', 'Chest:c:Incline', 'Back:c:Row', 'Shoulders:i:Lateral', 'Chest:i', 'Rear Delts:i', 'Biceps:i', 'Triceps:i'] },
+  UPPER_A: { title: 'Upper A', slots: ['Chest:c', 'Back:c:Row', 'Shoulders:c', 'Lats:c:Pull', 'Shoulders:i:Lateral', 'Chest:i', 'Triceps:i', 'Biceps:i'] },
+  UPPER_B: { title: 'Upper B', slots: ['Lats:c:Pull', 'Chest:c:Incline', 'Back:c:Row', 'Shoulders:i:Lateral', 'Chest:i', 'Rear Delts:i', 'Biceps:i', 'Triceps:i'] },
   LOWER_A: { title: 'Lower A', slots: ['Quads:c:Squat', 'Hamstrings:c:Hinge', 'Quads:i', 'Hamstrings:i:Curl', 'Glutes:c:Thrust', 'Calves:i', 'Abs:i'] },
   LOWER_B: { title: 'Lower B', slots: ['Hamstrings:c:Hinge', 'Quads:c:Squat', 'Quads:c:Lunge', 'Hamstrings:i:Curl', 'Calves:i', 'Abs:i'] },
   PUSH: { title: 'Push', slots: ['Chest:c', 'Shoulders:c', 'Chest:c:Incline', 'Shoulders:i:Lateral', 'Chest:i', 'Triceps:i', 'Triceps:i', 'Shoulders:i:Lateral'] },
-  PULL: { title: 'Pull', slots: ['Back:c:Pull', 'Back:c:Row', 'Back:c:Row', 'Rear Delts:i', 'Biceps:i', 'Biceps:i', 'Back:i', 'Traps:i'] },
+  PULL: { title: 'Pull', slots: ['Lats:c:Pull', 'Back:c:Row', 'Back:c:Row', 'Rear Delts:i', 'Biceps:i', 'Biceps:i', 'Lats:i', 'Traps:i'] },
   LEGS: { title: 'Legs', slots: ['Quads:c:Squat', 'Hamstrings:c:Hinge', 'Quads:c:Lunge', 'Quads:i', 'Hamstrings:i:Curl', 'Calves:i', 'Abs:i'] },
   GLUTE_HAM: { title: 'Glutes & Hamstrings', slots: ['Glutes:c:Thrust', 'Hamstrings:c:Hinge', 'Glutes:i', 'Hamstrings:i:Curl', 'GluteMed', 'Calves:i', 'Abs:i'] },
   GLUTE_QUAD: { title: 'Glutes & Quads', slots: ['Quads:c:Squat', 'Glutes:c:Thrust', 'Quads:c:Lunge', 'GluteMed', 'Quads:i', 'Glutes:i', 'Calves:i'] },
   GLUTE_PUMP: { title: 'Glute Focus', slots: ['Glutes:c:Thrust', 'Quads:c:Lunge', 'Glutes:i', 'Hamstrings:i:Curl', 'GluteMed', 'Abs:i'] },
-  FULL_GA: { title: 'Lower Focus + Upper', slots: ['Glutes:c:Thrust', 'Quads:c:Squat', 'Back:c:Pull', 'GluteMed', 'Chest:c', 'Hamstrings:i:Curl', 'Shoulders:i:Lateral'] },
+  FULL_GA: { title: 'Lower Focus + Upper', slots: ['Glutes:c:Thrust', 'Quads:c:Squat', 'Lats:c:Pull', 'GluteMed', 'Chest:c', 'Hamstrings:i:Curl', 'Shoulders:i:Lateral'] },
   FULL_GB: { title: 'Glutes & Hams + Upper', slots: ['Hamstrings:c:Hinge', 'Glutes:c:Thrust', 'Back:c:Row', 'Quads:c:Lunge', 'Shoulders:c', 'Glutes:i', 'Abs:i'] },
-  UPPER_LITE: { title: 'Upper Body', slots: ['Back:c:Pull', 'Chest:c', 'Shoulders:c', 'Back:c:Row', 'Shoulders:i:Lateral', 'Triceps:i', 'Biceps:i'] },
-  UPPER_DELTS: { title: 'Shoulders & Back', slots: ['Shoulders:c', 'Back:c:Pull', 'Shoulders:i:Lateral', 'Chest:c:Incline', 'Rear Delts:i', 'Back:c:Row', 'Biceps:i', 'Triceps:i'] },
+  UPPER_LITE: { title: 'Upper Body', slots: ['Lats:c:Pull', 'Chest:c', 'Shoulders:c', 'Back:c:Row', 'Shoulders:i:Lateral', 'Triceps:i', 'Biceps:i'] },
+  UPPER_DELTS: { title: 'Shoulders & Back', slots: ['Shoulders:c', 'Lats:c:Pull', 'Shoulders:i:Lateral', 'Chest:c:Incline', 'Rear Delts:i', 'Back:c:Row', 'Biceps:i', 'Triceps:i'] },
   ARMS_DELTS: { title: 'Arms & Delts', slots: ['Shoulders:i:Lateral', 'Biceps:i', 'Triceps:i', 'Rear Delts:i', 'Biceps:i', 'Triceps:i', 'Forearms:i', 'Traps:i'] },
   // '!' marks an accessory the day must keep (an arm day without two curls isn't an arm day).
   ARMS: { title: 'Arms', slots: ['Triceps:c', 'Biceps:i!', 'Triceps:i!', 'Biceps:i:Curl!', 'Triceps:i', 'Shoulders:i:Lateral', 'Forearms:i', 'Rear Delts:i', 'Biceps:i'] },
-  ARNOLD_CB: { title: 'Chest & Back', slots: ['Chest:c', 'Back:c:Row', 'Chest:c:Incline', 'Back:c:Pull', 'Chest:i', 'Back:i', 'Abs:i'] },
+  ARNOLD_CB: { title: 'Chest & Back', slots: ['Chest:c', 'Back:c:Row', 'Chest:c:Incline', 'Lats:c:Pull', 'Chest:i', 'Lats:i', 'Abs:i'] },
   ARNOLD_SA: { title: 'Shoulders & Arms', slots: ['Shoulders:c', 'Shoulders:i:Lateral', 'Biceps:i', 'Triceps:i', 'Rear Delts:i', 'Biceps:i', 'Triceps:i'] },
   BRO_CHEST: { title: 'Chest', slots: ['Chest:c', 'Chest:c:Incline', 'Chest:c', 'Chest:i', 'Chest:i', 'Triceps:i'] },
-  BRO_BACK: { title: 'Back', slots: ['Back:c:Pull', 'Back:c:Row', 'Back:c:Row', 'Back:c:Pull', 'Back:i', 'Biceps:i', 'Traps:i'] },
+  BRO_BACK: { title: 'Back', slots: ['Lats:c:Pull', 'Back:c:Row', 'Back:c:Row', 'Lats:c:Pull', 'Lats:i', 'Biceps:i', 'Traps:i'] },
   BRO_SHOULDERS: { title: 'Shoulders', slots: ['Shoulders:c', 'Shoulders:i:Lateral', 'Rear Delts:i', 'Shoulders:i:Lateral', 'Traps:i', 'Abs:i', 'Calves:i'] },
 };
 // Split styles the user can pick (glute focus keeps its own lower-body-heavy structure).
@@ -2481,11 +2553,22 @@ const BUILDER_PLANS = {
   balanced: { 2: ['FULL_A', 'FULL_B'], 3: ['FULL_A', 'FULL_B', 'FULL_C'], 4: ['UPPER_A', 'LOWER_A', 'UPPER_B', 'LOWER_B'], 5: ['UPPER_A', 'LOWER_A', 'PUSH', 'PULL', 'LEGS'], 6: ['PUSH', 'PULL', 'LEGS', 'PUSH', 'PULL', 'LEGS'] },
   glutes: { 2: ['FULL_GA', 'FULL_GB'], 3: ['GLUTE_HAM', 'UPPER_LITE', 'GLUTE_QUAD'], 4: ['GLUTE_HAM', 'UPPER_LITE', 'GLUTE_QUAD', 'UPPER_B'], 5: ['GLUTE_HAM', 'UPPER_LITE', 'GLUTE_QUAD', 'UPPER_B', 'GLUTE_PUMP'], 6: ['GLUTE_HAM', 'UPPER_LITE', 'GLUTE_QUAD', 'UPPER_B', 'GLUTE_PUMP', 'FULL_GB'] },
   upper: { 2: ['FULL_A', 'FULL_B'], 3: ['UPPER_DELTS', 'LOWER_A', 'UPPER_A'], 4: ['UPPER_DELTS', 'LOWER_A', 'UPPER_B', 'ARMS_DELTS'], 5: ['PUSH', 'PULL', 'LOWER_A', 'UPPER_DELTS', 'ARMS_DELTS'], 6: ['PUSH', 'PULL', 'LEGS', 'UPPER_DELTS', 'PULL', 'ARMS_DELTS'] },
+  // Single-area goals: the focus area gets an extra day (or a full-body day that hits it again).
+  legs: { 2: ['FULL_A', 'FULL_B'], 3: ['LOWER_A', 'UPPER_A', 'LEGS'], 4: ['LOWER_A', 'UPPER_A', 'LEGS', 'FULL_C'], 5: ['LOWER_A', 'UPPER_A', 'LEGS', 'UPPER_B', 'LOWER_B'], 6: ['LEGS', 'PUSH', 'LOWER_A', 'PULL', 'LOWER_B', 'UPPER_A'] },
+  chest: { 2: ['FULL_A', 'FULL_B'], 3: ['FULL_A', 'PUSH', 'FULL_C'], 4: ['UPPER_A', 'LOWER_A', 'PUSH', 'UPPER_B'], 5: ['PUSH', 'PULL', 'LEGS', 'UPPER_A', 'FULL_B'], 6: ['PUSH', 'PULL', 'LEGS', 'PUSH', 'UPPER_B', 'LOWER_A'] },
+  back: { 2: ['FULL_A', 'FULL_B'], 3: ['FULL_A', 'PULL', 'FULL_C'], 4: ['UPPER_A', 'LOWER_A', 'PULL', 'UPPER_B'], 5: ['PULL', 'PUSH', 'LEGS', 'UPPER_B', 'FULL_A'], 6: ['PULL', 'PUSH', 'LEGS', 'PULL', 'UPPER_A', 'LOWER_A'] },
+  shoulders: { 2: ['FULL_A', 'FULL_B'], 3: ['UPPER_DELTS', 'LOWER_A', 'UPPER_A'], 4: ['UPPER_DELTS', 'LOWER_A', 'UPPER_B', 'ARMS_DELTS'], 5: ['PUSH', 'PULL', 'LOWER_A', 'UPPER_DELTS', 'ARMS_DELTS'], 6: ['PUSH', 'PULL', 'LEGS', 'UPPER_DELTS', 'PUSH', 'ARMS_DELTS'] },
+  arms: { 2: ['FULL_A', 'FULL_B'], 3: ['UPPER_A', 'LOWER_A', 'ARMS'], 4: ['UPPER_A', 'LOWER_A', 'UPPER_B', 'ARMS'], 5: ['PUSH', 'PULL', 'LOWER_A', 'UPPER_B', 'ARMS'], 6: ['PUSH', 'PULL', 'LEGS', 'ARMS', 'UPPER_A', 'ARMS_DELTS'] },
 };
 const BUILDER_FOCUS = {
-  balanced: { label: 'Balanced', desc: 'Whole-body muscle, every muscle trained twice a week.' },
-  glutes: { label: 'Glutes & legs', desc: 'Most of the week goes to glutes, hamstrings and quads; upper body kept strong and toned.' },
-  upper: { label: 'Upper body', desc: 'Wider shoulders, back and arms (V-taper); legs kept at a solid maintenance dose.' },
+  balanced: { label: 'Balanced', desc: 'Every muscle trained twice a week.' },
+  legs: { label: 'Legs', desc: 'Bigger quads, hamstrings and calves; upper body held steady.' },
+  glutes: { label: 'Glutes', desc: 'Most of the week goes to glutes and hamstrings; upper body toned.' },
+  upper: { label: 'Upper body', desc: 'Wider shoulders, back and arms (V-taper); legs maintained.' },
+  chest: { label: 'Chest', desc: 'Extra chest volume, with the triceps work that comes with it.' },
+  back: { label: 'Back', desc: 'Width and thickness: lats, upper back and rear delts.' },
+  shoulders: { label: 'Shoulders', desc: 'Capped side and rear delts for width.' },
+  arms: { label: 'Arms', desc: 'Biceps, triceps and forearms brought up.' },
 };
 const BUILDER_SPLIT_NAMES = { 2: 'Full body', 3: 'Full body', 4: 'Upper / Lower', 5: 'Upper / Lower + Push / Pull / Legs', 6: 'Push / Pull / Legs ×2' };
 const BUILDER_MAX_EX = { 45: 5, 60: 6, 75: 7, 90: 8 };
@@ -2496,7 +2579,7 @@ function builderCandidates(muscle, tier) {
     const extra = muscle === 'Glutes' ? [...EXERCISE_LIBRARY.Back].filter(e => (SPECIAL_CONTRIB[e.name] || {}).Glutes >= 1) : [];
     return [...EXERCISE_LIBRARY.Legs.filter(e => (LEG_PARTS[e.name] || {})[muscle] >= 1), ...extra].filter(ok);
   }
-  return (EXERCISE_LIBRARY[muscle] || []).filter(e => { const c = muscleContributions(e.name, e.type); return c && c[muscle] >= 1 && ok(e); });
+  return (EXERCISE_LIBRARY[muscle] || (muscle === 'Lats' ? EXERCISE_LIBRARY.Back : [])).filter(e => { const c = muscleContributions(e.name, e.type); return c && c[muscle] >= 1 && ok(e); });
 }
 const BUILDER_EQUIP_RANK = {
   home: { dumbbell: 0, bodyweight: 1, band: 2 },
@@ -2509,10 +2592,22 @@ function builderDefaultPrio(focus) {
   const p = {}; VOLUME_MUSCLES.forEach(m => { p[m] = 'normal'; });
   if (focus === 'glutes') {
     ['Glutes', 'Hamstrings'].forEach(m => { p[m] = 'more'; });
-    ['Chest', 'Back', 'Shoulders', 'Rear Delts', 'Biceps', 'Triceps', 'Forearms', 'Traps'].forEach(m => { p[m] = 'less'; });
+    ['Chest', 'Back', 'Lats', 'Shoulders', 'Rear Delts', 'Biceps', 'Triceps', 'Forearms', 'Traps'].forEach(m => { p[m] = 'less'; });
   } else if (focus === 'upper') {
-    ['Shoulders', 'Back', 'Rear Delts'].forEach(m => { p[m] = 'more'; });
+    ['Shoulders', 'Back', 'Lats', 'Rear Delts'].forEach(m => { p[m] = 'more'; });
     ['Quads', 'Hamstrings', 'Calves', 'Glutes'].forEach(m => { p[m] = 'less'; });
+  } else {
+    // Single-area goals (a specialization block): bring that area up, and drop the muscles that
+    // don't help it to a maintenance dose so there's time and recovery left for the extra sets.
+    // Every other muscle stays normal, and any of it can be changed on the muscle chips.
+    const G = {
+      legs: { up: ['Quads', 'Hamstrings', 'Calves', 'Glutes'], keep: ['Chest', 'Back', 'Lats', 'Shoulders', 'Rear Delts', 'Biceps', 'Triceps'] },
+      chest: { up: ['Chest'], keep: ['Quads', 'Hamstrings', 'Calves', 'Biceps'] },
+      back: { up: ['Back', 'Lats', 'Rear Delts'], keep: ['Quads', 'Hamstrings', 'Calves', 'Triceps'] },
+      shoulders: { up: ['Shoulders', 'Rear Delts'], keep: ['Quads', 'Hamstrings', 'Calves', 'Biceps'] },
+      arms: { up: ['Biceps', 'Triceps', 'Forearms'], keep: ['Quads', 'Hamstrings', 'Calves', 'Chest'] },
+    }[focus];
+    if (G) { G.up.forEach(m => { p[m] = 'more'; }); G.keep.forEach(m => { p[m] = 'less'; }); }
   }
   return p;
 }
@@ -2536,7 +2631,7 @@ function builderTargets(experience, focus, prio) {
   return t;
 }
 // Opposing muscles recover while the other works, so pairing them costs nothing in performance.
-const ANTAGONISTS = [['Biceps', 'Triceps'], ['Chest', 'Back'], ['Shoulders', 'Rear Delts'], ['Quads', 'Hamstrings'], ['Calves', 'Abs'], ['Forearms', 'Traps']];
+const ANTAGONISTS = [['Biceps', 'Triceps'], ['Chest', 'Back'], ['Lats', 'Chest'], ['Shoulders', 'Rear Delts'], ['Quads', 'Hamstrings'], ['Calves', 'Abs'], ['Forearms', 'Traps']];
 function pairAntagonists(day) {
   const iso = day.exercises.filter(e => e.type === 'isolation');
   const used = new Set(); const pairs = {}; const order = [];
@@ -2564,7 +2659,8 @@ function buildProgram(opts) {
   const maxEx = BUILDER_MAX_EX[minutes] - (experience === 'beginner' && minutes >= 75 ? 1 : 0);
   // Supersets of opposing accessories save ~40% of their time. On by default for short sessions.
   const supersets = opts.supersets != null ? !!opts.supersets : minutes <= 60;
-  const plan = style !== 'auto' ? BUILDER_STYLE_PLANS[style][days] : BUILDER_PLANS[focus][days];
+  const planKey = BUILDER_PLANS[focus] ? focus : 'balanced';
+  const plan = style !== 'auto' ? BUILDER_STYLE_PLANS[style][days] : BUILDER_PLANS[planKey][days];
   const weekdays = BUILDER_WEEKDAYS[days];
   const rank = BUILDER_EQUIP_RANK[tier];
   const useCount = {};
@@ -2608,7 +2704,7 @@ function buildProgram(opts) {
   // one whose muscle is furthest below its weekly target (so arms aren't the first thing cut).
   const minPerDay = Math.min(4, maxEx);
   // Calves and abs matter, but they never outrank a big muscle that's short of work.
-  const gapOf = (slot, v) => { const m = slot.split(':')[0] === 'GluteMed' ? 'Glutes' : slot.split(':')[0]; return (targets[m] - (v[m] || 0)) / Math.max(4, targets[m]) * (['Calves', 'Abs', 'Forearms', 'Traps'].includes(m) ? 0.6 : 1); };
+  const gapOf = (slot, v) => { const m = slot.split(':')[0] === 'GluteMed' ? 'Glutes' : slot.split(':')[0]; return (targets[m] - (v[m] || 0)) / Math.max(4, targets[m]) * (['Calves', 'Abs', 'Forearms', 'Traps'].includes(m) && prio[m] !== 'more' ? 0.6 : 1); };
   weekdays.forEach(d => { // first, no day ends up with fewer than 4 exercises
     for (let g = 0; g < 10 && prog[d].exercises.length < minPerDay && (pendingIso[d] || []).length; g++) {
       const v = vol();
@@ -2678,6 +2774,25 @@ function buildProgram(opts) {
     const v2 = vol();
     if (VOLUME_MUSCLES.some(m => v2[m] > VOLUME_LANDMARKS[m].mrv && !(v[m] > VOLUME_LANDMARKS[m].mrv))) { prog[d].exercises.pop(); useCount[e.name] = Math.max(0, (useCount[e.name] || 1) - 1); gaveUp.add(under); }
   }
+  // Complete every Arms day (balanced biceps/triceps, hammer curl, overhead triceps, side delts),
+  // as far as the session length allows and never past what a muscle can recover from.
+  const dayMinutes = d => prog[d].exercises.reduce((a, e) => a + setsFor(e.type) * SET_MINUTES[e.type] * (supersets && e.type === 'isolation' ? SS_TIME_FACTOR : 1), 0) + 8;
+  weekdays.filter(d => isArmDay(prog[d])).forEach(d => {
+    for (const nd of armDayNeeds(prog[d])) {
+      if (prog[d].exercises.length >= maxEx + 1) break;
+      if (dayMinutes(d) + setsFor('isolation') * SET_MINUTES.isolation * (supersets ? SS_TIME_FACTOR : 1) > minutes + 3) break;
+      const taken = new Set(prog[d].exercises.map(e => e.name));
+      const cands = builderCandidates(nd.muscle, tier).filter(e => !taken.has(e.name));
+      const score = e => (nd.re.test(e.name) ? 0 : 6) + (e.type === 'isolation' ? 0 : 4) + (rank[e.equip] != null ? rank[e.equip] : 3) + (useCount[e.name] || 0) * 2;
+      const best = cands.sort((x, y) => score(x) - score(y))[0];
+      if (!best) continue;
+      const v0 = vol();
+      prog[d].exercises.push({ name: best.name, type: best.type });
+      const v1 = vol();
+      if (VOLUME_MUSCLES.some(m => v1[m] > VOLUME_LANDMARKS[m].mrv && !(v0[m] > VOLUME_LANDMARKS[m].mrv))) { prog[d].exercises.pop(); continue; }
+      useCount[best.name] = (useCount[best.name] || 0) + 1;
+    }
+  });
   // Keep compounds first within each day, then label each day by what it trains.
   weekdays.forEach(d => {
     const ex = prog[d].exercises;
@@ -2694,10 +2809,11 @@ function buildProgram(opts) {
   return {
     program: prog, weekdays, totals, targets, estMin: Object.fromEntries(weekdays.map(d => [d, estMin(d)])),
     meta: { days, minutes, tier, experience, focus, style, prio, supersets,
-      split: style !== 'auto' ? BUILDER_STYLES[style].label + (focus === 'upper' ? ' · Upper body focus' : '') : focus === 'balanced' ? BUILDER_SPLIT_NAMES[days] : `${BUILDER_FOCUS[focus].label} focus`,
+      split: style !== 'auto' ? BUILDER_STYLES[style].label + (focus !== 'balanced' ? ` · ${BUILDER_FOCUS[focus].label} focus` : '') : focus === 'balanced' ? BUILDER_SPLIT_NAMES[days] : `${BUILDER_FOCUS[focus].label} focus`,
       oncePerWeek: builderOncePerWeek(style, days), legsOnce: builderLegsOnce(style, days) },
     // Only flag real gaps: under the minimum that keeps a muscle growing (not just under a stretch target).
-    shortfalls: VOLUME_MUSCLES.filter(m => !OPTIONAL_MUSCLES.has(m) && totals[m] < Math.min(VOLUME_LANDMARKS[m].mev, targets[m]) - 0.5),
+    // Muscles you chose to keep minimal are meant to sit at a maintenance dose, so they aren't flagged.
+    shortfalls: VOLUME_MUSCLES.filter(m => !OPTIONAL_MUSCLES.has(m) && prio[m] !== 'less' && totals[m] < Math.min(VOLUME_LANDMARKS[m].mev, targets[m]) - 0.5),
   };
 }
 async function applyBuiltProgram(built) {
@@ -2822,7 +2938,8 @@ function renderBuilderPreview(opts) {
   const volRows = VOLUME_MUSCLES.filter(x => !(OPTIONAL_MUSCLES.has(x) && x !== 'Glutes' && r.totals[x] < 0.5 && P[x] !== 'more')).map(mu => {
     const tot = r.totals[mu] || 0, lm = VOLUME_LANDMARKS[mu];
     const isFocus = P[mu] === 'more';
-    const tier = isFocus && tot >= Math.max(1, Math.min(lm.mev, r.targets[mu] - 2)) ? { label: 'Focus' } : isFocus ? { label: 'Short' } : volumeTier(mu, tot);
+    const tier = isFocus && tot >= Math.max(1, Math.min(lm.mev, r.targets[mu] - 2)) ? { label: 'Focus' } : isFocus ? { label: 'Short' }
+      : P[mu] === 'less' && tot < lm.mev ? { label: 'Maintain' } : volumeTier(mu, tot);
     const pct = Math.min(100, Math.round(tot / lm.mrv * 100));
     return `<div class="preview-row" style="align-items:center;"><span class="pname" style="min-width:96px;">${mu}</span><span class="ptype" style="text-transform:none; margin-right:8px; min-width:52px;">${tier ? tier.label : ''}</span>
       <div style="flex:1; height:4px; background:var(--bg-input); overflow:hidden;"><div style="height:100%; width:${pct}%; background:${isFocus ? 'var(--rest-accent)' : 'var(--accent)'};"></div></div>
@@ -3425,7 +3542,7 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-02.6';
+const APP_BUILD = '2026-10-03.1';
 const SUPABASE_URL = 'https://xjvlmluycmbalzujojdm.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqdmxtbHV5Y21iYWx6dWpvamRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNzQ5MDcsImV4cCI6MjEwNTg1MDkwN30.zVGVSQ3zv_ZrVjHJP5JVCF-W2c-A7XelUYmlaTgjb8A';
 let supaClient = null;
@@ -4287,7 +4404,7 @@ function defaultSetCount(type, info) {
 //     other big muscles drop 1 set (never below the minimum that maintains them).
 // Totals always stay between that muscle's minimum effective and maximum recoverable volume.
 const VOL_ADJ_MIN = -3, VOL_ADJ_MAX = 4;
-const BIG_MUSCLES = new Set(['Chest', 'Back', 'Quads', 'Hamstrings', 'Glutes', 'Shoulders']);
+const BIG_MUSCLES = new Set(['Chest', 'Back', 'Lats', 'Quads', 'Hamstrings', 'Glutes', 'Shoulders']);
 let volumeState = { blockKey: null, hist: {} };   // hist[muscle] = { 'YYYY-MM-DD': {delta, why} }
 let priorityMuscles = [];
 function primaryMusclesOf(ex) {
@@ -7207,7 +7324,7 @@ function onboardExperienceHTML() {
     </div>
     <div class="field-row" style="margin-top:10px;">
       <div><label>Time per session</label><select id="obMinutes"><option value="45">45 min</option><option value="60" selected>60 min</option><option value="75">75 min</option><option value="90">90 min</option></select></div>
-      <div><label>Focus</label><select id="obFocus"><option value="balanced">Balanced</option><option value="glutes">Glutes &amp; legs</option><option value="upper">Upper body</option></select></div>
+      <div><label>Focus</label><select id="obFocus"><option value="balanced">Balanced</option><option value="legs">Legs</option><option value="glutes">Glutes</option><option value="upper">Upper body</option><option value="chest">Chest</option><option value="back">Back</option><option value="shoulders">Shoulders</option><option value="arms">Arms</option></select></div>
     </div>
     <div class="cp-label" style="margin-top:14px; text-transform:none; letter-spacing:0; font-size:12px;">Where do you train?</div>
     <div id="obGymPicker">${gymPickerHTML()}</div>`;
