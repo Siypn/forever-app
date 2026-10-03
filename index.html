@@ -1185,6 +1185,40 @@
   /* ---- Update bar ---- */
   .update-bar { position: fixed; left: 12px; right: 12px; bottom: calc(76px + env(safe-area-inset-bottom)); z-index: 960; max-width: 520px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 16px; border-radius: 16px; background: rgba(14,12,20,0.92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid rgba(167,139,250,0.45); box-shadow: 0 10px 30px -10px rgba(124,58,237,0.6); font-size: 13px; animation: isUp .4s var(--ease); }
   .update-bar button { background: #fff; color: #000; border: none; border-radius: 999px; padding: 8px 16px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+  /* ===== Set screen (2026-10-02): weight | reps side by side, no boxes ===== */
+  .focus-card { min-height: 0; }
+  .focus-name { font-size: 38px; line-height: 0.95; }
+  .set-chips { gap: 10px; margin-top: 24px; overflow: visible; }
+  .set-chip { flex: 1; min-width: 0; padding-bottom: 9px; }
+  .set-chip .chip-v { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.5px; white-space: nowrap; }
+  .set-chip.is-current .chip-v, .set-chip.is-done .chip-v { text-shadow: none; filter: drop-shadow(0 0 8px rgba(167,139,250,0.45)); }
+  .set-chip.is-done .chip-v { color: var(--rest-accent); }
+  .set-chip:not(.is-done):not(.is-current) .chip-v { color: rgba(255,255,255,0.28); }
+  .focus-input { margin-top: 28px; }
+  .focus-input::before { display: none; }
+  .set-pads { display: grid; grid-template-columns: 1fr 1px 1fr; gap: 0; align-items: stretch; }
+  .set-pads .big-x { width: 1px; padding: 0; margin: 6px 0; font-size: 0; opacity: 1; background: var(--hairline); text-shadow: none; }
+  .set-pads .big-field { display: flex; flex-direction: column; align-items: center; }
+  .set-pads .big-num { order: 2; width: 100%; max-width: 160px; font-size: 56px !important; line-height: 1.05; }
+  .set-pads .big-num.big-long { font-size: 48px !important; }
+  .set-pads .big-num::placeholder { color: rgba(255,255,255,0.18); }
+  .set-pads .pad-u { order: 1; font-size: 10.5px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--text-dim); }
+  .set-pads .big-meta { order: 3; justify-content: center !important; gap: 22px; margin-top: 2px; width: auto; }
+  .set-pads .big-num:placeholder-shown { filter: none; }
+  .set-pads .step { color: var(--rest-accent); font-size: 26px; width: 44px; height: 38px; }
+  .set-label { margin-top: 18px; font-size: 13px; }
+  .big-log { margin-top: 16px; }
+  .mini-row { justify-content: center; gap: 18px; margin-top: 14px; }
+  .mini-row label { white-space: nowrap; }
+  .rec-below { margin-top: 26px; }
+  /* Content scrolling under the iPhone clock/battery gets a black strip behind it */
+  body::after { content: ''; position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top); background: #000; z-index: 9999; pointer-events: none; }
+  /* Tab switch: the new tab fades in and rises slightly. "backwards" fill so nothing is left
+     transformed afterwards (a lingering transform would break fixed-position overlays). */
+  .tabpanel.tab-in { animation: tabIn 0.28s cubic-bezier(.2,.8,.2,1) backwards; }
+  @keyframes tabIn { from { opacity: 0; transform: translateY(8px); } }
+  @media (prefers-reduced-motion: reduce) { .tabpanel.tab-in { animation: none; } }
 </style>
 </head>
 <body>
@@ -1870,7 +1904,9 @@ document.querySelectorAll('.tabbar button').forEach(btn => {
     document.querySelectorAll('.tabbar button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.querySelectorAll('.tabpanel').forEach(p => p.classList.remove('active'));
-    document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+    const panel = document.getElementById(`tab-${btn.dataset.tab}`);
+    panel.classList.add('active');
+    panel.classList.remove('tab-in'); void panel.offsetWidth; panel.classList.add('tab-in');
     if (btn.dataset.tab === 'nutrition') renderNutrition();
     if (btn.dataset.tab === 'workout') { renderFuelCheck(); renderQuickLog(); renderBlockReviewIfNeeded(); }
     if (btn.dataset.tab === 'weight') { renderWeightTab(); if (bodyView === 'shape') renderShapePhotos(); }
@@ -3389,7 +3425,7 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-02.3';
+const APP_BUILD = '2026-10-02.6';
 const SUPABASE_URL = 'https://xjvlmluycmbalzujojdm.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqdmxtbHV5Y21iYWx6dWpvamRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNzQ5MDcsImV4cCI6MjEwNTg1MDkwN30.zVGVSQ3zv_ZrVjHJP5JVCF-W2c-A7XelUYmlaTgjb8A';
 let supaClient = null;
@@ -5173,9 +5209,9 @@ function renderMain() {
       ${ssBanner && ssBanner.name === ex.name ? `<div class="ss-banner">${escHtml(ssBanner.text)}</div>` : ''}
       <div class="focus-name">${escHtml(ex.name)}</div>
       ${cueHTML(ex)}
-      <div id="recAskSlot">${recoveryAskHTML(ex)}</div>
       <div class="ex-prev-slot"></div>
       <div class="ex-body"></div>
+      <div id="recAskSlot" class="rec-below">${recoveryAskHTML(ex)}</div>
     </div>
     <div class="run-nav" id="runNav"></div>
     <div class="run-finish"><button class="back-link" id="finishEarlyBtn">Finish workout</button></div>`;
@@ -5208,8 +5244,7 @@ function renderMain() {
 function cueHTML(ex) {
   const c = EXERCISE_CUES[ex.name];
   if (!c) return '';
-  const open = !prevByExercise[ex.name] && !(state[ex.name] || []).some(s => s.logged);
-  return `<details class="form-cue"${open ? ' open' : ''}><summary>Form</summary>
+  return `<details class="form-cue"><summary>Form</summary>
     <div class="cue-l"><b>Set up</b>${escHtml(c.setup)}</div><div class="cue-l"><b>Do</b>${escHtml(c.do)}</div><div class="cue-l"><b>Feel</b>${escHtml(c.feel)}</div></details>`;
 }
 // Before a muscle's first set of the day: did it recover from last time? (one tap, skippable)
@@ -5648,22 +5683,24 @@ function focusInputHTML(ex, sets, idx, id) {
   const rirTxt = s.rir === '' || s.rir == null ? '' : (String(s.rir) === '0' ? 'Take it to failure' : `Stop with ${escHtml(s.rir)} rep${String(s.rir) === '1' ? '' : 's'} left`);
   return `<div class="focus-input">
     ${intraSessionNoteByEx[exName] ? `<div class="run-note">${escHtml(intraSessionNoteByEx[exName])}</div>` : ''}
-    <div class="big-row">
+    <div class="big-row set-pads">
       <div class="big-field">
         <input type="number" inputmode="decimal" placeholder="0" value="${escHtml(wShown)}" id="wt-${id}" class="big-num ${String(wShown).length >= 4 ? 'big-long' : ''}" aria-label="${base ? (isAssisted(exName) ? 'Assistance in pounds' : 'Added weight in pounds') : 'Weight in pounds'}">
-        <div class="big-meta"><button class="step" data-step="w-" aria-label="Less weight">−</button><span class="big-unit">${wUnit}</span><button class="step" data-step="w+" aria-label="More weight">+</button></div>
+        <div class="pad-u big-unit">${wUnit}</div>
+        <div class="big-meta"><button class="step" data-step="w-" aria-label="Less weight">−</button><button class="step" data-step="w+" aria-label="More weight">+</button></div>
       </div>
       <div class="big-x">×</div>
       <div class="big-field">
         <input type="number" inputmode="numeric" placeholder="0" value="${escHtml(s.reps)}" id="reps-${id}" class="big-num" aria-label="Reps">
-        <div class="big-meta"><button class="step" data-step="r-" aria-label="Fewer reps">−</button><span class="big-unit">reps</span><button class="step" data-step="r+" aria-label="More reps">+</button></div>
+        <div class="pad-u big-unit">reps</div>
+        <div class="big-meta"><button class="step" data-step="r-" aria-label="Fewer reps">−</button><button class="step" data-step="r+" aria-label="More reps">+</button></div>
       </div>
     </div>
     ${base ? `<div class="bw-note">Body weight ${Math.round(bodyweightLb)} lb${BW_FRACTION[exName] < 1 ? ` · this move lifts ~${Math.round(BW_FRACTION[exName] * 100)}% of it` : ''} · total ${Math.round(parseFloat(s.weight) || base)} lb</div>` : ''}
     <div class="set-label">${rirTxt}</div>
     ${chase ? `<div class="pr-chase">${escHtml(chase)}</div>` : ''}
     <button class="log-btn big-log" id="logbtn-${id}">Log set ${idx + 1}</button>
-    <div class="mini-row"><label>Reps in reserve <select id="rir-${id}">${rirOpts}</select></label>${sets.length > 1 ? `<button class="text-btn" id="rm-${id}">Remove set</button>` : ''}</div>
+    <div class="mini-row"><label>RIR <select id="rir-${id}">${rirOpts}</select></label><button class="text-btn" id="add-${id}">+ Add set</button>${sets.length > 1 ? `<button class="text-btn" id="rm-${id}">Remove set</button>` : ''}</div>
   </div>`;
 }
 function renderExerciseBody(ex, container, prevSlot) {
@@ -5675,7 +5712,7 @@ function renderExerciseBody(ex, container, prevSlot) {
   const suggestion = computeSuggestion(exName, ex.type);
   const currentIndex = sets.findIndex(s => !s.logged);
 
-  prevSlot.innerHTML = (prev ? `<div class="ex-prev">Last time (${prev.date}): ${prev.sets.map(s=>`${escHtml(fmtLoad(exName, s.weight))}×${escHtml(s.reps||'–')}`).join(', ')}</div>` : `<div class="ex-prev">No previous log yet</div>`)
+  prevSlot.innerHTML = (prev ? `<div class="ex-prev">Last time (${prev.date}): ${prev.sets.map(s=>`${escHtml(fmtLoad(exName, s.weight))}×${escHtml(s.reps||'–')}`).join(', ')}</div>` : '')
     + (isBodyweightLift(exName) && !bwBase(exName) ? `<div class="ex-prev" style="color:var(--rest-accent);">Log a weigh-in on the Body tab and this lift will count your body weight automatically.</div>` : '');
 
   let html = '';
@@ -5692,7 +5729,7 @@ function renderExerciseBody(ex, container, prevSlot) {
   } else if (currentIndex !== -1 && !prev) {
     const t0 = parseInt(sets[currentIndex].rir, 10);
     const leftTxt = isNaN(t0) ? '2 left in the tank' : t0 === 0 ? 'nothing left (to failure)' : `${t0} left in the tank`;
-    html += `<div class="ex-suggest"><div class="suggest-detail">First time logging this lift — pick a weight you could do for about ${ex.type==='compound'?'8':'12'} reps with ${leftTxt}. From the next session on, the plan is built from what you do today.</div></div>`;
+    html += `<div class="ex-suggest"><div class="suggest-detail">First time on this lift — pick a weight you'd get about ${ex.type==='compound'?'8':'12'} reps with, ${leftTxt}.</div></div>`;
   }
   if (sleepDebt && ex.type === 'compound' && currentIndex !== -1) {
     html += `<div class="ex-sleep-flag">Sleep debt detected — RIR nudged up 1 on this compound lift today.</div>`;
@@ -5701,7 +5738,7 @@ function renderExerciseBody(ex, container, prevSlot) {
     // set chips: done (tap to edit), current, upcoming
     if (i === 0) html += `<div class="set-chips">`;
     const cls = s.logged ? 'set-chip is-done done-row' : (i === currentIndex ? 'set-chip is-current' : 'set-chip');
-    html += `<div class="${cls}" ${s.logged ? `data-i="${i}" title="Tap to edit"` : ''}><span class="chip-n">Set ${i + 1}${s.isPR ? '<b class="chip-pr">PR</b>' : ''}</span><span class="chip-v">${escHtml(fmtLoad(exName, s.weight))} × ${escHtml(s.reps || '–')}</span></div>`;
+    html += `<div class="${cls}" ${s.logged ? `data-i="${i}" title="Tap to edit"` : ''}><span class="chip-n">Set ${i + 1}${s.isPR ? '<b class="chip-pr">PR</b>' : ''}</span><span class="chip-v">${!s.logged && i === currentIndex ? 'Now' : (!s.weight && !s.reps ? '—' : `${escHtml(fmtLoad(exName, s.weight))} × ${escHtml(s.reps || '–')}`)}</span></div>`;
     if (i === sets.length - 1) html += `</div>`;
   });
 
@@ -5802,7 +5839,7 @@ function renderExerciseBody(ex, container, prevSlot) {
     const s = sets[currentIndex];
     html += focusInputHTML(ex, sets, currentIndex, id);
   }
-  if (!(ui.phase === 'tech' && ui.tech)) html += `<button class="add-set" id="add-${id}">+ Add set</button>`;
+  if (!(ui.phase === 'tech' && ui.tech) && !html.includes(`id="add-${id}"`)) html += `<button class="add-set" id="add-${id}">+ Add set</button>`;
   container.innerHTML = html;
   if (ui.phase === 'tech' && ui.tech) { wireTech(ex, container, prevSlot); updateRunChrome(); return; }
   wireExerciseEvents(ex, container);
