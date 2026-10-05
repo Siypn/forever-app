@@ -869,6 +869,8 @@
     background: linear-gradient(90deg, transparent, var(--rest-accent) 25%, #ddd6fe 50%, var(--rest-accent) 75%, transparent);
     box-shadow: 0 0 12px rgba(167,139,250,0.75); transition: transform .45s var(--ease); }
   .body-view { animation: fadeUp .28s var(--ease); }
+  .meso-seg .body-seg-line { width: 50%; }
+  .meso-view { animation: fadeUp .28s var(--ease); }
   .shape-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .shape-grid .photo-thumb { aspect-ratio: 3 / 4; width: 100%; height: auto; }
   .shape-actions { display: flex; gap: 10px; margin-top: 12px; }
@@ -1058,6 +1060,8 @@
   .pv-tech select { background: none; border: none; border-bottom: 1px solid var(--hairline); border-radius: 0; color: var(--text); font-size: 12px; padding: 3px 2px; }
   .pv-link { display: block; width: 100%; background: none; border: none; color: var(--text-dim); font: inherit; font-size: 11px; padding: 6px 0; cursor: pointer; text-align: center; letter-spacing: 0.3px; }
   .pv-link.on { color: var(--rest-accent); }
+  .pv-ss select { max-width: 60%; }
+  .pv-ss-note { font-size: 11px; color: var(--rest-accent); margin: 2px 0 6px; }
 
   .ss-tag { display: inline-block; min-width: 20px; margin-right: 8px; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; color: var(--rest-accent); }
 
@@ -1219,6 +1223,41 @@
   .tabpanel.tab-in { animation: tabIn 0.28s cubic-bezier(.2,.8,.2,1) backwards; }
   @keyframes tabIn { from { opacity: 0; transform: translateY(8px); } }
   @media (prefers-reduced-motion: reduce) { .tabpanel.tab-in { animation: none; } }
+
+  /* iOS zooms into any field under 16px when tapped; setup and the menus' fields stay at 16px. */
+  #onboardingOverlay input, #onboardingOverlay select, #onboardingOverlay textarea,
+  .menu-overlay input, .menu-overlay select, .control-panel input, .control-panel select { font-size: 16px !important; }
+  #onboardingOverlay input[type="date"] { min-width: 150px; }
+  #onboardingOverlay select { min-width: 150px; }
+
+  /* Write your own block */
+  .se-ex .cm-ex-t { width: 96px; }
+  .se-mv { background: none; border: none; color: var(--text-dim); font-size: 15px; width: 22px; padding: 0; cursor: pointer; }
+  .se-acts { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 4px; }
+  .se-copy { font-size: 12px; color: var(--text-dim); display: flex; align-items: center; gap: 6px; }
+  .se-copy select { max-width: 150px; }
+  .se-btns { display: flex; gap: 10px; margin-top: 12px; }
+  .se-btns button { flex: 1; }
+
+  /* What's new + version */
+  #whatsNew { position: fixed; inset: 0; z-index: 960; display: none; }
+  #whatsNew.open { display: block; }
+  #whatsNew .is-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.62); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); animation: isFade .3s var(--ease); }
+  #whatsNew .is-panel { position: absolute; left: 0; right: 0; bottom: 0; max-width: 560px; margin: 0 auto; max-height: 86vh; overflow-y: auto;
+    background: linear-gradient(180deg, #0e0c14, #060509); border-top: 1px solid rgba(167,139,250,0.35);
+    border-radius: 22px 22px 0 0; padding: 22px 22px calc(22px + env(safe-area-inset-bottom));
+    box-shadow: 0 -20px 60px -20px rgba(124,58,237,0.45); animation: isUp .42s var(--ease); }
+  #whatsNew .is-grab { width: 36px; height: 4px; border-radius: 4px; background: var(--hairline); margin: -8px auto 14px; }
+  #whatsNew .is-kicker { font-size: 10px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--rest-accent); }
+  #whatsNew .is-title { font-family: 'Bebas Neue', 'Outfit', sans-serif; font-size: 34px; letter-spacing: 0.5px; line-height: 1; margin: 8px 0 12px; }
+  .wn-list { list-style: none; margin: 0; padding: 0; }
+  .wn-list li { position: relative; padding: 10px 0 10px 20px; border-top: 1px solid var(--hairline); font-size: 13.5px; line-height: 1.45; }
+  .wn-list li::before { content: ''; position: absolute; left: 2px; top: 17px; width: 6px; height: 6px; border-radius: 50%; background: var(--rest-accent); box-shadow: 0 0 8px rgba(167,139,250,0.8); }
+  .wn-list li.wn-fix::before { background: var(--text-dim); box-shadow: none; }
+  .wn-h { font-size: 10px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--text-dim); margin: 16px 0 2px; }
+  .menu-ver { text-align: center; font-size: 11px; color: var(--text-dim); margin-top: 10px; letter-spacing: 0.4px; }
+  .cc-ver.ok { color: var(--text-dim); }
+  .cc-ver.old { color: #f5b971; }
 </style>
 </head>
 <body>
@@ -1274,6 +1313,7 @@
     </div>
     <input type="file" id="restoreFileInput" accept="application/json,.json" style="display:none;">
     <div class="menu-foot">
+      <button class="text-btn" id="menuWhatsNewBtn">What's new</button>
       <button class="text-btn" id="menuReportBugBtn" style="display:none;">Report a bug</button>
       <a class="text-btn" id="menuPrivacyLink" href="privacy.html" target="_blank" rel="noopener">Privacy</a>
     </div>
@@ -1281,6 +1321,7 @@
       <button id="menuRemindersBtn"></button><button id="menuPasswordBtn"></button><button id="menuLogoutBtn"></button><button id="menuDeleteDataBtn"></button>
     </div>
     <div id="menuWarmupPanel"></div>
+    <div class="menu-ver" id="menuVersion"></div>
   </div>
 </div>
 
@@ -1564,6 +1605,12 @@
 
 <section class="tabpanel" id="tab-mesos">
   <div style="padding-top:14px;">
+    <div class="body-seg meso-seg" role="tablist" aria-label="Mesos sections">
+      <button role="tab" data-view="current" class="on" aria-selected="true">Current</button>
+      <button role="tab" data-view="create" aria-selected="false">Create</button>
+      <span class="body-seg-line" aria-hidden="true"></span>
+    </div>
+    <div class="meso-view" data-view="current">
     <div class="panel" id="mesoTimelinePanel">
       <div class="section-title">Block Progress</div>
       <div class="meso-track-wrap">
@@ -1596,6 +1643,8 @@
       <div class="info-panel" id="infoLiftsPanel">Each lift's estimated max comes from your heaviest set each session, adjusted for how many reps you had left. The weekly rate is a trend line through your last 8 sessions of that lift — it's what the workout plan uses to decide how hard to push you on that movement. Deload weeks are left out so they don't drag the trend down.</div>
       <div id="liftTrendsBody" style="margin-top:10px;"></div>
     </div>
+    </div>
+    <div class="meso-view" data-view="create" hidden>
     <div class="panel">
       <div class="section-title">Choose your split</div>
       <button class="btn-primary" id="openBuilderBtn" style="width:100%; margin-top:14px;">Build my program</button>
@@ -1605,11 +1654,13 @@
       <div id="presetList" style="margin-top:14px;"></div>
     </div>
     <div class="panel">
-      <div class="section-title">Build your own <button class="info-btn" id="infoBuilderBtn">i</button></div>
+      <div class="section-title">Write your own block <button class="info-btn" id="infoBuilderBtn">i</button></div>
       <div class="info-panel" id="infoBuilderPanel">The exercise library is organized by muscle group and tagged by equipment (barbell, Smith, dumbbell, cable, machine, bodyweight) and by compound/isolation — so a day built from it slots straight into the same double-progression and warm-up logic as everything else. Switch to the Custom preset, then use "Edit this day's exercises" on the Workout tab to add from the library.</div>
-      <div class="ex-prev" style="margin-top:6px;">Switch to Custom below, then go to any day's overview on the Workout tab and tap "Edit this day's exercises" → "+ Choose from library" to build it from real gym equipment.</div>
-      <div class="cp-label" style="margin-top:18px; text-transform:none; letter-spacing:0; font-size:12px;">Where you train</div>
+      <div class="ex-prev" style="margin-top:6px;">Type in every day of your week yourself: day name, exercises and order. Pick a day to edit it.</div>
+      <div id="selfProgEditor" style="margin-top:12px;"></div>
+      <div class="cp-label" style="margin-top:22px; text-transform:none; letter-spacing:0; font-size:12px;">Where you train</div>
       <div id="gymPickerMesos"></div>
+    </div>
     </div>
   </div>
 </section>
@@ -1795,6 +1846,73 @@ async function renderMesos() {
   renderLiftTrendsPanel();
   renderSplitPicker();
   renderBuilderUndo();
+  showMesoView(mesoView);
+}
+// ---------- Write your own block: the same day-by-day editor coaches use for clients ----------
+let selfEditDay = null;
+function renderSelfProgramEditor() {
+  const box = document.getElementById('selfProgEditor');
+  if (!box) return;
+  if (!selfEditDay) selfEditDay = DAY_ORDER.includes(currentDay) ? currentDay : 'Monday';
+  const libNames = Object.values(EXERCISE_LIBRARY).flat().map(e => e.name).sort();
+  box.innerHTML = `
+    <datalist id="seLib">${libNames.map(n => `<option value="${escHtml(n)}">`).join('')}</datalist>
+    <div class="cm-days">${DAY_ORDER.map(d => { const x = getProgramDay(d) || {}; const n = (x.exercises || []).length;
+      return `<button class="cm-day ${d === selfEditDay ? 'selected' : ''}" data-d="${d}"><span>${d.slice(0, 3)}</span><b>${escHtml(n ? (x.title || d) : 'Rest')}</b><em>${n || ''}</em></button>`; }).join('')}</div>
+    <div id="seDayEdit"></div>`;
+  box.querySelectorAll('.cm-day').forEach(b => b.onclick = () => { selfEditDay = b.dataset.d; renderSelfProgramEditor(); });
+  renderSelfDayEdit(selfEditDay);
+}
+function renderSelfDayEdit(day) {
+  const box = document.getElementById('seDayEdit');
+  const d = getProgramDay(day) || { title: 'Rest', exercises: [] };
+  const row = ex => `<div class="cm-ex se-ex"><input class="cm-ex-n" list="seLib" value="${escHtml(ex.name)}" placeholder="Exercise"><select class="cm-ex-t"><option value="compound" ${ex.type === 'compound' ? 'selected' : ''}>Compound</option><option value="isolation" ${ex.type !== 'compound' ? 'selected' : ''}>Isolation</option></select><button class="se-mv" data-mv="-1" aria-label="Move up">↑</button><button class="se-mv" data-mv="1" aria-label="Move down">↓</button><button class="cm-x" aria-label="Remove">×</button></div>`;
+  const others = DAY_ORDER.filter(x => x !== day && ((getProgramDay(x) || {}).exercises || []).length);
+  box.innerHTML = `<div class="cm-edit">
+    <input id="seTitle" value="${escHtml((d.exercises || []).length ? (d.title || '') : '')}" placeholder="Day name (e.g. Push, Arms) — leave empty for a rest day">
+    <div id="seExList">${(d.exercises || []).map(row).join('')}</div>
+    <div class="se-acts"><button class="back-link" id="seAddEx" style="padding-left:0;">+ Add exercise</button>
+      ${others.length ? `<label class="se-copy">Copy from <select id="seCopy"><option value="">—</option>${others.map(x => `<option value="${x}">${x.slice(0, 3)} · ${escHtml((getProgramDay(x) || {}).title || x)}</option>`).join('')}</select></label>` : ''}</div>
+    <div class="se-btns"><button class="btn-secondary" id="seRest">Make it a rest day</button><button class="btn-primary" id="seSave">Save ${day}</button></div></div>`;
+  const list = document.getElementById('seExList');
+  const wire = () => {
+    list.querySelectorAll('.cm-x').forEach(x => x.onclick = () => x.parentElement.remove());
+    list.querySelectorAll('.se-mv').forEach(b => b.onclick = () => {
+      const r = b.parentElement, dir = parseInt(b.dataset.mv, 10);
+      if (dir < 0 && r.previousElementSibling) r.parentElement.insertBefore(r, r.previousElementSibling);
+      if (dir > 0 && r.nextElementSibling) r.parentElement.insertBefore(r.nextElementSibling, r);
+    });
+  };
+  wire();
+  document.getElementById('seAddEx').onclick = () => { list.insertAdjacentHTML('beforeend', row({ name: '', type: 'isolation' })); wire(); const n = list.lastElementChild.querySelector('.cm-ex-n'); if (n) n.focus(); };
+  const cp = document.getElementById('seCopy');
+  if (cp) cp.onchange = () => { const src = getProgramDay(cp.value); if (!src) return; list.innerHTML = (src.exercises || []).map(row).join(''); const t = document.getElementById('seTitle'); if (!t.value.trim()) t.value = src.title || ''; wire(); };
+  list.addEventListener('change', e => {
+    if (!e.target.classList.contains('cm-ex-n')) return;
+    const lib = libraryEntry(e.target.value.trim());
+    if (lib) e.target.parentElement.querySelector('.cm-ex-t').value = lib.type;
+  });
+  const save = async (btn, exercises, title) => {
+    const names = new Set(exercises.map(x => x.name));
+    const pairs = {}; Object.entries(d.pairs || {}).forEach(([a, b]) => { if (names.has(a) && names.has(b)) pairs[a] = b; });
+    const techniques = {}; Object.entries(d.techniques || {}).forEach(([a, k]) => { if (names.has(a)) techniques[a] = k; });
+    const t = btn.textContent; btn.disabled = true; btn.textContent = 'Saving…';
+    await saveProgramOverride(day, { title: exercises.length ? title : 'Rest', focus: '', exercises, pairs, techniques });
+    volumeBonusCache.key = null;
+    renderWeeklyVolumePanel();
+    if (day === currentDay && dayMode !== 'active') { try { await loadDay(); } catch (e) {} }
+    btn.textContent = 'Saved';
+    setTimeout(() => { renderSelfProgramEditor(); }, 700);
+  };
+  document.getElementById('seSave').onclick = (ev) => {
+    const exercises = Array.from(list.querySelectorAll('.cm-ex')).map(r => ({ name: r.querySelector('.cm-ex-n').value.trim(), type: r.querySelector('.cm-ex-t').value })).filter(x => x.name);
+    const seen = new Set(); const uniq = exercises.filter(x => !seen.has(x.name) && seen.add(x.name));
+    save(ev.target, uniq, document.getElementById('seTitle').value.trim() || day);
+  };
+  document.getElementById('seRest').onclick = async (ev) => {
+    if (((d.exercises || []).length) && !(await uiConfirm(`Make ${day} a rest day?`, 'Its exercises are removed from your program. Your logged workouts stay.'))) return;
+    save(ev.target, [], 'Rest');
+  };
 }
 function renderPriorityPanel() {
   const box = document.getElementById('priorityBody');
@@ -3542,7 +3660,21 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-03.1';
+const APP_BUILD = '2026-10-04.2';
+// The version people see. Bump it (and add a RELEASE_NOTES entry at the top) with every update
+// worth announcing; APP_BUILD still changes on every upload so phones know to refresh.
+const APP_VERSION = '1.0';
+const RELEASE_NOTES = [
+  { version: '1.0', date: 'Oct 4, 2026', items: [
+    { k: 'new', t: 'Mesos is now two pages: Current for the block you are running, Create for building the next one.' },
+    { k: 'new', t: 'Write your own block: type in every day of your week yourself, reorder exercises, or copy a day.' },
+    { k: 'new', t: 'Superset with any exercise in the day, not just the next one.' },
+    { k: 'new', t: 'Lats are tracked as their own muscle, and the builder has Legs, Chest, Back, Shoulders and Arms goals.' },
+    { k: 'new', t: 'Optimize now completes arm days: balanced biceps and triceps, a hammer curl, overhead triceps and side delts.' },
+    { k: 'fix', t: 'Setup no longer freezes or zooms in on iPhone after picking your start date.' },
+    { k: 'fix', t: 'Tabs fade in when you switch, and the set screen fits on one page.' },
+  ] },
+];
 const SUPABASE_URL = 'https://xjvlmluycmbalzujojdm.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqdmxtbHV5Y21iYWx6dWpvamRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNzQ5MDcsImV4cCI6MjEwNTg1MDkwN30.zVGVSQ3zv_ZrVjHJP5JVCF-W2c-A7XelUYmlaTgjb8A';
 let supaClient = null;
@@ -6840,7 +6972,7 @@ function renderWorkoutPreview() {
   const info = weekInfo();
   const exs = dayData.exercises;
   let html = `<button class="back-link" id="backFromPreviewBtn">‹ Back to overview</button>
-    <div class="pv-help">Link two exercises to run them as a <b>superset</b> (link three or more for a <b>giant set</b>): one set of each back to back, then rest. Add a <b>finisher</b> to an exercise's last set. Both are saved to your program for this day.</div>`;
+    <div class="pv-help">Pick a partner under any exercise to run them as a <b>superset</b> (link a third onto it for a <b>giant set</b>): one set of each back to back, then rest. Add a <b>finisher</b> to an exercise's last set. Both are saved to your program for this day.</div>`;
   exs.forEach((ex, i) => {
     const n = setCountFor(ex, currentDay, info);
     const st = (state[ex.name] || []);
@@ -6856,13 +6988,17 @@ function renderWorkoutPreview() {
       ${todayTech ? `<div class="pv-tech"><span>Today only: ${escHtml(TECHNIQUES[todayTech].label)}</span></div>` : ''}
       ${opts.length ? `<div class="pv-tech"><span>Finisher</span><select class="tech-sel" data-ex="${escHtml(ex.swappedFrom || ex.name)}"><option value="">None</option>${opts.map(k => `<option value="${k}" ${cur === k ? 'selected' : ''}>${TECHNIQUES[k].label}</option>`).join('')}</select></div>` : ''}
     </div>`;
-    if (i < exs.length - 1) {
-      const a = ex.swappedFrom || ex.name, b = exs[i + 1].swappedFrom || exs[i + 1].name;
+    // Pick any exercise in the day to superset with (not just the next one). The partner then runs
+    // right after this one; linking a third onto the partner makes a giant set.
+    if (exs.length > 1) {
+      const a = ex.swappedFrom || ex.name;
       const progPairs = getProgramDay(currentDay).pairs || {};
-      const linkedProg = progPairs[a] === b;
-      const linkedToday = !linkedProg && ex.ss && exs[i + 1].ss && ex.ss.id === exs[i + 1].ss.id;
-      html += linkedToday ? `<div class="pv-link on" style="cursor:default;">⛓ Superset today only (Short on time)</div>`
-        : `<button class="pv-link ${linkedProg ? 'on' : ''}" data-a="${escHtml(a)}" data-b="${escHtml(b)}">${linkedProg ? '⛓ Linked — tap to unlink' : '+ Superset with next'}</button>`;
+      const partner = progPairs[a] || '';
+      const nx = exs[i + 1];
+      const linkedToday = !partner && ex.ss && nx && nx.ss && ex.ss.id === nx.ss.id;
+      const leader = Object.keys(progPairs).find(k => progPairs[k] === a);
+      html += linkedToday ? `<div class="pv-link on" style="cursor:default;">⛓ Superset with ${escHtml(nx.name)} today only (Short on time)</div>`
+        : `<div class="pv-tech pv-ss"><span>Superset with</span><select class="ss-sel" data-a="${escHtml(a)}"><option value="">None</option>${exs.filter(o => (o.swappedFrom || o.name) !== a).map(o => { const n = o.swappedFrom || o.name; return `<option value="${escHtml(n)}" ${partner === n ? 'selected' : ''}>${escHtml(o.name)}${progPairs[n] === a ? ' (already linked)' : ''}</option>`; }).join('')}</select></div>${leader && !partner ? `<div class="pv-ss-note">Runs right after ${escHtml(leader)}</div>` : ''}`;
     }
   });
   html += `<div class="overview-actions"><button class="btn-primary" id="startFromPreviewBtn" style="flex:1;">Start Workout</button></div>`;
@@ -6875,10 +7011,15 @@ function renderWorkoutPreview() {
     await saveProgramOverride(currentDay, next);
     renderWorkoutPreview();
   };
-  wrap.querySelectorAll('.pv-link').forEach(b => b.onclick = () => saveStyle(d => {
-    const a = b.dataset.a, nb = b.dataset.b;
-    if (d.pairs[a] === nb) delete d.pairs[a];
-    else { Object.keys(d.pairs).forEach(k => { if (d.pairs[k] === nb) delete d.pairs[k]; }); d.pairs[a] = nb; }
+  wrap.querySelectorAll('.ss-sel').forEach(sel => sel.onchange = () => saveStyle(d => {
+    const a = sel.dataset.a, nb = sel.value;
+    delete d.pairs[a];
+    if (!nb) return;
+    // One leader per exercise, and no loops (A → B → A): break whatever would close the circle.
+    Object.keys(d.pairs).forEach(k => { if (d.pairs[k] === nb) delete d.pairs[k]; });
+    let cur = nb, guard = 0;
+    while (d.pairs[cur] && guard++ < 20) { if (d.pairs[cur] === a) { delete d.pairs[cur]; break; } cur = d.pairs[cur]; }
+    d.pairs[a] = nb;
   }));
   wrap.querySelectorAll('.tech-sel').forEach(sel => sel.onchange = () => saveStyle(d => { if (sel.value) d.techniques[sel.dataset.ex] = sel.value; else delete d.techniques[sel.dataset.ex]; }));
   document.getElementById('backFromPreviewBtn').onclick = () => { showMode('overview'); renderDayOverview(); };
@@ -7349,7 +7490,7 @@ function onboardBlockHTML() {
   const phases = blockPhaseWeeks(len);
   return `
     <div class="section-title">Start your training block</div>
-    <div class="ex-prev" style="margin-top:6px;">A ${len}-week undulating block: base volume weeks 1–${phases.base}, an overload peak weeks ${phases.base+1}–${phases.base+phases.overload}, then a deload week ${len} before the next one starts.${obRecommendedLen ? ' Length pre-set from your experience level — change it below if you\'d rather run something else.' : ' Today\'s a sensible default.'}</div>
+    <div class="ex-prev" style="margin-top:6px;">A ${len}-week undulating block: base volume weeks 1–${phases.base}, an overload peak ${phases.overload > 1 ? `weeks ${phases.base+1}–${phases.base+phases.overload}` : `week ${phases.base+1}`}, then a deload week ${len} before the next one starts.${obRecommendedLen ? ' Length pre-set from your experience level — change it below if you\'d rather run something else.' : ' Today\'s a sensible default.'}</div>
     <div class="field-row" style="margin-top:14px;">
       <div><label>Start date</label><input type="date" id="obBlockStart" value="${start}"></div>
       <div><label>Length</label><select id="obBlockLen"><option value="4" ${len===4?'selected':''}>4-wk</option><option value="6" ${len===6?'selected':''}>6-wk</option><option value="8" ${len===8?'selected':''}>8-wk</option><option value="10" ${len===10?'selected':''}>10-wk</option><option value="12" ${len===12?'selected':''}>12-wk</option></select></div>
@@ -7426,8 +7567,10 @@ async function finalizeOnboarding() {
   }
 }
 async function completeOnboarding() {
+  settleIOSViewport();
   if (db) { try { await db.doc('meta/onboarded').set({ done: true }); } catch (e) {} }
   document.getElementById('onboardingOverlay').style.display = 'none';
+  window.scrollTo(0, 0);
   renderNutrition();
   setTimeout(() => { maybeShowCarbCycleIntro(); }, 450);
 }
@@ -7438,6 +7581,7 @@ async function maybeShowCarbCycleIntro() {
   if (!db || dayMode === 'active') return;
   const ob = document.getElementById('onboardingOverlay');
   if (ob && ob.style.display === 'block') return;
+  const ae = document.activeElement; if (ae && /INPUT|SELECT|TEXTAREA/.test(ae.tagName)) { setTimeout(maybeShowCarbCycleIntro, 400); return; }
   try { const snap = await db.doc('meta/introCarbCycle').get(); if (snap.exists && snap.data().seen) return; } catch (e) { return; }
   showCarbCycleIntro();
 }
@@ -7482,7 +7626,16 @@ async function showCarbCycleIntro() {
   el.querySelector('.is-backdrop').onclick = () => close(carbCycle);
   setTimeout(() => { const b = document.getElementById('introKeepBtn'); if (b) b.focus({ preventScroll: true }); }, 50);
 }
+// iPhone: a native date picker / dropdown that's still open when the screen changes leaves the page
+// zoomed in, and the next sheet lands off-screen and blocks every tap (looks frozen). Close the
+// picker and snap the zoom back to 1 whenever setup moves on.
+function settleIOSViewport() {
+  try { const a = document.activeElement; if (a && a !== document.body && a.blur) a.blur(); } catch (e) {}
+  const vp = document.querySelector('meta[name="viewport"]');
+  if (vp) { const c = vp.getAttribute('content'); vp.setAttribute('content', c + ', user-scalable=no'); setTimeout(() => vp.setAttribute('content', c), 60); }
+}
 async function onboardHandleNext() {
+  settleIOSViewport();
   const key = ONBOARD_STEPS[onboardStep];
   if (key === 'stats') {
     document.getElementById('heightFt').value = document.getElementById('obHeightFt').value;
@@ -7521,8 +7674,10 @@ async function onboardHandleNext() {
   renderOnboardStep();
 }
 document.getElementById('onboardNextBtn').onclick = onboardHandleNext;
-document.getElementById('onboardBackBtn').onclick = () => { if (onboardStep > 0) { onboardStep--; renderOnboardStep(); } };
+document.getElementById('onboardBackBtn').onclick = () => { settleIOSViewport(); if (onboardStep > 0) { onboardStep--; renderOnboardStep(); } };
 document.getElementById('onboardSkipBtn').onclick = () => completeOnboarding();
+document.getElementById('menuWhatsNewBtn').addEventListener('click', () => { document.getElementById('menuOverlay').classList.remove('open'); maybeShowWhatsNew(true); });
+{ const mv = document.getElementById('menuVersion'); if (mv) mv.textContent = `FOREVER v${APP_VERSION}`; }
 document.getElementById('menuOnboardBtn').addEventListener('click', () => {
   document.getElementById('menuOverlay').classList.remove('open');
   onboardStep = 0;
@@ -9105,7 +9260,7 @@ async function renderCoachDashboard(useCache) {
       if (!s) return `<div class="coach-card"><div class="cc-name">${escHtml(clientDisplayName(c))}</div><div class="ex-prev">Couldn't load this client's data.</div></div>`;
       return `<button class="coach-card" data-i="${i}">
         <div class="cc-top"><span class="cc-dot ${s.status}"></span><span class="cc-name">${escHtml(clientDisplayName(c))}</span>${clientUnread(c) ? `<span class="cc-unread">${clientUnread(c)} new</span>` : ''}<span class="cc-phase">${escHtml(s.phaseLabel)}</span></div>
-        <div class="cc-email">${escHtml(c.client_email || '')}</div>
+        <div class="cc-email">${escHtml(c.client_email || '')}${(() => { const v = clientDoc(c, 'meta/appVersion'); return v && v.version ? ` · <span class="cc-ver ${v.version === APP_VERSION ? 'ok' : 'old'}">v${escHtml(v.version)}${v.version === APP_VERSION ? '' : ' · needs update'}</span>` : ''; })()}</div>
         <div class="cc-stats">
           <span><b>${s.workouts7}</b> workouts/7d</span>
           <span><b>${s.weightNow ? s.weightNow.toFixed(1) : '—'}</b> lb${s.rate != null ? ` <em>${s.rate >= 0 ? '+' : ''}${s.rate.toFixed(1)}/wk</em>` : ''}</span>
@@ -9449,6 +9604,20 @@ function showBodyView(v, focus) {
 }
 document.querySelectorAll('#tab-weight .body-seg button').forEach(b => b.onclick = () => showBodyView(b.dataset.view, true));
 showBodyView(bodyView);
+let mesoView = 'current';
+try { const v = localStorage.getItem('forever_mesoView'); if (['current', 'create'].includes(v)) mesoView = v; } catch (e) {}
+function showMesoView(v, focus) {
+  mesoView = v;
+  try { localStorage.setItem('forever_mesoView', v); } catch (e) {}
+  const btns = [...document.querySelectorAll('#tab-mesos .meso-seg button')];
+  btns.forEach(b => { const on = b.dataset.view === v; b.classList.toggle('on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); });
+  const line = document.querySelector('#tab-mesos .body-seg-line');
+  if (line) line.style.transform = `translateX(${Math.max(0, btns.findIndex(b => b.dataset.view === v)) * 100}%)`;
+  document.querySelectorAll('#tab-mesos .meso-view').forEach(el => { el.hidden = el.dataset.view !== v; });
+  if (v === 'create') renderSelfProgramEditor();
+  if (focus) window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('#tab-mesos .meso-seg button').forEach(b => b.onclick = () => showMesoView(b.dataset.view, true));
 async function renderShapePhotos() {
   const box = document.getElementById('shapePhotos');
   if (!box) return;
@@ -9979,8 +10148,58 @@ async function startApp() {
   await loadDay();
   await maybeShowOnboarding();
   saveScheduleDoc();
+  recordAppVersion();
+  setTimeout(() => { maybeShowWhatsNew(); }, 2600);
   setTimeout(() => { maybeShowCarbCycleIntro(); }, 900);
   setTimeout(() => { maybeShowCoachNote(); }, 1600);
+}
+// ---------- Version + What's new ----------
+// Each account records the version it's running (meta/appVersion) so a coach can see who's up to
+// date, and sees the release notes once after updating.
+async function recordAppVersion() {
+  if (!db || db.__local) return;
+  const key = `forever_recordedVersion_${currentUserId || ''}`;
+  try { if (localStorage.getItem(key) === APP_BUILD) return; } catch (e) {}
+  try { await db.doc('meta/appVersion').set({ version: APP_VERSION, build: APP_BUILD, at: new Date().toISOString() }); localStorage.setItem(key, APP_BUILD); } catch (e) {}
+}
+async function maybeShowWhatsNew(force) {
+  const notes = RELEASE_NOTES[0];
+  if (!notes || notes.version !== APP_VERSION) return;
+  if (!force) {
+    if (dayMode === 'active') return;
+    const busy = ['onboardingOverlay'].some(id => { const el = document.getElementById(id); return el && el.style.display === 'block'; })
+      || document.querySelector('#introSheet.open, #uiSheet.open, .menu-overlay.open');
+    if (busy) { setTimeout(() => maybeShowWhatsNew(), 3000); return; }
+    let seen = null;
+    try { seen = localStorage.getItem('forever_seenVersion'); } catch (e) {}
+    if (!seen && db) { try { const d = await db.doc('meta/whatsNewSeen').get(); if (d.exists) seen = d.data().version; } catch (e) {} }
+    if (seen === APP_VERSION) return;
+    // A brand-new account has nothing to compare against: just mark this version as seen.
+    if (!seen) {
+      let fresh = true;
+      try { const ob = db && await db.doc('meta/onboarded').get(); fresh = !(ob && ob.exists && ob.data().done && blockConfig.start && (await getWeightLog()).length); } catch (e) {}
+      if (fresh) { markWhatsNewSeen(); return; }
+    }
+  }
+  let el = document.getElementById('whatsNew');
+  if (!el) { el = document.createElement('div'); el.id = 'whatsNew'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); document.body.appendChild(el); }
+  const news = notes.items.filter(i => i.k === 'new'), fixes = notes.items.filter(i => i.k === 'fix');
+  const list = (arr, cls) => arr.map(i => `<li class="${cls}">${escHtml(i.t)}</li>`).join('');
+  el.innerHTML = `<div class="is-backdrop"></div><div class="is-panel">
+    <div class="is-grab"></div>
+    <div class="is-kicker">Version ${escHtml(notes.version)} · ${escHtml(notes.date)}</div>
+    <div class="is-title">What's new</div>
+    ${news.length ? `<ul class="wn-list">${list(news, 'wn-new')}</ul>` : ''}
+    ${fixes.length ? `<div class="wn-h">Fixed</div><ul class="wn-list">${list(fixes, 'wn-fix')}</ul>` : ''}
+    <button class="btn-primary" id="wnOk" style="width:100%; margin-top:18px;">Got it</button></div>`;
+  el.classList.add('open');
+  const close = () => { el.classList.remove('open'); markWhatsNewSeen(); };
+  el.querySelector('#wnOk').onclick = close;
+  el.querySelector('.is-backdrop').onclick = close;
+}
+async function markWhatsNewSeen() {
+  try { localStorage.setItem('forever_seenVersion', APP_VERSION); } catch (e) {}
+  if (db && !db.__local) { try { await db.doc('meta/whatsNewSeen').set({ version: APP_VERSION }); } catch (e) {} }
 }
 // A note your coach sent (Coach → client → Send a note). Shown once, newest first.
 async function maybeShowCoachNote() {
