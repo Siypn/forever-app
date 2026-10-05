@@ -1282,6 +1282,13 @@
   #whatsNew .wn-scroll { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
   #whatsNew .wn-foot { flex-shrink: 0; padding: 12px 0 calc(16px + env(safe-area-inset-bottom)); border-top: 1px solid var(--hairline); background: #060509; }
   #whatsNew .wn-x { position: absolute; top: 12px; right: 14px; z-index: 2; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--hairline); background: rgba(255,255,255,0.04); color: var(--text); font-size: 20px; line-height: 1; cursor: pointer; }
+
+  /* Drag to reorder */
+  .drag-h { flex-shrink: 0; width: 30px; align-self: stretch; background: none; border: none; color: var(--text-dim); font-size: 18px; line-height: 1; cursor: grab; touch-action: none; -webkit-user-select: none; user-select: none; padding: 0; }
+  .drag-h:active { color: var(--rest-accent); cursor: grabbing; }
+  .dragging { position: relative; z-index: 2; background: rgba(124,58,237,0.12) !important; border-radius: 12px; box-shadow: 0 0 0 1px rgba(167,139,250,0.5), 0 10px 24px -10px rgba(124,58,237,0.6); }
+  .dragging .drag-h { color: var(--rest-accent); }
+  #editExList .food-entry-form { align-items: center; }
 </style>
 </head>
 <body>
@@ -1890,7 +1897,7 @@ function renderSelfProgramEditor() {
 function renderSelfDayEdit(day) {
   const box = document.getElementById('seDayEdit');
   const d = getProgramDay(day) || { title: 'Rest', exercises: [] };
-  const row = ex => `<div class="cm-ex se-ex"><input class="cm-ex-n" list="seLib" value="${escHtml(ex.name)}" placeholder="Exercise"><select class="cm-ex-t"><option value="compound" ${ex.type === 'compound' ? 'selected' : ''}>Compound</option><option value="isolation" ${ex.type !== 'compound' ? 'selected' : ''}>Isolation</option></select><button class="se-mv" data-mv="-1" aria-label="Move up">↑</button><button class="se-mv" data-mv="1" aria-label="Move down">↓</button><button class="cm-x" aria-label="Remove">×</button></div>`;
+  const row = ex => `<div class="cm-ex se-ex"><button class="drag-h" type="button" aria-label="Hold and drag to reorder">≡</button><input class="cm-ex-n" list="seLib" value="${escHtml(ex.name)}" placeholder="Exercise"><select class="cm-ex-t"><option value="compound" ${ex.type === 'compound' ? 'selected' : ''}>Compound</option><option value="isolation" ${ex.type !== 'compound' ? 'selected' : ''}>Isolation</option></select><button class="cm-x" aria-label="Remove">×</button></div>`;
   const others = DAY_ORDER.filter(x => x !== day && ((getProgramDay(x) || {}).exercises || []).length);
   box.innerHTML = `<div class="cm-edit">
     <input id="seTitle" value="${escHtml((d.exercises || []).length ? (d.title || '') : '')}" placeholder="Day name (e.g. Push, Arms) — leave empty for a rest day">
@@ -1901,13 +1908,9 @@ function renderSelfDayEdit(day) {
   const list = document.getElementById('seExList');
   const wire = () => {
     list.querySelectorAll('.cm-x').forEach(x => x.onclick = () => x.parentElement.remove());
-    list.querySelectorAll('.se-mv').forEach(b => b.onclick = () => {
-      const r = b.parentElement, dir = parseInt(b.dataset.mv, 10);
-      if (dir < 0 && r.previousElementSibling) r.parentElement.insertBefore(r, r.previousElementSibling);
-      if (dir > 0 && r.nextElementSibling) r.parentElement.insertBefore(r.nextElementSibling, r);
-    });
   };
   wire();
+  makeSortable(list, '.cm-ex');
   document.getElementById('seAddEx').onclick = () => { list.insertAdjacentHTML('beforeend', row({ name: '', type: 'isolation' })); wire(); const n = list.lastElementChild.querySelector('.cm-ex-n'); if (n) n.focus(); };
   const cp = document.getElementById('seCopy');
   if (cp) cp.onchange = () => { const src = getProgramDay(cp.value); if (!src) return; list.innerHTML = (src.exercises || []).map(row).join(''); const t = document.getElementById('seTitle'); if (!t.value.trim()) t.value = src.title || ''; wire(); };
@@ -3708,7 +3711,7 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-05.2';
+const APP_BUILD = '2026-10-05.3';
 // The version people see. Bump it (and add a RELEASE_NOTES entry at the top) with every update
 // worth announcing; APP_BUILD still changes on every upload so phones know to refresh.
 const APP_VERSION = '1.05';
@@ -3718,6 +3721,7 @@ const RELEASE_NOTES = [
   { version: '1.05', date: 'Oct 4, 2026', announce: false, items: [
     { k: 'new', t: 'Joint pain check after each workout. Mild pain holds the weight next time; sharp pain offers a joint-friendlier swap (or flags your coach).' },
     { k: 'new', t: 'Finish workout now asks first if you still have open sets.' },
+    { k: 'new', t: 'Reorder exercises by holding the ≡ handle and sliding them up or down.' },
     { k: 'fix', t: 'Back to overview and other everyday links are easier to see.' },
     { k: 'fix', t: 'Setup, sign-in and the workout summary no longer hide their top line behind the iPhone status bar.' },
   ] },
@@ -7177,10 +7181,42 @@ function renderWorkoutPreview() {
   document.getElementById('startFromPreviewBtn').onclick = () => { startWorkoutClock(); showMode('active'); renderMain(); };
 }
 
+// Hold the ≡ handle and slide a row up or down. Rows swap as your finger passes the next row's middle.
+function makeSortable(listEl, rowSel) {
+  if (!listEl || listEl.__sortable) return;
+  listEl.__sortable = true;
+  listEl.addEventListener('pointerdown', e => {
+    const h = e.target.closest('.drag-h');
+    if (!h || !listEl.contains(h)) return;
+    const row = h.closest(rowSel);
+    if (!row) return;
+    e.preventDefault();
+    const pid = e.pointerId;
+    row.classList.add('dragging');
+    try { if (navigator.vibrate) navigator.vibrate(8); } catch (err) {}
+    // The dragged row itself never moves in the page; its neighbours hop over it. (Moving the row
+    // you're holding makes the browser drop the touch.) Listening on window keeps the drag alive
+    // even when the finger slides off the handle.
+    const move = ev => {
+      if (ev.pointerId !== pid) return;
+      ev.preventDefault();
+      const y = ev.clientY;
+      for (let g = 0; g < 20; g++) {
+        const prev = row.previousElementSibling, next = row.nextElementSibling;
+        if (prev && prev.matches(rowSel)) { const r = prev.getBoundingClientRect(); if (y < r.top + r.height / 2) { listEl.insertBefore(prev, row.nextSibling); continue; } }
+        if (next && next.matches(rowSel)) { const r = next.getBoundingClientRect(); if (y > r.top + r.height / 2) { listEl.insertBefore(next, row); continue; } }
+        break;
+      }
+    };
+    const end = ev => { if (ev.pointerId !== pid) return; row.classList.remove('dragging'); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', end); window.removeEventListener('pointercancel', end); };
+    window.addEventListener('pointermove', move, { passive: false }); window.addEventListener('pointerup', end); window.addEventListener('pointercancel', end);
+  });
+}
 function editDayPanelHTML() {
   const dayData = getProgramDay(currentDay);
   const rows = dayData.exercises.map((ex, i) => `
     <div class="food-entry-form" data-i="${i}">
+      <button class="drag-h" type="button" aria-label="Hold and drag to reorder">≡</button>
       <input class="edit-ex-name" value="${escHtml(ex.name)}" placeholder="Exercise name">
       <select class="edit-ex-type"><option value="compound" ${ex.type==='compound'?'selected':''}>Compound</option><option value="isolation" ${ex.type==='isolation'?'selected':''}>Isolation</option></select>
       <button class="frm edit-ex-remove" type="button">×</button>
@@ -7269,12 +7305,13 @@ function wireEditDayPanel() {
   function addRow(name, type) {
     const div = document.createElement('div');
     div.className = 'food-entry-form';
-    div.innerHTML = `<input class="edit-ex-name" value="${name||''}" placeholder="Exercise name"><select class="edit-ex-type"><option value="compound" ${type==='compound'?'selected':''}>Compound</option><option value="isolation" ${type!=='compound'?'selected':''}>Isolation</option></select><button class="frm edit-ex-remove" type="button">×</button>`;
+    div.innerHTML = `<button class="drag-h" type="button" aria-label="Hold and drag to reorder">≡</button><input class="edit-ex-name" value="${name||''}" placeholder="Exercise name"><select class="edit-ex-type"><option value="compound" ${type==='compound'?'selected':''}>Compound</option><option value="isolation" ${type!=='compound'?'selected':''}>Isolation</option></select><button class="frm edit-ex-remove" type="button">×</button>`;
     div.querySelector('.edit-ex-remove').onclick = () => div.remove();
     listEl.appendChild(div);
   }
 
   listEl.querySelectorAll('.edit-ex-remove').forEach(btn => btn.onclick = () => btn.closest('.food-entry-form').remove());
+  makeSortable(listEl, '.food-entry-form');
   document.getElementById('addExRowBtn').onclick = () => addRow('', 'isolation');
 
   const libBrowser = document.getElementById('libraryBrowser');
@@ -9530,7 +9567,7 @@ function renderCoachDayEdit(c, day) {
   const box = document.getElementById('cmDayEdit');
   const prog = clientProgram(c);
   const d = prog.days[day];
-  const row = (ex, i) => `<div class="cm-ex" data-i="${i}"><input class="cm-ex-n" list="cmLib" value="${escHtml(ex.name)}" placeholder="Exercise"><select class="cm-ex-t"><option value="compound" ${ex.type === 'compound' ? 'selected' : ''}>Compound</option><option value="isolation" ${ex.type !== 'compound' ? 'selected' : ''}>Isolation</option></select><button class="cm-x" aria-label="Remove">×</button></div>`;
+  const row = (ex, i) => `<div class="cm-ex" data-i="${i}"><button class="drag-h" type="button" aria-label="Hold and drag to reorder">≡</button><input class="cm-ex-n" list="cmLib" value="${escHtml(ex.name)}" placeholder="Exercise"><select class="cm-ex-t"><option value="compound" ${ex.type === 'compound' ? 'selected' : ''}>Compound</option><option value="isolation" ${ex.type !== 'compound' ? 'selected' : ''}>Isolation</option></select><button class="cm-x" aria-label="Remove">×</button></div>`;
   box.innerHTML = `<div class="cm-edit">
     <input id="cmTitle" value="${escHtml(d.title || '')}" placeholder="Day title (e.g. Arms) or Rest">
     <div id="cmExList">${(d.exercises || []).map(row).join('')}</div>
@@ -9539,6 +9576,7 @@ function renderCoachDayEdit(c, day) {
   const list = document.getElementById('cmExList');
   const wireRows = () => list.querySelectorAll('.cm-x').forEach(x => x.onclick = () => { x.parentElement.remove(); });
   wireRows();
+  makeSortable(list, '.cm-ex');
   document.getElementById('cmAddEx').onclick = () => { list.insertAdjacentHTML('beforeend', row({ name: '', type: 'isolation' }, list.children.length)); wireRows(); };
   list.addEventListener('change', e => {
     if (!e.target.classList.contains('cm-ex-n')) return;
