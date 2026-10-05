@@ -570,7 +570,7 @@
   .pr-e1 span { color: var(--text); font-weight: 700; }
   /* Summary */
   .summary-overlay { position: fixed; inset: 0; z-index: 980; background: var(--bg); overflow-y: auto; animation: fadeUp 0.3s var(--ease); }
-  .summary-card { max-width: 480px; margin: 0 auto; padding: 64px 22px 40px; }
+  .summary-card { max-width: 480px; margin: 0 auto; padding: calc(40px + env(safe-area-inset-top)) 22px calc(40px + env(safe-area-inset-bottom)); }
   .summary-title { font-family: 'Bebas Neue', sans-serif; font-size: 46px; letter-spacing: 1px; margin: 2px 0 18px; text-shadow: 0 0 24px rgba(255,255,255,0.35); }
   /* full-screen workout */
   body.is-running #tab-workout .control-panel, body.is-running #dayNav, body.is-running #fatigueSlot, body.is-running #checkinSlot,
@@ -1350,7 +1350,7 @@
 </div>
 
 <div id="onboardingOverlay" style="display:none; position:fixed; inset:0; background:var(--bg); z-index:950; overflow-y:auto;">
-  <div style="max-width:480px; margin:0 auto; padding:24px 20px 40px;">
+  <div style="max-width:480px; margin:0 auto; padding:calc(24px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));">
     <div style="text-align:right;"><button class="back-link" id="onboardSkipBtn" style="padding:0;">Skip setup</button></div>
     <div id="onboardContent"></div>
     <div style="display:flex; gap:10px; margin-top:20px;">
@@ -1709,7 +1709,7 @@
 </div>
 
 <div id="authOverlay" style="display:none; position:fixed; inset:0; background:var(--bg); z-index:970; overflow-y:auto;">
-  <div style="max-width:400px; margin:0 auto; padding:60px 20px 40px;">
+  <div style="max-width:400px; margin:0 auto; padding:calc(36px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));">
     <img class="brand-mark" src="icon-512.png" alt="" aria-hidden="true">
     <h1 style="text-align:center; margin-bottom:4px;">FOREVER</h1>
     <div class="ex-prev" style="text-align:center; margin-bottom:28px;" id="authSubtitle">Sign in to sync your training across devices.</div>
@@ -3684,7 +3684,7 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-04.4';
+const APP_BUILD = '2026-10-05.1';
 // The version people see. Bump it (and add a RELEASE_NOTES entry at the top) with every update
 // worth announcing; APP_BUILD still changes on every upload so phones know to refresh.
 const APP_VERSION = '1.05';
@@ -3695,6 +3695,7 @@ const RELEASE_NOTES = [
     { k: 'new', t: 'Joint pain check after each workout. Mild pain holds the weight next time; sharp pain offers a joint-friendlier swap (or flags your coach).' },
     { k: 'new', t: 'Finish workout now asks first if you still have open sets.' },
     { k: 'fix', t: 'Back to overview and other everyday links are easier to see.' },
+    { k: 'fix', t: 'Setup, sign-in and the workout summary no longer hide their top line behind the iPhone status bar.' },
   ] },
   { version: '1.0', date: 'Oct 4, 2026', items: [
     { k: 'new', t: 'Mesos is now two pages: Current for the block you are running, Create for building the next one.' },
@@ -7624,6 +7625,8 @@ function onboardBlockHTML() {
 
 function renderOnboardStep() {
   const key = ONBOARD_STEPS[onboardStep];
+  // Every step starts at the top (iOS keeps the last scroll position after a field was focused).
+  const ov = document.getElementById('onboardingOverlay'); if (ov) ov.scrollTop = 0;
   const content = document.getElementById('onboardContent');
   const backBtn = document.getElementById('onboardBackBtn');
   const nextBtn = document.getElementById('onboardNextBtn');
