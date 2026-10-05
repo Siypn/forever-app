@@ -2451,7 +2451,27 @@ function armDayNeeds(day) {
   if (!ex.some(e => (c(e).Shoulders || 0) >= 1 && e.type === 'isolation') && room()) {
     needs.push({ muscle: 'Shoulders', re: /Lateral|Shoulder Fly|Y-Raise/, why: 'Side delts pair naturally with arms (small muscles, nothing overlapping) and they are what make the arms look wide from the front.' });
   }
-  return needs;
+  // When room runs out, the moves that even out the lagging side must come first.
+  const b0 = n('Biceps'), t0 = n('Triceps');
+  const behind = b0 < t0 ? 'Biceps' : t0 < b0 ? 'Triceps' : null;
+  const pr = nd => nd.muscle === behind ? 0 : nd.muscle === 'Shoulders' ? 2 : 1;
+  return needs.map((nd, i) => ({ nd, i })).sort((a, b) => pr(a.nd) - pr(b.nd) || a.i - b.i).map(x => x.nd);
+}
+// After additions are rolled back (recovery limit), drop the newest unmatched biceps/triceps add on
+// the side that's now ahead, so a day never ends lopsided because only half a pair survived.
+function trimArmImbalance(day, added) {
+  const c = e => muscleContributions(e.name, e.type) || {};
+  const n = m => (day.exercises || []).filter(e => (c(e)[m] || 0) >= 1).length;
+  for (let g = 0; g < 4; g++) {
+    const bi = n('Biceps'), tri = n('Triceps');
+    if (bi === tri) return;
+    const ahead = bi > tri ? 'Biceps' : 'Triceps';
+    const k = [...added].reverse().findIndex(a => (c(a.item)[ahead] || 0) >= 1 && day.exercises.includes(a.item));
+    if (k === -1) return;
+    const a = added[added.length - 1 - k];
+    day.exercises.splice(day.exercises.indexOf(a.item), 1);
+    if (a.onRemove) a.onRemove();
+  }
 }
 function optimizeSplit(program, opts) {
   opts = opts || {};
@@ -2548,6 +2568,7 @@ function optimizeSplit(program, opts) {
     prog[a.d].exercises.splice(idx, 1);
     const ci = changes.indexOf(a.ch); if (ci !== -1) changes.splice(ci, 1);
   }
+  [...new Set(armAdds.map(a => a.d))].forEach(d => trimArmImbalance(prog[d], armAdds.filter(a => a.d === d).map(a => ({ item: a.item, onRemove: () => { const ci = changes.indexOf(a.ch); if (ci !== -1) changes.splice(ci, 1); } }))));
 
   // 2) Fill muscles under their minimum, and spread big muscles across 2 days.
   const pickExercise = (muscle, crossRegion, newDayForMajor) => {
@@ -2838,7 +2859,7 @@ function buildProgram(opts) {
     const isos = tpl.slots.filter(sl => !(sl.split(':')[1] === 'c' || sl.endsWith('!')));
     // Full-body days are mostly big lifts (one accessory slot); split days keep two for accessories.
     const compRoom = Math.max(2, maxEx - Math.min(/^FULL/.test(key) ? 1 : 2, isos.length));
-    for (const slot of comps) { if (ex.length >= compRoom) break; const e = pick(slot, ex, i); if (e) ex.push(e); }
+    for (const slot of comps) { if (ex.length >= (slot.endsWith('!') ? maxEx : compRoom)) continue; const e = pick(slot, ex, i); if (e) ex.push(e); }
     prog[weekdays[i]] = { title: tpl.title, focus: '', exercises: ex, key };
     pendingIso[weekdays[i]] = isos.slice();
   });
@@ -2920,6 +2941,7 @@ function buildProgram(opts) {
   // as far as the session length allows and never past what a muscle can recover from.
   const dayMinutes = d => prog[d].exercises.reduce((a, e) => a + setsFor(e.type) * SET_MINUTES[e.type] * (supersets && e.type === 'isolation' ? SS_TIME_FACTOR : 1), 0) + 8;
   weekdays.filter(d => isArmDay(prog[d])).forEach(d => {
+    const addedHere = [];
     for (const nd of armDayNeeds(prog[d])) {
       if (prog[d].exercises.length >= maxEx + 1) break;
       if (dayMinutes(d) + setsFor('isolation') * SET_MINUTES.isolation * (supersets ? SS_TIME_FACTOR : 1) > minutes + 3) break;
@@ -2933,7 +2955,9 @@ function buildProgram(opts) {
       const v1 = vol();
       if (VOLUME_MUSCLES.some(m => v1[m] > VOLUME_LANDMARKS[m].mrv && !(v0[m] > VOLUME_LANDMARKS[m].mrv))) { prog[d].exercises.pop(); continue; }
       useCount[best.name] = (useCount[best.name] || 0) + 1;
+      addedHere.push({ item: prog[d].exercises[prog[d].exercises.length - 1] });
     }
+    trimArmImbalance(prog[d], addedHere);
   });
   // Keep compounds first within each day, then label each day by what it trains.
   weekdays.forEach(d => {
@@ -3684,7 +3708,7 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-05.1';
+const APP_BUILD = '2026-10-05.2';
 // The version people see. Bump it (and add a RELEASE_NOTES entry at the top) with every update
 // worth announcing; APP_BUILD still changes on every upload so phones know to refresh.
 const APP_VERSION = '1.05';
@@ -5904,18 +5928,19 @@ function jointFriendlyAlternatives(ex) {
   const rank = { machine: 0, cable: 0, plate: 1, smith: 3, dumbbell: 3, band: 4, bodyweight: 5, barbell: 6 };
   // Movements known to load elbows, shoulders, knees or the lower back hard: last resort when a joint already hurts.
   const HARD_ON_JOINTS = /JM Press|Skull|Dip|Upright Row|Behind|Good Morning|Sissy|Nordic|Deficit|Pendlay|Barbell Row|Conventional Deadlift|Rack Pull|French|Close-Grip Push-Up|Pike/;
-  const sc = a => (rank[a.equip] != null ? rank[a.equip] : 3) * 2 + (a.type === ex.type ? 0 : 1) + (HARD_ON_JOINTS.test(a.name) ? 20 : 0);
+  const sc = a => (rank[a.equip] != null ? rank[a.equip] : 3) * 2 + (a.type === ex.type ? 0 : 9) + (HARD_ON_JOINTS.test(a.name) ? 20 : 0);
   return libraryCandidates(m).filter(a => !inDay.has(a.name) && a.name !== ex.name && availableAtMyGym(a.name)).sort((a, b) => sc(a) - sc(b)).slice(0, 3);
 }
 function painBannerHTML(ex) {
   const p = painInfo(ex.swappedFrom ? '' : ex.name);
   if (!p || !p.swap || (state[ex.name] || []).some(st => st.logged) || ((sessionMods.painKeep || []).includes(ex.name))) return '';
   const why = p.last >= 2 ? 'Sharp joint pain on this last time.' : 'Joint pain on this in 2 of your last 3 sessions.';
-  if (myCoaches.length) return `<div class="pain-banner"><b>${why}</b> Your coach can see it. The weight holds until it settles, and stop any set that hurts.</div>`;
+  const holdTxt = p.hold ? 'The weight holds until it settles. ' : '';
+  if (hasCoach()) return `<div class="pain-banner"><b>${why}</b> Your coach can see it. ${holdTxt}Stop any set that hurts.</div>`;
   const alts = jointFriendlyAlternatives(ex);
-  return `<div class="pain-banner"><b>${why}</b> ${alts.length ? 'Swap it for a joint-friendlier option for the rest of your program?' : 'The weight holds until it settles. Stop any set that hurts.'}
+  return `<div class="pain-banner"><b>${why}</b> ${alts.length ? 'Swap it for a joint-friendlier option for the rest of your program?' : `${holdTxt}Stop any set that hurts.`}
     ${alts.length ? `<div class="pain-alts">${alts.map(a => `<button class="pain-alt" data-n="${escHtml(a.name)}" data-t="${a.type}">${escHtml(a.name)}<em>${escHtml(EQUIP_LABELS && EQUIP_LABELS[a.equip] ? EQUIP_LABELS[a.equip] : a.equip)}</em></button>`).join('')}</div>
-    <button class="text-btn pain-keep">Keep ${escHtml(ex.name)} (weight holds)</button>` : ''}</div>`;
+    <button class="text-btn pain-keep">Keep ${escHtml(ex.name)}${p.hold ? ' (weight holds)' : ''}</button>` : ''}</div>`;
 }
 function wirePainBanner(ex) {
   document.querySelectorAll('.pain-alt').forEach(b => b.onclick = () => swapExerciseInDay(ex.name, b.dataset.n, b.dataset.t));
@@ -5928,7 +5953,7 @@ function jointCheckHTML(exs) {
   const d = sessionDate();
   return `<div class="muscle-check joint-check">
     <div class="review-rec-head">Any joint pain?</div>
-    <div class="review-reason" style="margin-bottom:8px;">Only tap if something hurt (elbows, shoulders, knees, lower back). Mild holds the weight next time; sharp ${myCoaches.length ? 'is flagged to your coach' : 'gets you a joint-friendlier swap'}.</div>
+    <div class="review-reason" style="margin-bottom:8px;">Only tap if something hurt (elbows, shoulders, knees, lower back). Mild holds the weight next time; sharp ${hasCoach() ? 'is flagged to your coach' : 'gets you a joint-friendlier swap'}.</div>
     ${done.map(ex => { const cur = ((jointPain[ex.name] || []).find(x => x.date === d) || {}).level || 0;
       return `<div class="jp-row" data-ex="${escHtml(ex.name)}"><span class="mc-name">${escHtml(ex.name)}</span>
         <div class="scale-row dot-scale mc-seg">${[[0, 'None'], [1, 'Mild'], [2, 'Sharp']].map(([v, l]) => `<button class="scale-btn ${cur === v ? 'selected' : ''}" data-jp="${v}">${l}</button>`).join('')}</div>
@@ -5941,7 +5966,7 @@ function wireJointCheck(root) {
     const lv = parseInt(b.dataset.jp, 10);
     await recordJointPain(row.dataset.ex, lv);
     row.querySelector('.mc-out').textContent = lv === 2
-      ? (myCoaches.length ? 'Noted. Your coach will see this, and the weight holds next time.' : "Noted. Next time we'll offer a joint-friendlier swap, and the weight holds if you keep it.")
+      ? (hasCoach() ? 'Noted. Your coach will see this, and the weight holds next time.' : "Noted. Next time we'll offer a joint-friendlier swap, and the weight holds if you keep it.")
       : lv === 1 ? 'Noted. Next time the weight holds (no increase). Two painful sessions out of three and we suggest a swap.' : '';
   }));
 }
@@ -6442,7 +6467,7 @@ function wireExerciseEvents(ex, container) {
       row.onclick = () => swapExerciseInDay(exName, row.dataset.name, row.dataset.type);
     });
   };
-  container.querySelectorAll('.done-row').forEach(row => {
+  container.querySelectorAll('.done-row[data-i]').forEach(row => {
     row.onclick = () => { const i = parseInt(row.dataset.i, 10); clearTimerFor(exName); sets[i].logged = false; uiState[exName].phase = 'input'; if (i === sets.length - 1) { uiState[exName].techDone = false; delete sets[i].extra; } renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot')); };
   });
   const addBtn = container.querySelector(`#add-${id}`);
@@ -7760,9 +7785,19 @@ async function showCarbCycleIntro() {
 function settleIOSViewport() {
   try { const a = document.activeElement; if (a && a !== document.body && a.blur) a.blur(); } catch (e) {}
   const vp = document.querySelector('meta[name="viewport"]');
-  if (vp) { const c = vp.getAttribute('content'); vp.setAttribute('content', c + ', user-scalable=no'); setTimeout(() => vp.setAttribute('content', c), 60); }
+  if (vp) {
+    if (!settleIOSViewport.orig) settleIOSViewport.orig = vp.getAttribute('content');
+    vp.setAttribute('content', settleIOSViewport.orig + ', user-scalable=no');
+    clearTimeout(settleIOSViewport.t); settleIOSViewport.t = setTimeout(() => vp.setAttribute('content', settleIOSViewport.orig), 60);
+  }
 }
+let onboardBusy = false;
 async function onboardHandleNext() {
+  if (onboardBusy) return;
+  onboardBusy = true;
+  try { await onboardHandleNextInner(); } finally { onboardBusy = false; }
+}
+async function onboardHandleNextInner() {
   settleIOSViewport();
   const key = ONBOARD_STEPS[onboardStep];
   if (key === 'stats') {
@@ -9263,11 +9298,15 @@ document.getElementById('addCardioBtn').onclick = async () => {
 // read-only (enforced by the database, not just the app). Either side can disconnect.
 let coachProfile = null;   // { code, display_name } when this account is a coach
 let myCoaches = [];        // coaches this account is connected to
+// Remembered per account so coach-only behaviour is right from the first screen and when offline.
+function coachCacheKey() { return `forever_coaches_${currentUserId || ''}`; }
+function loadCachedCoaches() { try { const v = JSON.parse(localStorage.getItem(coachCacheKey()) || 'null'); if (Array.isArray(v)) myCoaches = v; } catch (e) {} }
+function hasCoach() { return myCoaches.length > 0; }
 async function loadCoachState() {
-  coachProfile = null; myCoaches = [];
-  if (!(supaClient && currentUserId)) return;
+  coachProfile = null;
+  if (!(supaClient && currentUserId)) { myCoaches = []; return; }
   try { const { data } = await supaClient.from('coaches').select('code, display_name').eq('user_id', currentUserId).maybeSingle(); if (data) coachProfile = data; } catch (e) {}
-  try { const { data } = await supaClient.rpc('my_coaches'); myCoaches = data || []; } catch (e) {}
+  try { const { data, error } = await supaClient.rpc('my_coaches'); if (!error && Array.isArray(data)) { myCoaches = data; try { localStorage.setItem(coachCacheKey(), JSON.stringify(data.map(c => ({ coach_id: c.coach_id, display_name: c.display_name })))); } catch (e) {} } } catch (e) {}
   const dash = document.getElementById('menuCoachDashBtn'); if (dash) dash.style.display = coachProfile ? 'flex' : 'none';
   const con = document.getElementById('menuConnectCoachBtn');
   if (con) { con.style.display = 'flex'; const l = con.querySelector('.mt-l') || con; l.textContent = myCoaches.length ? `Coach: ${myCoaches[0].display_name}` : 'Connect to a coach'; }
@@ -9330,7 +9369,9 @@ function clientSummary(docs, today) {
     sessions, weights, food, flags: [],
   };
   const jp = ((docs.find(d => d.path === 'meta/jointPain') || {}).data || {}).log || {};
-  Object.entries(jp).forEach(([n, arr]) => { const last = (arr || []).slice(-1)[0]; if (last && last.level >= 2 && within(last.date, 10)) out.flags.push({ lvl: 1, t: `Sharp joint pain: ${n}` }); });
+  Object.entries(jp).forEach(([n, arr]) => { const last = (arr || []).slice(-1)[0]; const recent = (arr || []).filter(x => within(x.date, 21));
+    if (last && last.level >= 2 && within(last.date, 10)) out.flags.push({ lvl: 1, t: `Sharp joint pain: ${n}` });
+    else if (recent.length >= 2) out.flags.push({ lvl: 1, t: `Repeated joint pain: ${n}` }); });
   if (out.daysSince == null) out.flags.push({ lvl: 2, t: 'No workouts logged yet' });
   else if (out.daysSince >= 5) out.flags.push({ lvl: 2, t: `No workout in ${out.daysSince} days` });
   if (out.foodDays7 < 4) out.flags.push({ lvl: out.foodDays7 <= 1 ? 2 : 1, t: `Food logged ${out.foodDays7}/7 days` });
@@ -10385,6 +10426,7 @@ async function useSupabaseSession(session) {
     }
   } catch (e) {}
   await maybeImportLocalData(session.user.id);
+  myCoaches = []; loadCachedCoaches();
   await startApp();
   loadCoachState().catch(() => {});
   setTimeout(() => { ensureUsername().catch(() => {}); }, 2400);
