@@ -1258,6 +1258,25 @@
   .menu-ver { text-align: center; font-size: 11px; color: var(--text-dim); margin-top: 10px; letter-spacing: 0.4px; }
   .cc-ver.ok { color: var(--text-dim); }
   .cc-ver.old { color: #f5b971; }
+
+  /* Everyday navigation reads as tappable; destructive actions (Reset workout, Remove set) stay quiet. */
+  #backToOverviewBtn, #backFromPreviewBtn { color: var(--text) !important; font-size: 13.5px !important; font-weight: 500; letter-spacing: 0.2px; }
+  #editDayBtn { color: var(--text) !important; }
+  .mini-row [id^="add-"], .focus-card .add-set { color: var(--text); }
+  .warmupSkipBtn { color: var(--text); }
+  /* Joint pain */
+  .joint-check { margin-top: 18px; }
+  .jp-row { padding: 8px 0; border-top: 1px solid var(--hairline); }
+  .jp-row .mc-name { display: block; margin-bottom: 6px; }
+  .jp-row .mc-out { font-size: 11.5px; color: var(--rest-accent); margin-top: 6px; }
+  .jp-row .mc-out:empty { display: none; }
+  .pain-banner { margin: 8px 0 4px; padding: 12px 14px; border-radius: 14px; border: 1px solid rgba(245,185,113,0.35); background: rgba(245,185,113,0.07); font-size: 12.5px; line-height: 1.5; color: var(--text-dim); }
+  .pain-banner b { color: #f5b971; font-weight: 600; }
+  .pain-alts { display: grid; gap: 6px; margin: 10px 0 6px; }
+  .pain-alt { display: flex; justify-content: space-between; align-items: center; background: none; border: 1px solid var(--hairline); border-radius: 12px; padding: 10px 12px; color: var(--text); font: inherit; font-size: 13px; cursor: pointer; text-align: left; }
+  .pain-alt em { font-style: normal; font-size: 11px; color: var(--text-dim); }
+  .pain-keep { font-size: 12px; }
+  .wn-ver { font-size: 10px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--rest-accent); margin: 22px 0 4px; padding-top: 14px; border-top: 1px solid rgba(167,139,250,0.25); }
 </style>
 </head>
 <body>
@@ -3660,11 +3679,18 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-04.2';
+const APP_BUILD = '2026-10-04.3';
 // The version people see. Bump it (and add a RELEASE_NOTES entry at the top) with every update
 // worth announcing; APP_BUILD still changes on every upload so phones know to refresh.
-const APP_VERSION = '1.0';
+const APP_VERSION = '1.05';
+// announce: false = a quick follow-up that shows in the list but doesn't pop up again for people
+// who already saw the last announced version.
 const RELEASE_NOTES = [
+  { version: '1.05', date: 'Oct 4, 2026', announce: false, items: [
+    { k: 'new', t: 'Joint pain check after each workout. Mild pain holds the weight next time; sharp pain offers a joint-friendlier swap (or flags your coach).' },
+    { k: 'new', t: 'Finish workout now asks first if you still have open sets.' },
+    { k: 'fix', t: 'Back to overview and other everyday links are easier to see.' },
+  ] },
   { version: '1.0', date: 'Oct 4, 2026', items: [
     { k: 'new', t: 'Mesos is now two pages: Current for the block you are running, Create for building the next one.' },
     { k: 'new', t: 'Write your own block: type in every day of your week yourself, reorder exercises, or copy a day.' },
@@ -5003,9 +5029,10 @@ function computeSuggestion(exName, type) {
   const model = liftModelCache[exName];
   const sore = parseInt(sorenessToday, 10);
   const bw = bwBase(exName) > 0;
-  const plan = planLift(model, type, { rirs: plannedRirs(n, type, info.deload), today: todayISO(), deload: info.deload, noProgress: !isNaN(sore) && sore >= 5,
+  const pain = painInfo(exName);
+  const plan = planLift(model, type, { rirs: plannedRirs(n, type, info.deload), today: todayISO(), deload: info.deload, noProgress: (!isNaN(sore) && sore >= 5) || !!(pain && pain.hold),
     range: bw ? repRangeFor(exName, type) : null, maxAdd: bw ? 5 : null });
-  planMetaByEx[exName] = plan ? { targetE: plan.targetE, fatigue: model.fatigue, tier: plan.tier, note: plan.note, model } : null;
+  planMetaByEx[exName] = plan ? { targetE: plan.targetE, fatigue: model.fatigue, tier: plan.tier, note: pain && pain.hold ? 'Joint pain last time: the weight holds (no increase) until a session goes by without pain. Stop any set that hurts.' : plan.note, model } : null;
   if (!plan) return null;
   const bestAtBw = w => Math.max(0, ...((model.last && model.last.sets) || []).filter(x => parseFloat(x.weight) >= w - 1e-9).map(x => parseInt(x.reps, 10) || 0));
   if (bwBase(exName) && !plan.targetE) {
@@ -5458,6 +5485,7 @@ function renderMain() {
       ${ssBanner && ssBanner.name === ex.name ? `<div class="ss-banner">${escHtml(ssBanner.text)}</div>` : ''}
       <div class="focus-name">${escHtml(ex.name)}</div>
       ${cueHTML(ex)}
+      ${painBannerHTML(ex)}
       <div class="ex-prev-slot"></div>
       <div class="ex-body"></div>
       <div id="recAskSlot" class="rec-below">${recoveryAskHTML(ex)}</div>
@@ -5466,6 +5494,7 @@ function renderMain() {
     <div class="run-finish"><button class="back-link" id="finishEarlyBtn">Finish workout</button></div>`;
   const card = document.getElementById('focusCard');
   wireRecoveryAsk(ex);
+  wirePainBanner(ex);
   renderExerciseBody(ex, card.querySelector('.ex-body'), card.querySelector('.ex-prev-slot'));
   document.getElementById('busyBtn').onclick = () => renderBusySheet(ex);
   document.getElementById('shortBtn').onclick = () => renderShortSheet();
@@ -5784,6 +5813,14 @@ function buildWorkoutSummary(exs, startMs, endMs) {
 let finishing = false;
 async function finishWorkout() {
   if (finishing || document.querySelector('.summary-overlay')) return; // double-tap guard
+  // Ending early is a one-tap mistake waiting to happen mid-workout: ask when sets are still open.
+  const left = getDayData(currentDay).exercises.reduce((a, ex) => a + (isSkipped(ex.name) ? 0 : (state[ex.name] || []).filter(st => !st.logged).length), 0);
+  if (left > 0) {
+    finishing = true;
+    const go = await uiConfirm('Finish workout?', `${left} set${left === 1 ? ' is' : 's are'} still open. Finish now and ${left === 1 ? 'it won\'t' : 'they won\'t'} count; everything you logged is saved.`, 'Finish', { cancel: 'Keep going' });
+    finishing = false;
+    if (!go) return;
+  }
   finishing = true;
   try { await finishWorkoutInner(); } finally { finishing = false; }
 }
@@ -5813,11 +5850,94 @@ async function finishWorkoutInner() {
       ${sum.lifts.length ? `<div class="review-lifts">${sum.lifts.map(l => `<div class="review-lift"><span>${escHtml(l.name)}${l.pr ? '<b class="chip-pr">PR</b>' : ''}</span><span class="review-lift-v">${Math.round(l.e1)} lb est. max ${l.pct != null ? `<em>${f(l.pct)}</em>` : '<em>first log</em>'}</span></div>`).join('')}</div>` : ''}
       ${sum.overallPct != null ? `<div class="review-rec"><div class="review-rec-head">${sum.overallPct >= 0.5 ? 'Stronger than last time' : sum.overallPct > -1.5 ? 'Held your strength' : 'Off day — it happens'}</div><div class="review-reason">${sum.overallPct >= 0.5 ? `Your lifts moved ${f(sum.overallPct)} vs the last time you did them. Next session's plan already accounts for it.` : sum.overallPct > -1.5 ? 'Within normal day-to-day variation. Next session plans from today.' : 'Sleep, food and stress all show up here. The plan adjusts — one session doesn\'t change the trend.'}</div></div>` : ''}` : `<div class="ex-prev" style="margin-top:8px;">Log at least one set and it'll be saved here.</div>`}
       ${sum.sets ? muscleCheckHTML(exs) : ''}
+      ${sum.sets ? jointCheckHTML(exs) : ''}
       <button class="btn-primary" id="summaryDoneBtn" style="width:100%; margin-top:20px;">Done</button>
     </div>`;
   document.body.appendChild(el);
   wireMuscleCheck(el, exs);
+  wireJointCheck(el);
   el.querySelector('#summaryDoneBtn').onclick = () => { el.remove(); showMode('overview'); renderDayOverview(); };
+}
+
+// ---------- Joint pain ----------
+// Asked once at the end of a workout, per exercise (pain belongs to a movement, not a muscle).
+// Rules, applied the next time that exercise comes up:
+//  · mild last time  → the weight holds (no increase) until a session goes by without pain
+//  · sharp last time, or mild in 2 of the last 3 sessions → offer a joint-friendlier swap
+//    (with a coach: no automatic swap, the coach sees a flag instead)
+let jointPain = {}; // exName -> [{ date, level: 1 mild | 2 sharp }], oldest first
+async function loadJointPain() {
+  jointPain = {};
+  if (!db) return;
+  try { const snap = await db.doc('meta/jointPain').get(); if (snap.exists) jointPain = snap.data().log || {}; } catch (e) {}
+}
+async function recordJointPain(exName, level) {
+  const d = sessionDate();
+  const arr = (jointPain[exName] || []).filter(x => x.date !== d);
+  if (level) arr.push({ date: d, level });
+  if (arr.length) jointPain[exName] = arr.slice(-6); else delete jointPain[exName];
+  if (db) { try { await db.doc('meta/jointPain').set({ log: jointPain }); } catch (e) {} }
+}
+function painInfo(exName) {
+  const log = jointPain[exName] || [];
+  if (!log.length) return null;
+  const hist = (exerciseHistory[exName] || []).slice(0, 3).map(h => h.date);
+  if (!hist.length || daysBetweenISO(hist[0], todayISO()) > 28) return null;
+  const at = d => (log.find(x => x.date === d) || {}).level || 0;
+  const last = at(hist[0]);
+  const mild = hist.filter(d => at(d) >= 1).length;
+  if (!last && mild < 2) return null;
+  return { last, hold: last >= 1, swap: last >= 2 || mild >= 2 };
+}
+// Same muscle, same kind of movement, joint-friendlier equipment first (machines and cables guide
+// the path and let you adjust the angle; barbells lock your joints into one).
+function jointFriendlyAlternatives(ex) {
+  const m = primaryMusclesOf(ex)[0];
+  if (!m) return [];
+  const inDay = new Set(getDayData(currentDay).exercises.map(e => e.name));
+  const rank = { machine: 0, cable: 0, plate: 1, smith: 3, dumbbell: 3, band: 4, bodyweight: 5, barbell: 6 };
+  // Movements known to load elbows, shoulders, knees or the lower back hard: last resort when a joint already hurts.
+  const HARD_ON_JOINTS = /JM Press|Skull|Dip|Upright Row|Behind|Good Morning|Sissy|Nordic|Deficit|Pendlay|Barbell Row|Conventional Deadlift|Rack Pull|French|Close-Grip Push-Up|Pike/;
+  const sc = a => (rank[a.equip] != null ? rank[a.equip] : 3) * 2 + (a.type === ex.type ? 0 : 1) + (HARD_ON_JOINTS.test(a.name) ? 20 : 0);
+  return libraryCandidates(m).filter(a => !inDay.has(a.name) && a.name !== ex.name && availableAtMyGym(a.name)).sort((a, b) => sc(a) - sc(b)).slice(0, 3);
+}
+function painBannerHTML(ex) {
+  const p = painInfo(ex.swappedFrom ? '' : ex.name);
+  if (!p || !p.swap || (state[ex.name] || []).some(st => st.logged) || ((sessionMods.painKeep || []).includes(ex.name))) return '';
+  const why = p.last >= 2 ? 'Sharp joint pain on this last time.' : 'Joint pain on this in 2 of your last 3 sessions.';
+  if (myCoaches.length) return `<div class="pain-banner"><b>${why}</b> Your coach can see it. The weight holds until it settles, and stop any set that hurts.</div>`;
+  const alts = jointFriendlyAlternatives(ex);
+  return `<div class="pain-banner"><b>${why}</b> ${alts.length ? 'Swap it for a joint-friendlier option for the rest of your program?' : 'The weight holds until it settles. Stop any set that hurts.'}
+    ${alts.length ? `<div class="pain-alts">${alts.map(a => `<button class="pain-alt" data-n="${escHtml(a.name)}" data-t="${a.type}">${escHtml(a.name)}<em>${escHtml(EQUIP_LABELS && EQUIP_LABELS[a.equip] ? EQUIP_LABELS[a.equip] : a.equip)}</em></button>`).join('')}</div>
+    <button class="text-btn pain-keep">Keep ${escHtml(ex.name)} (weight holds)</button>` : ''}</div>`;
+}
+function wirePainBanner(ex) {
+  document.querySelectorAll('.pain-alt').forEach(b => b.onclick = () => swapExerciseInDay(ex.name, b.dataset.n, b.dataset.t));
+  const k = document.querySelector('.pain-keep');
+  if (k) k.onclick = () => { sessionMods.painKeep = [...(sessionMods.painKeep || []), ex.name]; saveSessionMods(); renderMain(); };
+}
+function jointCheckHTML(exs) {
+  const done = exs.filter(ex => (state[ex.name] || []).some(st => st.logged));
+  if (!done.length) return '';
+  const d = sessionDate();
+  return `<div class="muscle-check joint-check">
+    <div class="review-rec-head">Any joint pain?</div>
+    <div class="review-reason" style="margin-bottom:8px;">Only tap if something hurt (elbows, shoulders, knees, lower back). Mild holds the weight next time; sharp ${myCoaches.length ? 'is flagged to your coach' : 'gets you a joint-friendlier swap'}.</div>
+    ${done.map(ex => { const cur = ((jointPain[ex.name] || []).find(x => x.date === d) || {}).level || 0;
+      return `<div class="jp-row" data-ex="${escHtml(ex.name)}"><span class="mc-name">${escHtml(ex.name)}</span>
+        <div class="scale-row dot-scale mc-seg">${[[0, 'None'], [1, 'Mild'], [2, 'Sharp']].map(([v, l]) => `<button class="scale-btn ${cur === v ? 'selected' : ''}" data-jp="${v}">${l}</button>`).join('')}</div>
+        <div class="mc-out"></div></div>`; }).join('')}
+  </div>`;
+}
+function wireJointCheck(root) {
+  root.querySelectorAll('.jp-row').forEach(row => row.querySelectorAll('[data-jp]').forEach(b => b.onclick = async () => {
+    row.querySelectorAll('[data-jp]').forEach(x => x.classList.remove('selected')); b.classList.add('selected');
+    const lv = parseInt(b.dataset.jp, 10);
+    await recordJointPain(row.dataset.ex, lv);
+    row.querySelector('.mc-out').textContent = lv === 2
+      ? (myCoaches.length ? 'Noted. Your coach will see this, and the weight holds next time.' : "Noted. Next time we'll offer a joint-friendlier swap, and the weight holds if you keep it.")
+      : lv === 1 ? 'Noted. Next time the weight holds (no increase). Two painful sessions out of three and we suggest a swap.' : '';
+  }));
 }
 
 // After the session: pump per muscle trained → next week's sets for that muscle.
@@ -9201,6 +9321,8 @@ function clientSummary(docs, today) {
     lastCheck: checks[0] || null, blockStart: block.start || null,
     sessions, weights, food, flags: [],
   };
+  const jp = ((docs.find(d => d.path === 'meta/jointPain') || {}).data || {}).log || {};
+  Object.entries(jp).forEach(([n, arr]) => { const last = (arr || []).slice(-1)[0]; if (last && last.level >= 2 && within(last.date, 10)) out.flags.push({ lvl: 1, t: `Sharp joint pain: ${n}` }); });
   if (out.daysSince == null) out.flags.push({ lvl: 2, t: 'No workouts logged yet' });
   else if (out.daysSince >= 5) out.flags.push({ lvl: 2, t: `No workout in ${out.daysSince} days` });
   if (out.foodDays7 < 4) out.flags.push({ lvl: out.foodDays7 <= 1 ? 2 : 1, t: `Food logged ${out.foodDays7}/7 days` });
@@ -10145,6 +10267,7 @@ async function startApp() {
   await loadNutritionConfig();
   await loadWeightConfig();
   await loadFatigueSignal();
+  await loadJointPain();
   await loadDay();
   await maybeShowOnboarding();
   saveScheduleDoc();
@@ -10163,17 +10286,17 @@ async function recordAppVersion() {
   try { await db.doc('meta/appVersion').set({ version: APP_VERSION, build: APP_BUILD, at: new Date().toISOString() }); localStorage.setItem(key, APP_BUILD); } catch (e) {}
 }
 async function maybeShowWhatsNew(force) {
-  const notes = RELEASE_NOTES[0];
-  if (!notes || notes.version !== APP_VERSION) return;
+  const annIdx = RELEASE_NOTES.findIndex(n => n.announce !== false);
+  let seen = null;
+  try { seen = localStorage.getItem('forever_seenVersion'); } catch (e) {}
   if (!force) {
-    if (dayMode === 'active') return;
+    if (annIdx === -1 || dayMode === 'active') return;
     const busy = ['onboardingOverlay'].some(id => { const el = document.getElementById(id); return el && el.style.display === 'block'; })
-      || document.querySelector('#introSheet.open, #uiSheet.open, .menu-overlay.open');
+      || document.querySelector('#introSheet.open, #uiSheet.open, .menu-overlay.open, .summary-overlay');
     if (busy) { setTimeout(() => maybeShowWhatsNew(), 3000); return; }
-    let seen = null;
-    try { seen = localStorage.getItem('forever_seenVersion'); } catch (e) {}
     if (!seen && db) { try { const d = await db.doc('meta/whatsNewSeen').get(); if (d.exists) seen = d.data().version; } catch (e) {} }
-    if (seen === APP_VERSION) return;
+    const seenIdx = RELEASE_NOTES.findIndex(n => n.version === seen);
+    if (seenIdx !== -1 && seenIdx <= annIdx) { if (seenIdx > 0) markWhatsNewSeen(); return; } // already saw the last announced one
     // A brand-new account has nothing to compare against: just mark this version as seen.
     if (!seen) {
       let fresh = true;
@@ -10181,16 +10304,18 @@ async function maybeShowWhatsNew(force) {
       if (fresh) { markWhatsNewSeen(); return; }
     }
   }
+  const seenIdx = RELEASE_NOTES.findIndex(n => n.version === seen);
+  const shown = RELEASE_NOTES.slice(0, force ? 3 : (seenIdx > 0 ? seenIdx : 3));
   let el = document.getElementById('whatsNew');
   if (!el) { el = document.createElement('div'); el.id = 'whatsNew'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); document.body.appendChild(el); }
-  const news = notes.items.filter(i => i.k === 'new'), fixes = notes.items.filter(i => i.k === 'fix');
   const list = (arr, cls) => arr.map(i => `<li class="${cls}">${escHtml(i.t)}</li>`).join('');
+  const section = (notes, first) => { const news = notes.items.filter(i => i.k === 'new'), fixes = notes.items.filter(i => i.k === 'fix');
+    return `<div class="${first ? 'is-kicker' : 'wn-ver'}">Version ${escHtml(notes.version)} · ${escHtml(notes.date)}</div>${first ? `<div class="is-title">What's new</div>` : ''}
+    ${news.length ? `<ul class="wn-list">${list(news, 'wn-new')}</ul>` : ''}
+    ${fixes.length ? `<div class="wn-h">Fixed</div><ul class="wn-list">${list(fixes, 'wn-fix')}</ul>` : ''}`; };
   el.innerHTML = `<div class="is-backdrop"></div><div class="is-panel">
     <div class="is-grab"></div>
-    <div class="is-kicker">Version ${escHtml(notes.version)} · ${escHtml(notes.date)}</div>
-    <div class="is-title">What's new</div>
-    ${news.length ? `<ul class="wn-list">${list(news, 'wn-new')}</ul>` : ''}
-    ${fixes.length ? `<div class="wn-h">Fixed</div><ul class="wn-list">${list(fixes, 'wn-fix')}</ul>` : ''}
+    ${shown.map((n, k) => section(n, k === 0)).join('')}
     <button class="btn-primary" id="wnOk" style="width:100%; margin-top:18px;">Got it</button></div>`;
   el.classList.add('open');
   const close = () => { el.classList.remove('open'); markWhatsNewSeen(); };
