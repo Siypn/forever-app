@@ -832,6 +832,49 @@
   .coach-food div { display: flex; flex-direction: column; gap: 2px; font-size: 10px; color: var(--text-dim); }
   .coach-food b { font-size: 11.5px; color: var(--text); font-weight: 600; }
   .coach-food em { font-style: normal; font-size: 9.5px; }
+  .cc-sec-head { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; gap: 10px; }
+  .cc-range { display: flex; gap: 4px; flex-shrink: 0; }
+  .cc-range button { background: none; border: 1px solid var(--hairline); color: var(--text-dim); font: inherit; font-size: 10.5px; padding: 4px 10px; border-radius: 999px; cursor: pointer; }
+  .cc-range button.on { color: var(--text); border-color: var(--accent); }
+  .cc-range button:disabled { opacity: 0.3; }
+  .cc-weeknav button { font-size: 14px; padding: 1px 11px; }
+  .cc-wchart { width: 100%; height: auto; display: block; margin-top: 10px; }
+  .cc-wchart text { font-size: 9px; fill: var(--text-dim); font-family: inherit; }
+  .cc-legend { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+  .cc-legend .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-dim); }
+  .cc-legend .line { width: 14px; height: 2px; background: var(--accent); margin-left: 8px; border-radius: 2px; }
+  .cc-stat4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 12px; text-align: center; }
+  .cc-stat4 b { display: block; font-size: 13px; font-weight: 600; color: var(--text); }
+  .cc-stat4 span { display: block; font-size: 9.5px; color: var(--text-dim); margin-top: 2px; line-height: 1.3; }
+  .cc-more { margin-top: 10px; }
+  .cc-more summary { font-size: 11.5px; color: var(--accent); cursor: pointer; list-style: none; padding: 4px 0; }
+  .cc-more summary::-webkit-details-marker { display: none; }
+  .cc-more summary::after { content: ' ›'; }
+  .cc-more[open] summary::after { content: ' ⌄'; }
+  .cc-rows { max-height: 260px; overflow-y: auto; }
+  .cc-row { display: flex; gap: 10px; justify-content: space-between; font-size: 11.5px; padding: 6px 0; border-bottom: 1px solid var(--hairline); color: var(--text-dim); }
+  .cc-row b { color: var(--text); font-weight: 500; margin-left: auto; text-align: right; }
+  .cc-row em { font-style: normal; width: 38px; text-align: right; }
+  .cc-mrow { display: grid; grid-template-columns: 1.1fr 0.8fr 0.8fr 1fr 0.9fr; gap: 4px; align-items: baseline; font-size: 12px; padding: 7px 0; border-bottom: 1px solid var(--hairline); color: var(--text-dim); }
+  .cc-mrow b { color: var(--text); font-weight: 600; text-align: right; }
+  .cc-mrow em, .cc-mrow i { font-style: normal; text-align: right; }
+  .cc-mrow i { font-size: 10px; }
+  .cc-mhead { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.6px; padding-top: 8px; }
+  .cc-mhead b { font-weight: 500; color: var(--text-dim); }
+  .cc-week { font-size: 11px; color: var(--text-dim); margin-top: 6px; }
+  .cc-foodgrid button { display: flex; flex-direction: column; gap: 2px; align-items: center; background: none; border: 1px solid transparent; border-radius: 10px; padding: 6px 0; font: inherit; font-size: 10px; color: var(--text-dim); cursor: pointer; }
+  .cc-foodgrid button:disabled { cursor: default; }
+  .cc-foodgrid button.sel { border-color: var(--accent); background: rgba(160,130,255,0.08); }
+  .cc-foodgrid button.on b { color: #9fe3c2; }
+  .cc-foodgrid button.over b { color: #f0cf9c; }
+  .cc-foodgrid button.under b { color: #f0cf9c; }
+  .cc-fday { margin-top: 12px; border-top: 1px solid var(--hairline); }
+  .cc-fday-h { font-size: 12px; font-weight: 500; padding: 10px 0 4px; }
+  .cc-frow { display: grid; grid-template-columns: 1fr auto; column-gap: 10px; font-size: 11.5px; padding: 6px 0; border-bottom: 1px solid var(--hairline); color: var(--text); }
+  .cc-frow span { overflow: hidden; text-overflow: ellipsis; }
+  .cc-frow b { font-weight: 600; text-align: right; }
+  .cc-frow em { grid-column: 1 / -1; font-style: normal; font-size: 10.5px; color: var(--text-dim); }
+  .cc-frow.tot { border-bottom: none; font-weight: 600; }
   .cs-sess { padding: 10px 0; border-bottom: 1px solid var(--hairline); }
   .cs-head { font-size: 12.5px; font-weight: 500; margin-bottom: 4px; }
   .cs-lift { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--text-dim); padding: 2px 0; }
@@ -1289,6 +1332,11 @@
   .dragging { position: relative; z-index: 2; background: rgba(124,58,237,0.12) !important; border-radius: 12px; box-shadow: 0 0 0 1px rgba(167,139,250,0.5), 0 10px 24px -10px rgba(124,58,237,0.6); }
   .dragging .drag-h { color: var(--rest-accent); }
   #editExList .food-entry-form { align-items: center; }
+
+  .micro-ask { margin-top: 8px; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(167,139,250,0.35); background: rgba(124,58,237,0.08); font-size: 12px; line-height: 1.45; color: var(--text); }
+  .micro-btns { display: flex; gap: 8px; margin-top: 8px; }
+  .micro-btns button { flex: 1; background: none; border: 1px solid var(--hairline); border-radius: 999px; padding: 8px 10px; color: var(--text); font: inherit; font-size: 12px; cursor: pointer; }
+  .micro-btns .micro-yes { border-color: var(--rest-accent); color: var(--rest-accent); }
 </style>
 </head>
 <body>
@@ -1917,7 +1965,8 @@ function renderSelfDayEdit(day) {
   list.addEventListener('change', e => {
     if (!e.target.classList.contains('cm-ex-n')) return;
     const lib = libraryEntry(e.target.value.trim());
-    if (lib) e.target.parentElement.querySelector('.cm-ex-t').value = lib.type;
+    const ty = lib ? lib.type : guessExerciseType(e.target.value);
+    if (ty) e.target.parentElement.querySelector('.cm-ex-t').value = ty;
   });
   const save = async (btn, exercises, title) => {
     const names = new Set(exercises.map(x => x.name));
@@ -3711,7 +3760,7 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-05.3';
+const APP_BUILD = '2026-10-06.1';
 // The version people see. Bump it (and add a RELEASE_NOTES entry at the top) with every update
 // worth announcing; APP_BUILD still changes on every upload so phones know to refresh.
 const APP_VERSION = '1.05';
@@ -3723,7 +3772,13 @@ const RELEASE_NOTES = [
     { k: 'new', t: 'Finish workout now asks first if you still have open sets.' },
     { k: 'new', t: 'Reorder exercises by holding the ≡ handle and sliding them up or down.' },
     { k: 'fix', t: 'Back to overview and other everyday links are easier to see.' },
+    { k: 'fix', t: 'A heavier weight is never planned with more reps than you did last time, and later sets never ask for more reps than earlier ones.' },
+    { k: 'fix', t: 'Sets rated on the old 1–10 difficulty scale no longer inflate your estimated max.' },
+    { k: 'fix', t: 'Progression adds about 1 rep per set per week, and cables and machines move in real 5 lb steps.' },
+    { k: 'new', t: 'When a plan needs a small add-on weight (like 17.5 on a cable), the app asks once for that exercise; say no and it keeps building reps at your current weight instead.' },
+    { k: 'fix', t: "Exercises you type in yourself pick Compound or Isolation from the name, so a typed-in press isn't coached like a raise." },
     { k: 'fix', t: 'Setup, sign-in and the workout summary no longer hide their top line behind the iPhone status bar.' },
+    { k: 'new', t: "Coach view: a full weight chart (4 weeks, 12 weeks or all) with rate per week and every weigh-in, each client's measurements with changes, and their food log day by day, down to each item." },
   ] },
   { version: '1.0', date: 'Oct 4, 2026', items: [
     { k: 'new', t: 'Mesos is now two pages: Current for the block you are running, Create for building the next one.' },
@@ -4924,6 +4979,9 @@ function setRirActual(s) {
     // Guessing counts as at most 1 left, unsure as at most 2; the reps you actually did always count.
     if (s.confidence === 'Fuzzy') return Math.min(rir, 1);
     if (s.confidence === 'Somewhat') return Math.min(rir, 2);
+    // Ratings from the old 1–10 difficulty scale (no "how sure" answer saved) were easy to misread —
+    // a "5" or "6" meant "fairly hard" to most people but reads as 4–5 reps left. Trust them like Unsure.
+    if (!s.confidence) return Math.min(rir, 2);
     return rir;
   }
   const r = parseInt(s.rir, 10);
@@ -4936,11 +4994,44 @@ function setE1rmAdj(s) {
   if (!(w > 0) || !(r > 0)) return 0;
   return w * (1 + Math.min(20, r + setRirActual(s)) / 30);
 }
+// The most reps it's sensible to plan at weight w, given last session's sets:
+//  · at a weight you already did: up to 2 more than your best set there (real progress ≈ 1 rep/week)
+//  · heavier than anything last time: no more than your best at your top weight — same reps with
+//    more weight is already progress; more reps AND more weight means a reps-left guess was off
+function repCapAt(lastSets, w, i) {
+  const xs = (lastSets || []).map(s => ({ w: parseFloat(s.weight), r: parseInt(s.reps, 10) })).filter(s => s.w > 0 && s.r > 0);
+  if (!xs.length || !(w > 0)) return null;
+  // Same weight as last time: each set may beat its own match from last time by 1 rep (double
+  // progression ≈ 1 rep per set per week). 13/12/11 last week → up to 14/13/12, not 15/15/15.
+  const same = xs.filter(s => Math.abs(s.w - w) < 1e-9);
+  if (same.length && i != null) return same[Math.min(i, same.length - 1)].r + 1;
+  const atOrAbove = xs.filter(s => s.w >= w - 1e-9);
+  if (atOrAbove.length) return Math.max(...atOrAbove.map(s => s.r)) + 2;
+  const top = Math.max(...xs.map(s => s.w));
+  return Math.max(...xs.filter(s => s.w === top).map(s => s.r));
+}
+// Later sets at the same weight never ask for more reps than the set before (fatigue only goes up).
+function nonIncreasingReps(sets) {
+  for (let i = 1; i < sets.length; i++) {
+    const a = sets[i - 1], b = sets[i];
+    if (a && b && parseFloat(a.weight) === parseFloat(b.weight) && b.reps != null && a.reps != null && parseInt(b.reps, 10) > parseInt(a.reps, 10)) b.reps = a.reps;
+  }
+  return sets;
+}
 function repsAt(E, w, rir) {
   if (!(E > 0) || !(w > 0)) return null;
   return clampNum(Math.floor(30 * (E / w - 1) - rir + 0.2), 1, 30);
 }
-function roundLoad(w, type) { const st = LOAD_ROUND[type] || 5; return Math.max(st, Math.round(w / st) * st); }
+function roundLoad(w, type, st) { st = st || LOAD_ROUND[type] || 5; return Math.max(st, Math.round(w / st) * st); }
+// The smallest weight change the equipment really allows. Cable and machine stacks, plates and bars
+// move in 5 lb steps at most gyms; only light dumbbells come in 2.5 lb steps (12.5, 17.5…).
+function loadStepFor(name, type, w) {
+  const e = libraryEntry(name);
+  const eq = e ? e.equip : /dumbbell|\bdb\b/i.test(name) ? 'dumbbell' : null;
+  if (eq === 'dumbbell') return (parseFloat(w) || 0) < 25 ? 2.5 : 5;
+  if (eq === 'bodyweight' || eq === 'band') return 5;
+  return microLoad[name] === false ? 5 : 2.5;
+}
 
 function buildLiftModel(hist, type) {
   const all = (hist || []).map(h => {
@@ -5000,7 +5091,7 @@ function planLift(model, type, o) {
     notes.push(`Last time you got ${latest.logged} of ${latest.planned} sets — today is planned from the sets you did, so there's nothing to make up.`);
   }
   if (o.deload) {
-    const w = roundLoad(w0 * 0.6, type);
+    const w = roundLoad(w0 * 0.6, type, o.step);
     const firstReps = parseInt(last.sets[0].reps, 10) || range.lo;
     return { sets: rirs.map(r => ({ weight: w, reps: Math.max(firstReps - 2, 1), rir: String(r) })), tier: 'deload', note: notes.join(' '), targetE: null };
   }
@@ -5016,8 +5107,8 @@ function planLift(model, type, o) {
     tier = 'hold';
   }
   const repsFor = w => rirs.map((r, i) => repsAt(target * Math.pow(model.fatigue, i), w, r));
-  const step = LOAD_ROUND[type] || 5;
-  let w = roundLoad(w0, type);
+  const step = o.step || LOAD_ROUND[type] || 5;
+  let w = w0;
   let reps = repsFor(w);
   if (reps[0] >= range.hi && !o.noProgress && tier !== 'reentry') { // never push load when very sore or easing back in
     // Top of the rep range reached: take the heaviest jump where even your last set still lands in range.
@@ -5039,9 +5130,8 @@ function planLift(model, type, o) {
   }
   // Session to session, at the same (or heavier) weight: at most 2 reps over your best set last time.
   // Real progress is ~1 rep a week; anything bigger usually means a "reps left" guess was off.
-  const bestAt = Math.max(0, ...last.sets.filter(s => parseFloat(s.weight) >= w - 1e-9).map(s => parseInt(s.reps, 10) || 0));
-  if (bestAt > 0) reps = reps.map(r => (r == null ? r : Math.min(r, bestAt + 2)));
-  return { sets: rirs.map((r, i) => ({ weight: w, reps: reps[i], rir: String(r) })), tier, note: notes.join(' '), targetE: target };
+  reps = reps.map((r, i) => { const cap = repCapAt(last.sets, w, i); return r == null || cap == null ? r : Math.min(r, cap); });
+  return { sets: nonIncreasingReps(rirs.map((r, i) => ({ weight: w, reps: reps[i], rir: String(r) }))), tier, note: notes.join(' '), targetE: target };
 }
 
 // Extra reps-in-reserve today: sore (4–5/5) or short on sleep (compound lifts) → leave more in the tank.
@@ -5064,7 +5154,7 @@ function computeSuggestion(exName, type) {
   const sore = parseInt(sorenessToday, 10);
   const bw = bwBase(exName) > 0;
   const pain = painInfo(exName);
-  const plan = planLift(model, type, { rirs: plannedRirs(n, type, info.deload), today: todayISO(), deload: info.deload, noProgress: (!isNaN(sore) && sore >= 5) || !!(pain && pain.hold),
+  const plan = planLift(model, type, { step: loadStepFor(exName, type, model && model.last && model.last.topWeight), rirs: plannedRirs(n, type, info.deload), today: todayISO(), deload: info.deload, noProgress: (!isNaN(sore) && sore >= 5) || !!(pain && pain.hold),
     range: bw ? repRangeFor(exName, type) : null, maxAdd: bw ? 5 : null });
   planMetaByEx[exName] = plan ? { targetE: plan.targetE, fatigue: model.fatigue, tier: plan.tier, note: pain && pain.hold ? 'Joint pain last time: the weight holds (no increase) until a session goes by without pain. Stop any set that hurts.' : plan.note, model } : null;
   if (!plan) return null;
@@ -5080,10 +5170,11 @@ function computeSuggestion(exName, type) {
     plan.sets = plan.sets.map((st, i) => {
       const w = snapBwLoad(exName, parseFloat(st.weight));
       let r = repsAt(plan.targetE * Math.pow(model.fatigue, i), w, parseInt(st.rir, 10) || 0);
-      const best = bestAtBw(w);
-      if (r != null && best > 0) r = Math.min(r, best + 2); // same 2-rep limit as every other lift
+      const cap = repCapAt((model.last && model.last.sets) || [], w, i);
+      if (r != null && cap != null) r = Math.min(r, cap); // same limits as every other lift
       return { ...st, weight: w, reps: r == null ? st.reps : r };
     });
+    nonIncreasingReps(plan.sets);
   }
   return plan.sets.map(s => ({ ...s, tier: plan.tier }));
 }
@@ -5127,8 +5218,8 @@ function replanRemaining(ex, opts) {
   const meta = planMetaByEx[ex.name];
   const f = (meta && meta.fatigue) || SET_FATIGUE_DEFAULT[ex.type];
   const E = setE1rmAdj(sets[k]);
-  const step = LOAD_ROUND[ex.type] || 5;
   const loggedW = parseFloat(sets[k].weight);
+  const step = loadStepFor(ex.name, ex.type, loggedW);
   const remaining = [];
   for (let j = k + 1; j < sets.length; j++) if (!sets[j].logged) remaining.push(j);
   if (!remaining.length) { delete intraSessionNoteByEx[ex.name]; return; }
@@ -5163,7 +5254,8 @@ function replanRemaining(ex, opts) {
     const wj = parseFloat(sets[j].weight);
     if (!sets[j].rEdited && wj > 0) {
       let r = repsAtW(j, wj);
-      if (wj >= loggedW && loggedR > 0) r = Math.min(r, loggedR + 2);
+      if (wj > loggedW && loggedR > 0) r = Math.min(r, loggedR);
+      else if (wj >= loggedW && loggedR > 0) r = Math.min(r, loggedR + 2);
       if (guessed && sets[j].reps) r = Math.min(r, parseInt(sets[j].reps, 10) || r); // only ever eases off
       sets[j].reps = r;
     }
@@ -5173,7 +5265,12 @@ function replanRemaining(ex, opts) {
   const d = parseInt(sets[k].difficulty, 10);
   if (after === before) { delete intraSessionNoteByEx[ex.name]; return; }
   const nxt = sets[nextJ];
-  const how = direction < 0 ? 'harder than planned — dropped the weight so your next sets stay in range'
+  // Only call it "harder than planned" if you actually rated it harder; a set that went exactly as
+  // rated but landed under the rep range gets the real reason instead.
+  const plannedRir = parseInt(sets[k].rir, 10);
+  const ratedHarder = !isNaN(d) && !isNaN(plannedRir) && (10 - d) < plannedRir;
+  const how = direction < 0 ? (ratedHarder ? 'harder than planned — dropped the weight so your next sets stay in range'
+      : `landed at ${loggedR} reps, under the ${range.lo}–${range.hi} range for ${ex.type === 'compound' ? 'a compound' : 'an isolation'} lift — dropped the weight so your next sets land in range`)
     : direction > 0 ? (!isNaN(d) && d <= 5 ? 'felt easy — added weight instead of piling on reps' : 'easier than planned — bumped the weight')
     : (!isNaN(d) ? `had ${d <= 5 ? '5+' : 10 - d} rep${10 - d === 1 ? '' : 's'} left${guessed ? ' (a guess, so only eased off)' : ''} — adjusted the reps to match` : 'adjusted the reps to match');
   intraSessionNoteByEx[ex.name] = `Set ${k + 1} ${how}: next set ${fmtLoad(ex.name, nxt.weight)} × ${nxt.reps || '–'}. Edit if you'd rather push as planned.`;
@@ -5191,7 +5288,12 @@ function onCurrentWeightEdited(ex, idx, value) {
   if (sets.some(s => s.logged)) { replanRemaining(ex, { quiet: true }); }
   const meta = planMetaByEx[ex.name];
   if (meta && meta.targetE && !sets.some(s => s.logged)) {
-    sets.forEach((s, i) => { if (!s.logged && !s.rEdited) s.reps = repsAt(meta.targetE * Math.pow(meta.fatigue, i), parseFloat(s.weight), parseInt(s.rir, 10) || 0); });
+    const lastSets = (meta.model && meta.model.last && meta.model.last.sets) || [];
+    sets.forEach((s, i) => { if (s.logged || s.rEdited) return;
+      let r = repsAt(meta.targetE * Math.pow(meta.fatigue, i), parseFloat(s.weight), parseInt(s.rir, 10) || 0);
+      const cap = repCapAt(lastSets, parseFloat(s.weight), i); if (r != null && cap != null) r = Math.min(r, cap);
+      s.reps = r; });
+    nonIncreasingReps(sets.filter(s => !s.logged && !s.rEdited));
   }
   return sets[idx].rEdited ? null : sets[idx].reps;
 }
@@ -5354,7 +5456,22 @@ let sessionFinishMeta = null; // finishedAt / summary for today's session, kept 
 function freshSessionMods() { return { order: null, swaps: {}, skipped: [], startedAt: null, timeCapMin: null, recovery: {}, pump: {}, pairs: {}, techniques: {} }; }
 // The saved program for a day, without today's one-off changes. Use this for anything that EDITS
 // the program, so a "swap for today" or a reorder never gets baked into your split.
-function getProgramDay(day) { return programOverrides[day] || PRESET_PROGRAMS[activePreset][day]; }
+// Custom exercises (typed in, not from the library) get their type from the name: a typed-in
+// "Flat Bench Dumbbell" left on the blank-row default of Isolation would be coached toward 10–15
+// reps and have its weight dropped after a strong 7. Only ever upgrades isolation → compound.
+const ISOLATION_WORDS = /\bfly|flye|raise|curl|extension|pushdown|push-down|kickback|crunch|shrug|calf|pec deck|crossover|pullover|face pull|abduct|adduct|lateral|rear delt|wrist|leg ext/i;
+const COMPOUND_WORDS = /press|bench|squat|deadlift|\brdl\b|\brows?\b|pull-?ups?|chin-?ups?|pulldown|pull down|\bdips?\b|lunge|step-?up|thrust|\bclean|snatch|good morning|hack|push-?ups?/i;
+function guessExerciseType(name) {
+  const n = String(name || '');
+  if (ISOLATION_WORDS.test(n)) return 'isolation';
+  if (COMPOUND_WORDS.test(n)) return 'compound';
+  return null;
+}
+function withGuessedTypes(day) {
+  if (!day || !(day.exercises || []).some(ex => ex.type !== 'compound' && !libraryEntry(ex.name) && guessExerciseType(ex.name) === 'compound')) return day;
+  return { ...day, exercises: day.exercises.map(ex => (ex.type !== 'compound' && !libraryEntry(ex.name) && guessExerciseType(ex.name) === 'compound') ? { ...ex, type: 'compound' } : ex) };
+}
+function getProgramDay(day) { return withGuessedTypes(programOverrides[day] || PRESET_PROGRAMS[activePreset][day]); }
 // What you're actually doing on a day: the program, plus today's swaps and reordering (today only).
 function prioritySorted(dayObj) {
   if (!priorityMuscles.length || !dayObj || !(dayObj.exercises || []).length) return dayObj;
@@ -6129,7 +6246,10 @@ function renderExerciseBody(ex, container, prevSlot) {
     const m = meta.model;
     const why = m ? `Est. max ${Math.round(m.last.e1rm)} lb last time${m.weeklyPct != null ? ` · you're progressing ${m.weeklyPct >= 0 ? '+' : ''}${(m.weeklyPct * 100).toFixed(1)}%/week on this lift` : ''}` : '';
     const edited = sets.some(x => !x.logged && (x.wEdited || x.rEdited));
-    html += `<div class="ex-suggest"><div class="suggest-top"><span>Today's plan: ${top}</span>${edited ? `<button class="apply-btn" id="apply-${id}">Reset</button>` : ''}<button class="info-btn" id="infoProg-${id}">i</button></div><div class="suggest-detail"><span class="${t.cls}">${t.text}</span>${why ? ` · ${why}` : ''}</div>${meta.note ? `<div class="suggest-detail" style="margin-top:4px;">${escHtml(meta.note)}</div>` : ''}<div class="info-panel" id="infoProgPanel-${id}">Built from your own history on this lift. Each set you log gives an estimated max — adjusted for how many reps you had left (your check after each set, discounted if you weren't sure), so an easy set counts for more than a grind. The plan aims a little above your recent level at the rate you personally progress, keeps reps in the ${ex.type==='compound'?'5–8':'10–15'} range, and moves the weight up as soon as even your last set would still land in range. After every set it re-plans the rest from what you actually did, and your set-to-set rep drop is learned from your own logs too.</div>${plateauByExercise[exName] ? `<div class="ex-sleep-flag" style="margin-top:8px;">No new best on this lift in your last 2 sessions — usually a sign to check sleep and food, take an early deload on it, or swap it for a variation, rather than grinding the same weight.</div><button class="back-link" id="altBtn-${id}" style="padding:6px 0 0; color:var(--accent);">See alternatives</button><div id="altList-${id}"></div>` : ''}</div>`;
+    const askW = suggestion.map(x => x.weight).find(w => needsMicroAsk(exName, w));
+    const lastTop = meta.model && meta.model.last ? meta.model.last.topWeight : null;
+    const microAsk = askW ? `<div class="micro-ask"><span>${L(askW)} needs a small add-on weight. Do you have one for ${escHtml(exName)}?</span><div class="micro-btns"><button class="micro-yes" data-ex="${escHtml(exName)}">Yes</button><button class="micro-no" data-ex="${escHtml(exName)}">No${lastTop ? `, stay at ${L(Math.floor(lastTop / 5) * 5 || lastTop)}` : ''}</button></div></div>` : '';
+    html += `<div class="ex-suggest"><div class="suggest-top"><span>Today's plan: ${top}</span>${edited ? `<button class="apply-btn" id="apply-${id}">Reset</button>` : ''}<button class="info-btn" id="infoProg-${id}">i</button></div><div class="suggest-detail"><span class="${t.cls}">${t.text}</span>${why ? ` · ${why}` : ''}</div>${meta.note ? `<div class="suggest-detail" style="margin-top:4px;">${escHtml(meta.note)}</div>` : ''}<div class="info-panel" id="infoProgPanel-${id}">Built from your own history on this lift. Each set you log gives an estimated max — adjusted for how many reps you had left (your check after each set, discounted if you weren't sure), so an easy set counts for more than a grind. The plan aims a little above your recent level at the rate you personally progress, keeps reps in the ${ex.type==='compound'?'5–8':'10–15'} range, and moves the weight up as soon as even your last set would still land in range. After every set it re-plans the rest from what you actually did, and your set-to-set rep drop is learned from your own logs too.</div>${plateauByExercise[exName] ? `<div class="ex-sleep-flag" style="margin-top:8px;">No new best on this lift in your last 2 sessions — usually a sign to check sleep and food, take an early deload on it, or swap it for a variation, rather than grinding the same weight.</div><button class="back-link" id="altBtn-${id}" style="padding:6px 0 0; color:var(--accent);">See alternatives</button><div id="altList-${id}"></div>` : ''}</div>${microAsk}`;
   } else if (currentIndex !== -1 && !prev) {
     const t0 = parseInt(sets[currentIndex].rir, 10);
     const leftTxt = isNaN(t0) ? '2 left in the tank' : t0 === 0 ? 'nothing left (to failure)' : `${t0} left in the tank`;
@@ -6449,6 +6569,11 @@ function wireExerciseEvents(ex, container) {
 
   const infoProgBtn = container.querySelector(`#infoProg-${id}`);
   if (infoProgBtn) infoProgBtn.onclick = () => container.querySelector(`#infoProgPanel-${id}`).classList.toggle('open');
+  container.querySelectorAll('.micro-yes, .micro-no').forEach(b => b.onclick = async () => {
+    await setMicroLoad(exName, b.classList.contains('micro-yes'));
+    applyPlanToExercise(ex, false);
+    renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot'));
+  });
   const applyBtn = container.querySelector(`#apply-${id}`);
   if (applyBtn) applyBtn.onclick = () => {
     applyPlanToExercise(ex, true);
@@ -6513,7 +6638,7 @@ function wireExerciseEvents(ex, container) {
     if (logBtn) logBtn.onclick = () => { uiState[exName].phase = 'confirm'; uiState[exName].rateShownAt = Date.now(); renderExerciseBody(ex, container, container.parentElement.querySelector('.ex-prev-slot')); };
     container.querySelectorAll('[data-step]').forEach(b => b.onclick = () => {
       const cur = sets[currentIndex];
-      const step = LOAD_ROUND[ex.type] || 5;
+      const step = loadStepFor(exName, ex.type, cur.weight);
       if (b.dataset.step === 'w+' || b.dataset.step === 'w-') {
         if (bwBase(exName)) {
           const now = parseFloat(bwInputFromLoad(exName, cur.weight)) || 0;
@@ -6670,7 +6795,7 @@ function techHTML(ex, id) {
   const ui = uiState[ex.name], t = ui.tech, T = TECHNIQUES[t.kind];
   const sets = state[ex.name], last = sets[sets.length - 1];
   const lastW = parseFloat(last.weight) || 0;
-  const step = LOAD_ROUND[ex.type] || 5;
+  const step = loadStepFor(ex.name, ex.type, lastW);
   const minis = t.minis.map((m, i) => `<div class="tech-mini"><span>${t.kind === 'drop' ? `Drop ${i + 1}` : t.kind === 'partials' ? 'Partials' : `Mini ${i + 1}`}</span><span>${t.kind === 'partials' ? `${escHtml(m.r)} half reps` : `${escHtml(fmtLoad(ex.name, m.w))} × ${escHtml(m.r)}`}</span></div>`).join('');
   const maxN = { drop: 2, restpause: 2, myo: 5, partials: 1 }[t.kind];
   const lastMini = t.minis[t.minis.length - 1];
@@ -7255,15 +7380,31 @@ function availableAtMyGym(name, tier) {
   const e = libraryEntry(name);
   return !e || TIER_RANK[e.tier || 'gym'] <= TIER_RANK[tier || gymTier];
 }
+// Small jumps (2.5 lb) are answered per exercise, the first time a plan needs one: a gym can have
+// 1.25 lb plates for the bar but no add-on weights for the cables, or the other way round.
+// microLoad[exName] = true (has it) / false (doesn't — 5 lb steps on this lift).
+let microLoad = {};
 async function loadGymTier() {
   if (!db) return;
   try { const s = await db.doc('meta/gym').get(); if (s.exists && GYM_TIERS[s.data().tier]) gymTier = s.data().tier; } catch (e) {}
+  try { const m = await db.doc('meta/microLoad').get(); microLoad = m.exists ? (m.data().ex || {}) : {}; } catch (e) {}
 }
+async function setMicroLoad(exName, ok) { microLoad = { ...microLoad, [exName]: !!ok }; liftModelCache = {}; if (db) { try { await db.doc('meta/microLoad').set({ ex: microLoad }); } catch (e) {} } }
+// Does this weight need a small add-on the lifter hasn't confirmed yet?
+function needsMicroAsk(exName, w) {
+  const x = parseFloat(w);
+  if (!(x > 0) || Math.abs(x / 5 - Math.round(x / 5)) < 1e-9) return false;
+  if (microLoad[exName] != null) return false;
+  const e = libraryEntry(exName); const eq = e ? e.equip : (/dumbbell|\bdb\b/i.test(exName) ? 'dumbbell' : null);
+  return !(eq === 'dumbbell' && x < 25) && eq !== 'bodyweight' && eq !== 'band' && !bwBase(exName);
+}
+async function saveGymDoc() { if (db) { try { await db.doc('meta/gym').set({ tier: gymTier }); } catch (e) {} } }
 async function setGymTier(t) {
   if (!GYM_TIERS[t]) return;
   gymTier = t;
-  if (db) { try { await db.doc('meta/gym').set({ tier: t }); } catch (e) {} }
+  await saveGymDoc();
 }
+
 function gymPickerHTML() {
   return `<div class="gym-picker" role="radiogroup" aria-label="Your gym">${Object.keys(GYM_TIERS).map(k => `
     <button class="gym-opt ${gymTier === k ? 'selected' : ''}" role="radio" aria-checked="${gymTier === k}" data-gym="${k}">
@@ -7312,6 +7453,13 @@ function wireEditDayPanel() {
 
   listEl.querySelectorAll('.edit-ex-remove').forEach(btn => btn.onclick = () => btn.closest('.food-entry-form').remove());
   makeSortable(listEl, '.food-entry-form');
+  listEl.addEventListener('change', e => {
+    if (!e.target.classList.contains('edit-ex-name')) return;
+    const lib = libraryEntry(e.target.value.trim());
+    const ty = lib ? lib.type : guessExerciseType(e.target.value);
+    const sel = e.target.parentElement.querySelector('.edit-ex-type');
+    if (ty && sel) sel.value = ty;
+  });
   document.getElementById('addExRowBtn').onclick = () => addRow('', 'isolation');
 
   const libBrowser = document.getElementById('libraryBrowser');
@@ -9382,7 +9530,9 @@ function clientSummary(docs, today) {
   const sessions = by('sessions/').filter(s => s.exercises && typeof s.exercises === 'object' && Object.values(s.exercises).some(sets => Array.isArray(sets) && sets.some(x => x && x.logged)))
     .map(s => ({ ...s, date: s.date || s.path.slice(9, 19) })).sort((a, b) => b.date.localeCompare(a.date));
   const weights = by('weight/').map(w => ({ ...w, lb: N(w.lb), date: String(w.date || '') })).filter(w => w.lb > 0 && /^\d{4}-\d{2}-\d{2}$/.test(w.date)).sort((a, b) => b.date.localeCompare(a.date));
-  const food = by('nutrition/').filter(n => /^nutrition\/\d{4}-\d{2}-\d{2}$/.test(n.path) && Array.isArray(n.entries) && n.entries.length).map(n => ({ date: n.path.slice(10), ...sumEntries(n.entries) }));
+  const food = by('nutrition/').filter(n => /^nutrition\/\d{4}-\d{2}-\d{2}$/.test(n.path) && Array.isArray(n.entries) && n.entries.length).map(n => ({ date: n.path.slice(10), ...sumEntries(n.entries),
+    carb: n.entries.reduce((a, f) => a + ((f && Number(f.carb)) || 0), 0), fat: n.entries.reduce((a, f) => a + ((f && Number(f.fat)) || 0), 0), entries: n.entries }));
+  const measures = by('measurements/').map(m => ({ ...m, date: String(m.date || m.path.slice(13, 23)) })).filter(m => /^\d{4}-\d{2}-\d{2}$/.test(m.date)).sort((a, b) => a.date.localeCompare(b.date));
   const cfg = (docs.find(d => d.path === 'nutrition/config') || {}).data || {};
   const block = (docs.find(d => d.path === 'block/config') || {}).data || {};
   const act = by('activity/').map(a => ({ ...a, steps: N(a.steps) })).filter(a => a.date && a.steps > 0);
@@ -9403,7 +9553,7 @@ function clientSummary(docs, today) {
     foodDays7: f7.length, kcal7: f7.length ? Math.round(avg(f7.map(f => f.cals))) : null, prot7: f7.length ? Math.round(avg(f7.map(f => f.prot))) : null,
     steps7: act.filter(a => within(a.date, 7)).length ? Math.round(avg(act.filter(a => within(a.date, 7)).map(a => a.steps))) : null,
     lastCheck: checks[0] || null, blockStart: block.start || null,
-    sessions, weights, food, flags: [],
+    sessions, weights, food, measures, flags: [],
   };
   const jp = ((docs.find(d => d.path === 'meta/jointPain') || {}).data || {}).log || {};
   Object.entries(jp).forEach(([n, arr]) => { const last = (arr || []).slice(-1)[0]; const recent = (arr || []).filter(x => within(x.date, 21));
@@ -9581,7 +9731,8 @@ function renderCoachDayEdit(c, day) {
   list.addEventListener('change', e => {
     if (!e.target.classList.contains('cm-ex-n')) return;
     const lib = libraryEntry(e.target.value.trim());
-    if (lib) e.target.parentElement.querySelector('.cm-ex-t').value = lib.type;
+    const ty = lib ? lib.type : guessExerciseType(e.target.value);
+    if (ty) e.target.parentElement.querySelector('.cm-ex-t').value = ty;
   });
   document.getElementById('cmSaveDay').onclick = async (ev) => {
     const exercises = Array.from(list.querySelectorAll('.cm-ex')).map(r => ({ name: r.querySelector('.cm-ex-n').value.trim(), type: r.querySelector('.cm-ex-t').value })).filter(x => x.name);
@@ -9737,14 +9888,109 @@ async function wireCoachChat(c) {
   if (coachChatPoll) clearInterval(coachChatPoll);
   coachChatPoll = setInterval(draw, 15000);
 }
+// ---------- Coach client view: weight, measurements, food in detail ----------
+const MEASURE_LABELS = [['waist', 'Waist'], ['chest', 'Chest'], ['arm', 'Arm'], ['thigh', 'Thigh'], ['hips', 'Hips'], ['neck', 'Neck']];
+function coachWeightHTML(weights, range, today) {
+  const span = range === '4w' ? 28 : range === '12w' ? 84 : Infinity;
+  const asc = weights.filter(w => span === Infinity || daysBetweenISO(w.date, today) < span).slice().reverse();
+  if (!asc.length) return `<div class="ex-prev">${weights.length ? 'No weigh-ins in this range.' : 'No weigh-ins yet.'}</div>`;
+  const trend = asc.map((_, i) => trendAverage(asc.slice(Math.max(0, i - 6), i + 1).reverse(), 7));
+  const sgn = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}`;
+  const first = trend[0], last = trend[trend.length - 1];
+  const days = daysBetweenISO(asc[0].date, asc[asc.length - 1].date);
+  const lbs = asc.map(w => w.lb), lo = Math.min(...lbs), hi = Math.max(...lbs);
+  let chart = '';
+  if (asc.length >= 2) {
+    const W = 320, H = 130, L = 34, R = 6, T = 8, B = 18;
+    const vmin = Math.min(lo, ...trend), vmax = Math.max(hi, ...trend), pad = Math.max(0.5, (vmax - vmin) * 0.1);
+    const y0 = vmin - pad, y1 = vmax + pad, dspan = Math.max(1, days);
+    const x = d => L + daysBetweenISO(asc[0].date, d) / dspan * (W - L - R);
+    const y = v => T + (y1 - v) / (y1 - y0) * (H - T - B);
+    const ticks = [y1 - pad, (y0 + y1) / 2, y0 + pad];
+    const short = d => fmtHistoryDate(d).replace(/^\w+, /, '');
+    chart = `<svg class="cc-wchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Weight chart">
+      ${ticks.map(t => `<line x1="${L}" x2="${W - R}" y1="${y(t).toFixed(1)}" y2="${y(t).toFixed(1)}" stroke="var(--hairline)" stroke-width="1"/><text x="${L - 5}" y="${(y(t) + 3).toFixed(1)}" text-anchor="end">${t.toFixed(1)}</text>`).join('')}
+      <polyline points="${asc.map(w => `${x(w.date).toFixed(1)},${y(w.lb).toFixed(1)}`).join(' ')}" fill="none" stroke="var(--text-dim)" stroke-width="1" opacity="0.45"/>
+      ${asc.map(w => `<circle cx="${x(w.date).toFixed(1)}" cy="${y(w.lb).toFixed(1)}" r="2.2" fill="var(--text-dim)"/>`).join('')}
+      <polyline points="${asc.map((w, i) => `${x(w.date).toFixed(1)},${y(trend[i]).toFixed(1)}`).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="${L}" y="${H - 4}">${escHtml(short(asc[0].date))}</text><text x="${W - R}" y="${H - 4}" text-anchor="end">${escHtml(short(asc[asc.length - 1].date))}</text>
+    </svg>
+    <div class="cc-legend"><span class="dot"></span>weigh-ins <span class="line"></span>trend</div>`;
+  }
+  const stats = [
+    ['Trend now', `${last.toFixed(1)} lb`],
+    ['Change', asc.length >= 2 ? `${sgn(last - first)} lb` : '—'],
+    ['Per week', days >= 7 ? `${sgn((last - first) / (days / 7))} lb` : '—'],
+    ['Low · High', `${lo.toFixed(1)} · ${hi.toFixed(1)}`],
+  ];
+  const rows = asc.slice().reverse().map((w, i, arr) => { const prev = arr[i + 1];
+    return `<div class="cc-row"><span>${escHtml(fmtHistoryDate(w.date))}</span><b>${w.lb.toFixed(1)}</b><em>${prev ? sgn(w.lb - prev.lb) : ''}</em></div>`; }).join('');
+  return `${chart}<div class="cc-stat4">${stats.map(([k, v]) => `<div><b>${v}</b><span>${k}</span></div>`).join('')}</div>
+    <details class="cc-more"><summary>All ${asc.length} weigh-in${asc.length === 1 ? '' : 's'}</summary><div class="cc-rows">${rows}</div></details>`;
+}
+function coachMeasureHTML(measures) {
+  const fields = MEASURE_LABELS.filter(([k]) => measures.some(m => m[k] != null && isFinite(Number(m[k]))));
+  if (!fields.length) return '<div class="ex-prev">No measurements logged yet.</div>';
+  const sgn = v => `${v > 0 ? '+' : ''}${v.toFixed(2)}"`;
+  const rows = fields.map(([k, label]) => {
+    const xs = measures.filter(m => m[k] != null && isFinite(Number(m[k]))).map(m => ({ date: m.date, v: Number(m[k]) }));
+    const now = xs[xs.length - 1], start = xs[0];
+    const back = xs.filter(p => daysBetweenISO(p.date, now.date) >= 28).pop();
+    return `<div class="cc-mrow"><span>${label}</span><b>${now.v}"</b><em>${back ? sgn(now.v - back.v) : '—'}</em><em>${xs.length > 1 ? sgn(now.v - start.v) : '—'}</em><i>${escHtml(fmtHistoryDate(now.date).replace(/^\w+, /, ''))}</i></div>`;
+  }).join('');
+  const hist = measures.slice().reverse().map(m => `<div class="cc-row"><span>${escHtml(fmtHistoryDate(m.date))}</span><b>${fields.filter(([k]) => m[k] != null).map(([k, l]) => `${l} ${Number(m[k])}"`).join(' · ')}</b></div>`).join('');
+  return `<div class="cc-mrow cc-mhead"><span></span><b>Now</b><em>4 wk</em><em>Since start</em><i>Last</i></div>${rows}
+    <details class="cc-more"><summary>All ${measures.length} check-in${measures.length === 1 ? '' : 's'}</summary><div class="cc-rows">${hist}</div></details>`;
+}
+function coachFoodHTML(s, weekOff, sel, today) {
+  const end = addDaysISO(today, -7 * weekOff);
+  const days = Array.from({ length: 7 }, (_, i) => addDaysISO(end, i - 6));
+  const by = Object.fromEntries(s.food.map(x => [x.date, x]));
+  const logged = days.filter(d => by[d]).map(d => by[d]);
+  const avg = k => logged.length ? Math.round(logged.reduce((a, x) => a + (x[k] || 0), 0) / logged.length) : null;
+  const protT = proteinTargetFor(s.weightNow, s.target);
+  const pick = sel && days.includes(sel) ? sel : null;
+  const tone = x => !x || !s.target ? '' : Math.abs(x.cals - s.target) / s.target <= 0.1 ? ' on' : x.cals > s.target ? ' over' : ' under';
+  const grid = `<div class="coach-food cc-foodgrid">${days.map(d => { const x = by[d];
+    return `<button data-d="${d}" class="${d === pick ? 'sel' : ''}${tone(x)}"${x ? '' : ' disabled'}><span>${escHtml(fmtHistoryDate(d).split(',')[0])}</span><b>${x ? Math.round(x.cals).toLocaleString() : '—'}</b><em>${x ? Math.round(x.prot) + 'g P' : ''}</em></button>`; }).join('')}</div>`;
+  const range = `${fmtHistoryDate(days[0]).replace(/^\w+, /, '')} – ${fmtHistoryDate(days[6]).replace(/^\w+, /, '')}`;
+  const sum = logged.length
+    ? `<div class="cc-stat4"><div><b>${avg('cals').toLocaleString()}</b><span>avg kcal${s.target ? ` · ${s.target.toLocaleString()} goal` : ''}</span></div><div><b>${avg('prot')}g</b><span>protein${protT ? ` · ${protT}g goal` : ''}</span></div><div><b>${avg('carb')}g</b><span>carbs</span></div><div><b>${avg('fat')}g</b><span>fat</span></div></div>`
+    : '';
+  let detail = '';
+  if (pick && by[pick]) {
+    const x = by[pick];
+    const items = x.entries.map(f => `<div class="cc-frow"><span>${escHtml((f && f.name) || 'Food')}</span><b>${Math.round(Number(f.cals) || 0)}</b><em>${Math.round(Number(f.prot) || 0)}P · ${Math.round(Number(f.carb) || 0)}C · ${Math.round(Number(f.fat) || 0)}F</em></div>`).join('');
+    detail = `<div class="cc-fday"><div class="cc-fday-h">${escHtml(fmtHistoryDate(pick))} · ${x.entries.length} item${x.entries.length === 1 ? '' : 's'}</div>${items}
+      <div class="cc-frow tot"><span>Total</span><b>${Math.round(x.cals).toLocaleString()}</b><em>${Math.round(x.prot)}P · ${Math.round(x.carb)}C · ${Math.round(x.fat)}F</em></div></div>`;
+  } else if (logged.length) detail = '<div class="ex-prev">Tap a day to see what they ate.</div>';
+  return `<div class="cc-week">${range} · logged ${logged.length}/7 days</div>${grid}${sum}${detail}`;
+}
+function wireCoachInsights(s) {
+  const today = todayISO();
+  let range = '12w'; try { const r = localStorage.getItem('forever_ccRange'); if (['4w', '12w', 'all'].includes(r)) range = r; } catch (e) {}
+  const wBox = document.getElementById('ccWeight'), rBox = document.getElementById('ccWRange');
+  const drawW = () => { wBox.innerHTML = coachWeightHTML(s.weights, range, today); rBox.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.r === range)); };
+  rBox.querySelectorAll('button').forEach(b => b.onclick = () => { range = b.dataset.r; try { localStorage.setItem('forever_ccRange', range); } catch (e) {} drawW(); });
+  drawW();
+  let off = 0, sel = null;
+  const fBox = document.getElementById('ccFood'), prev = document.getElementById('ccFoodPrev'), next = document.getElementById('ccFoodNext');
+  const oldest = s.food.reduce((m, x) => (x.date < m ? x.date : m), today);
+  const drawF = () => {
+    if (sel == null) { const end = addDaysISO(today, -7 * off); sel = s.food.map(x => x.date).filter(d => d <= end && daysBetweenISO(d, end) < 7).sort().pop() || ''; }
+    fBox.innerHTML = coachFoodHTML(s, off, sel, today);
+    next.disabled = off === 0; prev.disabled = addDaysISO(today, -7 * off - 6) <= oldest;
+    fBox.querySelectorAll('.cc-foodgrid button').forEach(b => b.onclick = () => { sel = sel === b.dataset.d ? '' : b.dataset.d; drawF(); });
+  };
+  prev.onclick = () => { off++; sel = null; drawF(); };
+  next.onclick = () => { if (off > 0) { off--; sel = null; drawF(); } };
+  drawF();
+}
 async function renderCoachClient(c) {
   const body = document.getElementById('coachBody');
   const s = c.sum, nm = clientDisplayName(c);
   document.getElementById('coachTitle').textContent = nm;
   const f = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}`;
-  const days = Array.from({ length: 7 }, (_, i) => isoOffset(6 - i)); // oldest → today
-  const foodBy = Object.fromEntries(s.food.map(x => [x.date, x]));
-  const wSpark = s.weights.slice(0, 20).map(w => w.lb).reverse();
   const sessHTML = s.sessions.slice(0, 6).map(ss => {
     const lifts = Object.keys(ss.exercises).map(n => {
       const sets = (Array.isArray(ss.exercises[n]) ? ss.exercises[n] : []).filter(x => x && x.logged && parseFloat(x.weight) > 0);
@@ -9766,9 +10012,13 @@ async function renderCoachClient(c) {
       <div><div class="bc-num">${s.workouts7}</div><div class="bc-lbl">workouts / 7d</div></div>
       <div><div class="bc-num">${s.steps7 ? (s.steps7 / 1000).toFixed(1) + 'k' : '—'}</div><div class="bc-lbl">steps avg</div></div>
     </div>
-    ${wSpark.length >= 2 ? `<div class="coach-spark">${sparklineSVG(wSpark)}<span>Weigh-ins</span></div>` : ''}
-    <div class="cp-label" style="margin-top:18px;">Nutrition · ${escHtml(s.phaseLabel)}${s.target ? ` · ${s.target.toLocaleString()} kcal avg target` : ''}</div>
-    <div class="coach-food">${days.map(d => { const x = foodBy[d]; return `<div><span>${escHtml(fmtHistoryDate(d).split(',')[0])}</span><b>${x ? Math.round(x.cals).toLocaleString() : '—'}</b><em>${x ? Math.round(x.prot) + 'g P' : ''}</em></div>`; }).join('')}</div>
+    <div class="cc-sec-head"><div class="cp-label">Weight</div><div class="cc-range" id="ccWRange">${['4w', '12w', 'all'].map(r => `<button data-r="${r}">${r === 'all' ? 'All' : r.toUpperCase()}</button>`).join('')}</div></div>
+    <div id="ccWeight"></div>
+    <div class="cp-label" style="margin-top:22px;">Measurements</div>
+    <div id="ccMeasure">${coachMeasureHTML(s.measures)}</div>
+    <div class="cc-sec-head" style="margin-top:22px;"><div class="cp-label">Nutrition · ${escHtml(s.phaseLabel)}${s.target ? ` · ${s.target.toLocaleString()} kcal target` : ''}</div>
+      <div class="cc-range cc-weeknav"><button id="ccFoodPrev" aria-label="Previous week">‹</button><button id="ccFoodNext" aria-label="Next week">›</button></div></div>
+    <div id="ccFood"></div>
     <div class="cp-label" style="margin-top:18px;">Recent sessions</div>
     ${sessHTML || '<div class="ex-prev">No sessions yet.</div>'}
     <div class="cp-label" style="margin-top:18px;">Progress photos</div>
@@ -9778,6 +10028,7 @@ async function renderCoachClient(c) {
   document.getElementById('coachBackBtn').onclick = () => { if (coachChatPoll) { clearInterval(coachChatPoll); coachChatPoll = null; } renderCoachDashboard(); };
   wireCoachManage(c);
   wireCoachChat(c);
+  wireCoachInsights(s);
   document.getElementById('coachRemoveBtn').onclick = async () => {
     if (!(await uiConfirm(`Remove ${nm}?`, "You'll stop seeing their data. They can reconnect with your code.", 'Remove', { danger: true }))) return;
     try { await supaClient.from('coach_links').delete().eq('coach_id', currentUserId).eq('client_id', c.client_id); } catch (e) {}
