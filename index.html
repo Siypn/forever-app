@@ -3918,7 +3918,7 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-06.10';
+const APP_BUILD = '2026-10-06.11';
 // The version people see. Bump it (and add a RELEASE_NOTES entry at the top) with every update
 // worth announcing; APP_BUILD still changes on every upload so phones know to refresh.
 const APP_VERSION = '1.05';
@@ -3935,6 +3935,7 @@ const RELEASE_NOTES = [
     { k: 'fix', t: 'Progression adds about 1 rep per set per week, and cables and machines move in real 5 lb steps.' },
     { k: 'new', t: 'When a plan needs a small add-on weight (like 17.5 on a cable), the app asks once for that exercise; say no and it keeps building reps at your current weight instead.' },
     { k: 'fix', t: "Exercises you type in yourself pick Compound or Isolation from the name, so a typed-in press isn't coached like a raise." },
+    { k: 'fix', t: "Fixed being quietly signed out (\"permission denied\" when connecting to a coach or picking a username). If your sign-in ever does expire, the app now asks you to sign in again." },
     { k: 'fix', t: 'Setup, sign-in and the workout summary no longer hide their top line behind the iPhone status bar.' },
     { k: 'new', t: "Coach view: a full weight chart (4 weeks, 12 weeks or all) with rate per week and every weigh-in, each client's measurements with changes, and their food log day by day, down to each item." },
     { k: 'new', t: 'Coaches can personalize a client\'s app: a nickname in the top bar, a separate greeting name, a status badge with an end date, a one-time welcome message, and a Purple or Gold look.' },
@@ -3956,7 +3957,60 @@ const RELEASE_NOTES = [
 const SUPABASE_URL = 'https://xjvlmluycmbalzujojdm.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqdmxtbHV5Y21iYWx6dWpvamRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNzQ5MDcsImV4cCI6MjEwNTg1MDkwN30.zVGVSQ3zv_ZrVjHJP5JVCF-W2c-A7XelUYmlaTgjb8A';
 let supaClient = null;
-try { supaClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null; } catch (e) { supaClient = null; }
+// Sign-in hardening. supabase-js can start one token refresh per request when several requests go
+// out together right as the token expires; the server then sees "the same refresh token used many
+// times", revokes the session, and every later request silently goes out as an anonymous visitor
+// (that's where "permission denied" / "row-level security" errors came from). So: concurrent
+// getSession() calls share one refresh, a burst of refreshes pauses auto-refresh, and a lost
+// session asks you to sign in again instead of failing quietly.
+let sessionLost = false, userSignedOut = false;
+function authFetch(url, opts) {
+  return fetch(url, opts).then(res => {
+    if (res.status === 401 && currentUserId && !userSignedOut && /\/rest\/v1\//.test(String(url))) setTimeout(() => handleSessionLost(), 0);
+    return res;
+  });
+}
+try { supaClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { global: { fetch: authFetch } }) : null; } catch (e) { supaClient = null; }
+if (supaClient) {
+  try {
+    const auth = supaClient.auth, rawGetSession = auth.getSession.bind(auth);
+    let inflight = null;
+    auth.getSession = function () {
+      if (!inflight) inflight = rawGetSession().finally(() => { setTimeout(() => { inflight = null; }, 0); });
+      return inflight;
+    };
+    const refreshes = [];
+    auth.onAuthStateChange((event) => {
+      // Never call auth methods inside this callback (that's what feeds the refresh loop).
+      if (event === 'TOKEN_REFRESHED') {
+        const now = Date.now(); refreshes.push(now);
+        while (refreshes.length && now - refreshes[0] > 10000) refreshes.shift();
+        if (refreshes.length >= 4) setTimeout(() => {
+          try { auth.stopAutoRefresh(); } catch (e) {}
+          setTimeout(() => { try { auth.startAutoRefresh(); } catch (e) {} }, 60000);
+        }, 0);
+      }
+      if (event === 'SIGNED_OUT' && currentUserId && !userSignedOut) setTimeout(() => handleSessionLost(), 0);
+    });
+  } catch (e) {}
+}
+async function handleSessionLost() {
+  if (sessionLost || userSignedOut || !supaClient || !currentUserId) return;
+  try { const { data } = await supaClient.auth.getSession(); if (data && data.session && data.session.user && data.session.user.id === currentUserId) return; } catch (e) {}
+  sessionLost = true;
+  try { renderAuthMode(); } catch (e) {}
+  const err = document.getElementById('authError');
+  if (err) { err.textContent = 'You were signed out. Sign in again to keep saving and syncing.'; err.style.display = 'block'; }
+  const ov = document.getElementById('authOverlay'); if (ov) ov.style.display = 'block';
+}
+// Before anything that needs your account (connecting to a coach, saving a username).
+async function requireSession() {
+  if (!supaClient) return true;
+  try { const { data } = await supaClient.auth.getSession(); if (data && data.session) return true; } catch (e) {}
+  await handleSessionLost();
+  return false;
+}
+function isAuthError(e) { return /row-level security|permission denied|JWT|not signed in|401/i.test((e && (e.message || e.code)) || ''); }
 let currentUserId = null;
 
 // Sentry — real error tracking so bugs that only show up on a friend's device during
@@ -9731,12 +9785,14 @@ document.getElementById('menuConnectCoachBtn').addEventListener('click', async (
   }
   const code = await uiPrompt('Connect to a coach', "Enter your coach's code. They'll be able to see everything you log (workouts, nutrition, weight, measurements, sleep, soreness, steps, your profile, your email and progress photos). They can also adjust your program, diet phase and calories and send you notes, but never change what you've logged. You can disconnect anytime.", { placeholder: 'FOREVER-AB12', caps: 'characters' }, 'Connect');
   if (!code || !code.trim()) return;
+  if (!(await requireSession())) return;
   try {
     const { data, error } = await supaClient.rpc('connect_to_coach', { p_code: code.trim() });
     if (error) throw error;
     await loadCoachState();
     await uiAlert(`Connected to ${data}`, 'They can now see your progress.');
   } catch (e) {
+    if (isAuthError(e)) { await handleSessionLost(); if (sessionLost) return; await uiAlert("Couldn't connect", 'Your sign-in needed refreshing. Try once more.'); return; }
     await uiAlert("Couldn't connect", (e && e.message) ? e.message.replace(/^.*?: /, '') : 'Check the code and try again.');
   }
 });
@@ -11267,6 +11323,7 @@ async function useLocalMode() {
   await startApp();
 }
 async function useSupabaseSession(session) {
+  if (sessionLost) { location.reload(); return; } // signed back in after losing the session: start clean
   db = createSupabaseDb(supaClient, session.user.id);
   currentUserId = session.user.id;
   currentUserEmail = session.user.email || null;
@@ -11462,7 +11519,9 @@ function usernameProblem(u) {
 async function setUsername(u) {
   u = (u || '').trim().replace(/^@/, '');
   const bad = usernameProblem(u); if (bad) throw new Error(bad);
+  if (!(await requireSession())) throw new Error('You were signed out. Sign in again, then pick your username.');
   const { error } = await supaClient.from('usernames').upsert({ user_id: currentUserId, username: u }, { onConflict: 'user_id' });
+  if (error && isAuthError(error)) { await handleSessionLost(); throw new Error(sessionLost ? 'You were signed out. Sign in again, then pick your username.' : 'Your sign-in needed refreshing. Try once more.'); }
   if (error) throw new Error(/duplicate|unique/i.test(error.message || '') ? `@${u} is taken — try another.` : error.message);
   await saveAccountProfile({ username: u });
 }
@@ -11661,6 +11720,7 @@ document.getElementById('menuDeleteDataBtn').addEventListener('click', async () 
 });
 
 document.getElementById('menuLogoutBtn') && (document.getElementById('menuLogoutBtn').onclick = async () => {
+  userSignedOut = true;
   // Push any saves still waiting from being offline, then wipe this account's cached copy so the
   // next person to use this phone can't see it. Unsent saves stay queued (per account) and go up
   // next time this account logs in here.
