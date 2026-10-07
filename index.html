@@ -855,6 +855,65 @@
   .set-row .btn-secondary { flex: 0 0 auto; padding: 9px 16px; }
   .code-preview { font-size: 12.5px; color: var(--text-dim); margin: 10px 0 4px; }
   .code-preview b { color: var(--text); font-weight: 600; letter-spacing: 1px; }
+  /* Coach redesign: one colour (the coach's own, purple by default), glow + big numbers */
+  .cx-top { padding: 6px 0 0; }
+  .cx-kick { font-size: 10.5px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--text-dim); }
+  .cx-title { font-family: 'Cinzel', serif; font-weight: 600; font-size: 28px; line-height: 1.12; margin-top: 6px; overflow-wrap: anywhere; }
+  .cx-title em { font-style: normal; background: linear-gradient(90deg, rgb(var(--p4)), rgb(var(--p1))); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .cx-subline { font-size: 11.5px; color: var(--text-dim); margin-top: 6px; }
+  .cx-alert { margin: 16px 0 0; padding: 14px; border-radius: var(--r); border: 1px solid rgba(var(--p1),0.45); background: linear-gradient(135deg, rgba(var(--p1),0.12), rgba(0,0,0,0)); }
+  .cx-alert.calm { border-color: var(--hairline); background: none; }
+  .cx-alert .k { font-size: 9.5px; letter-spacing: 1.8px; text-transform: uppercase; color: rgb(var(--p1)); }
+  .cx-alert.calm .k { color: var(--text-dim); }
+  .cx-alert .t { font-size: 13px; margin-top: 5px; line-height: 1.5; }
+  .cx-alert .t b { font-weight: 600; }
+  .cx-tile { display: block; width: 100%; text-align: left; font: inherit; color: var(--text); cursor: pointer; margin: 0 0 14px; height: 190px; border-radius: var(--r-lg); position: relative; overflow: hidden; padding: 0;
+    border: 1px solid rgba(var(--p1),0.42); box-shadow: 0 14px 34px -18px rgba(var(--p2),0.7);
+    background: radial-gradient(110% 80% at 100% 0%, rgba(var(--p2),0.4), rgba(0,0,0,0) 60%), linear-gradient(160deg, #141018, #000); }
+  .cx-tile.quiet { border-color: var(--border); box-shadow: var(--shadow-card); background: radial-gradient(110% 80% at 100% 0%, rgba(var(--p2),0.16), rgba(0,0,0,0) 60%), linear-gradient(160deg, #0e0c12, #000); }
+  .cx-tile:active { transform: scale(0.99); }
+  .cx-tile .sp { position: absolute; right: 0; top: 62px; width: 190px; height: 70px; opacity: 0.85; pointer-events: none; }
+  .cx-tile.quiet .sp { opacity: 0.5; }
+  .cx-tile .in { position: absolute; inset: 0; padding: 16px; display: flex; flex-direction: column; }
+  .cx-tile .lbl { font-family: 'Bebas Neue', sans-serif; font-size: 12px; letter-spacing: 2px; color: rgb(var(--p1)); }
+  .cx-tile .nm { font-family: 'Cinzel', serif; font-weight: 600; font-size: 25px; margin-top: 2px; max-width: 62%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cx-tile .meta { font-size: 11px; color: var(--text-dim); margin-top: 4px; display: flex; gap: 6px; align-items: center; }
+  .cx-tile .meta em { font-style: normal; color: rgb(var(--p3)); }
+  .cx-tile .nums { margin-top: auto; display: flex; gap: 18px; align-items: flex-end; }
+  .cx-tile .nums b { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 30px; font-weight: 400; line-height: 1; text-shadow: 0 0 16px rgba(255,255,255,0.3); }
+  .cx-tile .nums b.low { color: rgba(var(--p3),0.55); text-shadow: none; }
+  .cx-tile .nums span { display: block; font-size: 9px; letter-spacing: 1.4px; color: var(--text-dim); text-transform: uppercase; margin-top: 3px; }
+  .cx-tile .pill { position: absolute; top: 14px; right: 14px; max-width: 46%; }
+  .cx-hero { margin: 2px 0 0; border-radius: var(--r-lg); border: 1px solid rgba(var(--p1),0.42); overflow: hidden; position: relative; padding: 20px 16px 14px; text-align: center;
+    background: radial-gradient(90% 70% at 50% 0%, rgba(var(--p2),0.38), rgba(0,0,0,0) 65%), linear-gradient(180deg, #120e18, #050407); box-shadow: 0 20px 50px -22px rgba(var(--p2),0.65); }
+  .cx-mono { position: relative; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-family: 'Cinzel', serif; font-weight: 600; font-size: 19px; color: rgb(var(--p4));
+    background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.12), rgba(255,255,255,0) 60%), #141118; border: 2px solid rgb(var(--p1)); box-shadow: 0 0 14px -2px rgba(var(--p1),0.6); }
+  .cx-mono.big { width: 78px; height: 78px; font-size: 32px; margin: 0 auto; box-shadow: 0 0 30px -4px rgba(var(--p1),0.8); }
+  .cx-mono .on { position: absolute; right: 2px; bottom: 2px; width: 15px; height: 15px; border-radius: 50%; background: #5bd39a; border: 2px solid #0d0c11; }
+  .cx-name { font-family: 'Cinzel', serif; font-weight: 600; font-size: 26px; margin-top: 10px; background: linear-gradient(90deg, rgb(var(--p4)), rgb(var(--p1))); -webkit-background-clip: text; background-clip: text; color: transparent; overflow-wrap: anywhere; }
+  .cx-sub { font-size: 11.5px; color: var(--text-dim); margin-top: 4px; }
+  .cx-mail { display: inline-block; font-size: 11px; color: var(--text-dim); margin-top: 10px; text-decoration: none; }
+  .cx-stats { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; margin: 14px 0 0; padding: 14px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
+  .cx-stats b { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: 400; line-height: 1; text-shadow: 0 0 18px rgba(255,255,255,0.3); }
+  .cx-stats b.acc { color: rgb(var(--p3)); text-shadow: 0 0 16px rgba(var(--p1),0.7); }
+  .cx-stats span { display: block; font-size: 9px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--text-dim); margin-top: 5px; }
+  .cx-rings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .cx-ring { position: relative; text-align: center; }
+  .cx-ring svg { width: 70px; height: 70px; display: block; margin: 0 auto; }
+  .cx-ring b { position: absolute; top: 23px; left: 0; right: 0; font-family: 'Bebas Neue', sans-serif; font-size: 20px; font-weight: 400; }
+  .cx-ring span { display: block; font-size: 9.5px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--text-dim); margin-top: 4px; }
+  .cx-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+  .cx-week div { padding: 8px 0; border-radius: 10px; border: 1px solid var(--hairline); font-size: 9.5px; color: var(--text-dim); }
+  .cx-week div.today { border-color: rgba(var(--p1),0.6); color: var(--text); }
+  .cx-week i { display: block; width: 6px; height: 6px; border-radius: 50%; margin: 5px auto 0; background: rgba(255,255,255,0.1); }
+  .cx-week i.w { background: rgb(var(--p1)); box-shadow: 0 0 6px rgb(var(--p1)); } .cx-week i.f { background: #9fe3c2; } .cx-week i.s { background: #c9c9d3; }
+  .cx-legend { display: flex; gap: 12px; justify-content: center; font-size: 10px; color: var(--text-dim); margin-top: 8px; }
+  .cx-legend i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 4px; vertical-align: 1px; }
+  .cx-wchart svg { width: 100%; height: 70px; display: block; }
+  .cx-flag { font-size: 10.5px; padding: 4px 9px; border-radius: 999px; border: 1px solid rgba(var(--p1),0.35); color: rgb(var(--p4)); }
+  .cx-flag.hi { border-color: rgba(var(--p1),0.75); box-shadow: 0 0 10px -3px rgba(var(--p1),0.8); }
+  .cx-mini { display: flex; flex-wrap: wrap; gap: 14px; font-size: 11.5px; color: var(--text-dim); margin-top: 10px; }
+  .cx-mini b { color: var(--text); font-weight: 600; }
   .cc-sec-head { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; gap: 10px; }
   .cc-range { display: flex; gap: 4px; flex-shrink: 0; }
   .cc-range button { background: none; border: 1px solid var(--hairline); color: var(--text-dim); font: inherit; font-size: 10.5px; padding: 4px 10px; border-radius: 999px; cursor: pointer; }
@@ -3822,7 +3881,7 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-06.6';
+const APP_BUILD = '2026-10-06.7';
 // The version people see. Bump it (and add a RELEASE_NOTES entry at the top) with every update
 // worth announcing; APP_BUILD still changes on every upload so phones know to refresh.
 const APP_VERSION = '1.05';
@@ -9650,6 +9709,95 @@ async function fetchClientDocs(clientId) {
   }
   return all;
 }
+// ---------- Coach redesign helpers (dashboard tiles + client hero) ----------
+let ccSparkN = 0;
+function coachSparkSVG(vals, w, h) {
+  if (!vals || vals.length < 2) return '';
+  const lo = Math.min(...vals), hi = Math.max(...vals), id = 'csg' + (++ccSparkN);
+  const pts = vals.map((v, i) => `${(i / (vals.length - 1) * w).toFixed(1)},${(h - 4 - (v - lo) / ((hi - lo) || 1) * (h - 8)).toFixed(1)}`).join(' ');
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="rgb(var(--p1))" stop-opacity=".35"/><stop offset="1" stop-color="rgb(var(--p1))" stop-opacity="0"/></linearGradient></defs><polygon fill="url(#${id})" points="0,${h} ${pts} ${w},${h}"/><polyline fill="none" stroke="rgb(var(--p1))" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="${pts}"/></svg>`;
+}
+function clientFirstLetter(c) { const n = clientDisplayName(c).replace(/^@/, ''); return (n[0] || '?').toUpperCase(); }
+function clientPlannedDays(c) { try { const pr = clientProgram(c); return DAY_ORDER.filter(d => (pr.days[d].exercises || []).length).length || 0; } catch (e) { return 0; } }
+function clientBlockWeek(c) {
+  const b = clientDoc(c, 'block/config') || {};
+  if (!b.start) return null;
+  const d = daysBetweenISO(b.start, todayISO());
+  if (d < 0) return null;
+  return Math.min(Math.floor(d / 7) + 1, b.length || 99);
+}
+function clientWeekDots(c) {
+  const s = c.sum, today = todayISO();
+  return Array.from({ length: 7 }, (_, i) => {
+    const d = addDaysISO(today, i - 6);
+    return { d, w: s.sessions.some(x => x.date === d), f: s.food.some(x => x.date === d), s: s.weights.some(x => x.date === d) };
+  });
+}
+function ringSVG(pct, col) {
+  const r = 27, len = 2 * Math.PI * r * Math.max(0, Math.min(1, pct));
+  return `<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="${r}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="5"/>${pct > 0 ? `<circle cx="32" cy="32" r="${r}" fill="none" stroke="${col}" stroke-width="5" stroke-linecap="round" stroke-dasharray="${len.toFixed(1)} 999" transform="rotate(-90 32 32)" style="filter:drop-shadow(0 0 5px ${col})"/>` : ''}</svg>`;
+}
+function needsYouHTML() {
+  const lines = [];
+  coachClients.forEach(c => { if (!c.sum) return;
+    const nm = `<b>${escHtml(clientDisplayName(c))}</b>`;
+    const red = c.sum.flags.filter(f => f.lvl === 2).map(f => f.t.charAt(0).toLowerCase() + f.t.slice(1));
+    const amb = c.sum.flags.filter(f => f.lvl === 1).map(f => f.t.charAt(0).toLowerCase() + f.t.slice(1));
+    const n = clientUnread(c);
+    if (red.length) lines.push(`${nm}: ${escHtml(red.concat(amb).slice(0, 2).join(', '))}.`);
+    if (n) lines.push(`${nm} sent you ${n === 1 ? 'a message' : n + ' messages'}.`);
+  });
+  return lines.length
+    ? `<div class="cx-alert"><div class="k">Needs you today</div><div class="t">${lines.slice(0, 4).join(' ')}</div></div>`
+    : `<div class="cx-alert calm"><div class="k">All clear</div><div class="t">Everyone's on track. Nothing needs you right now.</div></div>`;
+}
+function coachTileHTML(c, i) {
+  const s = c.sum, badge = activeBadge(clientDoc(c, 'coach/personal')), wk = clientBlockWeek(c), plan = clientPlannedDays(c), n = clientUnread(c);
+  const p = presenceInfo((clientDoc(c, 'meta/presence') || {}).at || 0);
+  const lowW = plan ? s.workouts7 < plan / 2 : s.workouts7 === 0, lowF = s.foodDays7 < 4;
+  const spark = coachSparkSVG(s.weights.slice(0, 12).map(w => w.lb).reverse(), 190, 70);
+  return `<button class="cx-tile${s.status === 'green' ? '' : ' quiet'}" data-i="${i}">
+    ${spark ? `<div class="sp">${spark}</div>` : ''}
+    <div class="in">
+      <div class="lbl">${escHtml(s.phaseLabel)}${wk ? ` · Week ${wk}` : ''}</div>
+      <div class="nm">${escHtml(clientDisplayName(c))}</div>
+      <div class="meta" data-presence-tile="${escHtml(c.client_id)}"><span class="pr-dot${p.on ? ' on' : ''}"></span><span class="pt">${escHtml(p.t)}</span>${n ? `<span>·</span><em>${n} new message${n === 1 ? '' : 's'}</em>` : ''}</div>
+      <div class="nums">
+        <div><b>${s.weightNow ? s.weightNow.toFixed(1) : '—'}</b><span>lb${s.rate != null ? ` · ${s.rate >= 0 ? '+' : '−'}${Math.abs(s.rate).toFixed(1)}/wk` : ''}</span></div>
+        <div><b class="${lowW ? 'low' : ''}">${s.workouts7}${plan ? '/' + plan : ''}</b><span>workouts</span></div>
+        <div><b class="${lowF ? 'low' : ''}">${s.foodDays7}/7</b><span>food days</span></div>
+      </div>
+    </div>
+    ${badge ? `<span class="vip-badge sm pill">${escHtml(badge)}</span>` : ''}
+  </button>`;
+}
+function coachClientHeroHTML(c) {
+  const s = c.sum, nm = clientDisplayName(c), pers = clientDoc(c, 'coach/personal') || {}, badge = activeBadge(pers), wk = clientBlockWeek(c);
+  const p = presenceInfo((clientDoc(c, 'meta/presence') || {}).at || 0);
+  return `<div class="cx-hero">
+      <div class="cx-mono big">${escHtml(clientFirstLetter(c))}${p.on ? '<span class="on"></span>' : ''}</div>
+      <div class="cx-name">${escHtml(nm.replace(/^@/, ''))}</div>
+      <div class="cx-sub">${pers.nickname ? `“${escHtml(pers.nickname)}” · ` : ''}<span data-presence-text="${escHtml(c.client_id)}">${escHtml(p.t)}</span> · ${escHtml(s.phaseLabel)}${wk ? `, week ${wk}` : ''}</div>
+      ${badge ? `<div style="margin-top:10px;"><span class="vip-badge" style="margin:0;">${escHtml(badge)}</span></div>` : ''}
+      <a class="cx-mail" href="mailto:${escHtml(c.client_email || '')}">${escHtml(c.client_email || '')}</a>
+    </div>
+    <div class="cx-stats">
+      <div><b>${s.weightNow ? s.weightNow.toFixed(1) : '—'}</b><span>lb${s.rate != null ? ` · ${s.rate >= 0 ? '+' : '−'}${Math.abs(s.rate).toFixed(1)}/wk` : ''}</span></div>
+      <div><b class="acc">${s.workouts7}</b><span>workouts / 7d</span></div>
+      <div><b>${s.kcal7 != null ? s.kcal7.toLocaleString() : '—'}</b><span>kcal avg</span></div>
+    </div>`;
+}
+function coachOverviewTopHTML(c) {
+  const s = c.sum, plan = clientPlannedDays(c) || 4, dots = clientWeekDots(c);
+  const wi = dots.filter(x => x.s).length;
+  const ring = (pct, lbl, val, col) => `<div class="cx-ring">${ringSVG(pct, col)}<b>${val}</b><span>${lbl}</span></div>`;
+  const wts = s.weights.filter(w => daysBetweenISO(w.date, todayISO()) < 28).map(w => w.lb).reverse();
+  return `<div class="cx-rings">${ring(s.workouts7 / plan, 'Training', `${s.workouts7}/${plan}`, 'rgb(var(--p1))')}${ring(s.foodDays7 / 7, 'Food', `${s.foodDays7}/7`, '#9fe3c2')}${ring(wi / 7, 'Weigh-ins', `${wi}/7`, '#c9c9d3')}</div>
+    <div class="cp-label" style="margin:18px 0 8px;">This week</div>
+    <div class="cx-week">${dots.map((x, k) => `<div class="${k === 6 ? 'today' : ''}">${escHtml(fmtHistoryDate(x.d).split(',')[0])}<i class="${x.w ? 'w' : ''}"></i><i class="${x.f ? 'f' : ''}"></i><i class="${x.s ? 's' : ''}"></i></div>`).join('')}</div>
+    <div class="cx-legend"><span><i style="background:rgb(var(--p1))"></i>Workout</span><span><i style="background:#9fe3c2"></i>Food</span><span><i style="background:#c9c9d3"></i>Weigh-in</span></div>
+    ${wts.length >= 2 ? `<div class="cp-label" style="margin:18px 0 4px;">Weight · 4 weeks</div><div class="cx-wchart">${coachSparkSVG(wts, 353, 70)}</div>` : ''}`;
+}
 let coachClients = [];
 let coachLoadedAt = 0;
 let coachDashView = 'clients', coachClientView = 'overview';
@@ -9710,10 +9858,15 @@ async function renderCoachDashboard(useCache) {
     .filter(t => t.last).sort((a, b) => (b.n > 0) - (a.n > 0) || b.last.ts - a.last.ts);
   const when = ts => { const d = new Date(ts); return d.toDateString() === new Date().toDateString() ? d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }) : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }); };
   const slug = (coachProfile.code || '').split('-')[1] || '';
+  const dn = (coachProfile.display_name || 'Coach').trim().split(/\s+/);
+  const dTitle = dn.length > 1 ? `${escHtml(dn.slice(0, -1).join(' '))} <em>${escHtml(dn[dn.length - 1])}</em>` : `<em>${escHtml(dn[0])}</em>`;
   body.innerHTML = `
+    <div class="cx-top"><div class="cx-kick">${greetingWord()}</div><div class="cx-title">${dTitle}</div>
+      <div class="cx-subline">${coachClients.length} client${coachClients.length === 1 ? '' : 's'} · code ${escHtml(coachProfile.code || '')}</div></div>
+    ${coachClients.length ? needsYouHTML() : ''}
     ${segHTML('cdSeg', [['clients', 'Clients', coachClients.length], ['inbox', 'Inbox', unreadClients], ['settings', 'Settings']], coachDashView)}
     <div class="cc-view" data-seg="cdSeg" data-view="clients">
-      ${coachClients.length ? coachClients.map(cardHTML).join('') : `<div class="ex-prev" style="padding:20px 0;">No clients yet. Share your code from Settings and they'll show up here once they connect.</div>`}
+      ${coachClients.length ? coachClients.map((c, i) => c.sum ? coachTileHTML(c, i) : cardHTML(c, i)).join('') : `<div class="ex-prev" style="padding:20px 0;">No clients yet. Share your code from Settings and they'll show up here once they connect.</div>`}
     </div>
     <div class="cc-view" data-seg="cdSeg" data-view="inbox">
       ${threads.length ? threads.map(t => `<button class="inbox-row${t.n ? ' unread' : ''}" data-i="${t.i}">
@@ -9765,7 +9918,7 @@ async function renderCoachDashboard(useCache) {
     await uiAlert('Your new code', `${saved}\n\nShare this with new clients.`);
     renderCoachDashboard(true);
   };
-  body.querySelectorAll('.coach-card[data-i]').forEach(b => b.onclick = () => renderCoachClient(coachClients[parseInt(b.dataset.i, 10)]));
+  body.querySelectorAll('.coach-card[data-i], .cx-tile[data-i]').forEach(b => b.onclick = () => renderCoachClient(coachClients[parseInt(b.dataset.i, 10)]));
   body.querySelectorAll('.inbox-row[data-i]').forEach(b => b.onclick = () => renderCoachClient(coachClients[parseInt(b.dataset.i, 10)], 'chat'));
   startPresencePoll(); if (useCache) refreshPresence();
 }
@@ -9813,6 +9966,10 @@ function presenceHTML(c) {
 let presencePoll = null;
 function paintPresence() {
   document.querySelectorAll('[data-presence]').forEach(el => { const c = coachClients.find(x => x.client_id === el.dataset.presence); if (c) el.innerHTML = presenceHTML(c); });
+  document.querySelectorAll('[data-presence-text]').forEach(el => { const c = coachClients.find(x => x.client_id === el.dataset.presenceText); if (c) el.textContent = presenceInfo((clientDoc(c, 'meta/presence') || {}).at || 0).t; });
+  document.querySelectorAll('[data-presence-tile]').forEach(el => { const c = coachClients.find(x => x.client_id === el.dataset.presenceTile); if (!c) return;
+    const p = presenceInfo((clientDoc(c, 'meta/presence') || {}).at || 0), dot = el.querySelector('.pr-dot'); if (dot) dot.classList.toggle('on', p.on);
+    const pt = el.querySelector('.pt'); if (pt) pt.textContent = p.t; });
 }
 async function refreshPresence() {
   const ov = document.getElementById('coachOverlay');
@@ -10220,24 +10377,16 @@ async function renderCoachClient(c, view) {
     }).join('');
     return `<div class="cs-sess"><div class="cs-head">${escHtml(fmtHistoryDate(ss.date))}${ss.day ? ` · ${escHtml(ss.day)}` : ''}${ss.durationSec ? ` · ${Math.round(ss.durationSec / 60)} min` : ''}</div>${lifts}</div>`;
   }).join('');
-  const badge = activeBadge(clientDoc(c, 'coach/personal'));
   const unread = clientUnread(c);
   body.innerHTML = `
     <button class="back-link" id="coachBackBtn" style="padding:0 0 10px;">‹ All clients</button>
-    <div class="cc-who"><b>${escHtml(nm)}</b>${badge ? `<span class="vip-badge sm" style="align-self:flex-start; max-width:100%;">${escHtml(badge)}</span>` : ''}<span class="cc-seen" data-presence="${escHtml(c.client_id)}" style="margin-left:0;">${presenceHTML(c)}</span><a href="mailto:${escHtml(c.client_email || '')}">${escHtml(c.client_email || '')}</a></div>
+    ${coachClientHeroHTML(c)}
     ${segHTML('ccSeg', [['overview', 'Overview'], ['progress', 'Progress'], ['food', 'Food'], ['chat', 'Chat', unread], ['plan', 'Plan']], coachClientView)}
     <div class="cc-view" data-seg="ccSeg" data-view="overview">
-      <div class="cc-flags" style="margin:0 0 12px;">${s.flags.length ? s.flags.map(fl => `<span class="cc-flag l${fl.lvl}">${escHtml(fl.t)}</span>`).join('') : '<span class="cc-flag ok">On track</span>'}</div>
-      <div class="coach-grid">
-        <div><div class="bc-num">${s.weightNow ? s.weightNow.toFixed(1) : '—'}</div><div class="bc-lbl">lb${s.rate != null ? ` · ${f(s.rate)}/wk` : ''}</div></div>
-        <div><div class="bc-num">${s.workouts7}</div><div class="bc-lbl">workouts / 7d</div></div>
-        <div><div class="bc-num">${s.steps7 ? (s.steps7 / 1000).toFixed(1) + 'k' : '—'}</div><div class="bc-lbl">steps avg</div></div>
-      </div>
-      <div class="coach-grid" style="border-top:none;">
-        <div><div class="bc-num">${s.foodDays7}/7</div><div class="bc-lbl">days food logged</div></div>
-        <div><div class="bc-num">${s.kcal7 != null ? s.kcal7.toLocaleString() : '—'}</div><div class="bc-lbl">kcal avg${s.target ? ` · ${s.target.toLocaleString()} goal` : ''}</div></div>
-        <div><div class="bc-num">${s.prot7 != null ? s.prot7 + 'g' : '—'}</div><div class="bc-lbl">protein avg</div></div>
-      </div>
+      ${coachOverviewTopHTML(c)}
+      <div class="cp-label" style="margin:20px 0 8px;">Flags</div>
+      <div class="cc-flags" style="margin:0 0 4px;">${s.flags.length ? s.flags.map(fl => `<span class="cx-flag${fl.lvl === 2 ? ' hi' : ''}">${escHtml(fl.t)}</span>`).join('') : '<span class="cx-flag">On track — nothing to flag</span>'}</div>
+      <div class="cx-mini">${s.steps7 ? `<span><b>${(s.steps7 / 1000).toFixed(1)}k</b> steps avg</span>` : ''}${s.prot7 != null ? `<span><b>${s.prot7}g</b> protein avg</span>` : ''}${s.target ? `<span><b>${s.target.toLocaleString()}</b> kcal goal</span>` : ''}</div>
       <div class="cp-label" style="margin-top:18px;">Recent sessions</div>
       ${sessHTML || '<div class="ex-prev">No sessions yet.</div>'}
     </div>
