@@ -1409,7 +1409,12 @@
   @media (prefers-reduced-motion: reduce) { .tr-dash, .tr-svg.arrived #trMe { animation: none; } }
   #stepsSummary.ac-hero { padding: 6px 2px 0; border-radius: 0; }
   /* Activity: step mountain */
-  .mt-wrap { margin: 6px -16px 0; }
+  .mt-wrap { margin: 10px -4px 0; }
+  .mt-range path.empty { fill: none; stroke: rgba(var(--p1),0.22); stroke-dasharray: 3 4; }
+  .mt-tick line { stroke: rgba(255,255,255,0.3); stroke-width: 1.2; }
+  .mt-tick text { font-size: 9.5px; fill: var(--text-dim); font-family: 'Outfit', sans-serif; }
+  .mt-tick.on line { stroke: #fff; } .mt-tick.on text { fill: rgb(var(--p4)); }
+
   .mt-svg { display: block; width: 100%; height: auto; overflow: visible; }
   .mt-range path { fill: rgba(var(--p1),0.10); stroke: rgba(var(--p1),0.25); stroke-width: 1; animation: mtRise .7s var(--ease) both; transform-origin: center bottom; transform-box: fill-box; }
   .mt-range path.hit { fill: rgba(var(--p1),0.2); }
@@ -1418,8 +1423,7 @@
   .mt-day { font-size: 10px; fill: var(--text-dim); font-family: 'Outfit', sans-serif; }
   .mt-day.t { fill: rgb(var(--p4)); letter-spacing: 1px; }
   .mt-ground { stroke: rgba(255,255,255,0.12); stroke-width: 1; }
-  .mt-rangebase { fill: rgba(var(--p1),0.10); stroke: none; }
-  .mt-front { fill: rgba(255,255,255,0.04); stroke: rgba(var(--p1),0.35); stroke-width: 1.2; stroke-linejoin: round; }
+  .mt-front { fill: url(#mtt); stroke: rgba(var(--p1),0.5); stroke-width: 1.2; stroke-linejoin: round; }
   .mt-fill { fill: url(#mtg); }
   .mt-route { stroke: #fff; stroke-width: 2; stroke-dasharray: 3 5; fill: none; opacity: .85; }
   .mt-flag line { stroke: rgb(var(--p4)); stroke-width: 1.5; } .mt-flag path { fill: rgb(var(--p4)); }
@@ -4687,7 +4691,7 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-07.14';
+const APP_BUILD = '2026-10-07.15';
 // The version people see. Bump it (and add a RELEASE_NOTES entry at the top) with every update
 // worth announcing; APP_BUILD still changes on every upload so phones know to refresh.
 const APP_VERSION = '1.2';
@@ -11312,20 +11316,24 @@ function playTrail(animate) {
   const wrap = document.getElementById('mtWrap'); if (!wrap || !trailState) return;
   if (!wrap.getClientRects().length) return; // hidden right now; runs again when the view opens
   const { frac, steps, goal, prior } = trailState;
-  // Same geometry as the approved template: the week's peaks span the full width behind a
-  // see-through mountain; today's climb fills it from the bottom.
-  const W = 361, H = 250, rangeBase = H - 40, base = H - 6, peakX = 276, peakY = 34, leftX = 100;
-  const top = Math.max(13000, goal * 1.3, ...prior.map(p => p.v));
-  const peaks = prior.map((p, i) => ({ x: 20 + i * 57, y: rangeBase - p.v / top * 150, d: p.d, hit: p.v >= goal }));
-  const front = `M${leftX} ${base} L${peakX} ${peakY} L${W + 20} ${base} Z`;
+  // One ground line for everything. Days with no steps still get a faint outline peak so the range
+  // never looks empty; today's mountain is tinted, with markers at 25 / 50 / 75% up the slope.
+  const W = 361, H = 236, base = H - 22, peakX = 268, peakY = 30, leftX = 104;
+  const top = Math.max(goal * 1.25, ...prior.map(p => p.v), 1);
+  const peaks = prior.map((p, i) => ({ x: 26 + i * 48, y: base - (p.v ? Math.max(22, p.v / top * (base - peakY - 6)) : 26), d: p.d, hit: p.v >= goal, empty: !p.v }));
+  const front = `M${leftX} ${base} L${peakX} ${peakY} L${W + 30} ${base} Z`;
+  const ticks = [.25, .5, .75].map(f => { const x = leftX + (peakX - leftX) * f, y = base + (peakY - base) * f; return { f, x, y, t: Math.round(goal * f / 100) / 10 + 'k' }; });
   wrap.innerHTML = `<svg class="mt-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${steps.toLocaleString()} of ${goal.toLocaleString()} steps">
-    <defs><linearGradient id="mtg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgb(var(--p2))" stop-opacity=".9"/><stop offset="1" stop-color="rgb(var(--p2))" stop-opacity=".15"/></linearGradient>
+    <defs><linearGradient id="mtg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgb(var(--p5))" stop-opacity=".95"/><stop offset="1" stop-color="rgb(var(--p6))" stop-opacity=".25"/></linearGradient>
+      <linearGradient id="mtt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgb(var(--p1))" stop-opacity=".16"/><stop offset="1" stop-color="rgb(var(--p1))" stop-opacity=".03"/></linearGradient>
       <clipPath id="mtClip"><rect id="mtClipR" x="0" y="${base}" width="${W + 40}" height="${H}"/></clipPath></defs>
-    <g class="mt-range">${peaks.map(p => `<path d="M${p.x - 30} ${rangeBase} L${p.x} ${p.y.toFixed(1)} L${p.x + 30} ${rangeBase} Z" class="${p.hit ? 'hit' : ''}"/>`).join('')}</g>
-    <path class="mt-rangebase" d="M0 ${rangeBase} L${W} ${rangeBase} L${W} ${H} L0 ${H} Z"/>
-    ${peaks.map(p => `<text class="mt-day" x="${p.x}" y="${H - 26}" text-anchor="middle">${p.d}</text>`).join('')}
+    <g class="mt-range">${peaks.map(p => `<path d="M${p.x - 32} ${base} L${p.x} ${p.y.toFixed(1)} L${p.x + 32} ${base} Z" class="${p.hit ? 'hit' : ''}${p.empty ? ' empty' : ''}"/>`).join('')}</g>
     <path class="mt-front" d="${front}"/>
     <path class="mt-fill" d="${front}" clip-path="url(#mtClip)"/>
+    <line class="mt-ground" x1="0" y1="${base}" x2="${W}" y2="${base}"/>
+    ${peaks.map(p => `<text class="mt-day" x="${p.x}" y="${H - 5}" text-anchor="middle">${p.d}</text>`).join('')}
+    <text class="mt-day t" x="${Math.min(W - 24, peakX + 34)}" y="${H - 5}" text-anchor="middle">TODAY</text>
+    ${ticks.map(k => `<g class="mt-tick" data-f="${k.f}"><line x1="${(k.x - 6).toFixed(1)}" y1="${k.y.toFixed(1)}" x2="${(k.x + 6).toFixed(1)}" y2="${k.y.toFixed(1)}"/><text x="${(k.x - 10).toFixed(1)}" y="${(k.y + 3.5).toFixed(1)}" text-anchor="end">${k.t}</text></g>`).join('')}
     <path class="mt-route" id="mtRoute" d="M${leftX} ${base} L${leftX} ${base}"/>
     <g class="mt-flag"><line x1="${peakX}" y1="${peakY}" x2="${peakX}" y2="${peakY - 26}"/><path d="M${peakX} ${peakY - 26} l18 6 l-18 6 z"/>
       <text x="${peakX - 8}" y="${peakY - 10}" text-anchor="end">${frac >= 1 ? 'SUMMIT' : goal.toLocaleString()}</text></g>
@@ -11337,6 +11345,7 @@ function playTrail(animate) {
     clip.setAttribute('y', cy.toFixed(1));
     me.setAttribute('transform', `translate(${cx.toFixed(1)} ${cy.toFixed(1)})`);
     route.setAttribute('d', `M${leftX} ${base} L${cx.toFixed(1)} ${cy.toFixed(1)}`);
+    svg.querySelectorAll('.mt-tick').forEach(t => t.classList.toggle('on', parseFloat(t.dataset.f) <= f + 1e-6));
     if (countEl) countEl.textContent = Math.round(steps * k).toLocaleString();
     if (pctEl) pctEl.textContent = Math.round((goal ? Math.min(999, steps / goal * 100) : 0) * k);
   };
