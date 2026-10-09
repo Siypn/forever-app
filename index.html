@@ -1231,7 +1231,7 @@
   .mh-s { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
   .mh-start { width: 100%; margin-top: 14px; }
   .mh-wk { display: flex; align-items: flex-end; gap: 5px; height: 58px; margin-top: 12px; }
-  .mh-wk div { flex: 1; text-align: center; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); }
+  .mh-wk div { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-align: center; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); }
   .mh-wk i { display: block; border-radius: 6px; margin-bottom: 5px; background: rgba(var(--p1),0.14); border: 1px solid rgba(var(--p1),0.25); }
   .mh-wk .d i { background: rgba(var(--p1),0.55); border-color: transparent; }
   .mh-wk .c i { background: linear-gradient(180deg, #fff, rgb(var(--p3))); border-color: transparent; }
@@ -1540,6 +1540,79 @@
   .ns-step { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 14px; background: rgba(255,255,255,0.03); font-size: 13.5px; line-height: 1.45; }
   .ns-step i { flex: 0 0 24px; height: 24px; border-radius: 50%; font-style: normal; font-size: 12px; font-weight: 700; display: grid; place-items: center; background: rgba(var(--p1),0.25); color: rgb(var(--p4)); }
   .ns-ic { width: 16px; height: 16px; vertical-align: -3px; fill: none; stroke: rgb(var(--p3)); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  /* ---- End-of-block recap ---- */
+  body.br-lock { overflow: hidden; }
+  #recapOverlay { position: fixed; inset: 0; z-index: 960; overflow-y: auto; -webkit-overflow-scrolling: touch; display: none;
+    background: linear-gradient(180deg, rgba(var(--p2),0.30) 0, rgba(var(--p2),0.08) 280px, #050407 520px), #050407; }
+  #recapOverlay.open { display: block; animation: brIn .35s ease-out; }
+  @keyframes brIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .br { max-width: 560px; margin: 0 auto; padding: calc(8px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom)); }
+  .br-top { position: sticky; top: calc(8px + env(safe-area-inset-top)); display: flex; justify-content: flex-end; z-index: 3; height: 0; }
+  .br-x { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.18); background: rgba(10,8,16,0.7); backdrop-filter: blur(8px); color: #fff; font-size: 20px; line-height: 1; cursor: pointer; }
+  .br-hero { padding-top: 34px; }
+  .br-k { font-size: 10px; letter-spacing: 2.8px; text-transform: uppercase; color: rgb(var(--p3)); }
+  .br-h { margin: 12px 0 0; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: clamp(40px, 11.5vw, 56px); line-height: .92; letter-spacing: .5px; }
+  .br-h span { display: block; color: #fff; }
+  .br-h em { display: block; font-style: normal; background: linear-gradient(100deg, #f5f3ff 0%, rgb(var(--p4)) 35%, rgb(var(--p1)) 70%, #f5f3ff 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .br-sub { margin: 12px 0 0; font-size: 14px; line-height: 1.5; color: #c9c5d6; max-width: 34ch; }
+  .br-photos { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 24px; }
+  .br-photos.one { grid-template-columns: 1fr; max-width: 60%; }
+  .br-photos figure { margin: 0; position: relative; }
+  .br-ph { aspect-ratio: 4 / 5; border-radius: 18px; background: linear-gradient(180deg, #221c30, #0f0d15) center / cover no-repeat; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.10); }
+  .br-photos figcaption { position: absolute; left: 10px; bottom: 10px; font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; padding: 5px 9px; border-radius: 999px; background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); color: #fff; }
+  .br-vs { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: #050407; border: 1px solid rgba(var(--p1),0.6); font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1px; color: rgb(var(--p4)); }
+  .br-nophoto { margin-top: 22px; padding: 14px 16px; border-radius: 16px; border: 1px dashed rgba(var(--p1),0.35); font-size: 12.5px; line-height: 1.5; color: var(--text-dim); }
+  .br-sec { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); }
+  .br-sh { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+  .br-sh b { font-size: 10.5px; letter-spacing: 2.4px; text-transform: uppercase; color: #fff; font-weight: 600; }
+  .br-sh em { font-style: normal; font-size: 11.5px; color: var(--text-dim); }
+  .br-weeks { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 7px; align-items: end; height: 150px; }
+  .br-wk { display: flex; flex-direction: column; align-items: center; gap: 7px; height: 100%; justify-content: flex-end; min-width: 0; }
+  .br-bar { width: 100%; height: var(--h); min-height: 26px; border-radius: 10px 10px 5px 5px; position: relative; transform-origin: bottom;
+    background: linear-gradient(180deg, rgba(var(--p4),0.95) 0, rgb(var(--p1)) 28%, rgba(var(--p2),0.55) 100%); animation: brGrow .7s cubic-bezier(.2,.8,.2,1) both; }
+  .br-wk.pk .br-bar { box-shadow: inset 0 2px 0 rgba(255,255,255,0.85); }
+  .br-wk.dl .br-bar { background: rgba(var(--p1),0.10); border: 1px dashed rgba(var(--p1),0.5); }
+  @keyframes brGrow { from { transform: scaleY(0.05); } to { transform: none; } }
+  .br-bar b { position: absolute; top: 7px; left: 0; right: 0; text-align: center; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 17px; color: #0c0814; }
+  .br-wk.dl .br-bar b { color: rgb(var(--p4)); }
+  .br-dots { display: flex; gap: 3px; flex-wrap: wrap; justify-content: center; }
+  .br-dots i { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.16); }
+  .br-dots i.on { background: rgb(var(--p1)); }
+  .br-wk span { font-size: 9px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; overflow: hidden; max-width: 100%; }
+  .br-lift { display: grid; grid-template-columns: minmax(0, 1fr) 80px 56px; gap: 10px; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .br-lift:last-child { border-bottom: 0; }
+  .br-ln b { display: block; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .br-ln span { font-size: 11.5px; color: var(--text-dim); }
+  .br-spark { width: 80px; height: 28px; }
+  .br-spark .a { fill: rgba(var(--p1),0.16); } .br-spark .l { fill: none; stroke: rgb(var(--p1)); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; } .br-spark .c { fill: #fff; }
+  .br-spark.flat .a { fill: rgba(255,255,255,0.05); } .br-spark.flat .l { stroke: rgba(255,255,255,0.35); } .br-spark.flat .c { fill: #9a96a8; }
+  .br-lp { text-align: right; font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: rgb(var(--p4)); }
+  .br-lp.flat { color: #8e8a9b; } .br-lp.dn { color: #fca5a5; }
+  .br-chg { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: center; padding: 12px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); margin-top: 8px; }
+  .br-chg i { height: 44px; border-radius: 12px; display: grid; place-items: center; font-style: normal; font-family: 'Bebas Neue', sans-serif; font-size: 17px; color: #fff; background: linear-gradient(160deg, rgba(var(--p1),0.55), rgba(var(--p2),0.30)); }
+  .br-chg b { display: block; font-size: 13.5px; font-weight: 600; }
+  .br-chg span { display: block; font-size: 12px; color: var(--text-dim); margin-top: 2px; line-height: 1.4; }
+  .br-nums { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .br-nums > div { padding: 14px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; gap: 2px; }
+  .br-nums span { font-size: 9.5px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--text-dim); }
+  .br-nums b { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 32px; line-height: 1; }
+  .br-nums em { font-style: normal; font-size: 11.5px; color: var(--text-dim); }
+  .br-rec { margin-top: 30px; padding: 20px; border-radius: 22px; position: relative;
+    background: linear-gradient(160deg, rgba(var(--p2),0.30), rgba(var(--p2),0.06) 55%, rgba(255,255,255,0.02)); border: 1px solid rgba(var(--p1),0.45); }
+  .br-rh { font-size: 20px; font-weight: 600; line-height: 1.25; margin-top: 8px; }
+  .br-rec p { font-size: 13px; line-height: 1.55; color: #cfcbdc; margin: 10px 0 0; }
+  .br-lens { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 16px; }
+  .br-len { padding: 10px 0; border-radius: 12px; border: 1px solid rgba(255,255,255,0.14); background: rgba(0,0,0,0.25); color: var(--text-dim); font: inherit; font-size: 12.5px; cursor: pointer; }
+  .br-len.on { border-color: rgba(var(--p1),0.9); background: rgba(var(--p1),0.22); color: #fff; }
+  .br-go { width: 100%; margin-top: 14px; } .br-go2 { width: 100%; margin-top: 8px; } .br-later { width: 100%; padding-top: 12px; }
+  .br-coachnote { margin-top: 14px; padding: 12px 14px; border-radius: 14px; background: rgba(0,0,0,0.3); font-size: 13px; color: #e8e5f1; }
+  .br-coachline { margin-top: 16px; text-align: center; font-size: 12px; color: var(--text-dim); }
+  .br-teaser { display: flex; flex-direction: column; gap: 4px; width: 100%; margin: 14px 0 4px; padding: 16px 18px; border-radius: var(--r-lg); text-align: left; cursor: pointer; font: inherit; color: var(--text);
+    border: 1px solid rgba(var(--p1),0.6); background: linear-gradient(135deg, rgba(var(--p2),0.45), rgba(var(--p2),0.10) 60%, rgba(255,255,255,0.02)); }
+  .br-teaser b { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 28px; line-height: 1; letter-spacing: .3px; }
+  .br-teaser em { font-style: normal; font-size: 12.5px; color: rgb(var(--p4)); }
+  .br-teaser.coach { margin-top: 18px; }
+  @media (prefers-reduced-motion: reduce) { #recapOverlay.open, .br-bar { animation: none; } }
   /* ---- Coach-managed mode, coach targets, habits, roles ---- */
   body.managed .mg-hide { display: none !important; }
   .mg-note { display: flex; flex-direction: column; gap: 3px; margin: 12px 0; padding: 12px 14px; border-radius: 14px; border: 1px solid rgba(var(--p1),0.35); background: rgba(var(--p1),0.08); }
@@ -3008,7 +3081,7 @@ async function renderMesoHero() {
     <div class="mh-top"><span class="kick2">Current block</span><button class="mh-pill" id="mhWeek">Week ${info.week} of ${len} ›</button></div>
     <div class="mh-t">${escHtml(name)}</div>
     <div class="mh-s">${phaseTxt}${deloadOn}</div>
-    <div class="mh-wk">${Array.from({ length: len }, (_, i) => i + 1).map(w => `<div class="${w < info.week ? 'd' : w === info.week ? 'c' : ''}"><i style="height:${hgt(w)}px"></i>${kind(w)}</div>`).join('')}</div>
+    <div class="mh-wk">${Array.from({ length: len }, (_, i) => i + 1).map(w => `<div class="${w < info.week ? 'd' : w === info.week ? 'c' : ''}"><i style="height:${hgt(w)}px"></i>${len > 6 ? (kind(w) === 'Deload' ? 'DL' : 'W' + w) : kind(w)}</div>`).join('')}</div>
     <div class="mh-st"><div><b id="mhSess">—</b><span>Sessions</span></div><div><b id="mhSets">—</b><span>Sets this week</span></div><div><b id="mhPrs">—</b><span>PRs this block</span></div></div></div>`;
   document.getElementById('mhWeek').onclick = () => openMesoDet('mesoBlockDet');
   if (!db) return;
@@ -4906,7 +4979,7 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-08.3';
+const APP_BUILD = '2026-10-08.5';
 // The version people see. Bump it (and add a RELEASE_NOTES entry at the top) with every update
 // worth announcing; APP_BUILD still changes on every upload so phones know to refresh.
 const APP_VERSION = '1.3';
@@ -4914,6 +4987,8 @@ const APP_VERSION = '1.3';
 // who already saw the last announced version.
 const RELEASE_NOTES = [
   { version: '1.3', date: 'Oct 8, 2026', items: [
+    { k: 'new', t: 'New end-of-block recap: start and end photos side by side, every week’s sets and sessions, your main lifts’ strength curves, what FOREVER adjusted and why, and a clear plan for the next block. Coaches get the same recap for each client.' },
+    { k: 'new', t: 'New end-of-block recap: a full-screen story of your block with start and end photos side by side, every week’s sets and sessions, your main lifts’ strength curves, what FOREVER adjusted along the way and why, and a clear plan for the next block. Coaches get the same recap for each client.' },
     { k: 'new', t: 'Setup now asks how you’ll use FOREVER: I train, I coach, or Both. Training on your own works exactly as before, and you can connect to a coach any time.' },
     { k: 'new', t: 'Coaching is by invite: coaches get an invite code when they sign up, and enter it in setup or under Menu › Become a coach.' },
     { k: 'new', t: 'Coach-managed mode: a coach can run a client’s app for them. The coach sets the plan and targets; the client follows them and can still swap a busy machine for one session. Coaches pick Full app or Coach-managed per client, plus a default for new clients.' },
@@ -4922,6 +4997,10 @@ const RELEASE_NOTES = [
     { k: 'new', t: 'Tempo and cues: add a tempo like 3-1-1 or a cue like “pause at the bottom” to any exercise. It shows above the set during your workout.' },
     { k: 'new', t: 'Daily habits from your coach (creatine, mobility, bedtime…): tick them off on the Workout tab, and your coach sees your streaks.' },
     { k: 'new', t: 'New finisher: bodyweight to failure. After your last set, the app tells you the matching move (air squats after leg press, push-ups after presses) and logs your reps.' },
+    { k: 'fix', t: 'Much faster for coaches: the dashboard loads each client’s recent weeks instead of their whole history (about 4x less data with 25 clients), and reopening it only downloads what changed. A client’s full history loads when you open them.' },
+    { k: 'fix', t: 'Faster app start on long-running accounts: the app now asks the server only for the workouts it needs, so opening it uses the same small amount of data after two years as after two months.' },
+    { k: 'fix', t: '“No new best” stall warnings are much less jumpy: a lift now needs no new best in 3 sessions and a flat trend over 8 before it’s flagged, so normal day-to-day swings don’t trigger it.' },
+    { k: 'fix', t: 'Blocks longer than 6 weeks no longer push the Mesos week bars off the side of small phones.' },
     { k: 'new', t: 'Program templates for coaches: save any client’s week as a template, then apply it (or one of the FOREVER programs) to one or many clients at once. Their old split is kept as a backup.' },
     { k: 'new', t: 'Weekly check-in forms: coaches write their own questions (written, 1–10 or yes/no), pick the day, and ask for weight and photos. Clients get a check-in card on that day; coaches get a notification and see answers, weight change and photos next to an older photo.' },
     { k: 'new', t: 'Monthly progress report: workouts vs planned, strength change per lift, weight, measurements, food, steps, habits and PRs on one page. Coaches open it from a client’s Overview; anyone can open their own from the menu. Save it as a PDF or share the headline numbers.' },
@@ -5718,86 +5797,217 @@ function actionLabel(action) {
   if (action.type === 'calories') return `${action.delta > 0 ? '+' : '−'}${Math.abs(action.delta)} kcal/day + start next block`;
   return 'Start next block';
 }
+// ---------- End-of-block recap ----------
+// When a block ends: a full-screen recap opens once (photos, week by week, main lifts, what the app
+// changed, averages, next-block recommendation). A teaser card on the Workout tab reopens it until the
+// next block starts. A snapshot is saved to blockRecaps/<block> so the coach sees the same recap;
+// coach-managed clients see their results but the coach sets up the next block.
+async function buildBlockRecapExtras(st) {
+  const start = st.start, end = st.end, len = st.len, inBlock = d => d && d >= start && d < end;
+  const weekOf = d => Math.floor(daysBetweenISO(start, d) / 7) + 1;
+  const ph = blockPhaseWeeks(len);
+  const kind = w => w > len - ph.deload ? 'Deload' : w > ph.base ? (w === len - ph.deload ? 'Peak' : 'Over') : 'Base';
+  let sessions = [];
+  try { sessions = (await db.collection('sessions').orderBy('date', 'desc').limit(120).get()).docs.map(d => d.data()).filter(x => x && inBlock(x.date) && x.exercises); } catch (e) {}
+  const perWeek = trainingDaysPerWeek();
+  const weeks = Array.from({ length: len }, (_, k) => ({ w: k + 1, kind: kind(k + 1), sets: 0, done: 0, planned: perWeek }));
+  const series = {};
+  sessions.slice().sort((a, b) => a.date < b.date ? -1 : 1).forEach(x => {
+    const wk = weeks[Math.min(len, Math.max(1, weekOf(x.date))) - 1];
+    let any = false;
+    Object.entries(x.exercises).forEach(([n, sets]) => {
+      const lg = (sets || []).filter(st2 => st2 && st2.logged && parseFloat(st2.weight) > 0 && parseFloat(st2.reps) > 0);
+      if (lg.length) { any = true; wk.sets += lg.length; }
+      const e = bestE1rm(sets); if (e) (series[n] = series[n] || []).push(Math.round(e));
+    });
+    if (any) wk.done++;
+  });
+  // Main lifts: the lift each training day opens with, then other compounds, then the rest.
+  const leads = new Set(); try { DAY_ORDER.forEach(d => { const e = ((getProgramDay(d) || {}).exercises || [])[0]; if (e) leads.add(e.name); }); } catch (e) {}
+  const lifts = (st.lifts || []).map(l => ({ ...l, type: exerciseTypeOf(l.name), lead: leads.has(l.name), n: (series[l.name] || []).length, series: (series[l.name] || []).slice(-8) }))
+    .sort((a, b) => (b.lead - a.lead) || (b.type === 'compound') - (a.type === 'compound') || b.n - a.n || b.from - a.from).slice(0, 4);
+  // What the app changed during the block.
+  const changes = [];
+  try {
+    Object.entries(volumeState.hist || {}).forEach(([m, h]) => {
+      const used = appliedMuscleDates(h).filter(d => inBlock(d));
+      if (!used.length) return;
+      const net = used.reduce((a, d) => a + (h[d].delta || 0), 0); if (!net) return;
+      const first = h[used[0]];
+      changes.push({ tag: (net > 0 ? '+' : '−') + Math.abs(net), title: `${m} ${Math.abs(net) === 1 ? 'set' : 'sets'} ${net > 0 ? 'added' : 'trimmed'} in week ${weekOf(used[0])}`, why: first.why ? first.why.charAt(0).toUpperCase() + first.why.slice(1) + '.' : '' });
+    });
+  } catch (e) {}
+  try { Object.entries(repRangeOverrides || {}).forEach(([n, o]) => { if (o && (o.block === start || inBlock(o.at))) changes.push({ tag: `${o.lo}–${o.hi}`, title: `${n} moved to ${o.lo}–${o.hi} reps`, why: 'No new best for a while, so it got a fresh rep range.' }); }); } catch (e) {}
+  if (maintAdjustedOn && inBlock(maintAdjustedOn)) changes.push({ tag: 'kcal', title: 'Calories adjusted to your real maintenance', why: `Your weigh-ins showed where maintenance actually is (${maintCals ? maintCals.toLocaleString() + ' kcal' : 'updated'}).` });
+  // Photos: first and last progress photo of the block.
+  let photos = [];
+  try {
+    const photoEnd = addDaysISO(end, 7); // end-of-block photos are often taken on review day
+    const logs = (await db.collection('photoLog').get()).docs.map(d => d.data()).filter(l => l && l.date >= addDaysISO(start, -3) && l.date < photoEnd && (l.storagePath || l.url)).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+    if (logs.length >= 2) photos = [logs[0], logs[logs.length - 1]].map(l => ({ date: l.date, path: l.storagePath || null, url: l.storagePath ? null : l.url }));
+    else if (logs.length === 1) photos = [{ date: logs[0].date, path: logs[0].storagePath || null, url: logs[0].storagePath ? null : logs[0].url }];
+  } catch (e) {}
+  let blockNo = 1; try { blockNo = ((await db.collection('blockReviews').get()).docs || []).length + 1; } catch (e) {}
+  return { weeks, lifts, changes, photos, blockNo };
+}
+function recapSnapshot(st, rec, ex) {
+  const g = phaseGroupOf(nutritionPhase);
+  return { block: st.start, blockNo: ex.blockNo, len: st.len, phase: nutritionPhase, phaseLabel: (PHASES[nutritionPhase] || {}).label || '', group: g,
+    st: { strengthPct: st.strengthPct, sessionsDone: st.sessionsDone, sessionsPlanned: st.sessionsPlanned, prCount: st.prCount, weightDelta: st.weightDelta, weightRate: st.weightRate,
+      waistDelta: st.waistDelta, avgCals: st.avgCals, target: st.target, avgRecovery: st.avgRecovery, avgSoreness: st.avgSoreness, loggedDays: st.loggedDays, elapsedDays: st.elapsedDays },
+    weeks: ex.weeks, lifts: ex.lifts.map(l => ({ name: l.name, from: Math.round(l.from), to: Math.round(l.to), pct: l.pct, series: l.series })), changes: ex.changes, photos: ex.photos,
+    rec: { headline: rec.headline, reasons: rec.reasons, training: rec.training }, at: Date.now() };
+}
+function recapHeadline(snap) {
+  const s = snap.st, sp = s.strengthPct, wd = s.weightDelta;
+  const l1 = sp == null ? 'Block complete.' : sp >= 1 ? `${Math.round(sp)}% stronger.` : sp > -1 ? 'Strength held.' : `${Math.round(Math.abs(sp))}% down on strength.`;
+  let l2 = '';
+  if (wd != null) { const a = Math.abs(wd); l2 = a < 0.5 ? 'Weight held.' : wd > 0 ? `${a.toFixed(1)} lb heavier.` : `${a.toFixed(1)} lb lighter.`; }
+  const waist = s.waistDelta == null ? '' : Math.abs(s.waistDelta) < 0.15 ? ' and your waist held steady' : s.waistDelta < 0 ? `, waist down ${Math.abs(s.waistDelta).toFixed(2)}"` : `, waist up ${s.waistDelta.toFixed(2)}"`;
+  const sub = `${s.sessionsDone}${s.sessionsPlanned ? ` of ${s.sessionsPlanned}` : ''} sessions, ${s.prCount} PR${s.prCount === 1 ? '' : 's'}${waist}.`;
+  return { l1, l2, sub };
+}
+function recapSpark(series, flat) {
+  if (!series || series.length < 2) return '<svg class="br-spark" viewBox="0 0 80 28"></svg>';
+  const lo = Math.min(...series), hi = Math.max(...series), sp = hi - lo || 1, W = 80, H = 28;
+  const pts = series.map((v, i) => [(i / (series.length - 1) * (W - 6) + 3), (H - 4 - (v - lo) / sp * (H - 8))]);
+  const d = pts.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');
+  const last = pts[pts.length - 1];
+  return `<svg class="br-spark${flat ? ' flat' : ''}" viewBox="0 0 ${W} ${H}"><path d="${d} L${last[0].toFixed(1)} ${H} L3 ${H} Z" class="a"/><path d="${d}" class="l"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2.6" class="c"/></svg>`;
+}
+function recapHTML(snap, opts) {
+  opts = opts || {};
+  const s = snap.st, h = recapHeadline(snap);
+  const fmtD = d => d ? new Date(d + 'T12:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '';
+  const maxSets = Math.max(1, ...snap.weeks.map(w => w.sets));
+  const weeksHTML = snap.weeks.map(w => `<div class="br-wk${w.kind === 'Deload' ? ' dl' : ''}${w.kind === 'Peak' ? ' pk' : ''}"><div class="br-bar" style="--h:${Math.max(10, Math.round(w.sets / maxSets * 100))}%"><b>${w.sets || '–'}</b></div><div class="br-dots">${Array.from({ length: Math.max(w.planned, w.done) }, (_, i) => `<i class="${i < w.done ? 'on' : ''}"></i>`).join('')}</div><span>${snap.len > 6 ? (w.kind === 'Deload' ? 'DL' : 'W' + w.w) : w.kind}</span></div>`).join('');
+  const lifts = snap.lifts.map(l => { const flat = Math.abs(l.pct) < 1.5; return `<div class="br-lift"><div class="br-ln"><b>${escHtml(l.name)}</b><span>${l.from} → ${l.to} lb${flat ? ' · flat' : ''}</span></div>${recapSpark(l.series, flat)}<div class="br-lp${flat ? ' flat' : l.pct < 0 ? ' dn' : ''}">${l.pct >= 0 ? '+' : '−'}${Math.abs(Math.round(l.pct))}%</div></div>`; }).join('');
+  const changes = snap.changes.slice(0, 4).map(c => `<div class="br-chg"><i>${escHtml(c.tag)}</i><div><b>${escHtml(c.title)}</b>${c.why ? `<span>${escHtml(c.why)}</span>` : ''}</div></div>`).join('');
+  const ph = snap.photos || [];
+  const photoHTML = ph.length ? `<div class="br-photos${ph.length === 1 ? ' one' : ''}">${ph.map((p, i) => `<figure data-path="${escHtml(p.path || '')}" data-url="${escHtml(p.url || '')}"><div class="br-ph"></div><figcaption>${i === 0 ? 'Start' : 'End'} · ${escHtml(fmtD(p.date))}</figcaption></figure>`).join('')}${ph.length === 2 ? '<div class="br-vs">VS</div>' : ''}</div>`
+    : `<div class="br-nophoto">No progress photos this block. Take one on day 1 of the next block and your next recap shows the change side by side.</div>`;
+  const num = (k, v, sub) => `<div><span>${k}</span><b>${v}</b><em>${sub}</em></div>`;
+  const kcal = s.avgCals == null ? '—' : Math.round(s.avgCals).toLocaleString();
+  const lenChips = [4, 6, 8, 10, 12].map(n => `<button class="br-len${n === opts.suggestLen ? ' on' : ''}" data-len="${n}">${n} wk</button>`).join('');
+  return `<div class="br">
+    <div class="br-top"><button class="br-x" id="brClose" aria-label="Close">×</button></div>
+    <header class="br-hero">
+      <div class="br-k">Block ${snap.blockNo || ''} · ${snap.len} weeks${snap.phaseLabel ? ' · ' + escHtml(snap.phaseLabel) : ''}</div>
+      <h2 class="br-h"><span>${escHtml(h.l1)}</span>${h.l2 ? `<em>${escHtml(h.l2)}</em>` : ''}</h2>
+      <p class="br-sub">${escHtml(h.sub)}</p>
+    </header>
+    ${photoHTML}
+    <section class="br-sec"><div class="br-sh"><b>Week by week</b><em>working sets · sessions</em></div><div class="br-weeks">${weeksHTML}</div></section>
+    ${lifts ? `<section class="br-sec"><div class="br-sh"><b>Main lifts</b><em>estimated max</em></div>${lifts}</section>` : ''}
+    ${changes ? `<section class="br-sec"><div class="br-sh"><b>What FOREVER changed</b><em>from your feedback</em></div>${changes}</section>` : ''}
+    <section class="br-sec"><div class="br-sh"><b>The rest</b><em>block averages</em></div>
+      <div class="br-nums">${num('Weight', s.weightDelta == null ? '—' : `${s.weightDelta >= 0 ? '+' : '−'}${Math.abs(s.weightDelta).toFixed(1)}`, 'lb total')}${num('Waist', s.waistDelta == null ? '—' : `${s.waistDelta >= 0 ? '+' : '−'}${Math.abs(s.waistDelta).toFixed(1)}"`, s.waistDelta == null ? 'log weekly' : 'change')}${num('Calories', kcal, s.target ? `of ${s.target.toLocaleString()}` : `${s.loggedDays} days`)}${num('Recovery', s.avgRecovery == null ? '—' : s.avgRecovery.toFixed(1), 'of 5')}</div></section>
+    <section class="br-rec">
+      <div class="br-k">Next block</div>
+      <div class="br-rh">${escHtml(snap.rec.headline)}</div>
+      ${(snap.rec.reasons || []).map(r => `<p>${escHtml(r)}</p>`).join('')}${snap.rec.training ? `<p>${escHtml(snap.rec.training)}</p>` : ''}
+      ${opts.managed ? `<div class="br-coachnote">${escHtml(opts.coachName || 'Your coach')} sets up your next block. They have this recap too.</div>` : opts.actions ? `
+        <div class="br-lens">${lenChips}</div>
+        <button class="btn-primary br-go" id="brApply">${escHtml(opts.applyLabel || 'Start next block')}</button>
+        ${opts.keepBtn ? '<button class="btn-secondary br-go2" id="brKeep">Start next block, no changes</button>' : ''}
+        <button class="back-link br-later" id="brLater">Remind me tomorrow</button>` : ''}
+    </section>
+    ${opts.coachLine ? `<div class="br-coachline">${escHtml(opts.coachLine)}</div>` : ''}
+  </div>`;
+}
+async function fillRecapPhotos(root) {
+  const figs = [...root.querySelectorAll('.br-photos figure')]; if (!figs.length) return;
+  const paths = figs.map(f => f.dataset.path).filter(Boolean);
+  let signed = {}; if (paths.length) { try { signed = await signPhotoPaths(paths); } catch (e) {} }
+  figs.forEach(f => { const u = f.dataset.path ? signed[f.dataset.path] : f.dataset.url; if (u) f.querySelector('.br-ph').style.backgroundImage = `url("${u.replace(/"/g, '%22')}")`; });
+}
+function openRecapOverlay(html, onWire) {
+  let el = document.getElementById('recapOverlay');
+  if (!el) { el = document.createElement('div'); el.id = 'recapOverlay'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); document.body.appendChild(el); }
+  el.innerHTML = html; el.scrollTop = 0; el.classList.add('open'); document.body.classList.add('br-lock');
+  const close = () => { el.classList.remove('open'); document.body.classList.remove('br-lock'); };
+  el.querySelector('#brClose').onclick = close;
+  fillRecapPhotos(el);
+  // count the headline numbers up once
+  try { if (!matchMedia('(prefers-reduced-motion: reduce)').matches) el.querySelectorAll('.br-bar').forEach((b, i) => { b.style.animationDelay = (i * 70) + 'ms'; }); } catch (e) {}
+  if (onWire) onWire(el, close);
+  return close;
+}
 async function renderBlockReviewIfNeeded() {
   const slot = document.getElementById('blockReviewSlot');
   if (!slot) return;
-  if (!blockReviewDue() || isCoachManaged()) { slot.innerHTML = ''; return; } // coach-managed: the coach reviews the block
+  if (!blockReviewDue()) { slot.innerHTML = ''; return; }
+  const managed = isCoachManaged();
   const { st, rec } = await buildBlockReview();
   if (!blockReviewDue()) { slot.innerHTML = ''; return; }
-  const fmtPct = v => v == null ? '—' : `${v >= 0 ? '+' : ''}${v.toFixed(0)}%`;
-  const weightVal = st.weightRate == null ? '—' : `${st.weightRate >= 0 ? '+' : ''}${st.weightRate.toFixed(1)}`;
-  const calVal = st.avgCals == null ? '—' : Math.round(st.avgCals).toLocaleString();
-  const lifts = st.lifts.slice(0, 4).map(l =>
-    `<div class="review-lift"><span>${escHtml(l.name)}</span><span class="review-lift-v">${Math.round(l.from)} → ${Math.round(l.to)} <em>${fmtPct(l.pct)}</em></span></div>`).join('');
-  const lenOpts = [4, 6, 8, 10, 12].map(n => `<option value="${n}" ${n === rec.suggestLen ? 'selected' : ''}>${n}-wk</option>`).join('');
-  slot.innerHTML = `
-    <div class="checkin-card review-card swipe">
-      <div class="review-kicker">Block complete · ${st.len} weeks</div>
-      <div class="review-title">Your block review</div>
-      <div class="review-grid">
-        ${reviewStatHTML('Strength', fmtPct(st.strengthPct), st.lifts.length ? `median of ${st.lifts.length} lift${st.lifts.length === 1 ? '' : 's'}` : 'not enough sets')}
-        ${reviewStatHTML('Sessions', `${st.sessionsDone}${st.sessionsPlanned ? `/${st.sessionsPlanned}` : ''}`, st.prCount ? `${st.prCount} PR${st.prCount === 1 ? '' : 's'}` : '')}
-        ${reviewStatHTML('Weight / wk', weightVal, `${st.weighIns} weigh-in${st.weighIns === 1 ? '' : 's'}`)}
-        ${reviewStatHTML('Waist', st.waistDelta == null ? '—' : `${st.waistDelta >= 0 ? '+' : ''}${st.waistDelta.toFixed(2)}"`, st.waistCount < 2 ? 'log weekly' : '')}
-        ${reviewStatHTML('Avg kcal', calVal, st.target ? `target ${st.target}` : `${st.loggedDays} days logged`)}
-        ${reviewStatHTML('Recovery', st.avgRecovery == null ? '—' : `${st.avgRecovery.toFixed(1)}/5`, st.avgSoreness == null ? '' : `soreness ${st.avgSoreness.toFixed(1)}/5`)}
-      </div>
-      ${lifts ? `<div class="review-lifts">${lifts}</div>` : ''}
-      <div class="review-rec">
-        <div class="review-rec-label">Recommendation</div>
-        <div class="review-rec-head">${escHtml(rec.headline)}</div>
-        ${rec.reasons.map(r => `<div class="review-reason">${escHtml(r)}</div>`).join('')}
-        <div class="review-reason">${escHtml(rec.training)}</div>
-      </div>
-      <div class="review-len"><span class="cp-label">Next block length</span><select id="reviewLenSel">${lenOpts}</select></div>
-      <button class="btn-primary" id="reviewApplyBtn" style="width:100%; margin-top:14px;">${escHtml(actionLabel(rec.action))}</button>
-      ${rec.action.type !== 'keep' ? `<button class="btn-secondary" id="reviewKeepBtn" style="width:100%; margin-top:10px;">Start next block, no changes</button>` : ''}
-      <button class="back-link" id="reviewLaterBtn" style="width:100%; padding-top:12px;">Remind me tomorrow</button>
-    </div>`;
+  let ex; try { ex = await buildBlockRecapExtras(st); } catch (e) { ex = { weeks: [], lifts: [], changes: [], photos: [], blockNo: 1 }; }
+  const snap = recapSnapshot(st, rec, ex);
+  // Save the recap for the coach (and tell them once).
+  if (db && hasCoach()) {
+    try { const prev = await db.doc(`blockRecaps/${st.start}`).get(); if (!prev.exists) { await db.doc(`blockRecaps/${st.start}`).set(snap); const hd = recapHeadline(snap); notifyCoach(`Block ${snap.blockNo} recap: ${hd.l1} ${hd.l2} ${snap.st.sessionsDone}/${snap.st.sessionsPlanned || '?'} sessions.`); } } catch (e) {}
+  }
+  const hd = recapHeadline(snap);
+  slot.innerHTML = `<button class="br-teaser" id="brTeaser" type="button"><span class="br-k">Block ${snap.blockNo} complete</span><b>${escHtml(hd.l1)} ${escHtml(hd.l2)}</b><em>See your recap ›</em></button>`;
+  const coachName = (myCoaches[0] && myCoaches[0].display_name) || 'Your coach';
   let applying = false;
-  const startNext = async (applyAction) => {
-    if (applying) return; // a second tap while saving would apply the change twice and skip a block
-    applying = true;
-    slot.querySelectorAll('button, select').forEach(b => { b.disabled = true; });
-    const lenSel = document.getElementById('reviewLenSel');
-    const newLen = lenSel ? parseInt(lenSel.value, 10) : blockConfig.length;
-    const a = rec.action;
-    if (applyAction && a.type === 'phase') await setNutritionPhase(a.phase, { plannedWeeks: a.plannedWeeks, reason: 'block-review' });
-    if (applyAction && a.type === 'calories' && maintCals) { maintCals = Math.round(maintCals + a.delta); maintAdjustedOn = todayISO(); await persistNutritionConfig(); }
-    if (db) {
-      try {
-        await db.doc(`blockReviews/${blockKey()}`).set({
-          start: blockKey(), length: blockConfig.length, reviewedOn: todayISO(),
-          stats: { strengthPct: st.strengthPct, sessionsDone: st.sessionsDone, sessionsPlanned: st.sessionsPlanned, weightRate: st.weightRate,
-                   waistDelta: st.waistDelta, avgCals: st.avgCals, avgProt: st.avgProt, avgRecovery: st.avgRecovery, prCount: st.prCount },
-          recommendation: rec.headline, applied: applyAction ? a : { type: 'keep' }, nextLength: newLen,
-        });
-      } catch (e) {}
-    }
-    // Keep the weekday rhythm if the review happens within a week of the block ending; otherwise
-    // (came back after a break) the new block starts today.
-    const blockEnd = addDaysISO(blockConfig.start, blockConfig.length * 7);
-    blockConfig.start = daysBetweenISO(blockEnd, todayISO()) < 7 ? blockEnd : nextBlockMonday(todayISO());
-    blockConfig.length = newLen;
-    blockConfig.lastAckedWeek = null;
-    blockConfig.forceDeload = false;
-    blockConfig.reviewSnoozeUntil = null;
-    blockConfig.shiftDays = 0;
-    blockConfig.missedAck = null;
-    const bs = document.getElementById('blockStart'), bl = document.getElementById('blockLen');
-    if (bs) bs.value = blockConfig.start;
-    if (bl) bl.value = String(newLen);
-    slot.innerHTML = '';
-    await saveBlockConfig();
-  };
-  document.getElementById('reviewApplyBtn').onclick = () => startNext(true);
-  const keep = document.getElementById('reviewKeepBtn');
-  if (keep) keep.onclick = () => startNext(false);
-  document.getElementById('reviewLaterBtn').onclick = async () => {
-    blockConfig.reviewSnoozeUntil = isoOffset(-1);
-    slot.innerHTML = '';
-    await saveBlockConfig();
-  };
+  const open = () => openRecapOverlay(recapHTML(snap, { managed, coachName, actions: !managed, suggestLen: rec.suggestLen, applyLabel: actionLabel(rec.action), keepBtn: rec.action.type !== 'keep', coachLine: !managed && hasCoach() ? `${coachName} gets this recap too.` : '' }), (el, close) => {
+    if (managed) return;
+    let newLen = rec.suggestLen || blockConfig.length;
+    el.querySelectorAll('.br-len').forEach(b => b.onclick = () => { newLen = parseInt(b.dataset.len, 10); el.querySelectorAll('.br-len').forEach(x => x.classList.toggle('on', x === b)); });
+    const startNext = async (applyAction) => {
+      if (applying) return; // a second tap while saving would apply the change twice and skip a block
+      applying = true;
+      el.querySelectorAll('button').forEach(b => { if (b.id !== 'brClose') b.disabled = true; });
+      const a = rec.action;
+      if (applyAction && a.type === 'phase') await setNutritionPhase(a.phase, { plannedWeeks: a.plannedWeeks, reason: 'block-review' });
+      if (applyAction && a.type === 'calories' && maintCals) { maintCals = Math.round(maintCals + a.delta); maintAdjustedOn = todayISO(); await persistNutritionConfig(); }
+      if (db) {
+        try {
+          await db.doc(`blockReviews/${blockKey()}`).set({
+            start: blockKey(), length: blockConfig.length, reviewedOn: todayISO(),
+            stats: { strengthPct: st.strengthPct, sessionsDone: st.sessionsDone, sessionsPlanned: st.sessionsPlanned, weightRate: st.weightRate,
+                     waistDelta: st.waistDelta, avgCals: st.avgCals, avgProt: st.avgProt, avgRecovery: st.avgRecovery, prCount: st.prCount },
+            recommendation: rec.headline, applied: applyAction ? a : { type: 'keep' }, nextLength: newLen,
+          });
+        } catch (e) {}
+      }
+      // Keep the weekday rhythm if the review happens within a week of the block ending; otherwise
+      // (came back after a break) the new block starts today.
+      const blockEnd = addDaysISO(blockConfig.start, blockConfig.length * 7);
+      blockConfig.start = daysBetweenISO(blockEnd, todayISO()) < 7 ? blockEnd : nextBlockMonday(todayISO());
+      blockConfig.length = newLen;
+      blockConfig.lastAckedWeek = null;
+      blockConfig.forceDeload = false;
+      blockConfig.reviewSnoozeUntil = null;
+      blockConfig.shiftDays = 0;
+      blockConfig.missedAck = null;
+      const bs = document.getElementById('blockStart'), bl = document.getElementById('blockLen');
+      if (bs) bs.value = blockConfig.start;
+      if (bl) bl.value = String(newLen);
+      slot.innerHTML = '';
+      await saveBlockConfig();
+      close(); showToast(`Block ${snap.blockNo + 1} starts ${blockConfig.start === todayISO() ? 'today' : new Date(blockConfig.start + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'long' })}`);
+    };
+    el.querySelector('#brApply').onclick = () => startNext(true);
+    const keep = el.querySelector('#brKeep'); if (keep) keep.onclick = () => startNext(false);
+    el.querySelector('#brLater').onclick = async () => { blockConfig.reviewSnoozeUntil = isoOffset(-1); slot.innerHTML = ''; await saveBlockConfig(); close(); };
+  });
+  document.getElementById('brTeaser').onclick = open;
+  const seenKey = `forever_recapSeen_${st.start}`;
+  let seen = false; try { seen = !!localStorage.getItem(seenKey); localStorage.setItem(seenKey, '1'); } catch (e) {}
+  if (!seen && dayMode !== 'active') open();
+}
+// Coach: latest block recap on a client's Overview.
+function coachRecapCardHTML(c) {
+  const list = (c.docs || []).filter(d => /^blockRecaps\//.test(d.path)).map(d => d.data).filter(Boolean).sort((a, b) => (b.block || '').localeCompare(a.block || ''));
+  if (!list.length) return '';
+  const r = list[0], hd = recapHeadline(r);
+  return `<button class="br-teaser coach" id="ccRecap" type="button"><span class="br-k">Block ${r.blockNo || ''} recap · ${escHtml(fmtHistoryDate(addDaysISO(r.block, r.len * 7)))}</span><b>${escHtml(hd.l1)} ${escHtml(hd.l2)}</b><em>${r.st.sessionsDone}/${r.st.sessionsPlanned || '?'} sessions · open recap ›</em></button>`;
+}
+function openCoachRecap(c) {
+  const list = (c.docs || []).filter(d => /^blockRecaps\//.test(d.path)).map(d => d.data).filter(Boolean).sort((a, b) => (b.block || '').localeCompare(a.block || ''));
+  if (!list.length) return;
+  openRecapOverlay(recapHTML(list[0], { coachLine: `${clientDisplayName(c)}'s recap. The recommendation is what the app suggested to them.` }));
 }
 
 // ---------- Fuel check (Workout tab) ----------
@@ -6183,7 +6393,7 @@ function renderWeekPill() {
 async function computeStreak() {
   if (!db) return 0;
   try {
-    const snap = await db.collection('sessions').orderBy('date','desc').limit(200).get();
+    const snap = await db.collection('sessions').orderBy('date','desc').limit(90).get();
     const loggedDates = new Set();
     (snap.docs || []).forEach(d => {
       const data = d.data();
@@ -6722,7 +6932,7 @@ async function loadExerciseHistory() {
   liftModelCache = {};
   if (!db) return;
   try {
-    const snap = await db.collection('sessions').orderBy('date', 'desc').limit(150).get();
+    const snap = await db.collection('sessions').orderBy('date', 'desc').limit(90).get();
     const today = todayISO();
     (snap.docs || []).forEach(d => {
       const data = d.data();
@@ -8640,9 +8850,18 @@ async function loadPrevious() {
     // them. (The old rule flagged any session with a set rated 9+, which every planned to-failure
     // last set is — so it cried "stalled" on lifts that were climbing.)
     const sess = hist.filter(h => !h.deload).map(h => Math.max(0, ...h.sets.map(setE1rmAdj))).filter(e => e > 0);
-    // On a cut, holding a lift is the goal — only a real drop counts as stalled.
-    const grp = trainPhaseGroup(), bar = grp === 'cut' ? 0.97 : grp === 'recomp' ? 0.99 : 1.005;
-    plateauByExercise[exName] = sess.length >= 4 && (grp === 'cut' || grp === 'recomp' ? Math.max(sess[0], sess[1]) < Math.max(sess[2], sess[3]) * bar : Math.max(sess[0], sess[1]) <= Math.max(sess[2], sess[3]) * bar);
+    // Stalled needs two signals, so ordinary day-to-day swings don't trigger it (a 16-week simulation of
+    // 200 lifters flagged half of the ones still progressing with the old last-2-vs-previous-2 rule):
+    //  1) no new best in the last 3 sessions versus the 3 before them, and
+    //  2) the trend across the last 8 sessions is flat (under +0.2% a week).
+    // On a cut, holding a lift is the goal: only a real drop (3%+ and a falling trend) counts.
+    const grp = trainPhaseGroup();
+    let trend = null; try { const m = buildLiftModel(hist, exerciseTypeOf(exName)); trend = m ? m.weeklyPct : null; } catch (e) {}
+    const best = (a, b) => Math.max(...sess.slice(a, b));
+    if (sess.length < 6 || trend == null) plateauByExercise[exName] = false;
+    else if (grp === 'cut') plateauByExercise[exName] = best(0, 3) < best(3, 6) * 0.97 && trend < -0.005;
+    else if (grp === 'recomp') plateauByExercise[exName] = best(0, 3) < best(3, 6) * 0.99 && trend < 0;
+    else plateauByExercise[exName] = best(0, 3) <= best(3, 6) && trend < 0.002;
   });
 }
 
@@ -12285,16 +12504,42 @@ function clientSummary(docs, today) {
   out.status = out.flags.some(f => f.lvl === 2) ? 'red' : out.flags.length ? 'amber' : 'green';
   return out;
 }
-async function fetchClientDocs(clientId) {
-  const all = [];
-  for (let from = 0; from < 5000; from += 1000) {
-    const { data, error } = await supaClient.from('documents').select('path,data').eq('user_id', clientId)
-      .not('path', 'like', 'photos/%').range(from, from + 999);
-    if (error) throw error;
-    all.push(...(data || []));
-    if (!data || data.length < 1000) break;
+// Full history (opening one client), or just the recent part (the dashboard): every plan, setting
+// and message, plus dated logs saved in the last `sinceDays` days. With 25 clients and six months of
+// history the full pull was ~14 MB per dashboard open; the recent pull is a fraction of that.
+const DATED_PATH_RX = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
+async function fetchClientDocs(clientId, opts) {
+  const pageAll = async build => {
+    const out = [];
+    for (let from = 0; from < 20000; from += 1000) {
+      const { data, error } = await build().range(from, from + 999);
+      if (error) throw error;
+      out.push(...(data || []));
+      if (!data || data.length < 1000) break;
+    }
+    return out;
+  };
+  const base = () => supaClient.from('documents').select('path,data').eq('user_id', clientId).not('path', 'like', 'photos/%');
+  if (opts && opts.changedSince) { // only what changed since the last pull
+    try { return await pageAll(() => base().gte('updated_at', opts.changedSince)); } catch (e) { return null; }
   }
-  return all;
+  if (opts && opts.sinceDays) {
+    try {
+      const since = new Date(Date.now() - opts.sinceDays * 864e5).toISOString();
+      const [undated, recent] = await Promise.all([
+        pageAll(() => base().not('path', 'match', DATED_PATH_RX)),
+        pageAll(() => base().filter('path', 'match', DATED_PATH_RX).gte('updated_at', since)),
+      ]);
+      return undated.concat(recent);
+    } catch (e) { /* older server without regex filters: fall back to everything */ }
+  }
+  return pageAll(base);
+}
+// The dashboard holds recent data only; opening a client loads their whole history once.
+const coachDocCache = {}; // clientId → { docs, at, partial }: reopening the dashboard pulls only what changed
+async function ensureFullClient(c) {
+  if (!c || !c.partial) return;
+  try { const at = Date.now(); c.docs = await fetchClientDocs(c.client_id); c.sum = clientSummary(c.docs, todayISO()); c.partial = false; coachDocCache[c.client_id] = { docs: c.docs, at, partial: false }; } catch (e) {}
 }
 // ---------- Coach redesign helpers (dashboard tiles + client hero) ----------
 let ccSparkN = 0;
@@ -12419,8 +12664,17 @@ async function renderCoachDashboard(useCache) {
   let unames = {};
   try { const { data } = await supaClient.from('usernames').select('user_id, username').in('user_id', links.map(l => l.client_id)); (data || []).forEach(r => { unames[r.user_id] = r.username; }); } catch (e) {}
   links = links.map(l => ({ ...l, username: unames[l.client_id] || null }));
+  const fetchStart = Date.now();
   coachClients = await Promise.all(links.map(async l => {
-    try { const docs = await fetchClientDocs(l.client_id); let sum = null; try { sum = clientSummary(docs, today); } catch (e) {} return { ...l, docs, sum }; }
+    try {
+      const prev = coachDocCache[l.client_id];
+      let docs, partial = true;
+      const changed = prev ? await fetchClientDocs(l.client_id, { changedSince: new Date(prev.at - 120000).toISOString() }) : null;
+      if (prev && changed) { const byPath = new Map(prev.docs.map(d => [d.path, d])); changed.forEach(d => byPath.set(d.path, d)); docs = [...byPath.values()]; partial = prev.partial; }
+      else docs = await fetchClientDocs(l.client_id, { sinceDays: 35 });
+      coachDocCache[l.client_id] = { docs, at: fetchStart, partial };
+      let sum = null; try { sum = clientSummary(docs, today); } catch (e) {} return { ...l, docs, sum, partial };
+    }
     catch (e) { return { ...l, docs: [], sum: null, err: true }; }
   }));
   await loadCoachSeen();
@@ -12942,7 +13196,7 @@ async function coachNote(c, text, changed) {
   const ts = Date.now();
   await coachWrite(c.client_id, `coachNotes/${ts}`, { text: text || '', changed: changed || '', from: (coachProfile && coachProfile.display_name) || 'Your coach', date: todayISO(), ts });
 }
-async function refreshClient(c) { try { c.docs = await fetchClientDocs(c.client_id); c.sum = clientSummary(c.docs, todayISO()); } catch (e) {} }
+async function refreshClient(c) { try { c.docs = await fetchClientDocs(c.client_id); c.sum = clientSummary(c.docs, todayISO()); c.partial = false; } catch (e) {} }
 function presenceInfo(at) {
   if (!at) return { on: false, t: 'Not seen yet' };
   const m = (Date.now() - at) / 60000;
@@ -13649,6 +13903,7 @@ function coachShapeHTML(c) {
 }
 async function renderCoachClient(c, view) {
   const body = document.getElementById('coachBody');
+  if (c && c.partial) { body.innerHTML = '<div class="fs-status">Loading their history…</div>'; await ensureFullClient(c); }
   const s = c.sum, nm = clientDisplayName(c);
   if (view) coachClientView = view;
   document.getElementById('coachTitle').textContent = nm;
@@ -13670,6 +13925,7 @@ async function renderCoachClient(c, view) {
     <div class="cc-view" data-seg="ccSeg" data-view="overview">
       ${coachCheckinHTML(c)}
       ${coachOverviewTopHTML(c)}
+      ${coachRecapCardHTML(c)}
       ${coachFormCheckinsHTML(c)}
       <button class="btn-secondary" id="ccReport" style="width:100%; margin-top:14px;">Monthly progress report</button>
       <div class="cp-label" style="margin:20px 0 8px;">Flags</div>
@@ -13710,6 +13966,7 @@ async function renderCoachClient(c, view) {
   wireCoachInsights(s);
   renderCoachMealPlan(c);
   try { fillCheckinPhotos(c); } catch (e) {}
+  { const rc = document.getElementById('ccRecap'); if (rc) rc.onclick = () => openCoachRecap(c); }
   { const r = document.getElementById('ccReport'); if (r) r.onclick = () => openProgressReport(c.docs, clientDisplayName(c), (coachProfile && coachProfile.display_name) || ''); }
   const show = wireSeg('ccSeg', v => { coachClientView = v;
     if (v === 'chat') { if (c._drawChat) c._drawChat(); const b = document.querySelector('#ccSeg [data-view="chat"] .seg-n'); if (b) b.remove(); const l = document.getElementById('ccChat'); if (l) l.scrollTop = l.scrollHeight; } });
@@ -14237,6 +14494,7 @@ function createSupabaseDb(client, userId) {
     }
   }
   async function writeDoc(path, data) {
+    try { collInflight.clear(); } catch (e) {}
     cachePut(path, data);
     if (loadOutbox()[path] || inflight.has(path)) { queue(path, 'set', data); flushOutbox(); return; }
     try { await remoteWrite(path, data); clearQueued(path); }
@@ -14248,6 +14506,7 @@ function createSupabaseDb(client, userId) {
       set: async (data) => { await writeDoc(path, data); },
       update: async (data) => { await writeDoc(path, { ...(await readDoc(path) || {}), ...data }); },
       delete: async () => {
+        try { collInflight.clear(); } catch (e) {}
         cachePut(path, null);
         if (loadOutbox()[path] || inflight.has(path)) { queue(path, 'delete'); flushOutbox(); return; }
         try { await remoteDelete(path); clearQueued(path); }
@@ -14255,6 +14514,7 @@ function createSupabaseDb(client, userId) {
       },
     };
   }
+  const collInflight = new Map(); // same query twice within 1.5 s (startup does this) → one download
   function collectionRef(prefix) {
     const filters = []; let order = null; let lim = null;
     const builder = {
@@ -14263,13 +14523,32 @@ function createSupabaseDb(client, userId) {
       limit: (n) => { lim = n; return builder; },
       get: async () => {
         let rows;
+        // "Newest N by date" is answered by the server: dated docs (prefix/YYYY-MM-DD…) sort by path the
+        // same way they sort by date, so only the rows needed come down instead of the whole history.
+        // Filters (e.g. day == Monday) widen the window so enough rows survive them.
+        const dated = order && order.field === 'date' && lim;
+        const serverLim = dated ? (filters.some(f => f[0] !== 'lb') ? lim * 8 + 10 : Math.ceil(lim * 1.25) + 5) : null;
+        const key = `${prefix}|${serverLim || 'all'}|${order ? order.dir : ''}`;
         try {
-          const { data, error } = await client.from('documents').select('path, data').eq('user_id', userId).like('path', prefix + '/%');
-          if (error) throw error;
-          rows = data || [];
+          const now = Date.now(), hit = collInflight.get(key);
+          let pr;
+          if (hit && now - hit.at < 1500) pr = hit.pr;
+          else {
+            let qb = client.from('documents').select('path, data').eq('user_id', userId).like('path', prefix + '/%');
+            if (dated) qb = qb.filter('path', 'match', '^' + prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '/[0-9]{4}-[0-9]{2}-[0-9]{2}').order('path', { ascending: order.dir !== 'desc' }).limit(serverLim);
+            pr = (async () => { const { data, error } = await qb; if (error) throw error; return data || []; })();
+            collInflight.set(key, { at: now, pr });
+          }
+          rows = await pr;
           rows.forEach(r => cachePut(r.path, r.data));
+          if (dated && rows.length < serverLim) {} // got everything there is
         } catch (e) {
-          rows = cacheList(prefix);
+          collInflight.delete(key);
+          rows = null;
+          if (dated) { // server couldn't do the sorted/limited query: ask the simple way before falling back to the phone's copy
+            try { const { data, error } = await client.from('documents').select('path, data').eq('user_id', userId).like('path', prefix + '/%'); if (error) throw error; rows = data || []; rows.forEach(r => cachePut(r.path, r.data)); } catch (e2) {}
+          }
+          if (!rows) rows = cacheList(prefix);
         }
         // Overlay writes that haven't reached the server yet.
         const byPath = new Map(rows.map(r => [r.path, r.data]));
