@@ -1,4 +1,4 @@
-const CACHE_NAME = 'forever-app-v14';
+const CACHE_NAME = 'forever-app-v15';
 // Fonts live in their own cache so an app update never throws them away.
 const FONT_CACHE = 'forever-fonts-v1';
 // One-entry cache the page reads to learn which screen a tapped notification wants (works even
@@ -19,6 +19,7 @@ self.addEventListener('activate', (event) => {
       keys.filter((k) => k !== CACHE_NAME && k !== FONT_CACHE && k !== SIGNAL_CACHE).map((k) => caches.delete(k))))
   );
   self.clients.claim();
+  event.waitUntil(caches.open(SIGNAL_CACHE).then(c => c.put(new URL('__swv', self.registration.scope).href, new Response(JSON.stringify({ v: CACHE_NAME, at: Date.now() })))).catch(() => {}));
 });
 
 // Google Fonts: the font files never change once published, so they're served cache-first —
@@ -92,6 +93,7 @@ self.addEventListener('notificationclick', (event) => {
       try { const c = await caches.open(SIGNAL_CACHE); await c.put(new URL('__open', self.registration.scope).href, new Response(JSON.stringify({ open, from, at: Date.now() }), { headers: { 'Content-Type': 'application/json' } })); } catch (e) {}
     }
     const list = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    try { const c = await caches.open(SIGNAL_CACHE); await c.put(new URL('__lastclick', self.registration.scope).href, new Response(JSON.stringify({ open, from, tag: event.notification.tag || '', at: Date.now(), windows: list.length, sw: CACHE_NAME }))); } catch (e) {}
     for (const c of list) {
       if (c.url.startsWith(self.registration.scope) && 'focus' in c) {
         if (open) c.postMessage({ type: 'forever-open', open, from });
