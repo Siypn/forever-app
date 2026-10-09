@@ -1,4 +1,4 @@
-const CACHE_NAME = 'forever-app-v12';
+const CACHE_NAME = 'forever-app-v13';
 // Fonts live in their own cache so an app update never throws them away.
 const FONT_CACHE = 'forever-fonts-v1';
 const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png',
@@ -72,14 +72,25 @@ self.addEventListener('push', (event) => {
     tag: d.tag || 'forever',
     icon: './icon-192.png',
     badge: './icon-192.png',
-    data: { url: d.url || './' },
+    data: { url: d.url || './', open: d.open || '', from: d.from || '' },
   }));
 });
+// Tapping a notification opens the screen it was about: messages open the chat, reminders their tab.
+const OPEN_FOR_TAG = { msg: 'msg', weigh: 'weigh', workout: 'workout', photos: 'photos', checkin: 'checkin' };
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  const url = new URL((event.notification.data && event.notification.data.url) || './', self.registration.scope).href;
-  event.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
-    for (const c of list) { if (c.url.startsWith(self.registration.scope) && 'focus' in c) return c.focus(); }
-    return self.clients.openWindow(url);
+  const data = event.notification.data || {};
+  const open = data.open || OPEN_FOR_TAG[event.notification.tag] || '';
+  const from = data.from || '';
+  const url = new URL(data.url || './', self.registration.scope);
+  if (open) { url.searchParams.set('open', open); if (from) url.searchParams.set('from', from); }
+  event.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(async (list) => {
+    for (const c of list) {
+      if (c.url.startsWith(self.registration.scope) && 'focus' in c) {
+        if (open) c.postMessage({ type: 'forever-open', open, from });
+        return c.focus();
+      }
+    }
+    return self.clients.openWindow(url.href);
   }));
 });

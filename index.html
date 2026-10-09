@@ -801,7 +801,34 @@
   .scan-top { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
   .scan-view { position: relative; flex: 1; margin: 14px 0; border-radius: 18px; overflow: hidden; background: #0b0a0f; }
   .scan-view video, #scanLibBox, #scanLibBox video { width: 100% !important; height: 100% !important; object-fit: cover; }
-  .scan-frame { position: absolute; left: 12%; right: 12%; top: 38%; height: 24%; border: 2px solid var(--rest-accent); border-radius: 12px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.35), 0 0 24px rgba(var(--p1),0.6); pointer-events: none; }
+  .scan-frame { position: absolute; left: 7%; right: 7%; top: 36%; height: 26%; border: 2px solid var(--rest-accent); border-radius: 12px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.30); pointer-events: none; overflow: hidden; }
+  .scan-frame i { position: absolute; left: 6%; right: 6%; top: 50%; height: 2px; background: rgba(255,80,90,0.85); animation: scanLine 1.6s ease-in-out infinite alternate; }
+  @keyframes scanLine { from { transform: translateY(-38px); } to { transform: translateY(38px); } }
+  .xr-ic { width: 17px; height: 17px; fill: none; stroke: rgb(var(--p3)); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: block; }
+  .cue-send { border: 0; background: none; font: inherit; cursor: pointer; padding: 0; margin-top: 8px; display: flex; }
+  .fc-prev { width: 100%; max-height: 42vh; border-radius: 14px; background: #000; margin-top: 12px; display: block; }
+  .fc-note { width: 100%; margin-top: 12px; padding: 11px 13px; border-radius: 14px; font-size: 14px; font-family: inherit; resize: none; box-sizing: border-box; }
+  .fc-status { min-height: 18px; margin-top: 8px; font-size: 12.5px; color: rgb(var(--p4)); text-align: center; }
+  .chat-fc { padding: 6px 6px 6px; }
+  .chat-fc .chat-t { padding: 6px 7px 0; }
+  .chat-fc .chat-time { padding: 0 7px; }
+  .fc-card { display: flex; align-items: center; gap: 11px; width: 100%; min-width: 210px; padding: 10px; border-radius: 13px; border: 1px solid rgba(255,255,255,0.14); background: rgba(0,0,0,0.28); color: #fff; font: inherit; text-align: left; cursor: pointer; }
+  .fc-play { flex: none; width: 44px; height: 44px; border-radius: 11px; display: grid; place-items: center; background: linear-gradient(135deg, rgb(var(--p1)), rgb(var(--p2))); }
+  .fc-play svg { width: 18px; height: 18px; fill: #fff; margin-left: 2px; }
+  .fc-txt { display: flex; flex-direction: column; min-width: 0; }
+  .fc-txt em { font-style: normal; font-size: 9.5px; letter-spacing: 1.6px; text-transform: uppercase; opacity: .7; }
+  .fc-txt b { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fc-txt span { font-size: 11.5px; opacity: .75; }
+  #fcViewer { position: fixed; inset: 0; z-index: 990; background: #000; display: none; flex-direction: column; padding: calc(12px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom)); }
+  #fcViewer.open { display: flex; }
+  .fv-top { display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 15px; }
+  .fv-stage { flex: 1; display: grid; place-items: center; min-height: 0; margin: 10px 0; }
+  .fv-stage video { max-width: 100%; max-height: 100%; border-radius: 12px; background: #000; }
+  .fv-speed { display: flex; gap: 8px; justify-content: center; }
+  .fv-speed button { padding: 9px 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.2); background: none; color: #fff; font: inherit; font-size: 13px; cursor: pointer; }
+  .fv-speed button.on { background: rgb(var(--p2)); border-color: rgb(var(--p2)); }
+  .scan-tips { text-align: center; font-size: 11.5px; color: var(--text-dim); opacity: .8; margin-top: 4px; }
+  .scan-photo { margin: 12px auto 0; display: block; background: none; border: 1px solid rgba(var(--p1),0.45); color: rgb(var(--p4)); border-radius: 999px; padding: 9px 16px; font-size: 13px; font-family: inherit; cursor: pointer; }
   .scan-msg { text-align: center; font-size: 12.5px; color: var(--text-dim); min-height: 18px; }
   .scan-manual { display: flex; gap: 8px; margin-top: 12px; }
   .scan-manual input { flex: 1; padding: 11px 14px; border-radius: 999px; font-size: 15px; }
@@ -4548,7 +4575,7 @@ async function refreshPreSnapshot() {
 function fmtPre(pre, dayTotal) {
   if (!pre && !dayTotal) return '';
   const bits = [];
-  if (pre && pre.sleep != null) bits.push(`Slept ${pre.sleep}h`);
+  if (pre && pre.sleep != null) bits.push(`Slept ${Math.round(parseFloat(pre.sleep) * 10) / 10}h`);
   if (pre && pre.soreness != null) bits.push(`Soreness ${pre.soreness}/5`);
   if (pre && pre.cals != null) bits.push(`${pre.cals.toLocaleString()} kcal · ${pre.prot} g protein before training`);
   if (dayTotal && dayTotal.cals) bits.push(`${Math.round(dayTotal.cals).toLocaleString()} kcal that day`);
@@ -4979,7 +5006,7 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-08.5';
+const APP_BUILD = '2026-10-08.7';
 // The version people see. Bump it (and add a RELEASE_NOTES entry at the top) with every update
 // worth announcing; APP_BUILD still changes on every upload so phones know to refresh.
 const APP_VERSION = '1.3';
@@ -4987,6 +5014,10 @@ const APP_VERSION = '1.3';
 // who already saw the last announced version.
 const RELEASE_NOTES = [
   { version: '1.3', date: 'Oct 8, 2026', items: [
+    { k: 'new', t: 'Form checks: film a set (or pick a video you already took) from the Form section of any exercise and send it to your coach. It lands in your chat; your coach can watch it in slow motion and reply. Big videos are shrunk on your phone first, and form videos are kept for 60 days.' },
+    { k: 'improved', t: 'Tapping a notification now takes you to what it’s about: messages open the chat (coaches land on that client’s chat), weigh-in reminders open the Body tab, workout and check-in reminders the Workout tab, and photo reminders your photos.' },
+    { k: 'improved', t: 'Barcode scanner reads far more reliably: it now scans the whole camera picture in HD instead of a small box that didn’t line up with the frame on screen, double-checks each read, and has a new “take a photo of it” option for barcodes that won’t scan live.' },
+    { k: 'fix', t: 'Workout history showed sleep like “7.084178784435698h”. Now 7.1 h.' },
     { k: 'new', t: 'New end-of-block recap: start and end photos side by side, every week’s sets and sessions, your main lifts’ strength curves, what FOREVER adjusted and why, and a clear plan for the next block. Coaches get the same recap for each client.' },
     { k: 'new', t: 'New end-of-block recap: a full-screen story of your block with start and end photos side by side, every week’s sets and sessions, your main lifts’ strength curves, what FOREVER adjusted along the way and why, and a clear plan for the next block. Coaches get the same recap for each client.' },
     { k: 'new', t: 'Setup now asks how you’ll use FOREVER: I train, I coach, or Both. Training on your own works exactly as before, and you can connect to a coach any time.' },
@@ -7288,7 +7319,7 @@ function xrRowHTML(ex, d, opts) {
     <div class="xr-main"><button class="drag-h" type="button" aria-label="Hold and drag to reorder">≡</button>
       <input class="cm-ex-n" list="xrLib" value="${escHtml(ex.name)}" placeholder="Exercise name" autocomplete="off">
       ${xrTypePill(ex.name, type)}<button class="cm-x" type="button" aria-label="Remove">×</button></div>
-    <div class="xr-opts"><label class="xr-opt"><span>⛓</span><select class="xr-ss"></select></label><label class="xr-opt"><span>🔥</span><select class="xr-tech"></select></label></div>
+    <div class="xr-opts"><label class="xr-opt"><span><svg class="xr-ic" viewBox="0 0 24 24" aria-label="Superset"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><select class="xr-ss"></select></label><label class="xr-opt"><span><svg class="xr-ic" viewBox="0 0 24 24" aria-label="Finisher"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg></span><select class="xr-tech"></select></label></div>
     <div class="xr-tag"></div>
     ${xrAdvHTML(ex, coach)}
   </div>`;
@@ -7307,7 +7338,8 @@ function wireXrList(list) {
       if (partner && !names.includes(partner)) r.dataset.partner = '';
       const ok = Object.keys(TECHNIQUES).filter(k => techniqueAllowed({ name: nm, type: r.dataset.type }, k));
       if (r.dataset.tech && !ok.includes(r.dataset.tech)) r.dataset.tech = '';
-      te.innerHTML = `<option value="">Finisher…</option>${ok.map(k => `<option value="${k}" ${r.dataset.tech === k ? 'selected' : ''}>${escHtml(TECHNIQUES[k].label)}</option>`).join('')}`;
+      const limited = ok.length < Object.keys(TECHNIQUES).length - 1 && r.dataset.type === 'compound';
+      te.innerHTML = `<option value="">Finisher…</option>${ok.map(k => `<option value="${k}" ${r.dataset.tech === k ? 'selected' : ''}>${escHtml(TECHNIQUES[k].label)}</option>`).join('')}${limited ? '<option disabled>Drop sets, myo-reps etc. are for machines and cables (not safe to grind out under free weights)</option>' : ''}`;
       r.classList.toggle('has-ss', !!r.dataset.partner); r.classList.toggle('has-tech', !!r.dataset.tech);
     });
     // group tags (A → B → C)
@@ -7580,7 +7612,7 @@ function cueHTML(ex) {
   const v = formVideoLink(ex);
   const vid = `<a class="cue-vid" href="${escHtml(v.url)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg>${v.own ? 'Watch your coach’s form video' : 'Watch form videos'}</a>`;
   return `<details class="form-cue"><summary>Form</summary>
-    ${c ? `<div class="cue-l"><b>Set up</b>${escHtml(c.setup)}</div><div class="cue-l"><b>Do</b>${escHtml(c.do)}</div><div class="cue-l"><b>Feel</b>${escHtml(c.feel)}</div>` : ''}${vid}</details>`;
+    ${c ? `<div class="cue-l"><b>Set up</b>${escHtml(c.setup)}</div><div class="cue-l"><b>Do</b>${escHtml(c.do)}</div><div class="cue-l"><b>Feel</b>${escHtml(c.feel)}</div>` : ''}${vid}${formCheckBtnHTML(ex)}</details>`;
 }
 // Before a muscle's first set of the day: did it recover from last time? (one tap, skippable)
 function recoveryAskHTML(ex) {
@@ -11704,10 +11736,26 @@ async function stopBarcodeScanner() {
   if (scanStream) { scanStream.getTracks().forEach(t => t.stop()); scanStream = null; }
   const el = document.getElementById('scanOverlay'); if (el) el.remove();
 }
+// EAN-8 / UPC-A / EAN-13 / GTIN-14 check digit. Camera reads that fail it are misreads; skip them.
+function barcodeChecksumOK(code) {
+  if (![8, 12, 13, 14].includes(code.length)) return code.length === 6 || code.length === 7; // UPC-E: trust the decoder
+  const d = code.split('').map(Number), check = d.pop();
+  const sum = d.reverse().reduce((a, n, i) => a + n * (i % 2 === 0 ? 3 : 1), 0);
+  return (10 - (sum % 10)) % 10 === check;
+}
+// Camera frames can misread one bar; only accept a code once two reads agree (or one clean read twice in a row).
+let scanLastRead = { code: '', at: 0 };
+function scanConsensus(code) {
+  const now = Date.now();
+  const ok = scanLastRead.code === code && now - scanLastRead.at < 2500;
+  scanLastRead = { code, at: now };
+  return ok;
+}
 async function handleScannedCode(code, fromCamera) {
   code = String(code || '').replace(/\D/g, '');
   if (code.length < 6) return false;
   if (fromCamera && scanHandled) return true;
+  if (fromCamera === true) { if (!barcodeChecksumOK(code) || !scanConsensus(code)) return false; try { navigator.vibrate && navigator.vibrate(30); } catch (e) {} }
   scanHandled = true;
   foodSearchSeq++; // cancel any name search still in flight so it can't replace this result
   await stopBarcodeScanner();
@@ -11720,6 +11768,28 @@ async function handleScannedCode(code, fromCamera) {
   } catch (e) {
     box.innerHTML = `<div class="fs-status">Couldn't reach the food database. Enter it yourself below for now.</div>`;
   }
+  return true;
+}
+const SCAN_VIDEO = { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 }, advanced: [{ focusMode: 'continuous' }] };
+// A still photo is sharp and full-resolution, so it reads barcodes the live preview can't.
+async function decodeBarcodeImage(file) {
+  try {
+    if ('BarcodeDetector' in window) {
+      const det = new window.BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e'] });
+      const bmp = await createImageBitmap(file); const r = await det.detect(bmp);
+      if (r && r[0] && r[0].rawValue) return String(r[0].rawValue).replace(/\D/g, '');
+    }
+  } catch (e) {}
+  try {
+    if (!window.Html5Qrcode) await loadScript('https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js');
+    let box = document.getElementById('scanFileBox');
+    if (!box) { box = document.createElement('div'); box.id = 'scanFileBox'; box.style.display = 'none'; document.body.appendChild(box); }
+    const F = window.Html5QrcodeSupportedFormats;
+    const lib = new window.Html5Qrcode('scanFileBox', { ...(F ? { formatsToSupport: [F.EAN_13, F.EAN_8, F.UPC_A, F.UPC_E] } : {}), verbose: false });
+    const code = await lib.scanFile(file, false);
+    try { lib.clear(); } catch (e) {}
+    return String(code || '').replace(/\D/g, '');
+  } catch (e) { return ''; }
 }
 async function openBarcodeScanner() {
   await stopBarcodeScanner();
@@ -11728,19 +11798,32 @@ async function openBarcodeScanner() {
   const stale = () => my !== scanSession || !document.getElementById('scanOverlay');
   const el = document.createElement('div');
   el.id = 'scanOverlay';
-  el.innerHTML = `<div class="scan-top"><span>Point at the barcode</span><button class="menu-close" id="scanClose">×</button></div>
-    <div class="scan-view" id="scanView"><video id="scanVideo" playsinline muted></video><div id="scanLibBox"></div><div class="scan-frame"></div></div>
+  el.innerHTML = `<div class="scan-top"><span>Scan a barcode</span><button class="menu-close" id="scanClose">×</button></div>
+    <div class="scan-view" id="scanView"><video id="scanVideo" playsinline muted></video><div id="scanLibBox"></div><div class="scan-frame"><i></i></div></div>
     <div class="scan-msg" id="scanMsg">Starting camera…</div>
+    <div class="scan-tips">Lines going up and down · about a hand’s length away · good light</div>
+    <button class="scan-photo" id="scanPhotoBtn">Not reading? Take a photo of it</button>
+    <input type="file" accept="image/*" capture="environment" id="scanPhotoIn" hidden>
     <div class="scan-manual"><input id="scanManual" type="text" inputmode="numeric" placeholder="Or type the barcode number"><button class="food-add-btn" id="scanManualGo">Look up</button></div>`;
   document.body.appendChild(el);
   document.getElementById('scanClose').onclick = () => stopBarcodeScanner();
   document.getElementById('scanManualGo').onclick = () => handleScannedCode(document.getElementById('scanManual').value);
+  document.getElementById('scanPhotoBtn').onclick = () => document.getElementById('scanPhotoIn').click();
+  document.getElementById('scanPhotoIn').onchange = async ev => {
+    const f = ev.target.files && ev.target.files[0]; if (!f) return;
+    msg('Reading the photo…');
+    const code = await decodeBarcodeImage(f);
+    if (code && barcodeChecksumOK(code)) { await handleScannedCode(code, 'photo'); return; }
+    msg('Couldn’t read that photo. Get closer so the barcode fills most of the picture, or type the number.');
+    ev.target.value = '';
+  };
+  scanLastRead = { code: '', at: 0 };
   const msg = t => { const m = document.getElementById('scanMsg'); if (m) m.textContent = t; };
   const formats = ['ean_13', 'ean_8', 'upc_a', 'upc_e'];
   try {
     if ('BarcodeDetector' in window && (await window.BarcodeDetector.getSupportedFormats()).some(f => formats.includes(f))) {
       const det = new window.BarcodeDetector({ formats });
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+      const stream = await navigator.mediaDevices.getUserMedia({ video: SCAN_VIDEO, audio: false });
       if (stale()) { stream.getTracks().forEach(t => t.stop()); return; } // closed while asking for the camera
       scanStream = stream;
       const v = document.getElementById('scanVideo'); v.srcObject = scanStream; await v.play();
@@ -11757,9 +11840,12 @@ async function openBarcodeScanner() {
     if (stale()) return;
     document.getElementById('scanVideo').style.display = 'none';
     const F = window.Html5QrcodeSupportedFormats;
-    const lib = new window.Html5Qrcode('scanLibBox', F ? { formatsToSupport: [F.EAN_13, F.EAN_8, F.UPC_A, F.UPC_E], verbose: false } : undefined);
+    const lib = new window.Html5Qrcode('scanLibBox', { ...(F ? { formatsToSupport: [F.EAN_13, F.EAN_8, F.UPC_A, F.UPC_E] } : {}), verbose: false, experimentalFeatures: { useBarCodeDetectorIfSupported: true } });
     scanLib = lib;
-    await lib.start({ facingMode: 'environment' }, { fps: 12, qrbox: { width: 260, height: 150 } }, code => { if (!stale()) handleScannedCode(code, true); }, () => {});
+    // No qrbox: the library's box is measured on the uncropped video, so it never lined up with the
+    // frame on screen (the preview is cropped to fill). Decoding the whole HD frame is more forgiving.
+    try { await lib.start({ facingMode: 'environment' }, { fps: 15, disableFlip: true, videoConstraints: SCAN_VIDEO }, code => { if (!stale()) handleScannedCode(code, true); }, () => {}); }
+    catch (e2) { if (stale() || (e2 && e2.name === 'NotAllowedError')) throw e2; await lib.start({ facingMode: 'environment' }, { fps: 15, disableFlip: true }, code => { if (!stale()) handleScannedCode(code, true); }, () => {}); }
     if (stale()) { try { await lib.stop(); } catch (e) {} try { lib.clear(); } catch (e) {} return; }
     msg('Hold steady over the barcode');
   } catch (e) {
@@ -13394,6 +13480,147 @@ function renderCoachDayEdit(c, day) {
 // One thread per client, stored in the CLIENT's documents: coachNotes/<ts> are written by the coach
 // (plan changes are logged there too), messages/<ts> are the client's replies. Database rules already
 // let a client write their own docs and a linked coach read them and write coachNotes/*.
+// ---- Form checks: a client films a set and sends it to their coach, inside the chat. ----
+// Videos live in the private 'videos' bucket under <clientId>/form/. Big phone videos are shrunk to
+// 720p on the phone first (about 1 MB per 4 seconds), and only the first 60 seconds are kept.
+const FC_MAX_SEC = 60, FC_DIRECT_MB = 18, FC_LIMIT_MB = 50, FC_KEEP_DAYS = 60;
+function formCheckBtnHTML(ex) {
+  if (!hasCoach() || !supaClient) return '';
+  return `<button type="button" class="cue-vid cue-send" data-fc="${escHtml(ex.name)}"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg>Send your coach a form check</button>`;
+}
+function formCheckCardHTML(v) {
+  const sub = [v.set, v.dur ? `${Math.round(v.dur)} s` : ''].filter(Boolean).join(' · ');
+  return `<button type="button" class="fc-card" data-vpath="${escHtml(v.path)}" data-vtitle="${escHtml(v.ex || 'Form check')}"><span class="fc-play"><svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg></span><span class="fc-txt"><em>Form check</em><b>${escHtml(v.ex || 'Video')}</b>${sub ? `<span>${escHtml(sub)}</span>` : ''}</span></button>`;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('.cue-send');
+  if (b) { e.preventDefault(); e.stopPropagation(); pickFormCheckVideo(b.dataset.fc); return; }
+  const v = e.target.closest && e.target.closest('.fc-card');
+  if (v) { e.preventDefault(); e.stopPropagation(); openFormVideo(v.dataset.vpath, v.dataset.vtitle); }
+}, true);
+function pickFormCheckVideo(exName) {
+  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'video/*'; inp.style.display = 'none';
+  inp.onchange = () => { const f = inp.files && inp.files[0]; inp.remove(); if (f) openFormCheckSheet(f, exName); };
+  document.body.appendChild(inp); inp.click();
+}
+function videoMeta(url) {
+  return new Promise(res => { const v = document.createElement('video'); v.preload = 'metadata'; v.muted = true; v.playsInline = true;
+    const t = setTimeout(() => res({ dur: 0, w: 0, h: 0 }), 8000);
+    v.onloadedmetadata = () => { clearTimeout(t); res({ dur: isFinite(v.duration) ? v.duration : 0, w: v.videoWidth, h: v.videoHeight }); };
+    v.onerror = () => { clearTimeout(t); res({ dur: 0, w: 0, h: 0 }); }; v.src = url; });
+}
+// Re-encode on the phone: play the clip (muted, off screen) into a 720p canvas and record that.
+// Takes about as long as the clip. Returns null where the browser can't do it.
+async function shrinkVideo(file, maxSec, onProg) {
+  try {
+    if (!window.MediaRecorder || !HTMLCanvasElement.prototype.captureStream) return null;
+    const type = ['video/mp4;codecs=avc1', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm'].find(t => { try { return MediaRecorder.isTypeSupported(t); } catch (e) { return false; } });
+    if (!type) return null;
+    const url = URL.createObjectURL(file);
+    const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.src = url;
+    v.style.cssText = 'position:fixed;left:0;top:0;width:2px;height:2px;opacity:0;pointer-events:none;';
+    document.body.appendChild(v);
+    const cleanup = () => { try { v.pause(); } catch (e) {} v.remove(); URL.revokeObjectURL(url); };
+    await new Promise((res, rej) => { v.onloadedmetadata = res; v.onerror = rej; setTimeout(rej, 10000); });
+    const dur = Math.min(isFinite(v.duration) ? v.duration : maxSec, maxSec);
+    const short = Math.min(v.videoWidth, v.videoHeight) || 720, k = Math.min(1, 720 / short);
+    const W = Math.max(2, Math.round(v.videoWidth * k / 2) * 2), H = Math.max(2, Math.round(v.videoHeight * k / 2) * 2);
+    const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const g = cv.getContext('2d');
+    const rec = new MediaRecorder(cv.captureStream(30), { mimeType: type, videoBitsPerSecond: 2200000 });
+    const chunks = []; rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+    const stopped = new Promise(res => { rec.onstop = res; });
+    g.drawImage(v, 0, 0, W, H); rec.start(1000);
+    await v.play();
+    await new Promise(res => {
+      const hard = setTimeout(res, (dur * 2 + 15) * 1000);
+      const fin = () => { clearTimeout(hard); res(); };
+      v.onended = fin;
+      const step = () => {
+        if (v.ended || v.currentTime >= dur) return fin();
+        g.drawImage(v, 0, 0, W, H); if (onProg) onProg(v.currentTime / dur);
+        if (v.requestVideoFrameCallback) v.requestVideoFrameCallback(step); else requestAnimationFrame(step);
+      };
+      step();
+    });
+    rec.stop(); await stopped; cleanup();
+    const blob = new Blob(chunks, { type: type.split(';')[0] });
+    return blob.size > 2000 ? { blob, dur } : null;
+  } catch (e) { return null; }
+}
+function openFormCheckSheet(file, exName) {
+  const S = fdSheet(), url = URL.createObjectURL(file);
+  const sets = (state[exName] || []).map((x, i) => ({ x, i })).filter(o => o.x.logged && parseFloat(o.x.reps) > 0);
+  const label = o => `Set ${o.i + 1} · ${parseFloat(o.x.weight) > 0 ? `${o.x.weight} × ` : ''}${o.x.reps}`;
+  let pick = sets.length ? label(sets[sets.length - 1]) : '';
+  const panel = S.paint(`<div class="is-kicker">Form check</div><div class="is-title">${escHtml(exName)}</div>
+    <video class="fc-prev" src="${url}" controls playsinline muted></video>
+    ${sets.length ? `<div class="cp-label" style="margin-top:12px;">Which set is this?</div><div class="fh-slot fc-sets">${sets.map(o => `<button data-s="${escHtml(label(o))}" class="${label(o) === pick ? 'on' : ''}">${escHtml(label(o))}</button>`).join('')}<button data-s="">Other</button></div>` : ''}
+    <textarea id="fcNote" class="fc-note" rows="2" maxlength="300" placeholder="What should your coach look at? e.g. knees on the way up"></textarea>
+    <div class="fc-status" id="fcStatus"></div>
+    <div class="fh-acts"><button class="btn-primary" id="fcSend">Send to ${escHtml((myCoaches[0] && myCoaches[0].display_name) || 'your coach')}</button></div>`);
+  const close0 = S.close; const close = () => { URL.revokeObjectURL(url); close0(); };
+  panel.querySelector('.wn-x').onclick = close; S.el.querySelector('.is-backdrop').onclick = close;
+  panel.querySelectorAll('.fc-sets button').forEach(b => b.onclick = () => { pick = b.dataset.s; panel.querySelectorAll('.fc-sets button').forEach(x => x.classList.toggle('on', x === b)); });
+  const status = t => { const el = document.getElementById('fcStatus'); if (el) el.textContent = t; };
+  document.getElementById('fcSend').onclick = async () => {
+    const btn = document.getElementById('fcSend'); btn.disabled = true;
+    try {
+      const meta = await videoMeta(url);
+      let blob = file, dur = meta.dur, mb = file.size / 1048576;
+      const okType = /^video\/(mp4|quicktime|webm)/.test(file.type || '') || /\.(mp4|mov|webm)$/i.test(file.name || '');
+      if (mb > FC_DIRECT_MB || dur > FC_MAX_SEC + 1 || !okType) {
+        status('Making it smaller so it sends fast… 0%');
+        const out = await shrinkVideo(file, FC_MAX_SEC, p => status(`Making it smaller so it sends fast… ${Math.min(99, Math.round(p * 100))}%`));
+        if (out) { blob = out.blob; dur = out.dur; }
+        else if (mb > FC_LIMIT_MB || !okType) { status(''); btn.disabled = false; await uiAlert('Video too big', 'Film just the one set (under a minute), or set the camera to 1080p, and try again.'); return; }
+      }
+      status('Sending…');
+      const ext = /webm/.test(blob.type) ? 'webm' : /quicktime/.test(blob.type) ? 'mov' : 'mp4';
+      const ts = Date.now(), path = `${currentUserId}/form/${todayISO()}_${ts}.${ext}`;
+      const { error } = await supaClient.storage.from('videos').upload(path, blob, { contentType: blob.type || 'video/mp4' });
+      if (error) throw error;
+      const note = (document.getElementById('fcNote').value || '').trim().slice(0, 300);
+      const video = { path, ex: exName, set: pick || '', dur: Math.round(dur || 0), note };
+      const text = `Form check: ${exName}${pick ? ` (${pick})` : ''}${note ? ` — ${note}` : ''}`;
+      await db.doc(`messages/${ts}`).set({ text, ts, date: todayISO(), video });
+      const coach = myCoaches[0]; if (coach) notifyMessage(coach.coach_id, `Form check: ${exName}${pick ? ` (${pick})` : ''}`);
+      close(); showToast('Sent to your coach');
+      pruneOldFormVideos();
+    } catch (e) {
+      btn.disabled = false; status('');
+      const m = (e && e.message) || '';
+      await uiAlert("Couldn't send", /bucket|not found|row-level|policy/i.test(m) ? 'Form videos need a quick database update first (form_videos.sql).' : /size|large|exceed/i.test(m) ? 'That video is too big. Film just the one set and try again.' : 'Check your connection and try again.');
+    }
+  };
+}
+// Keep storage small: a client's own form videos older than FC_KEEP_DAYS are removed.
+async function pruneOldFormVideos() {
+  try {
+    const cut = addDaysISO(todayISO(), -FC_KEEP_DAYS);
+    const { data } = await supaClient.storage.from('videos').list(`${currentUserId}/form`, { limit: 100, sortBy: { column: 'name', order: 'asc' } });
+    const old = (data || []).filter(f => f.name && f.name.slice(0, 10) < cut).map(f => `${currentUserId}/form/${f.name}`);
+    if (old.length) await supaClient.storage.from('videos').remove(old);
+  } catch (e) {}
+}
+async function openFormVideo(path, title) {
+  let el = document.getElementById('fcViewer');
+  if (!el) { el = document.createElement('div'); el.id = 'fcViewer'; document.body.appendChild(el); }
+  el.innerHTML = `<div class="fv-top"><b>${escHtml(title || 'Form check')}</b><button class="menu-close" id="fvClose">×</button></div><div class="fv-stage"><div class="fs-status">Loading video…</div></div>
+    <div class="fv-speed" id="fvSpeed">${[1, 0.5, 0.25].map(r => `<button data-r="${r}" class="${r === 1 ? 'on' : ''}">${r === 1 ? 'Normal' : r + '×'}</button>`).join('')}</div>`;
+  el.classList.add('open');
+  const close = () => { const v = el.querySelector('video'); if (v) v.pause(); el.classList.remove('open'); el.innerHTML = ''; };
+  document.getElementById('fvClose').onclick = close;
+  try {
+    const { data, error } = await supaClient.storage.from('videos').createSignedUrl(path, 3600);
+    if (error || !data || !data.signedUrl) throw error || new Error('no url');
+    const stage = el.querySelector('.fv-stage');
+    stage.innerHTML = `<video src="${escHtml(data.signedUrl)}" controls playsinline autoplay muted loop></video>`;
+    const v = stage.querySelector('video');
+    el.querySelectorAll('#fvSpeed button').forEach(b => b.onclick = () => { v.playbackRate = parseFloat(b.dataset.r); el.querySelectorAll('#fvSpeed button').forEach(x => x.classList.toggle('on', x === b)); });
+  } catch (e) {
+    const stage = el.querySelector('.fv-stage'); if (stage) stage.innerHTML = `<div class="fs-status">This video isn’t available any more. Form videos are kept for ${FC_KEEP_DAYS} days.</div>`;
+  }
+}
 function threadFromDocs(docs) {
   const out = [];
   docs.forEach(d => {
@@ -13402,12 +13629,12 @@ function threadFromDocs(docs) {
     if (d.path.startsWith('coachNotes/')) {
       if (x.text) out.push({ who: 'coach', text: x.text, ts: x.ts, from: x.from });
       if (x.changed) out.push({ who: 'system', text: `${x.from || 'Coach'} updated your ${x.changed}.`, ts: x.ts + (x.text ? 1 : 0) });
-    } else if (d.path.startsWith('messages/') && x.text) out.push({ who: 'client', text: x.text, ts: x.ts });
+    } else if (d.path.startsWith('messages/') && x.text) out.push({ who: 'client', text: x.text, ts: x.ts, video: x.video || null });
   });
   return out.sort((a, b) => a.ts - b.ts);
 }
 function threadHTML(msgs, mine) {
-  if (!msgs.length) return `<div class="chat-empty">No messages yet. Say hi 👋</div>`;
+  if (!msgs.length) return `<div class="chat-empty">No messages yet. Say hi.</div>`;
   let lastDay = '';
   return msgs.map(m => {
     const d = new Date(m.ts), day = d.toDateString();
@@ -13415,6 +13642,7 @@ function threadHTML(msgs, mine) {
     lastDay = day;
     if (m.who === 'system') return sep + `<div class="chat-sys">${escHtml(m.text)}</div>`;
     const me = m.who === mine;
+    if (m.video && m.video.path) return sep + `<div class="chat-b ${me ? 'me' : 'them'} chat-fc">${formCheckCardHTML(m.video)}${m.video.note ? `<div class="chat-t">${escHtml(m.video.note).replace(/\n/g, '<br>')}</div>` : ''}<div class="chat-time">${escHtml(d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }))}</div></div>`;
     return sep + `<div class="chat-b ${me ? 'me' : 'them'}"><div class="chat-t">${escHtml(m.text).replace(/\n/g, '<br>')}</div><div class="chat-time">${escHtml(d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }))}</div></div>`;
   }).join('');
 }
@@ -14649,6 +14877,50 @@ function renderAuthMode() {
 }
 // ---------- Invite links: ?coach=CODE opens sign-up with the coach's code filled in ----------
 function inviteCoachCode() { try { return localStorage.getItem('forever_inviteCoach') || ''; } catch (e) { return ''; } }
+// Notification taps: the service worker opens ?open=<kind>&from=<userId>, or posts the same to a
+// window that's already open. Each kind lands on the screen the notification was about.
+let pendingOpen = null;
+function captureOpenTarget() {
+  try {
+    const u = new URL(location.href), open = u.searchParams.get('open');
+    if (!open) return;
+    pendingOpen = { open, from: u.searchParams.get('from') || '' };
+    u.searchParams.delete('open'); u.searchParams.delete('from');
+    history.replaceState(null, '', u.pathname + (u.search || '') + u.hash);
+  } catch (e) {}
+}
+captureOpenTarget();
+function clickTab(t) { const b = document.querySelector(`.tabbar button[data-tab="${t}"]`); if (b) b.click(); }
+function closeOpenSheets() {
+  ['menuOverlay', 'chatOverlay', 'coachOverlay'].forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('open'); });
+  const ro = document.getElementById('recapOverlay'); if (ro && ro.classList.contains('open')) { ro.classList.remove('open'); document.body.classList.remove('br-lock'); }
+}
+async function openCoachInboxFor(fromId) {
+  document.getElementById('coachOverlay').classList.add('open');
+  if (!fromId) coachDashView = 'inbox';
+  await renderCoachDashboard(true);
+  const c = fromId && (coachClients || []).find(x => x.client_id === fromId);
+  if (c) await renderCoachClient(c, 'chat');
+}
+async function handleOpenTarget(t) {
+  if (!t || !t.open || !currentUserId) return;
+  closeOpenSheets();
+  const from = t.from || '';
+  try {
+    if (t.open === 'msg') {
+      const fromMyCoach = myCoaches.some(c => c.coach_id === from);
+      if (coachProfile && !fromMyCoach && (from || !myCoaches.length)) await openCoachInboxFor(from);
+      else if (myCoaches.length) await openClientChat('chat');
+      else if (coachProfile) await openCoachInboxFor('');
+    } else if (t.open === 'checkin') {
+      clickTab('workout'); // the weekly soreness/recovery check-in lives on the Workout tab
+    } else if (t.open === 'weigh') clickTab('weight');
+    else if (t.open === 'photos') { clickTab('weight'); setTimeout(() => { const b = document.getElementById('menuPhotosBtn'); if (b) b.click(); }, 80); }
+    else if (t.open === 'workout') clickTab('workout');
+  } catch (e) {}
+}
+function runPendingOpen() { if (!pendingOpen) return; const t = pendingOpen; pendingOpen = null; setTimeout(() => handleOpenTarget(t), 300); }
+try { if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('message', e => { const d = e.data || {}; if (d.type === 'forever-open') handleOpenTarget(d); }); } catch (e) {}
 function captureInviteLink() {
   try {
     const q = new URLSearchParams(location.search); const c = (q.get('coach') || q.get('c') || '').trim().toUpperCase();
@@ -14933,7 +15205,7 @@ async function useSupabaseSession(session) {
   await maybeImportLocalData(session.user.id);
   myCoaches = []; loadCachedCoaches();
   await startApp();
-  loadCoachState().then(() => connectPendingCoach()).catch(() => {});
+  loadCoachState().then(() => connectPendingCoach()).catch(() => {}).then(runPendingOpen);
   setTimeout(() => { ensureUsername().catch(() => {}); }, 2400);
   migrateLegacyPhotos().then(changed => { if (changed) loadHeroPhoto(); }).catch(() => {});
 }
