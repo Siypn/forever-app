@@ -1,6 +1,9 @@
-const CACHE_NAME = 'forever-app-v13';
+const CACHE_NAME = 'forever-app-v14';
 // Fonts live in their own cache so an app update never throws them away.
 const FONT_CACHE = 'forever-fonts-v1';
+// One-entry cache the page reads to learn which screen a tapped notification wants (works even
+// when the app was asleep and missed the message, or the phone opened the app without the link).
+const SIGNAL_CACHE = 'forever-signal';
 const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png',
   './icon-maskable-192.png', './icon-maskable-512.png', './apple-touch-icon.png', './privacy.html'];
 
@@ -13,7 +16,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => Promise.all(
-      keys.filter((k) => k !== CACHE_NAME && k !== FONT_CACHE).map((k) => caches.delete(k))))
+      keys.filter((k) => k !== CACHE_NAME && k !== FONT_CACHE && k !== SIGNAL_CACHE).map((k) => caches.delete(k))))
   );
   self.clients.claim();
 });
@@ -84,7 +87,11 @@ self.addEventListener('notificationclick', (event) => {
   const from = data.from || '';
   const url = new URL(data.url || './', self.registration.scope);
   if (open) { url.searchParams.set('open', open); if (from) url.searchParams.set('from', from); }
-  event.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(async (list) => {
+  event.waitUntil((async () => {
+    if (open) {
+      try { const c = await caches.open(SIGNAL_CACHE); await c.put(new URL('__open', self.registration.scope).href, new Response(JSON.stringify({ open, from, at: Date.now() }), { headers: { 'Content-Type': 'application/json' } })); } catch (e) {}
+    }
+    const list = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
     for (const c of list) {
       if (c.url.startsWith(self.registration.scope) && 'focus' in c) {
         if (open) c.postMessage({ type: 'forever-open', open, from });
@@ -92,5 +99,5 @@ self.addEventListener('notificationclick', (event) => {
       }
     }
     return self.clients.openWindow(url.href);
-  }));
+  })());
 });

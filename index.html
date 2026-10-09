@@ -805,7 +805,8 @@
   .scan-frame i { position: absolute; left: 6%; right: 6%; top: 50%; height: 2px; background: rgba(255,80,90,0.85); animation: scanLine 1.6s ease-in-out infinite alternate; }
   @keyframes scanLine { from { transform: translateY(-38px); } to { transform: translateY(38px); } }
   .xr-ic { width: 17px; height: 17px; fill: none; stroke: rgb(var(--p3)); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: block; }
-  .cue-send { border: 0; background: none; font: inherit; cursor: pointer; padding: 0; margin-top: 8px; display: flex; }
+  .form-cue .cue-send { border: 0; background: none; font: inherit; cursor: pointer; padding: 0; margin-top: 8px; display: flex; }
+  .run-tools2 { flex-wrap: wrap; }
   .fc-prev { width: 100%; max-height: 42vh; border-radius: 14px; background: #000; margin-top: 12px; display: block; }
   .fc-note { width: 100%; margin-top: 12px; padding: 11px 13px; border-radius: 14px; font-size: 14px; font-family: inherit; resize: none; box-sizing: border-box; }
   .fc-status { min-height: 18px; margin-top: 8px; font-size: 12.5px; color: rgb(var(--p4)); text-align: center; }
@@ -5006,7 +5007,7 @@ const DEFAULT_HERO_PHOTOS = {}; // no stock photos — a day shows a photo once 
 // client code by design — it only grants what the database's row-level security policies allow,
 // which for the `documents` table is "your own rows, nothing else."
 // Bumped with every release; the app compares it with the published copy to offer a refresh.
-const APP_BUILD = '2026-10-08.7';
+const APP_BUILD = '2026-10-08.9';
 // The version people see. Bump it (and add a RELEASE_NOTES entry at the top) with every update
 // worth announcing; APP_BUILD still changes on every upload so phones know to refresh.
 const APP_VERSION = '1.3';
@@ -7519,6 +7520,7 @@ function renderMain() {
     <div class="run-tools2">
       <button class="run-chip" id="busyBtn"><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg>Machine taken</button>
       <button class="run-chip" id="shortBtn"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg>Short on time</button>
+      ${hasCoach() && supaClient ? `<button class="run-chip cue-send" data-fc="${escHtml(ex.name)}"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg>Form check</button>` : ''}
       ${isBarbellish(ex.name) ? '<button class="run-chip" id="plateBtn"><svg viewBox="0 0 24 24"><path d="M2 12h3M19 12h3M6 7v10M18 7v10M9 5v14M15 5v14M9 12h6"/></svg>Plates</button>' : ''}
     </div>
     <div id="recAskSlot" class="rec-below">${recoveryAskHTML(ex)}</div>
@@ -14904,6 +14906,10 @@ async function openCoachInboxFor(fromId) {
 }
 async function handleOpenTarget(t) {
   if (!t || !t.open || !currentUserId) return;
+  const k = t.open + '|' + (t.from || ''); // the message and the cached signal can both arrive; act once
+  if (lastOpenHandled.key === k && Date.now() - lastOpenHandled.at < 4000) return;
+  lastOpenHandled = { key: k, at: Date.now() };
+  try { if ('caches' in window) caches.open('forever-signal').then(c => c.delete(new URL('__open', location.href).href)).catch(() => {}); } catch (e) {}
   closeOpenSheets();
   const from = t.from || '';
   try {
@@ -14919,8 +14925,25 @@ async function handleOpenTarget(t) {
     else if (t.open === 'workout') clickTab('workout');
   } catch (e) {}
 }
-function runPendingOpen() { if (!pendingOpen) return; const t = pendingOpen; pendingOpen = null; setTimeout(() => handleOpenTarget(t), 300); }
-try { if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('message', e => { const d = e.data || {}; if (d.type === 'forever-open') handleOpenTarget(d); }); } catch (e) {}
+function runPendingOpen() { checkOpenSignal(); if (!pendingOpen) return; const t = pendingOpen; pendingOpen = null; setTimeout(() => handleOpenTarget(t), 300); }
+// The service worker also leaves the tapped notification's target in a tiny cache; read it whenever
+// the app comes to the front (iPhone often wakes the app without delivering the worker's message).
+let lastOpenHandled = { key: '', at: 0 };
+async function checkOpenSignal() {
+  try {
+    if (!('caches' in window)) return;
+    const c = await caches.open('forever-signal'), key = new URL('__open', location.href).href;
+    const r = await c.match(key); if (!r) return;
+    await c.delete(key);
+    const t = await r.json();
+    if (!t || !t.open || Date.now() - (t.at || 0) > 10 * 60000) return;
+    if (!currentUserId) { pendingOpen = t; return; }
+    handleOpenTarget(t);
+  } catch (e) {}
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') setTimeout(checkOpenSignal, 150); });
+window.addEventListener('focus', () => setTimeout(checkOpenSignal, 150));
+try { if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('message', e => { const d = e.data || {}; if (d.type === 'forever-open') { if (currentUserId) handleOpenTarget(d); else pendingOpen = d; } }); } catch (e) {}
 function captureInviteLink() {
   try {
     const q = new URLSearchParams(location.search); const c = (q.get('coach') || q.get('c') || '').trim().toUpperCase();
